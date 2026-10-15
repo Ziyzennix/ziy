@@ -124,10 +124,13 @@ still visible and shows the wall if it was hidden.</p>
 
 # --- the Spotify-style ad slot --------------------------------------------
 #
-# Offline-honesty note, because this is the difference between a real proof and
-# a theatre: an offline box cannot resolve audio-fa.spotifycdn.com, so a fixture
-# whose ad <audio> literally points there would fail to load whether or not the
-# extension blocked it — it would prove nothing.
+# Offline-honesty note: an offline box cannot resolve audio-fa.spotifycdn.com, so
+# a fixture whose ad <audio> literally pointed there would fail to load whether
+# or not the extension blocked it — it would prove nothing. That is why the
+# audio half is a local silent WAV and the DECISION under test is the
+# extension's verdict, obtained over a real message from the real background
+# page. The URL is still the real ad host, so the verdict being asked about is
+# the real thing.
 #
 # So the fixture separates the two halves and tests each on its own:
 #
@@ -160,8 +163,8 @@ in the slot &mdash; the song never plays.</p>
 <script>
 (function () {
   "use strict";
-  var AD_URL = "https://audio-fa.spotifycdn.com/ad-segment.mp3";
-  var SONG_URL = "https://p.scdn.co/song.mp3";
+  var AD_URL = "__ZSPOT_AD_URL__";
+  var SONG_URL = "__ZSPOT_SONG_URL__";
   var log = [];
   var state = {
     adVerdict: null, adBlocked: null, adAudible: false,
@@ -300,9 +303,16 @@ def main() -> None:
     if args.kind == "spotify":
         # The two hosts are the Spotify ad-delivery / CDN shape the list rules
         # name; they resolve to nothing, so only the extension decides.
-        ad_url = args.ad_url or "https://audio-fa.spotifycdn.test/ad-segment.mp3"
-        song_url = args.song_url or "https://p.scdn.co.test/song.mp3"
-        html = html.replace("AD_URL", ad_url).replace("SONG_URL", song_url)
+        ad_url = args.ad_url or "https://audio-fa.spotifycdn.com/ad-segment.mp3"
+        song_url = args.song_url or "https://p.scdn.co/song.mp3"
+        # Placeholders are tokens a URL cannot contain, so the substitution
+        # cannot rewrite its own declaration. (The first version of this
+        # fixture used the bare words, and the replace turned
+        # `var AD_URL = "..."` into `var https://... = "..."` — a SyntaxError
+        # that made the page's script never run and every window.* read
+        # undefined, so the fixture proved nothing.)
+        html = html.replace("__ZSPOT_AD_URL__", ad_url).replace(
+            "__ZSPOT_SONG_URL__", song_url)
 
     path = Path(args.out)
     path.parent.mkdir(parents=True, exist_ok=True)

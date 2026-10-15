@@ -121,8 +121,29 @@ pref("security.ssl.errorReporting.automatic", false);
 // ---------------------------------------------------------------------------
 // Firefox Accounts / Mozilla sync: disabled, so only ziy-sync can exist
 // ---------------------------------------------------------------------------
+// identity.fxaccounts.enabled is the FULL UI kill, not a cosmetic one:
+// browser-sync.js init() reads it (line 1254) and on false calls onFxaDisabled()
+// (line 1284), which sets fxadisabled on the document element and hides every
+// element carrying class "sync-ui-item" (line 3722) — 14 elements in
+// browser.xhtml, covering the app menu's FxA block, the sync setup card, both
+// send-to-device context menus and the synced-tabs sidebar row. Verified
+// 2026-10-16 against the engine's own browser/omni.ja.
 pref("identity.fxaccounts.enabled", false);
 pref("identity.fxaccounts.toolbar.enabled", false);
+pref("identity.fxaccounts.toolbar.pxiToolbarEnabled", false);
+// The one account identity field the engine registers (verified: 1 hit in
+// libxul's pref strings).
+pref("services.sync.username", "");
+// No welcome / what's-new / upgrade dialog, at the pref layer, matching the
+// mozilla.cfg locks and the policies.json entries.
+pref("browser.aboutwelcome.enabled", false);
+// NOT written here (the engine registers no pref by these names — 0 hits in
+// libxul and in defaults/preferences/firefox.js; see the note in ziy.js §10 and
+// replica/proofs-fix-prefs.md): identity.fxaccounts.sync.devices.url,
+// identity.fxaccounts.mobilepromo.android, services.sync.engine.prefs,
+// services.sync.accounts, services.sync.engine.{addons,bookmarks,history,
+// passwords,tabs}, browser.translations.mostRecentTargetLanguages,
+// browser.preferences.newtab.home.
 
 // ---------------------------------------------------------------------------
 // The product's own suite

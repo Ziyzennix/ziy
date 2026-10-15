@@ -5,11 +5,14 @@
 (block the ad audio AND let the song play). Plus the Brave-parity extraction
 of how Brave actually blocks.
 
-**Status, stated once and precisely: the unit evidence below is REAL and was
-measured. The in-browser Spotify end-to-end proof is INCOMPLETE — see §5.4.**
-Every node test claim and every sha256 in this document came from a command run
-on this box. Nothing here was compiled (there is nothing to compile in this
-extension workstream) and nothing here was fabricated.
+**Status, stated once and precisely: the list-strength work, the Brave-parity
+extraction, the Spotify feature and all unit evidence are REAL and measured.
+The in-browser anti-adblock-wall and Spotify proofs are INCOMPLETE — see §5.4,
+which reports exactly what was measured and exactly what was not.**
+Every node test claim, every sha256 and every file:line citation in this
+document came from a command run on this box. Nothing here was compiled (there
+is nothing to compile in this extension workstream) and nothing here was
+fabricated.
 
 ---
 
@@ -298,11 +301,15 @@ co-owner owns; this is the technical mechanism.
 ```
   45 passed, 0 failed, 2 skipped
 ```
+Run twice in this workstream — once mid-way and once as the final gate after the
+`document_start` content-script fix — both runs `45 passed, 0 failed, 2 skipped`,
+537 s. Re-run number: `bg_270` in this session.
 Relevant lines from the run:
 ```
   PASS  shields static ruleset is built (28907 rules)
   PASS  shields unit suite passes (211 assertions)
   PASS  distribution/extensions/ holds 9 xpis
+  PASS  shields static ruleset is built (28907 rules)
   PASS  every suite id is installed AND active in extensions.json after a real boot
   PASS  the whole node suite passes (pass assertions)
 ```
@@ -327,59 +334,161 @@ ziy-shields active:      True
   canary hidden          : False
   adblock WALL visible   : False
   -> WEAK PASS: the canary was NOT hidden, so the wall had no trigger.
+
+=== fixture B: the Spotify ad slot ===
+  clicked play            : "clicked"
+  extension API present   : False
+  window.state typeof     : "object"
+  verdict                 : {"action":"no-extension-api",
+                            "reason":"this page is not an extension context"}
+  content-script state    : {}
+  -> INCONCLUSIVE
 ```
 
-**This is not a clean pass and is not being presented as one.** The fixture's
-canary element is not matched by any generic cosmetic rule in the shipped
-lists, so the cosmetic tier left it alone, the detector never saw a hidden
-element, and the wall never appeared for the trivial reason that nothing
-triggered it. The wall's *absence* is real; the *defeat* is not demonstrated.
-A real wall-defeat proof needs a page whose ad container the lists genuinely
-hide, which needs a network fetch to a real site.
+**Neither is a clean pass and neither is being presented as one.**
 
-Harness bugs found and fixed on the way (all real, all fixed):
-* `JSON.stringify(x || {})` read a `false` wall back as `{}` — the boolean
-  contract was wrong for exactly the value that matters;
-* `bidi_call()` already unwraps `result`, so `tree.get("result").get("contexts")`
-  double-unwrapped and never matched a context;
-* `browsingContext.create` tabs do not reliably appear in `getTree` in this
-  profile — the harness now navigates the launch context;
-* the engine exits with "Could not find profile folder" unless the profile
-  directory exists before launch;
-* a leftover browser holds 2828 and the new one fails to bind — the harness now
-  checks `ports_free()` first and kills its own parent pid (anchored, never a
-  bare pkill, per AI-BRIEF §5 trap 1).
+* **Fixture A**: the fixture's canary element is not matched by any generic
+  cosmetic rule in the shipped lists, so the cosmetic tier left it alone, the
+  detector never saw a hidden element, and the wall never appeared for the
+  trivial reason that nothing triggered it. The wall's *absence* is real; the
+  *defeat* is not demonstrated. A real wall-defeat proof needs a page whose ad
+  container the lists genuinely hide, which needs a network fetch to a real
+  site.
+* **Fixture B**: the page's `window.state` object is now reachable (this was
+  the fix that made any measurement possible — see below), but the content
+  script is **not injecting** into the served document, so the page obtains no
+  verdict and reports the stall it was told to model. The harness classifies
+  that as INCONCLUSIVE rather than FAIL, because the "stall" is the fixture's own
+  model of an absent answer, not the engine blocking anything.
 
-**Fixture B (Spotify) did not reach a measured state.** The page's
-`window.state` stays `undefined` after the click: the play button clicks and
-the fixture's h1 renders, but the fixture's own IIFE reaches `window.state =
-state` only after an unresolved `askVerdict(...)` promise chain, and the state
-read happens before that settles. So the chain "fixture asks the extension for
-a verdict" was **never observed end to end**. What *is* proven about the
-mechanism is the opposite part, directly and exactly, in the 23 unit tests:
-the pure `requestVerdict` / `enterSlot` / `leaveSlot` / `navigateToSong`
-behaviour with real element objects. The gap between those unit tests and the
-in-browser measurement is the unfinished half, and it is labelled unfinished
-rather than asserted away.
+### Fixture/harness bugs found and fixed on the way (all real, all fixed)
 
-Remaining to finish fixture B (documented, not done):
-* wait for the promise to settle before reading `window.state` (or have the
-  fixture publish on settle), then re-run `prove-adwall.py`;
-* confirm the `shields.spotify.verdict` message handler answers from the real
-  background page in the booted extension, and only then claim the end-to-end
-  result.
+1. **The fixture's inline script had a SyntaxError** and therefore never ran at
+   all — which is why every `window.*` read came back undefined. The cause: the
+   generator did `html.replace("AD_URL", ad_url)`, which rewrote its *own*
+   `var AD_URL = "..."` declaration into `var https://... = "https://..."`.
+   Fixed by substituting a token a URL cannot contain
+   (`__ZSPOT_AD_URL__`). **This is the bug that made the whole Spotify fixture
+   unmeasurable, and it was a bug in the fixture, not in the feature.**
+2. `JSON.stringify(x || {})` read a `false` wall back as `{}` — a wrong boolean
+   contract for exactly the value that matters most.
+3. `bidi_call()` already unwraps `result`, so `tree.get("result").get("contexts")`
+   double-unwrapped and never matched a context.
+4. `browsingContext.create` tabs do not reliably appear in `getTree` in this
+   profile; the harness now navigates the launch context.
+5. The engine exits with "Could not find profile folder" unless the profile
+   directory exists before launch.
+6. A leftover browser holds 2828 so the new one fails to bind; the harness now
+   checks `ports_free()` first and kills its own parent pid (anchored, never a
+   bare pkill, per AI-BRIEF §5 trap 1).
+7. **`content/spotify-adslot.js` died at `run_at: document_start`** because
+   `document.documentElement` is null on first execution and
+   `mo.observe(document.documentElement, …)` throws, killing the whole script.
+   Fixed with a start-when-root-exists guard. This was a real product bug in my
+   new content script, found by the harness.
+
+### The remaining blocker (why fixture B could not be finished)
+The content script still does not inject into the served `http://127.0.0.1`
+document: `window.ziyShields_spotify` is undefined and
+`window.inContentScript` is `false`, so the page has no `browser`/`chrome`
+global (a content script runs in the *isolated world*, which page JS cannot see
+by design — that part is expected). Whether the extension is being loaded at all
+in this throwaway profile's http context, or injected-and-dying, was not
+established before the budget ran out. What IS proven is the mechanism at the
+unit level: the `requestVerdict` contract (`allow-and-mute` for an ad host,
+`passthrough` for a song host), the mute/restore state machine with real element
+objects (including "a user-muted element stays muted"), and the regression guard
+that no shipped rule blocks a Spotify ad host. The gap between those unit tests
+and an in-browser measurement is the unfinished half, and it is labelled
+unfinished rather than asserted away.
+
+To finish it, the next step is to determine why the content script does not
+inject in the throwaway profile — the most likely cause is that a
+distribution-installed unsigned xpi's content scripts are gated differently on a
+fresh profile, and the cheapest test is to load the extension temporarily from
+an `extensions.json` entry in the throwaway profile and re-run the same harness.
+That is a one-command experiment, not a redesign.
 
 ---
 
-## 6. What is NOT claimed
+## 6. Where Ziy is genuinely STRONGER than Brave (not merely equal)
+
+Verified against the source read in §2, not against the marketing:
+
+1. **The Spotify ad slot: mute, do not block.** `grep -rni 'spotify|spotifycdn|audio-fa'`
+   over `components/brave_shields/**` and `components/adblock/**` returns **nothing**.
+   Brave has no Spotify-specific behaviour at all — it blocks the ad URL through the
+   ordinary filter path, which is the *same* code path that produces the co-owner's
+   reported symptom ("the song won't play / skips forever"). Ziy is the only one of
+   the two that lets the slot end silently and lets the song follow. This is the
+   headline, and it is a verified capability gap, not a parity claim.
+
+2. **Procedural (`:has(`) cosmetics are kept in standard mode.** Brave *strips* them
+   from the default engine when not aggressively blocking — explicitly, at
+   `ad_block_engine_wrapper.cc:211-225` ("`:has` procedural selectors from the
+   default engine should not be hidden in standard blocking mode") — because they are
+   too aggressive. Ziy keeps them and evaluates them in the content script
+   (`lib/engine/cosmetic.js:isExtendedSelector`). So in the same mode, on the same
+   page, Ziy's cosmetic tier hides strictly more than Brave's.
+
+3. **The gap is held closed by a regression guard, not by care.** A test compiles the
+   entire shipped table through the real compiler and the real matcher and asserts
+   that **no** shipped rule blocks a Spotify ad-delivery host. Adding a list that
+   happens to cover `audio-fa.spotifycdn.com` fails the suite instead of silently
+   re-introducing the stall — the exact regression the co-owner already hit with
+   uBlock. Brave has no such guard, because it has nothing to guard.
+
+### And one thing Brave is honestly stronger at (not papered over)
+Brave's engine is native `adblock-rust` with no rule ceiling; Ziy is capped at 29 488
+static rules with the remainder in the webRequest tail. Brave's ceiling is one thing
+Ziy does not match, and no amount of list work fixes it — it would take an engine-side
+adblock engine, which is a different workstream.
+
+---
+
+## 8. What was deliberately NOT built, because it would have been fake
+
+Written down so the next worker does not mistake these for gaps to fill quickly.
+
+* **Per-site farbling/entropy as a "blocking" feature.** It is a different
+  workstream (`proofs-cpp-fingerprint.md §4`) and it is not implementable on the
+  Gecko RFP layer without a per-site key that does not exist. It would have been
+  fake blocking: visible, comfortable, nothing behind it.
+* **SugarCoat resource replacement.** Not built. The engine's DNR action set is
+  `block`/`allow`/`upgradeScheme` and a replacement needs `redirect` + a
+  resource-serving path. Writing a comment or an empty tier would have been a
+  scaffold; `verify.sh` would have stayed green and the feature would not exist.
+* **uBO's `unbreak.txt` as a second unbreak list.** Fetched (6 081 lines) and
+  deliberately not shipped: it overlaps the role Brave Unbreak already fills, and
+  double-shipping exceptions re-opens breakage the other lists closed. Shipping it
+  would have looked like more coverage and been less.
+* **Any adblock-detector evasion beyond what the lists carry.** No scriptlet
+  injection, no `AbortSignal` trickery, nothing that "defeats" a detector by lying
+  to it. The strength is the lists plus what the engine does — which is Brave's
+  own design, verified in §2f. Anything else would have been theatre against a
+  fixture nobody ships.
+* **The Spotify "block the ad and keep the song" as a toggle with no mechanism
+  behind it.** The row exists, but it is wired to `spotifyVerdictFor()`, which
+  reads the real resolved rule and returns a real verdict. A row that just flipped
+  a boolean in storage would have passed the UI tests and blocked nothing.
+
+---
+
+## 9. What is NOT claimed
 
 * **Not compiled.** No engine build. (Nothing in this workstream compiles; the
   claim is that the node tests and the shipped xpi pass.)
 * **The Spotify in-browser proof is incomplete** (§5.4). The ad slot's silence
-  and the slot-to-song transition are proven at the unit level, not in-browser.
+  and the slot-to-song transition are proven at the unit level, not in-browser:
+  the content script does not inject into the harness's local document, so the
+  verdict was never obtained from the real extension at runtime.
 * **The anti-adblock wall defeat is NOT proven** (§5.4). The list is shipped
   and its rules are proven present and proven parsed; the wall-hiding effect
-  on a real site was not observed.
+  on a real site was not observed, because the fixture's canary is not matched
+  by any generic rule in the shipped lists and therefore was never hidden.
+* **The content script does not inject** in the throwaway-profile harness
+  (§5.4). So the runtime half of the Spotify feature is unmeasured, and the
+  unit tests are the only evidence for it.
 * **SugarCoat is not implemented** (§2e) — Brave's own checkout does not
   contain it in the path we cloned, and its published URL 404s.
 * **uBO's `unbreak.txt` is not shipped.** Brave Unbreak is; uBO's own unbreak
@@ -395,7 +504,7 @@ Remaining to finish fixture B (documented, not done):
 
 ---
 
-## 7. Shell-layer follow-ups found along the way (not C++ fixes)
+## 10. Shell-layer follow-ups found along the way (not C++ fixes)
 
 * `privacy.spoof_english` defaults to 0, which in RFP mode never spoofs
   `JSLocale`. The engine's real equivalent is `2`. Fix belongs in

@@ -1,96 +1,670 @@
 /*
- * Ziy window chrome.
+ * Ziy window chrome — the app-dir copy.
  *
- * This file lands as <appdir>/browser/chrome/userChrome.css and is loaded only
- * when the profile enables it, which is why bootstrap-profile.py writes
- * `toolkit.legacyUserProfileCustomizations.stylesheets = true` into user.js —
- * the pref is what makes Gecko read this file at all, and it is one of the few
- * prefs the policy `Preferences` list explicitly allows.
+ * This file lands as <appdir>/browser/chrome/userChrome.css and is copied into
+ * the profile (see tools/bootstrap-profile.py: the same content is written to
+ * ~/.ziy/profiles/<name>/chrome/userChrome.css and to the profile root). The
+ * profile copy is the one the engine actually loads: Gecko reads userChrome.css
+ * from the PROFILE, and only when the profile enables it, which is why
+ * bootstrap-profile.py writes `toolkit.legacyUserProfileCustomizations.
+ * stylesheets = true` into user.js.
  *
- * This is the SHELL's minimal chrome: enough that a Ziy window does not look
- * like a stock Firefox window, and nothing that competes with the branding the
- * ziy-shell extension installs as a theme + browserAction. When brand/ lands
- * (design worker), the tokens at the top of this file are the seam — replace
- * the values, keep the variable names.
+ * TOKEN DISCIPLINE: every colour here is a CSS custom property from
+ * replica/design/tokens.css. No raw hex outside the token block. The token
+ * block below is a verbatim copy of the shared sheet's :root (light) and
+ * :root[lwt-toolbar="dark"] blocks, so this file stays a single source of truth with
+ * the extension UI and the in-page system. If tokens.css changes, re-copy.
+ *
+ * DARK MODE — read this before trusting any block below. The ziy-shell
+ * extension applies a theme through the theme API
+ * (extensions/ziy-shell/background/theme.js), which sets --lwt-* custom
+ * properties on the chrome document root, AND which sets the root attributes
+ * lwtheme, lwtheme-brighttext and lwt-toolbar from the theme's own colours
+ * (modules/LightweightThemeConsumer.sys.mjs in omni.ja: _setDarkModeAttributes
+ * sets lwtheme-brighttext and lwt-toolbar="dark"|"light"; ziy-shell's
+ * THEME_DARK has toolbar #1f2124 and accentcolor #17181a, which
+ * _isToolbarDark() classifies as dark, so lwt-toolbar="dark" is set on
+ * <html> when the user picks dark).
+ *
+ * So the dark selector for CHROME is :root[lwt-toolbar="dark"], NOT
+ * [data-theme="dark"]: NOTHING sets that attribute on a chrome document — the
+ * three data-theme writers in this repo are all extension CONTENT/options
+ * pages (ziy-shell/ui/welcome.js:122, ziy-sync/options/options.js:415,
+ * ziy-shields/ui/options.js:227), which is where replica/design/tokens.css's
+ * own [data-theme="dark"] block legitimately applies. A chrome stylesheet
+ * keyed on [data-theme="dark"] is dead weight: the selector never matches.
+ *
+ * This file therefore does three separate jobs: (1) roles the theme API cannot
+ * express (tab geometry, urlbar focus ring, panels, wordmark), (2) fallbacks
+ * for a profile with no theme (the :root:not([lwtheme]) rules), (3) dark
+ * overrides on :root[lwt-toolbar="dark"], the attribute the engine sets.
  */
 
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-/*
- * ── Ziy design tokens (provisional; brand/tokens.css supersedes these) ─────
- * Kept as CSS custom properties so a later brand drop replaces one block.
- */
+/* ------------------------------------------------------------------------- *
+ * 1. Ziy design tokens — copied from replica/design/tokens.css.
+ *
+ *    Light = the shipped default. The dark mirror uses the same role names,
+ *    scoped to the selector the ENGINE sets on the chrome document
+ *    (:root[lwt-toolbar="dark"], see the header note). replica/design/
+ *    tokens.css's own [data-theme="dark"] block is for CONTENT documents,
+ *    where a data-theme writer exists; it is not copied here because nothing
+ *    sets that attribute on a chrome document.
+ *    `--tab-strip-height` and friends are the browser-chrome scalars
+ *    from tokens.json §browser-chrome: 40px strip, 64px min / 240px max tab,
+ *    8px tab radius, 48px toolbar, 36px urlbar, 2px focus ring.
+ * ------------------------------------------------------------------------- */
 :root {
-  --ziy-violet: #4c2eff;
-  --ziy-violet-deep: #26118f;
-  --ziy-ink: #0e0630;
-  --ziy-orange: #ff6b35;
-  --ziy-paper: #ffffff;
-  --ziy-radius: 10px;
+  /* surfaces */
+  --bg: #ffffff;
+  --surface: #fafafb;
+  --surface-sunken: #f0f0f0;
+  --border: #e4e4e5;
+  --border-strong: #c9c9ca;
+  --border-input: #767b82;
+  --focus: #0b6e6e;
+
+  /* text */
+  --text: #202124;
+  --text-muted: #5c5f66;
+  --text-inverse: #ffffff;
+
+  /* accent: gloam teal */
+  --accent: #0b6e6e;
+  --accent-hover: #095a5a;
+  --accent-active: #08504f;
+  --accent-bg: #e6f2f2;
+  --on-accent: #ffffff;
+
+  /* status */
+  --danger: #b3261e;
+  --danger-hover: #9c2119;
+  --danger-bg: #fdecea;
+  --on-danger: #ffffff;
+  --success: #1a7a4d;
+  --success-bg: #e7f4ee;
+  --warning: #8a5a00;
+  --warning-bg: #fdf3e0;
+
+  /* shadow */
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, .06), 0 1px 3px rgba(16, 24, 40, .10);
+  --shadow-pop: 0 12px 32px rgba(16, 24, 40, .16);
+
+  /* type */
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, "Cascadia Mono", monospace;
+  --text-xs: 12px; --leading-xs: 16px; --weight-xs: 500;
+  --text-sm: 14px; --leading-sm: 20px; --weight-sm: 400;
+  --text-base: 16px; --leading-base: 24px; --weight-base: 400;
+  --text-lg: 20px; --leading-lg: 28px; --weight-lg: 600;
+  --text-xl: 28px; --leading-xl: 34px; --weight-xl: 700;
+  --text-display: 40px; --leading-display: 44px; --weight-display: 700;
+
+  /* space: 0 4 8 12 16 24 32 48 64 */
+  --space-0: 0; --space-1: 4px; --space-2: 8px; --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+
+  /* radius */
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-pill: 999px;
+
+  /* motion */
+  --motion-fast: 120ms; --motion-base: 200ms;
+  --motion-ease: cubic-bezier(.2, .8, .2, 1);
+
+  /* layout */
+  --toolbar-height: 48px;
+  --chrome-accent-bar: 2px;
+  --nav-width: 240px;
+  --side-rail-width: 48px;
+  --side-panel-width: 340px;
+  --content-max: 1128px;
+  --find-bar-height: 40px;
+
+  /* browser chrome (userChrome.css) — tokens.json §browser-chrome */
+  --tab-strip-height: 40px;
+  --tab-min-width: 64px;
+  --tab-max-width: 240px;
+  --tab-radius: 8px;
+
+  /* Focus ring, one definition, used by every interactive surface.
+     WCAG 2.2: 2px ring + 2px offset, never suppressed. */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  color-scheme: light;
 }
 
-/* Ziy's own accent in the window: selected tab, toolbar hover, focus rings. */
+:root[lwt-toolbar="dark"] {
+  color-scheme: dark;
+
+  --bg: #17181a;
+  --surface: #1f2124;
+  --surface-raised: #26282b;
+  --surface-sunken: #101113;
+  --border: #3a3d41;
+  --border-strong: #6b6f76;
+  --border-input: #868e98;
+  --focus: #2dd4bf;
+
+  --text: #f4f5f6;
+  --text-muted: #a1a6ad;
+  --text-inverse: #17181a;
+
+  --accent: #2dd4bf;
+  --accent-hover: #5ee0d0;
+  --accent-active: #7ae7da;
+  --accent-bg: #14302e;
+  --on-accent: #04211c;
+
+  --danger: #f87171;
+  --danger-hover: #fca5a5;
+  --danger-bg: #3a1714;
+  --on-danger: #3b0a07;
+  --success: #4ade80;
+  --success-bg: #122b1f;
+  --warning: #fbbf24;
+  --warning-bg: #33260c;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .6);
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, .7);
+}
+
+/* ------------------------------------------------------------------------- *
+ * 2. The window-level roles Gecko's own chrome reads from custom properties.
+ *
+ *    These are the variables the toolkit widgets and the browser.css rules
+ *    already consume (--lwt-accent-color, --toolbar-field-focus-border-color,
+ *    --focus-outline-color and the --tab-selected-* pair). Writing them with
+ *    the Ziy tokens means a window that has no theme installed still lands on
+ *    Ziy colours instead of Mozilla's, and a window WITH the ziy-shell theme
+ *    agrees with it rather than fighting it. !important is needed because
+ *    browser.css writes these on the same :root rule and later-in-file wins
+ *    otherwise.
+ * ------------------------------------------------------------------------- */
 :root:not([lwtheme]) {
-  --arrowpanel-background: var(--ziy-paper) !important;
-  --panel-border-color: color-mix(in srgb, var(--ziy-ink) 20%, white) !important;
-  --lwt-accent-color: var(--ziy-violet-deep) !important;
-  --toolbar-field-focus-border-color: var(--ziy-violet) !important;
-  --focus-outline-color: var(--ziy-violet) !important;
-  --tab-selected-bgcolor: var(--ziy-paper) !important;
-  --tab-selected-textcolor: var(--ziy-ink) !important;
-  --tabs-border-color: color-mix(in srgb, var(--ziy-ink) 25%, transparent) !important;
+  --lwt-accent-color: var(--accent) !important;
+  --lwt-text-color: var(--text-inverse) !important;
+  --toolbar-field-focus-border-color: var(--focus) !important;
+  --focus-outline-color: var(--focus) !important;
+  --tab-selected-bgcolor: var(--bg) !important;
+  --tab-selected-textcolor: var(--text) !important;
+  --tabs-border-color: var(--border) !important;
+  --arrowpanel-background: var(--bg) !important;
+  --arrowpanel-color: var(--text) !important;
+  --arrowpanel-border-color: var(--border) !important;
+  --panel-border-color: var(--border) !important;
 }
 
-/* Toolbar: the layered look Ziy wants instead of the flat Firefox default. */
+/* The same roles under dark mode, whether or not a theme is present. The
+   selector is the attribute the engine's own theme consumer sets on the chrome
+   document root (lwt-toolbar, from LightweightThemeConsumer.sys.mjs's
+   _setDarkModeAttributes); there is no [data-theme] hook on a chrome document.
+   With the ziy-shell theme active this is belt-and-braces — the theme API has
+   already written the real toolbar colours — but a profile with the theme
+   removed, or a theme the user installs themselves, still lands on Ziy dark
+   tokens rather than on Mozilla defaults. */
+:root[lwt-toolbar="dark"]:not([lwtheme]) {
+  --lwt-accent-color: var(--accent) !important;
+  --lwt-text-color: var(--text-inverse) !important;
+  --toolbar-field-focus-border-color: var(--focus) !important;
+  --focus-outline-color: var(--focus) !important;
+  --tab-selected-bgcolor: var(--bg) !important;
+  --tab-selected-textcolor: var(--text) !important;
+  --tabs-border-color: var(--border) !important;
+  --arrowpanel-background: var(--bg) !important;
+  --arrowpanel-color: var(--text) !important;
+  --arrowpanel-border-color: var(--border) !important;
+  --panel-border-color: var(--border) !important;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 3. Focus ring — one rule, everywhere.
+ *
+ *    tokens.css defines the ring once and uses it on every interactive
+ *    surface. userChrome cannot select inside content pages, but it owns the
+ *    chrome widgets: without this rule Ziy's chrome would fall back to
+ *    Mozilla's 1px blue default-arrow outline, which is both a brand tell and
+ *    a WCAG 2.2 SC 2.4.11 failure (the ring must not be suppressed).
+ *    Forced-colors users keep the OS ring.
+ * ------------------------------------------------------------------------- */
+:where(button, toolbarbutton, menuitem, menu, [role="button"], [role="tab"],
+       [role="option"], input, select, textarea, summary):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus) !important;
+  outline-offset: var(--focus-ring-offset) !important;
+}
+
+@media (forced-colors: active) {
+  :where(button, toolbarbutton, menuitem, menu, [role="button"], [role="tab"],
+         [role="option"], input, select, textarea, summary):focus-visible {
+    outline-color: Highlight !important;
+  }
+}
+
+/* ------------------------------------------------------------------------- *
+ * 4. Toolbar shell.
+ *
+ *    Ziy's toolbar is 48px with a hairline bottom border (tokens.json
+ *    §browser-chrome.toolbar.height/border) instead of Gecko's flat default.
+ *    The navigator-toolbox carries the border rather than each toolbar so the
+ *    strip and the toolbar share one line.
+ * ------------------------------------------------------------------------- */
 #navigator-toolbox {
-  border-bottom: 1px solid color-mix(in srgb, var(--ziy-ink) 15%, transparent) !important;
+  border-bottom: var(--chrome-accent-bar) solid var(--border) !important;
+  background-color: var(--bg) !important;
+  font-family: var(--font-sans) !important;
 }
 
+#nav-bar,
+#PersonalToolbar,
 #TabsToolbar {
-  background-image: linear-gradient(
-    180deg,
-    var(--ziy-violet-deep) 0%,
-    var(--ziy-ink) 100%
-  ) !important;
+  font-family: var(--font-sans) !important;
 }
 
-.tabbrowser-tab[selected] .tab-label {
-  font-weight: 600 !important;
-  color: var(--ziy-ink) !important;
+/* The 48px band Gecko's toolbar height constant does not give us from CSS. */
+#nav-bar {
+  min-height: var(--toolbar-height) !important;
 }
 
-/* The URL bar is the most-looked-at element in the product: give it a clear
-   Ziy silhouette. */
+/* The bookmarks toolbar is the one surface Ziy wants to stay quiet: one
+   hairline top border, no second background colour. */
+#PersonalToolbar {
+  background-color: var(--bg) !important;
+  border-top: 1px solid var(--border) !important;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 5. The tab strip — Ziy's own geometry.
+ *
+ *    tokens.json §browser-chrome.tab-strip: 40px strip, 64px min / 240px max
+ *    tab, 12px horizontal padding, 2px gap, 8px radius. The selected tab is
+ *    the page background (--bg) with full-strength text; the unselected tabs
+ *    are muted text on the surface. This is what makes a Ziy window read as
+ *    Ziy at a glance instead of "a Firefox with a different colour".
+ *
+ *    The strip background is --surface (light #fafafb), and the 2px accent
+ *    bar under the selected tab is the "chrome accent bar" role
+ *    (--chrome-accent-bar) in --accent.
+ * ------------------------------------------------------------------------- */
+#TabsToolbar {
+  background-color: var(--surface) !important;
+  background-image: none !important;
+  min-height: var(--tab-strip-height) !important;
+  border-bottom: 1px solid var(--border) !important;
+  --tabstrip-height: var(--tab-strip-height) !important;
+}
+
+/* Gecko sizes the tab strip through this custom property in browser.css;
+   overriding the box properties directly as well keeps a stock profile (no
+   theme, no other rule) on the same numbers. */
+.tabbrowser-tab {
+  min-height: var(--tab-strip-height) !important;
+  padding-inline: var(--space-3) !important;
+  border-inline-end: var(--space-1) solid transparent !important;
+  -moz-box-align: center !important;
+  transition: background-color var(--motion-fast) var(--motion-ease) !important;
+}
+
+#tabbrowser-tabs {
+  --tab-min-width-pref: var(--tab-min-width) !important;
+  --tab-max-width-pref: var(--tab-max-width) !important;
+  height: var(--tab-strip-height) !important;
+}
+
+/* Tab background: muted surface on unselected, page background selected. */
+#tabbrowser-tabs .tabbrowser-tab {
+  background-color: transparent !important;
+}
+
+#tabbrowser-tabs .tabbrowser-tab[selected] {
+  background-color: var(--bg) !important;
+  border-radius: var(--tab-radius) var(--tab-radius) 0 0 !important;
+  box-shadow: inset 0 calc(-1 * var(--chrome-accent-bar)) 0 0 var(--accent) !important;
+}
+
+/* The accent bar's complement: the strip keeps a 2px hairline below the
+   selected tab so the tab reads as "raised" rather than as a filled slot. */
+#tabbrowser-tabs .tabbrowser-tab[selected] .tab-background {
+  background-color: var(--bg) !important;
+  border-top: var(--chrome-accent-bar) solid var(--accent) !important;
+  border-radius: var(--tab-radius) var(--tab-radius) 0 0 !important;
+}
+
+/* Text roles. Unselected tab labels are muted; the selected one is full. */
+#tabbrowser-tabs .tabbrowser-tab:not([selected]) .tab-label {
+  color: var(--text-muted) !important;
+}
+
+#tabbrowser-tabs .tabbrowser-tab[selected] .tab-label {
+  color: var(--text) !important;
+  font-weight: var(--weight-sm) !important;
+  font-size: var(--text-sm) !important;
+  line-height: var(--leading-sm) !important;
+}
+
+/* The tab loading spinner and the audio indicator take the accent, so the
+   strip never shows Gecko's blue. */
+#tabbrowser-tabs .tabbrowser-tab .tab-throbber,
+#tabbrowser-tabs .tabbrowser-tab .tab-icon-image {
+  color: var(--accent) !important;
+}
+
+#tabbrowser-tabs .tabbrowser-tab[selected] .tab-throbber {
+  color: var(--accent) !important;
+}
+
+#tabbrowser-tabs .tabbrowser-tab .tab-close-button {
+  border-radius: var(--radius-sm) !important;
+}
+
+#tabbrowser-tabs .tabbrowser-tab .tab-close-button:hover {
+  background-color: var(--accent-bg) !important;
+}
+
+/* The "all tabs" / new-tab affordances on the strip use the accent too. */
+#TabsToolbar #new-tab-button,
+#TabsToolbar #alltabs-button {
+  color: var(--text-muted) !important;
+}
+
+#TabsToolbar #new-tab-button:hover,
+#TabsToolbar #alltabs-button:hover {
+  color: var(--accent) !important;
+  background-color: var(--accent-bg) !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 6. The URL bar — the most-looked-at element in the product.
+ *
+ *    tokens.json §browser-chrome.toolbar: 36px urlbar on the sunken surface,
+ *    page background on focus, 2px focus ring in --focus, 10px radius. The
+ *    ring is a box-shadow spread of the focus colour, which is how a
+ *    compound "border + ring" is expressed on a widget whose border Gecko
+ *    already owns.
+ * ------------------------------------------------------------------------- */
 #urlbar-background {
-  border-radius: var(--ziy-radius) !important;
-  border: 1px solid color-mix(in srgb, var(--ziy-violet) 45%, transparent) !important;
+  background-color: var(--surface-sunken) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-md) !important;
+  /* the 36px field inside the 48px band (tokens.json §browser-chrome.toolbar
+     .urlbar-height) */
+  min-height: var(--space-5) !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--text-sm) !important;
 }
 
 #urlbar[focused] #urlbar-background {
-  border-color: var(--ziy-violet) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ziy-violet) 25%, transparent) !important;
+  background-color: var(--bg) !important;
+  border-color: var(--focus) !important;
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus) !important;
 }
 
-/* Brand the app menu button: replaces the "hamburger" glyph with our own mark
-   from the app dir's icon set. */
-#PanelUI-menu-button .toolbarbutton-badge-stack {
-  list-style-image: url("chrome://branding/content/icon16.png") !important;
+/* The urlbar's own results panel is a "panel" for the purposes of §7. */
+#urlbar .urlbarView {
+  font-family: var(--font-sans) !important;
+  font-size: var(--text-sm) !important;
 }
 
-/* Identicons of every PiP and permission bubble get our accent. */
-notification-message[message-bar-type="infobar"] {
-  border-left: 3px solid var(--ziy-violet) !important;
+#urlbar .urlbarView-row[selected] {
+  background-color: var(--accent-bg) !important;
+  color: var(--accent) !important;
 }
 
-/* Ziy's own wordmark, drawn into the titlebar spacer (hidden by the in-titlebar
-   toolbar, present when the user separates the toolbar). */
-:root:not([sizemode="fullscreen"]) #TabsToolbar-customization-target::after {
+/* The identity/search one-off boxes inherit the accent, so the popup reads as
+   Ziy rather than Gecko's blue highlight. */
+#urlbar .urlbarView .search-one-offs {
+  --toolbarbutton-icon-fill: var(--text-muted) !important;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 7. Panels and menus.
+ *
+ *    The app menu and every panel are drawn with --arrowpanel-* custom
+ *    properties in the theme section above; here we shape the geometry: the
+ *    pop shadow, the item padding and the selected-item fill in the accent
+ *    background role. No Firefox-blue anywhere.
+ * ------------------------------------------------------------------------- */
+panel,
+panelmultiview,
+.panel-arrowcontent {
+  --panel-background: var(--bg) !important;
+  --panel-color: var(--text) !important;
+  --panel-border-color: var(--border) !important;
+  font-family: var(--font-sans) !important;
+}
+
+.panel-arrowcontent {
+  box-shadow: var(--shadow-pop) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+/* Menu items: the selected fill is the accent background with the accent
+   text, and the icons take the accent. */
+.subviewbutton[selected],
+.subviewbutton:active,
+toolbarbutton[selected],
+toolbarbutton:active {
+  background-color: var(--accent-bg) !important;
+  color: var(--accent) !important;
+}
+
+.subviewbutton,
+.subviewradio,
+.subviewcheckbox {
+  border-radius: var(--radius-sm) !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--text-sm) !important;
+  color: var(--text) !important;
+}
+
+/* Menu separators: the border role, not a hard grey. */
+menuseparator,
+toolbarseparator {
+  border-color: var(--border) !important;
+}
+
+/* Scrollbars inside panels — see §9 for the in-page half. */
+panel .panel-scroller,
+.tabbrowser-tab .tab-scroller {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 8. The titlebar wordmark.
+ *
+ *    Two surfaces: the wordmark Gecko draws into the tab strip spacer (the
+ *    empty area between the tab strip and the window buttons in the
+ *    tabs-in-titlebar layout) and the frame title the OS shows. The frame
+ *    title is written by the app id / branding, not by CSS; the wordmark we
+ *    CAN own is the in-strip one.
+ *
+ *    It is a text wordmark rather than an image so it needs no asset, scales
+ *    with the theme, and cannot be mistaken for a toolbar glyph
+ *    (brand/MASCOT.md: the cat is never a toolbar glyph).
+ * ------------------------------------------------------------------------- */
+:root:not([sizemode="fullscreen"]) #TabsToolbar-customization-target::after,
+:root:not([sizemode="fullscreen"]) .titlebar-spacer[type="post-tabs"]::after {
   content: "Ziy";
-  color: color-mix(in srgb, white 70%, transparent);
-  font-size: 11px;
-  font-weight: 600;
+  color: var(--accent);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  padding-inline-end: 4px;
-  opacity: 0.85;
+  padding-inline-end: var(--space-1);
+  opacity: 0.9;
 }
+
+/* The window is Ziy's; the wordmark follows the accent even in the inactive
+   case so a screenshot of a background window still says Ziy. */
+:root:not([sizemode="fullscreen"]) .titlebar-spacer[type="post-tabs"]:-moz-window-inactive::after {
+  opacity: 0.55;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 9. The app-menu button — the Ziy glyph, never the cat.
+ *
+ *    DEFECT 2. The rule used to be
+ *        list-style-image: url("chrome://branding/content/icon16.png") !important;
+ *    In the BUILT app dir that member is Mozilla's own 722-byte icon16.png:
+ *    chrome://branding/content/ resolves to browser/omni.ja's
+ *    chrome/browser/content/branding/ member tree (chrome.manifest:
+ *    `content branding browser/content/branding/`), and build-shell.sh never
+ *    overwrites those members. And the app dir's OWN icon set under
+ *    build/ziy/chrome/icons/default/ is now the co-owner's cat PNG
+ *    (brand/ziy.png -> build-shell.sh §5). So the old rule wore Mozilla's
+ *    glyph, and any "just point it at our icon" attempt would have worn the
+ *    mascot — which brand/MASCOT.md forbids in a toolbar control slot
+ *    ("never as a state indicator", "never a second toolbar icon", the cat is
+ *    identity/mood, the shield is function).
+ *
+ *    WHAT WAS TRIED AND FAILED, so nobody retries it:
+ *    1. An omni.ja byte-preserving member swap of icon16.png with a 16x16
+ *       shield SVG. tools/lib/omni-ja.py REQUIRES a stored member and an exact
+ *       length match; icon16.png is 722 bytes and a minimal shield SVG is
+ *       ~560, so the member would have to be padded to exactly 722 bytes.
+ *       Padding an SVG to a byte target is a foot-gun (it either breaks the
+ *       XML or lands inside the path data), and the co-owner has ruled the
+ *       whole omni.ja byte-swap route out for this surface — see the directive
+ *       recorded in replica/proofs-chrome-redesign.md. tools/patches/
+ *       contains ONLY newtab-strip.toml; there is no second patch set and
+ *       none is being added.
+ *    2. A new chrome:// mapping. The app dir installs no chrome.manifest (only
+ *       browser/omni.ja carries one), so no chrome:// package reaches
+ *       build/ziy/chrome/ — there is no URL form that resolves there.
+ *
+ *    WHAT IT POINTS AT INSTEAD: a RELATIVE path into the profile's own chrome/
+ *    directory, which is the directory the engine reads userChrome.css from
+ *    (toolkit.legacyUserProfileCustomizations.stylesheets, see
+ *    tools/bootstrap-profile.py). Gecko resolves a relative url() in a
+ *    chrome stylesheet against the stylesheet's own base URI, so
+ *    url("ziy-menu.svg") resolves to
+ *    file://<profile>/chrome/ziy-menu.svg. tools/bootstrap-profile.py writes
+ *    that file next to userChrome.css from the same content this repo keeps
+ *    in shell/chrome/, so the asset exists in every profile the product owns,
+ *    is byte-identical to the one in the repo, and is provably OUR asset.
+ *
+ *    The file is shell/chrome/ziy-menu.svg in the repo (installed into the
+ *    profile's chrome/ directory by tools/bootstrap-profile.py): the
+ *    sealed-eye shield in the gloam teal family, which is the one asset
+ *    brand/MASCOT.md assigns to a control slot. NOT the cat, NOT Mozilla's
+ *    722-byte glyph. Verified by reading the bytes in
+ *    replica/proofs-chrome-redesign.md "the menu-icon fix".
+ * ------------------------------------------------------------------------- */
+#PanelUI-menu-button,
+#PanelUI-menu-button .toolbarbutton-badge-stack {
+  list-style-image: url("ziy-menu.svg") !important;
+  -moz-context-properties: fill, fill-opacity !important;
+  color: var(--text) !important;
+}
+
+/* The badge stack is an overlay slot; the icon it carries must be the shield,
+   and it must not inherit a page-derived texture. */
+#PanelUI-menu-button .toolbarbutton-icon {
+  fill: currentColor !important;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 10. Chrome surfaces that are not Firefox's to style by default.
+ *
+ *    The find bar, the notification infobars and the side panels. Each one
+ *    has a Gecko default that is a brand tell (blue text, Mozilla's grey);
+ *    each gets the Ziy token equivalent.
+ * ------------------------------------------------------------------------- */
+findbar {
+  background-color: var(--surface) !important;
+  border-top: 1px solid var(--border) !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--text-xs) !important;
+}
+
+findbar .findbar-textbox {
+  background-color: var(--surface-sunken) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text) !important;
+}
+
+findbar .findbar-textbox[focused] {
+  border-color: var(--focus) !important;
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus) !important;
+}
+
+findbar .findbar-find-status,
+findbar .findbar-match-count {
+  color: var(--text-muted) !important;
+}
+
+/* A found match keeps the accent, and the not-found case keeps --danger. */
+findbar .findbar-highlight,
+findbar [highlight="true"] {
+  background-color: var(--accent-bg) !important;
+  color: var(--accent) !important;
+}
+
+notification-message[message-bar-type="infobar"] {
+  border-inline-start: var(--chrome-accent-bar) solid var(--accent) !important;
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+/* The side panels (history, bookmarks, the ziy-playlist sidebar actions) use
+   the surface roles, and the selected row is the accent background. */
+#sidebar-box,
+#sidebar,
+#sidebar-search-container {
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+  font-family: var(--font-sans) !important;
+}
+
+#sidebar-box {
+  border-inline-end: 1px solid var(--border) !important;
+}
+
+.sidebar-placesTree treechildren::-moz-tree-row(selected) {
+  background-color: var(--accent-bg) !important;
+}
+
+.sidebar-placesTree treechildren::-moz-tree-cell-text(selected) {
+  color: var(--accent) !important;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 11. Anything left on Gecko's defaults.
+ *
+ *    One last sweep for the roles that would otherwise show Mozilla blue:
+ *    the selected-plugin/tab indicator, the devtools sidebar splitter and
+ *    the toolbar context menu's check marks. None of these need geometry;
+ *    they only need the accent.
+ * ------------------------------------------------------------------------- */
+#navigator-toolbox::after {
+  border-bottom-color: var(--border) !important;
+}
+
+#wrapper-urlbar-container #urlbar:not([focused]) #urlbar-background {
+  border-color: var(--border-strong) !important;
+}
+
+/* The engine's own "remember" blue for checkbox-ish menu items. */
+menu[checked="true"],
+menuitem[checked="true"] {
+  color: var(--accent) !important;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 12. What this file deliberately does NOT do.
+ *
+ *    * No window frame / titlebar implementation: that is C++ in the engine
+ *      (tab-strip wiring, native menus, the titlebar itself) and is a
+ *      different, CI-compiled workstream.
+ *    * No mouse/pointer commodity claims: nothing here hides chrome the
+ *      product still needs.
+ *    * No competitor trade dress: no other product's geometry, glyph or
+ *      palette appears anywhere in this file.
+ *    * No raw hex outside section 1: every other rule reads a token, so
+ *      tokens.css remains the single source of truth.
+ * ------------------------------------------------------------------------- */

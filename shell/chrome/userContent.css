@@ -1,0 +1,352 @@
+/*
+ * Ziy in-page chrome — the content side.
+ *
+ * This lands as shell/chrome/userContent.css and is copied into the profile's
+ * chrome/ directory (and the profile root) by tools/bootstrap-profile.py, and
+ * into the app dir's browser/chrome/ by tools/build-shell.sh. It is read by
+ * the engine under the same pref as userChrome.css:
+ * toolkit.legacyUserProfileCustomizations.stylesheets.
+ *
+ * WHAT THIS FILE IS AND IS NOT. userContent.css applies to CONTENT pages, which
+ * for Ziy means: (a) the Gecko pages rendered inside the browser window that
+ * Ziy owns the chrome of — the about: family not overridden by an extension and
+ * the error pages; and (b) the scrollbar, selection and form-accent surfaces of
+ * the pages the user actually browses.
+ *
+ * It is NOT a second blocking engine and NOT a page restyle. The ziy-shields
+ * extension owns cosmetic filtering and Speedreader, and a site's own CSS
+ * always wins over a user stylesheet. What we can honestly claim here:
+ *   * the engine's own design-token variables — which drive its about: pages,
+ *     its buttons, its links and its selection colours — are pointed at the
+ *     Ziy values, so every page Gecko renders looks like Ziy rather than
+ *     Mozilla blue;
+ *   * scrollbars, selection and form-control accents match the brand, which no
+ *     site styles and which is one of the most visible "this is not Firefox"
+ *     tells;
+ *   * the reader/scrollbar treatment from tokens.json's browser-chrome roles is
+ *     applied consistently.
+ *
+ * ABOUT DARK MODE IN THIS FILE: the engine's modern about: pages do their light
+ * and dark in ONE place — chrome/toolkit/skin/classic/global/design-system/
+ * tokens-shared.css declares its tokens with CSS `light-dark(<light>, <dark>)`,
+ * e.g. `--color-accent-primary: light-dark(var(--color-blue-60),
+ * var(--color-cyan-30))`. That is why this file sets tokens rather than
+ * hexes: one override carries through BOTH schemes with no media query and no
+ * attribute selector. (There is no `[data-theme]` hook on a content document
+ * either — nothing sets it — and the older `--in-content-*` variable names this
+ * file used to write DO NOT EXIST in this engine: a scan of every member of
+ * both shipped omni.ja archives finds no CSS declaration of any `--in-content-*`
+ * custom property except `--in-content-zap-gradient`, so those rules were dead
+ * weight. See replica/proofs-chrome-redesign.md §3 for the scan.)
+ *
+ * TOKEN DISCIPLINE: no raw hex outside the token block, exactly as
+ * userChrome.css. replica/design/tokens.css stays the single source of truth.
+ */
+
+/* ------------------------------------------------------------------------- *
+ * 1. Ziy design tokens, from replica/design/tokens.css.
+ * ------------------------------------------------------------------------- */
+:root {
+  --bg: #ffffff;
+  --surface: #fafafb;
+  --surface-sunken: #f0f0f0;
+  --border: #e4e4e5;
+  --border-strong: #c9c9ca;
+  --border-input: #767b82;
+  --focus: #0b6e6e;
+
+  --text: #202124;
+  --text-muted: #5c5f66;
+  --text-inverse: #ffffff;
+
+  --accent: #0b6e6e;
+  --accent-hover: #095a5a;
+  --accent-active: #08504f;
+  --accent-bg: #e6f2f2;
+  --on-accent: #ffffff;
+
+  --danger: #b3261e;
+  --danger-bg: #fdecea;
+  --on-danger: #ffffff;
+  --success: #1a7a4d;
+  --success-bg: #e7f4ee;
+  --warning: #8a5a00;
+  --warning-bg: #fdf3e0;
+
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, "Cascadia Mono", monospace;
+  --text-xs: 12px; --leading-xs: 16px; --weight-xs: 500;
+  --text-sm: 14px; --leading-sm: 20px; --weight-sm: 400;
+  --text-base: 16px; --leading-base: 24px; --weight-base: 400;
+  --text-lg: 20px; --leading-lg: 28px; --weight-lg: 600;
+  --text-xl: 28px; --leading-xl: 34px; --weight-xl: 700;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px;
+
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-pill: 999px;
+
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
+  color-scheme: light;
+}
+
+/* ------------------------------------------------------------------------- *
+ * 2. The engine's OWN design tokens, pointed at Ziy's values.
+ *
+ *    This is the surface all modern Gecko chrome pages draw from:
+ *    chrome/toolkit/skin/classic/global/design-system/tokens-shared.css
+ *    (inside omni.ja) declares --color-accent-primary,
+ *    --background-color-box, --link-color, --border-color-interactive and the
+ *    rest with `light-dark(<light>, <dark>)`, so pointing them at Ziy values
+ *    reaches both schemes in one declaration — about:preferences,
+ *    about:addons, about:support, the panels and the error pages all render out
+ *    of these variables.
+ *
+ *    Every default in the engine is Mozilla blue (--color-accent-primary:
+ *    light-dark(blue-60, cyan-30) at tokens-shared.css:219, with a violet
+ *    variant at :894 for the brand layer). That blue — and its cyan dark
+ *    counterpart — is the second most visible Firefox tell in the product
+ *    after the tab strip, and this is the one place a content stylesheet can
+ *    actually remove it.
+ *
+ *    The two values below are the ENGINE's variable names, given the Ziy
+ *    accent. The light-dark() form is the engine's own idiom, kept verbatim so
+ *    the dark half follows the same token rather than being hard-coded.
+ * ------------------------------------------------------------------------- */
+:root {
+  /* Buttons, links, selected borders, focus outline.
+     --color-accent-primary is the engine's own accent role
+     (tokens-shared.css:70 uses it for
+     --button-background-color-primary, :398 for --focus-outline-color, :459
+     for --link-color), so retargeting it recolours the whole in-content
+     surface at once. */
+  --color-accent-primary: light-dark(var(--accent), var(--accent));
+  --color-accent-primary-hover: light-dark(var(--accent-hover), var(--accent-hover));
+  --color-accent-primary-active: light-dark(var(--accent-active), var(--accent-active));
+  --color-accent-attention: light-dark(var(--warning), var(--warning));
+
+  /* Surfaces: page, boxes, headers. */
+  --background-color-canvas: light-dark(var(--bg), #17181a);
+  --background-color-box: light-dark(var(--bg), #1f2124);
+  --background-color-box-info: light-dark(var(--accent-bg), #14302e);
+  --background-color-critical: light-dark(var(--danger), #f87171);
+  --background-color-information: light-dark(var(--accent-bg), #14302e);
+  --background-color-success: light-dark(var(--success-bg), #122b1f);
+  --background-color-warning: light-dark(var(--warning-bg), #33260c);
+
+  /* Text. */
+  --text-color-primary: light-dark(var(--text), #f4f5f6);
+  --text-color-deemphasized: light-dark(var(--text-muted), #a1a6ad);
+  --text-color-disabled: light-dark(var(--text-muted), #6b6f76);
+  --text-color-critical: light-dark(var(--danger), #f87171);
+
+  /* Links and focus. */
+  --link-color: light-dark(var(--accent), var(--accent-hover));
+  --link-color-hover: light-dark(var(--accent-hover), var(--accent-hover));
+  --link-color-active: light-dark(var(--accent-active), var(--accent-active));
+  --focus-outline-color: light-dark(var(--focus), var(--focus));
+
+  /* Borders and interactive controls. */
+  --border-color-interactive: light-dark(var(--border-input), #868e98);
+  --border-color-interactive-hover: light-dark(var(--accent), var(--accent));
+  --border-color-deemphasized: light-dark(var(--border), #3a3d41);
+  --border-color-transparent: transparent;
+  --border-color-selected: light-dark(var(--accent), var(--accent));
+  --border-color-success: light-dark(var(--success), #4ade80);
+  --border-color-critical: light-dark(var(--danger), #f87171);
+
+  /* Checkbox/radio/slider accents, so the native form controls are Ziy's
+     rather than the OS default blue. */
+  --color-accent-1: light-dark(var(--accent), var(--accent));
+  --color-accent-2: light-dark(var(--accent-hover), var(--accent-hover));
+  --color-accent-3: light-dark(var(--accent-active), var(--accent-active));
+}
+
+/* ------------------------------------------------------------------------- *
+ * 3. Typography and typography only.
+ *
+ *    The in-content pages take the engine's own font stack. Ziy's voice is
+ *    Inter first (tokens.json §font.sans), the same stack the chrome file and
+ *    every extension UI use. This sets the family on the page so about: pages
+ *    are not a different voice from the rest of the product.
+ * ------------------------------------------------------------------------- */
+@-moz-document url-prefix(about:),
+               url-prefix(chrome://browser/content/) {
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-base);
+    color: var(--text-color-primary);
+  }
+
+  /* WCAG 2.2 SC 2.4.11 — 2px ring + 2px offset, never suppressed. */
+  :where(button, a, input, select, textarea, summary, [role="button"],
+         [role="tab"], [role="option"], [tabindex]):focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-outline-color);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  /* Checkboxes and radios in the accent when checked. */
+  input[type="checkbox"]:checked,
+  input[type="radio"]:checked {
+    accent-color: var(--accent);
+  }
+
+  /* Focus ring on the outline-bearing interactive elements, kept from the
+     tokens above rather than re-declared per selector. */
+  ::selection {
+    background-color: var(--background-color-information);
+    color: var(--text-color-primary);
+  }
+}
+
+/* ------------------------------------------------------------------------- *
+ * 4. Scrollbars — the "not Firefox" tell that no site styles.
+ *
+ *    The engine's default is the platform's own scrollbar, and Ziy's is a
+ *    1px border-role thumb on the surface with the accent on hover. Thin by
+ *    default so the content area keeps its width. Applies to about: pages,
+ *    to the surfaces userContent.css reaches, and to content pages (whose
+ *    authors do not normally style it).
+ * ------------------------------------------------------------------------- */
+:root {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+:root:-moz-window-inactive {
+  scrollbar-color: var(--border) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-strong);
+  border-radius: var(--radius-pill);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent);
+}
+
+/* ------------------------------------------------------------------------- *
+ * 5. Text selection — the brand's accent at a weight that keeps text
+ *    readable (tokens.json pairs: accent-bg fill, accent text).
+ * ------------------------------------------------------------------------- */
+::selection {
+  background-color: var(--accent-bg);
+  color: var(--accent);
+}
+
+::-moz-selection {
+  background-color: var(--accent-bg);
+  color: var(--accent);
+}
+
+/* ------------------------------------------------------------------------- *
+ * 6. Reader / Speedreader surfaces.
+ *
+ *    Speedreader renders its article view inside the page's own document with
+ *    its own stylesheet, so what we own is the container it injects into: the
+ *    reader chrome and the measure. The measure comes from tokens.json
+ *    (--content-max 1128px, and a comfortable 680px reading column), so a long
+ *    line is never why a page reads like a spreadsheet. The reader's text and
+ *    background follow the tokens so the light/dark switch is one variable.
+ * ------------------------------------------------------------------------- */
+@-moz-document url-prefix(about:reader) {
+  :root {
+    --reader-background: var(--bg);
+    --reader-text: var(--text);
+    --reader-accent: var(--accent);
+    --reader-max-width: 680px;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--reader-background);
+    color: var(--reader-text);
+  }
+
+  .container {
+    max-width: var(--reader-max-width);
+    margin-inline: auto;
+  }
+
+  a {
+    color: var(--reader-accent);
+  }
+
+  .toolbar {
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+/* ------------------------------------------------------------------------- *
+ * 7. Error pages (neterror, blocked, "this site can't be reached").
+ *
+ *    Gecko draws these from chrome://global/content/netError.*, which is the
+ *    GRE's own content tree — the one content area a userContent sheet is
+ *    allowed to touch. Mozilla's defaults here are the Firefox purple title
+ *    and the Mozilla logo; Ziy's is the accent title, the token text colour and
+ *    the wordmark, so a failed load still says whose browser it is.
+ * ------------------------------------------------------------------------- */
+@-moz-document url-prefix(chrome://global/content/netError) {
+  :root {
+    --net-error-title-color: var(--accent);
+    --net-error-text-color: var(--text);
+    --net-error-background: var(--bg);
+    --net-error-border: var(--border);
+    --net-error-button-background: var(--accent);
+    --net-error-button-color: var(--on-accent);
+  }
+
+  #errorPageContainer {
+    background-color: var(--net-error-background);
+    color: var(--net-error-text-color);
+    font-family: var(--font-sans);
+  }
+
+  .title-text,
+  #errorTitleText {
+    color: var(--net-error-title-color);
+    font-family: var(--font-sans);
+    font-weight: var(--weight-lg);
+  }
+
+  .button-container button {
+    background-color: var(--net-error-button-background);
+    color: var(--net-error-button-color);
+    border: none;
+    border-radius: var(--radius-md);
+  }
+}
+
+/* ------------------------------------------------------------------------- *
+ * 8. What this file does NOT claim.
+ *
+ *    * It does not restyle the pages the user browses. A user stylesheet can
+ *      set custom properties and a few form/scrollbar/selection surfaces;
+ *      every site's own CSS wins over the rest, and claiming otherwise would
+ *      be a lie the first screenshot disproves.
+ *    * It does not pretend the `--in-content-*` variables exist. They do not,
+ *      in this engine — §2 points at the token names that DO exist, verified
+ *      by scanning every member of both shipped archives for a CSS declaration
+ *      of an `--in-content-*` name (only `--in-content-zap-gradient` exists,
+ *      and it is not ours to own).
+ *    * It does not touch the about: pages an extension overrides:
+ *      about:newtab and about:home are ziy-ntp's.
+ *    * It carries no rule that only looks like it works: every block above
+ *      names the variable it writes or the surface it shapes.
+ * ------------------------------------------------------------------------- */

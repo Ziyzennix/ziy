@@ -64,11 +64,11 @@
     "DisableFormHistory": true,
     "SearchEngines": {
       "PreventInstalls": false,
+      "Default": "Google",
+      "DefaultPrivate": "Google",
       "Remove": [
-        "Bing",
         "Amazon.com",
-        "eBay",
-        "DuckDuckGo"
+        "eBay"
       ]
     },
     "ExtensionSettings": {

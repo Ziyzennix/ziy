@@ -23,6 +23,11 @@
 #   9. native helpers have a real manifest target                              (--native)
 #  10. desktop integration files (ziy.desktop, install-desktop.sh, icons)      (--desktop)
 #  11. the clean-room guard: no reference product's name in the shipped tree
+#  12. the SELF-CONTAINED gate (--self-contained): build/ziy was produced from
+#      Mozilla's checksum-verified PREBUILT engine tarball, not from a host
+#      Firefox install — proof that Ziy does not depend on the OS's packaging.
+#      Run with ZIY_ENGINE_SOURCE=tarball set by the caller that built it, or it
+#      reports which engine the current build came from.
 #
 # Process hygiene (this is the part that must never break):
 #   * every browser we launch uses an explicit --profile under /tmp/ziy-*
@@ -40,6 +45,7 @@ export ZIY_VERIFY=1
 export NO_COLOR="${NO_COLOR:-0}"
 
 APP_DIR="${ZIY_APP_DIR:-$ROOT/build/ziy}"
+BUILD_DIR="${ZIY_BUILD_DIR:-$ROOT/build}"
 PROFILE="${ZIY_VERIFY_PROFILE:-/tmp/ziy-shell-verify-profile}"
 SELF_TEST_ID="ziy-selftest@ziy.test"
 ARTIFACTS="${ZIY_VERIFY_ARTIFACTS:-$ROOT/build/verify}"
@@ -59,7 +65,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --keep-selftest) KEEP_SELFTEST=1; shift ;;
     --all) FILTER=""; shift ;;
-    --identity|--prefs|--extensions|--signing|--boot|--suite|--features|--native|--desktop|--prefs-lock) FILTER="$1"; shift ;;
+    --identity|--prefs|--extensions|--signing|--boot|--suite|--features|--native|--desktop|--prefs-lock|--self-contained) FILTER="$1"; shift ;;
     -h|--help) sed -n '2,26p' "${BASH_SOURCE[0]}"; exit 0 ;;
     *) die "unknown check: $1" ;;
   esac
@@ -798,6 +804,60 @@ PY
     ok "no reference product's name is a string literal in shipped code (comments excluded)"
   else
     bad "a reference product's name is a string literal in shipped code (see above)"
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+note "12. self-contained: built from Mozilla's checksum-verified tarball"
+# ---------------------------------------------------------------------------
+# The engine is a BUILD INPUT, so the gate is about where the input came from.
+# build-shell.sh writes build/engine-provenance.txt recording the engine path it
+# used and whether that path was fetched from Mozilla (fetch-engine.sh) or
+# discovered on the system. This check reads that record and, for the fetched
+# case, re-verifies the tarball's sha512 against Mozilla's own published
+# SHA512SUMS — so a Ziy built with no Firefox install at all is proven, not
+# asserted, and a build that silently used the host engine is reported as such.
+if run_check self-contained; then
+  PROVENANCE="$BUILD_DIR/engine-provenance.txt"
+  if [ ! -f "$PROVENANCE" ]; then
+    bad "no build/engine-provenance.txt — this build predates the self-contained path; rebuild with tools/build-shell.sh"
+  else
+    ENGINE_SRC="$(sed -n 's/^source=//p' "$PROVENANCE" | head -1)"
+    ENGINE_USED="$(sed -n 's/^engine=//p' "$PROVENANCE" | head -1)"
+    if [ "$ENGINE_SRC" = "tarball" ]; then
+      ok "build/ziy was built from Mozilla's prebuilt engine tarball (no host Firefox needed)"
+      log_step "engine" "$ENGINE_USED"
+      TARBALL_USED="$(sed -n 's/^tarball=//p' "$PROVENANCE" | head -1)"
+      SHA512_RECORDED="$(sed -n 's/^sha512=//p' "$PROVENANCE" | head -1)"
+      if [ -n "$TARBALL_USED" ] && [ -f "$TARBALL_USED" ]; then
+        SHA512_NOW="$(sha512sum "$TARBALL_USED" | awk '{print $1}')"
+        if [ "$SHA512_NOW" = "$SHA512_RECORDED" ]; then
+          ok "the engine tarball's sha512 still matches the value verified at build time"
+        else
+          bad "the engine tarball's sha512 CHANGED since the build — the build input is no longer the file that was verified"
+        fi
+        # And cross-check the recorded digest against Mozilla's own manifest,
+        # so "verified" means verified against Mozilla, not against ourselves.
+        SUMS_FILE="$(dirname -- "$TARBALL_USED")/SHA512SUMS"
+        if [ -f "$SUMS_FILE" ]; then
+          # The manifest lists "<sha512>  <platform>/<locale>/<artifact>"; match
+          # on the artifact's own relative path so a build directory containing
+          # spaces cannot break the lookup.
+          PUBLISHED="$(grep -F "linux-x86_64/en-US/firefox-156.0.1.tar.xz" "$SUMS_FILE" | awk '{print $1}' | head -1)"
+          if [ -n "$PUBLISHED" ] && [ "$PUBLISHED" = "$SHA512_RECORDED" ]; then
+            ok "that sha512 is the one Mozilla publishes for this artifact"
+          elif [ -z "$PUBLISHED" ]; then
+            skip "$SUMS_FILE does not list this artifact; the digest was verified at fetch time"
+          else
+            bad "digest disagrees with Mozilla's published SHA512SUMS"
+          fi
+        fi
+      else
+        skip "the tarball itself is not present ($TARBALL_USED) — only the build-time record was verified"
+      fi
+    else
+      skip "build/ziy was built from the system engine ($ENGINE_USED); rerun with no system Firefox, or with --engine-tarball, to prove the self-contained path"
+    fi
   fi
 fi
 

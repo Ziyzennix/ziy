@@ -415,15 +415,23 @@ def build_policies() -> dict:
             # must NOT be removed from the engine list here — it is what
             # browser.search.defaultenginename in distribution.ini has to
             # resolve to, and what the welcome page and the NTP picker default
-            # to. The rest are third-party/marketplace engines Ziy does not
-            # want surfaced in the address bar's one-offs.
+            # to.
+            #
+            # CORRECTED 2026-10-16: the list here used to include DuckDuckGo.
+            # It does not belong: ziy-shell's own first-run catalog offers it
+            # (extensions/ziy-shell/ui/welcome.js's ENGINES: google,
+            # duckduckgo, startpage, marginalia, custom), so removing it here
+            # left the welcome page offering a choice the policy had deleted —
+            # the user's pick silently fell back to the default. Keep only the
+            # two engines Ziy does not offer anywhere and that carry their own
+            # third-party branding into the address bar's one-offs.
             "SearchEngines": {
                 "PreventInstalls": False,
+                "Default": "Google",
+                "DefaultPrivate": "Google",
                 "Remove": [
-                    "Bing",
                     "Amazon.com",
                     "eBay",
-                    "DuckDuckGo",
                 ],
             },
             "ExtensionSettings": ext_settings,

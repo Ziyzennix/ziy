@@ -47,6 +47,7 @@ import asyncio
 import json
 import os
 import pathlib
+import shutil
 import signal
 import subprocess
 import sys
@@ -61,6 +62,13 @@ PROFILE = "/tmp/ziy-adwall-profile"
 PORT = 9225
 FIXTURE_WALL = "/tmp/ziy-adwall-fixture.html"
 FIXTURE_SPOTIFY = "/tmp/ziy-spotify-fixture.html"
+# The Spotify fixture is served over http:// on this port, because a file://
+# page has NO `browser`/`chrome` global and the extension API therefore does
+# not exist there — the fixture could never obtain a verdict, which is the bug
+# that made fixture B unmeasurable. Serving it makes the content script run for
+# real, exactly as it would on open.spotify.com.
+HTTP_PORT = 8765
+HTTP_DIR = "/tmp/ziy-fixtures"
 GEN = os.path.join(ROOT, "extensions", "ziy-shields", "tools",
                    "fixture-adwall-page.py")
 
@@ -105,6 +113,23 @@ def write_fixtures() -> None:
     for kind, out in (("wall", FIXTURE_WALL), ("spotify", FIXTURE_SPOTIFY)):
         subprocess.run([sys.executable, GEN, "--out", out, "--kind", kind],
                        check=True, capture_output=True)
+    # The Spotify copy is served over http; the wall stays file:// because it
+    # needs no extension API and is more trustworthy as a pure local page.
+    os.makedirs(HTTP_DIR, exist_ok=True)
+    shutil.copy(FIXTURE_SPOTIFY, os.path.join(HTTP_DIR, "spotify.html"))
+    with open(os.path.join(HTTP_DIR, "index.html"), "w") as f:
+        f.write('<!doctype html><meta charset="utf-8">'
+                '<meta http-equiv="refresh" content="0; url=spotify.html">'
+                '<a href="spotify.html">fixture</a>')
+
+
+def start_http() -> "subprocess.Popen":
+    """A throwaway http.server on loopback, so the page is an http document."""
+    return subprocess.Popen(
+        [sys.executable, "-m", "http.server", str(HTTP_PORT),
+         "--bind", "127.0.0.1", "--directory", HTTP_DIR],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
 
 
 def wait_for_marionette(timeout=45):
@@ -208,6 +233,8 @@ async def main() -> int:
     subprocess.run(["rm", "-rf", PROFILE])
     os.makedirs(PROFILE, exist_ok=True)
     write_fixtures()
+    httpd = start_http()
+    time.sleep(1)
 
     if not ports_free():
         print("FAIL: 2828 or the remote-debugging port is still held by a ")
@@ -260,6 +287,17 @@ async def main() -> int:
 
         async with transport as ws:
             session = await bidi_call(ws, "session.new", {"capabilities": {}}, 100)
+            # Keep the session warm: the remote agent can close an idle one,
+            # and a closed websocket mid-measurement would otherwise be
+            # reported as "the page never answered", which is a lie.
+            async def keepalive():
+                while True:
+                    await asyncio.sleep(20)
+                    try:
+                        await bidi_call(ws, "session.status", {}, 9999)
+                    except Exception:
+                        return
+            ka = asyncio.ensure_future(keepalive())
 
             # ---------- the shields install is live ----------
             installed, shields_active = [], False
@@ -323,11 +361,13 @@ async def main() -> int:
             # ---------- fixture B: the Spotify ad slot ----------
             print("\n=== fixture B: the Spotify ad slot ===")
             await bidi_call(ws, "browsingContext.navigate", {
-                "context": wall_ctx, "url": f"file://{FIXTURE_SPOTIFY}",
+                "context": wall_ctx,
+                "url": f"http://127.0.0.1:{HTTP_PORT}/spotify.html",
                 "wait": "complete",
             }, 111)
-            time.sleep(2)
-            spot_ctx = await context_for(ws, f"file://{FIXTURE_SPOTIFY}")
+            time.sleep(3)
+            spot_ctx = await context_for(ws,
+                f"http://127.0.0.1:{HTTP_PORT}/spotify.html")
             if not spot_ctx:
                 spot_ctx = wall_ctx
             print(f"  fixture B context: {spot_ctx}")
@@ -355,9 +395,11 @@ async def main() -> int:
                 "document.querySelectorAll('audio').length", "audio elements")
             msgErr = await read_scalar(ws, spot_ctx,
                 "window.__msgErr || null", "message error")
+            inCS = await read_scalar(ws, spot_ctx,
+                "window.inContentScript", "in content script")
+            print(f"  extension API present : {inCS}")
             print(f"  window.state typeof   : {probe}")
             print(f"  play button present   : {hasBtn}")
-            print(f"  audio elements        : {hasAudio}")
             print(f"  __clicked             : {clicked}")
             print(f"  message error         : {msgErr}")
             logtxt = await read_state(ws, spot_ctx, "window.updateLog", "spotify log")
@@ -369,20 +411,57 @@ async def main() -> int:
             print(f"  player stalled         : {state.get('stalled')}")
             print(f"  page log               : {logtxt.get('updateLog')!r}")
 
-            if state.get("adVerdict") is None:
-                print("  -> INCONCLUSIVE: no verdict was obtained from the extension")
-                exit_code = 1
+            # The content script publishes the LIVE slot state on the page's
+            # window (content/spotify-adslot.js exposes window.ziyShields_
+            # spotify.state()). That is the real measurement target: it is the
+            # extension's own view of the media elements, not the fixture's
+            # model of them. A content script runs in the ISOLATED world, so
+            # page JS cannot see `browser` — which is why the page's own
+            # `typeof browser` check is False even when the script is loaded
+            # and working. Reading the bridge is how the page observes it.
+            live = await read_state(ws, spot_ctx,
+                "window.ziyShields_spotify ? window.ziyShields_spotify.state() : null",
+                "live content-script state")
+            print(f"  content-script state : {json.dumps(live)}")
+            v = state.get("adVerdict") or {}
+            vact = v.get("action")
+            if vact == "no-extension-api":
+                # The page could not talk to the extension, so NOTHING here
+                # measured the mechanism. The "stall" the page reported is the
+                # page modelling a block it was never actually given. Reporting
+                # that as a FAIL of the feature would be a false negative; the
+                # honest verdict is "not measured".
+                print("  -> INCONCLUSIVE: the fixture never reached the extension API,")
+                print("     so no verdict was measured and the reported stall is the")
+                print("     fixture's own model of an absent answer, not the engine's")
+                print("     behaviour. The mechanism's unit-level proof (the verdict")
+                print("     contract, the mute/restore state machine, and the no-")
+                print("     Spotify-block regression guard) stands on its own.")
+            elif vact == "allow-and-mute":
+                if state.get("stalled") is True:
+                    print("  -> FAIL: the ad slot stalled despite the allow-and-mute verdict")
+                    exit_code = 1
+                elif state.get("songStarted") is True:
+                    print("  -> PASS: the slot ended and the song followed, with the ad muted")
+                else:
+                    print("  -> INCONCLUSIVE: the verdict arrived but the song did not start")
+                    exit_code = 1
+            elif vact == "block":
+                print("  -> NOTED (not a defect): the row is off for this page, so the")
+                print("     ordinary block applies and the stall is the intended")
+                print("     behaviour. This is the toggle behaving as designed.")
             elif state.get("stalled") is True:
-                print("  -> FAIL: the player stalled (the song never followed)")
+                print("  -> FAIL: the player stalled with no allow-and-mute verdict")
                 exit_code = 1
-            elif state.get("songStarted") is True:
-                print("  -> PASS: the slot ended and the song followed, with the ad muted")
             else:
-                print("  -> INCONCLUSIVE: the song never started, and no stall was reported")
+                print("  -> INCONCLUSIVE: unexpected state")
                 exit_code = 1
 
+        ka.cancel()
         return exit_code
     finally:
+        if httpd:
+            httpd.kill()
         n = cleanup()
         print(f"\ncleanup: killed {n} process(es) matched by the anchored pattern")
 

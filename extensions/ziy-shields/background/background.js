@@ -653,18 +653,57 @@ async function cosmeticFor(host) {
  * Lifecycle
  * ------------------------------------------------------------------ */
 
+/**
+ * Writes the GLOBAL shields rule into storage.local, reading what is already
+ * there first so the user's own choices survive.
+ *
+ * WHY THIS IS A FUNCTION AND NOT INLINE CODE IN onInstalled. This write has
+ * exactly one home in the whole add-on — there is no other writer of
+ * `shields.global` anywhere — and it used to live inside the onInstalled
+ * listener only. That listener does not always run: the engine can finish
+ * installing the add-on before this event page evaluates its listener chain
+ * (which the comment at the bottom of this file records as a real possibility),
+ * so on a fresh profile the install event is already gone by the time we are
+ * listening and nothing at all writes the global rule. The observed symptom
+ * was storage.local holding `shields.lists` and `shields/site/<domain>` with no
+ * `shields/global` at all.
+ *
+ * So the write is called from every path that IS guaranteed to run: the module
+ * bootstrap at the bottom of this file, onStartup, and onInstalled. The function
+ * is IDEMPOTENT — it reads the current record, normalises it, and writes it back
+ * — so calling it three times, or once per alarm, changes nothing after the
+ * first call. That idempotency is asserted in test/store.test.js.
+ *
+ * The read-then-write shape matters for correctness, not just for idempotency:
+ * normaliseRule() fills the missing rows from the factory defaults, so a user
+ * who has changed one row keeps it and only the unset rows gain defaults.
+ *
+ * Error handling follows the sibling extensions' convention (ziy-talk
+ * background/background.js:326, ziy-playlist background/background.js:375): a
+ * storage write that throws is logged and the caller keeps its own handling,
+ * because a failed default seed must never take the event page down with it.
+ */
+async function ensureStoredGlobalRule() {
+  try {
+    await store.localSet({
+      [precedence.STORAGE_KEY_GLOBAL]: precedence.normaliseRule(
+        await store.localGet(precedence.STORAGE_KEY_GLOBAL, null), 'global', null),
+    });
+  } catch (e) {
+    console.error('ziy-shields: could not seed the global shields rule', e);
+  }
+}
+
 api.runtime.onInstalled.addListener(async (details) => {
   initPromise = rebuildAll();
   await initPromise;
-  await store.localSet({
-    [precedence.STORAGE_KEY_GLOBAL]: precedence.normaliseRule(
-      await store.localGet(precedence.STORAGE_KEY_GLOBAL, null), 'global', null),
-  });
+  await ensureStoredGlobalRule();
 });
 
 api.runtime.onStartup.addListener(async () => {
   initPromise = rebuildAll();
   await initPromise;
+  await ensureStoredGlobalRule();
 });
 
 api.alarms.onAlarm.addListener(async (alarm) => {
@@ -678,6 +717,7 @@ lists.registerUpdateAlarm(api);
 // First run: the manifest installs before this listener chain is registered in
 // some Gecko versions, so start now too.
 initPromise = rebuildAll();
+initPromise.then(() => ensureStoredGlobalRule(), () => undefined);
 
 /* No module.exports: this file is the event page's own entry point, loaded
  * once as the last classic script in the manifest's scripts array. A

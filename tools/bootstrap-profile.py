@@ -13,7 +13,9 @@ What this script creates, for --name default:
     ├── user.js                     # values that must win over every default
     ├── prefs.js                    # seed the engine reads on first run
     ├── chrome/
-    │   └── userChrome.css          # our window chrome
+    │   ├── userChrome.css          # our window chrome
+    │   ├── userContent.css         # our in-page chrome
+    │   └── ziy-menu.svg            # the app-menu glyph userChrome.css pins to
     ├── chrome.css                  # -> the same file, some builds look here
     ├── extensions/                 # sideload directory (app-profile scope)
     ├── ziy-profile.json            # profile metadata: name, schema version
@@ -137,85 +139,73 @@ SUITE_IDS = [
     "ziy-pwd@ziy.app",
 ]
 
-USER_CHROME_CSS = """/* Ziy — window chrome.
- *
- * Written by tools/bootstrap-profile.py. The same file also ships as
- * shell/chrome/userChrome.css, which is what build-shell.sh installs into the
- * app dir; this copy is the one the engine actually loads, because
- * userChrome.css is read from the PROFILE (this file), not from the app dir.
- *
- * The ziy-shell extension installs the real theme and its own chrome CSS on top
- * of this. This file only guarantees Ziy never looks like stock Firefox.
- */
+def _read_shell_file(relpath: str, fallback: str) -> str:
+    """Read a stylesheet out of shell/chrome/, or use the fallback.
+
+    The repo's shell/chrome/ directory is the single source of truth for the
+    profile chrome: shell/chrome/userChrome.css and shell/chrome/userContent.css
+    are the files build-shell.sh installs into the app dir, and they are what
+    tools/verify.sh asserts the profile copy matches. Reading them here rather
+    than keeping a second copy as a Python literal means there is exactly one
+    place to edit, and the old defect class - the profile's copy carrying a
+    retired violet palette while the shell file carried the shipped teal one -
+    cannot recur.
+
+    The fallback exists so a partial checkout still produces a bootable
+    profile; it is never the reason a stale file survives.
+    """
+    path = Path(__file__).resolve().parent.parent / "shell" / "chrome" / relpath
+    try:
+        return path.read_text(encoding="utf-8")
+    except OSError:
+        return fallback
+
+
+# Fallbacks used only when shell/chrome/ is missing from the checkout. They are
+# the pre-token minimal chrome, not a second copy to maintain: verify.sh asserts
+# these are NOT what ships when the shell directory is present.
+USER_CHROME_CSS_FALLBACK = """/* Ziy — window chrome (fallback: shell/chrome/userChrome.css was not found). */
 
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
 :root {
-  --ziy-violet: #4c2eff;
-  --ziy-violet-deep: #26118f;
-  --ziy-ink: #0e0630;
-  --ziy-orange: #ff6b35;
-  --ziy-radius: 10px;
-}
-
-:root:not([lwtheme]) {
-  --lwt-accent-color: var(--ziy-violet-deep) !important;
-  --toolbar-field-focus-border-color: var(--ziy-violet) !important;
-  --focus-outline-color: var(--ziy-violet) !important;
-  --tab-selected-bgcolor: #ffffff !important;
-  --tab-selected-textcolor: var(--ziy-ink) !important;
+  --ziy-accent: #0b6e6e;
+  --ziy-ink: #202124;
+  --ziy-border: #e4e4e5;
+  --ziy-surface: #fafafb;
 }
 
 #navigator-toolbox {
-  border-bottom: 1px solid rgba(14, 6, 48, 0.15) !important;
+  border-bottom: 1px solid var(--ziy-border);
 }
 
 #TabsToolbar {
-  background-image: linear-gradient(
-    180deg,
-    var(--ziy-violet-deep) 0%,
-    var(--ziy-ink) 100%
-  ) !important;
+  background-color: var(--ziy-surface);
 }
 
 #urlbar-background {
-  border-radius: var(--ziy-radius) !important;
-  border: 1px solid rgba(76, 46, 255, 0.45) !important;
+  border-radius: 10px;
+  border: 1px solid var(--ziy-border);
 }
 
 #urlbar[focused] #urlbar-background {
-  border-color: var(--ziy-violet) !important;
-  box-shadow: 0 0 0 3px rgba(76, 46, 255, 0.25) !important;
-}
-
-:root:not([sizemode="fullscreen"]) #TabsToolbar-customization-target::after {
-  content: "Ziy";
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding-inline-end: 4px;
+  border-color: var(--ziy-accent);
+  box-shadow: 0 0 0 2px var(--ziy-accent);
 }
 """
 
-USER_CONTENT_CSS = """/* Ziy — content tweaks applied to every page the user sees.
- *
- * Kept deliberately tiny: the ziy-shields extension does the real page work
- * (cosmetic filters, Speedreader, cookie-consent un-bundling). Anything here
- * would be a second, unauditable blocking engine.
- */
+USER_CONTENT_CSS_FALLBACK = """/* Ziy — content tweaks (fallback: shell/chrome/userContent.css was not found). */
 
 @-moz-document url-prefix("about:") {
-  /* Ziy's own accent on the about: pages we do not override. */
   :root {
-    --in-content-accent-color: #4c2eff;
-    --in-content-primary-button-background: #4c2eff;
-    --in-content-primary-button-background-hover: #26118f;
-    --in-content-primary-button-background-active: #0e0630;
+    --in-content-accent-color: #0b6e6e;
+    --in-content-primary-button-background: #0b6e6e;
   }
 }
 """
+
+USER_CHROME_CSS = _read_shell_file("userChrome.css", USER_CHROME_CSS_FALLBACK)
+USER_CONTENT_CSS = _read_shell_file("userContent.css", USER_CONTENT_CSS_FALLBACK)
 
 
 def fmt_pref_value(value: object) -> str:
@@ -348,6 +338,15 @@ def bootstrap(name: str, *, reset: bool = False, verbose: bool = False) -> int:
     # --- chrome ---------------------------------------------------------------
     (profile / "chrome" / "userChrome.css").write_text(USER_CHROME_CSS, encoding="utf-8")
     (profile / "chrome" / "userContent.css").write_text(USER_CONTENT_CSS, encoding="utf-8")
+    # The app-menu glyph shell/chrome/userChrome.css pins to, as a RELATIVE url()
+    # so it resolves against this directory (see §"the menu-icon fix" in
+    # shell/chrome/userChrome.css for why chrome://branding/content/ is wrong).
+    # Without it the menu button falls back to the engine's own icon, so this
+    # line is what makes the shield actually appear.
+    menu_glyph = (Path(__file__).resolve().parent.parent / "shell" / "chrome"
+                  / "ziy-menu.svg")
+    if menu_glyph.is_file():
+        shutil.copyfile(menu_glyph, profile / "chrome" / "ziy-menu.svg")
     # Some Gecko builds and older docs look for the stylesheet at the profile
     # root; both paths cost nothing and remove a class of silent no-ops.
     for extra in ("userChrome.css", "userContent.css"):
@@ -394,7 +393,7 @@ def bootstrap(name: str, *, reset: bool = False, verbose: bool = False) -> int:
     if verbose:
         for line in (
             f"  user.js        {len(merged)} prefs (merged over {len(present)} existing)",
-            f"  chrome/        userChrome.css, userContent.css",
+            f"  chrome/        userChrome.css, userContent.css, ziy-menu.svg",
             f"  extensions/    sideload directory (extensions.sideloadScopes=15)",
             f"  prefs.js       {'seeded' if prefs_path.exists() else 'missing'}",
             f"  schema         compat={PROFILE_SCHEMA_VERSION}",

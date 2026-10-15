@@ -152,11 +152,34 @@
 
   /* The player creates its media elements on demand, so the DOM is watched.
    * The cosmetic tier already does this for the same reason (an ad slot
-   * appears after the first paint). */
+   * appears after the first paint).
+   *
+   * `run_at` is document_start, so document.documentElement can be null on the
+   * very first execution. Observing null throws and the whole script dies —
+   * which is exactly what happened here: the content script never injected, so
+   * the extension API looked absent and the fixture could not measure anything.
+   * Wait for the root element instead of assuming it. */
   const mo = new MutationObserver(() => observe());
-  mo.observe(document.documentElement, { childList: true, subtree: true });
+  function startObserving() {
+    if (document.documentElement) {
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+      observe();
+    } else {
+      const t0 = Date.now();
+      const spin = setInterval(() => {
+        if (document.documentElement) {
+          clearInterval(spin);
+          mo.observe(document.documentElement, { childList: true, subtree: true });
+          observe();
+        } else if (Date.now() - t0 > 10000) {
+          // A headless page with no documentElement is broken; do not spin.
+          clearInterval(spin);
+        }
+      }, 50);
+    }
+  }
 
-  observe();
+  startObserving();
 
   /* The debug/inspection surface: the same shape the tracker exposes, so the
    * options page and the e2e harness can read the live state. */

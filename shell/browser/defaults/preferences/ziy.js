@@ -273,13 +273,58 @@ pref("network.trr.mode", 5);
 // 10. Firefox Accounts / Sync disabled (only ziy-sync exists)
 // ---------------------------------------------------------------------------
 // The DisableFirefoxAccounts policy locks these; these are the defaults.
+// WHY THIS IS THE FULL KILL, not a cosmetic one: browser-sync.js's init() reads
+// identity.fxaccounts.enabled at line 1254 and, when it is false, calls
+// onFxaDisabled() (line 1284), which sets fxadisabled on the document element
+// and hides every element carrying class "sync-ui-item" (line 3722). That class
+// is on 14 elements in browser.xhtml: the app menu's FxA block
+// (appMenu-fxa-status2), the sync setup card (PanelUI-fxa-menu-*), the
+// "send tab to device" tab context menu (context_sendTabToDevice and its
+// separator/popup), the "send link to device" content context menu
+// (context-sendlinktodevice), the synced-tabs sidebar entry
+// (sidebar-switcher-tabs), and the separators between them. So with this one
+// pref false, the FxA UI is gone from every menu and panel at startup — no
+// sign-in card, no "Sync and save data", no send-to-device, no synced-tabs
+// row — without a byte-level patch and without policy being the only layer.
+// identity.fxaccounts.toolbar.enabled gates the toolbar avatar separately.
 pref("identity.fxaccounts.enabled", false);
 pref("identity.fxaccounts.toolbar.enabled", false);
-pref("identity.fxaccounts.sync.devices.url", "");
-pref("services.sync.engine.prefs", false);
+pref("identity.fxaccounts.toolbar.pxiToolbarEnabled", false);
+// The FxA/sync account identity field the engine DOES have. Verified present as
+// a libxul pref string (`strings -a libxul.so | grep -x` = 1 hit). Emptied so
+// Mozilla's sync has no account to act on.
 pref("services.sync.username", "");
-pref("services.sync.accounts", "");
-pref("identity.mobilepromo.android", "");
+// The following are NOT written here because the engine registers no pref by
+// those names, and this project already paid for that mistake once
+// (replica/proofs-fix-prefs.md: "a lock of a pref the engine never reads is a
+// silent no-op"). Checked on this box 2026-10-16:
+//   identity.fxaccounts.sync.devices.url  -> 0 hits in libxul, 0 in firefox.js
+//   identity.fxaccounts.mobilepromo.android-> 0 hits in libxul, 0 in firefox.js
+//                                              (the OLD line was
+//                                               identity.mobilepromo.android,
+//                                               which is equally absent)
+//   services.sync.engine.prefs / .addons / .bookmarks / .history / .passwords
+//                                        -> 0 hits in libxul, 0 in firefox.js
+//   services.sync.accounts            -> 0 hits in libxul, 0 in firefox.js
+// The user-facing account-clearing intent is carried by the two alive prefs
+// above, by the DisableFirefoxAccounts policy, and by the fact that the FxA UI
+// never initialises when identity.fxaccounts.enabled is false (see the note at
+// the top of this section). Do not re-add these names.
+// No welcome / what's-new / upgrade dialog from Mozilla's side: about:welcome
+// is gated by browser.aboutwelcome.enabled, read as a DEFAULT by BrowserGlue
+// (modules/BrowserGlue.sys.mjs:1748 — "Check the default branch as enterprise
+// policies can set prefs there", returning "no-welcome"), and the OverrideFirst
+// RunPage policy locks it false as well. The ziy-shell extension owns first run.
+pref("browser.aboutwelcome.enabled", false);
+pref("browser.preferences.moreFromMozilla", false);
+// browser.translations.mostRecentTargetLanguages — NOT written here: 0 hits in
+// libxul and 0 in defaults/preferences/firefox.js; only the UserMessaging policy
+// handler writes it (Policies.sys.mjs:3644), as a side effect of
+// FeatureRecommendations. Our policies.json already sets FeatureRecommendations
+// false, which is the engine's own route to the same outcome. Do not re-add it.
+// browser.preferences.newtab.home — NOT written: no such pref (0 hits in both
+// layers). Ziy's new tab is owned by ziy-ntp through chrome_url_overrides, and
+// the newtab strip in §8 is what keeps Mozilla's out. Do not re-add it.
 
 // ---------------------------------------------------------------------------
 // 11. Error noise: no "report this site to Mozilla" prompts
@@ -319,8 +364,25 @@ pref("extensions.enabledScopes", 15);
 // These are the values the design system will read before the shell extension
 // has written its own settings, so a first launch is already branded.
 pref("browser.tabs.inTitlebar", 1);
-pref("browser.tabs.drawInTitlebar", true);
+// browser.tabs.drawInTitlebar — REMOVED 2026-10-16: there is no PREF by that
+// name in the engine. Verified: `strings -a libxul.so | grep -x` finds
+// browser.tabs.inTitlebar (the real one, above) and no hit for
+// browser.tabs.drawInTitlebar; grep over browser/omni.ja finds only reads of
+// Services.appinfo.drawInTitlebar, which is an APPINFO attribute set by the
+// app's own build configuration — not a pref, so nothing a pref call can
+// change. Writing it was a silent no-op. The tabs-in-titlebar behaviour the
+// line was reaching for is owned by browser.tabs.inTitlebar above.
 pref("browser.uidensity", 0);
+// browser.toolbars.bookmarks.visibility: the engine reads this as a CHAR pref
+// (Services.prefs.setCharPref at browser.js:3013 and in
+// policies/Policies.sys.mjs:1390), and its three values are exactly
+// "always" / "never" / "newtab" (the switch at browser.js:3054-3087).
+// "always" means the bookmarks toolbar is shown in every window; the engine's
+// own default is "newtab" (defaults/preferences/firefox.js:1194 in
+// browser/omni.ja), which shows it only on a new-tab page. Ziy ships it always:
+// the bookmarks toolbar is a Ziy surface (it is where the shields/news
+// shortcuts a user pins live), and "only visible on a page we do not ship"
+// would have made it invisible in practice.
 pref("browser.toolbars.bookmarks.visibility", "always");
 pref("browser.theme.content-theme", 0);
 pref("browser.theme.dark-private-windows", true);
@@ -330,7 +392,18 @@ pref("extensions.activeThemeID", "ziy-shell@ziy.app");
 pref("sidebar.revamp", true);
 pref("sidebar.verticalTabs", false);
 pref("sidebar.position_start", false);
-pref("sidebar.visibility", "always");
+// sidebar.visibility — the value was "always", which is NOT one of the pref's
+// values. The engine's four are "always-show", "expand-on-hover",
+// "hide-sidebar" (vertical tabs) and "hide-on-close", "hide-launcher"
+// (horizontal), read at
+// chrome/browser/content/browser/sidebar/browser-sidebar.js:1547 and
+// :2977 and switched on at :1618-1633. The engine's own default is
+// "always-show" (defaults/preferences/firefox.js:865). "always" fell through
+// every case, so the launcher's initial state came from the fall-through
+// rather than from a value the engine understood. Changed to the engine's real
+// name for the same intent: the sidebar rail is shown, collapsed, and the
+// user opens a panel from it.
+pref("sidebar.visibility", "always-show");
 pref("browser.ml.chat.enabled", false);
 pref("browser.ml.chat.menu", false);
 pref("browser.ml.linkPreview.enabled", false);

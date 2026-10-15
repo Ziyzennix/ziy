@@ -7,7 +7,24 @@ Exec=/usr/bin/ziy %u
 TryExec=/usr/bin/ziy
 Icon=ziy
 Categories=Network;WebBrowser;
-MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
+; x-scheme-handler/mailto is registered so the desktop entry is the handoff
+; point a local mail client hands a mailto: to. Ziy does NOT claim to BE a mail
+; client, and the engine's own behaviour supports that: a mailto: opened in Ziy
+; is dispatched by modules/ContentDispatchChooser.sys.mjs (which has a
+; mailto-specific branch) and modules/handlers/HandlerList.sys.mjs, whose
+; default handler table offers Gmail's webmail URI template for the mailto
+; scheme — i.e. the address goes to the system's mail program or to a webmail
+; handler in the browser, never into Ziy's own UI. nothing in Ziy parses or
+; stores the address.
+;
+; Registering it makes Ziy the selectable handoff rather than a dead end when
+; the OS asks "open mailto: with what", and on a box with no mail client it
+; gives a defined answer instead of an error dialog.
+;
+; webcal is NOT registered: Ziy has no calendar surface and registering it
+; would claim one. Same reasoning applies to every other scheme in the
+; engine's list (E10SUtils.sys.mjs's registeredSchemes).
+MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/mailto;
 Terminal=false
 StartupNotify=true
 StartupWMClass=Ziy

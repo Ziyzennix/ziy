@@ -99,16 +99,24 @@ against Firefox 156.0.1. The last full run:
 ```
 $ ./tools/verify.sh ; echo "exit=$?"
 ...
-  46 passed, 0 failed, 1 skipped
+  48 passed, 0 failed, 2 skipped
 exit=0
 ```
 
+**2026-10-16 — the number above was re-measured and replaced.** The earlier
+`46 passed, 0 failed, 1 skipped` baseline and the `45 passed, 0 failed, 2
+skipped` live run in this section were stale; the run recorded here was taken
+after `./tools/build-shell.sh --force` and `./tools/build-extension.sh --all`
+rebuilt the app dir with the redesigned chrome set, so it is the first gate run
+on the settled tree. Both SKIPs are engine limitations, not gaps in the product:
+`--version does not say Ziy` (libxul owns the version string, so
+`tools/ziy --ziy-version` answers with Ziy's own branding plus the engine
+version clearly labelled) and the playlist-panel probe (headless will not render
+the panel; the suite it probes is unit-passing). `replica/HANDOFF.md` §3 carries
+the same figures.
+
 One line per check, `PASS`/`FAIL`/`SKIP` plus the evidence, and a non-zero exit
-on any `FAIL`. The single `SKIP` is `--version does not say Ziy` — an engine
-limitation (the engine's `--version` string cannot be remapped from `App:Name`),
-with the fallback path — the app-dir boot and the branded screenshot — passing
-instead. `tools/ziy --ziy-version` answers with Ziy's own branding and the
-engine version clearly labelled.
+on any `FAIL`.
 
 The proofs live in `replica/proofs/` and `replica/proofs-*.md`. The desktop
 slice's own proof, with every command and its observed output, is
@@ -179,7 +187,52 @@ an environment this machine does not have (a display, a Jitsi server, a
 
 ---
 
-## 5. If something fails
+## 5. LAUNCH BLOCKERS — what must land before a public release
+
+**Nothing here is a test; this is the list a release is gated on.** It is kept
+here, beside the verify sections, so the gate is read with the thing it gates.
+Status recorded 2026-10-15; every row cites the file that establishes it.
+
+**0 — The model, for context (not a blocker).** Ziy ships **free** — no paid
+tier, no feature gating, no accounts, no DRM — with a single Ko-fi donation link
+that funds engineering time and explicitly buys no influence
+(`replica/premium-position.md` §2, the co-owner's final decision). The paid/tier
+model was rejected on the evidence in `replica/research-market.md` and
+`replica/research-patreon.md`, which are retained in the repo as the record of
+why. **A free launch does not delete the licence and trademark work below** —
+free distribution is still distribution of a modified Mozilla binary.
+
+| # | blocker | status | the file that establishes it |
+| --- | --- | --- | --- |
+| 1 | **A self-contained packaged artifact exists and boots.** `packaging/linux/`'s tarball stage does not exist, and the proof file `replica/proofs-self-contained.md` is absent while being referenced by `tools/build-shell.sh:9` | **BLOCKING — not done** | `glob packaging/**` → path not found · `replica/architecture.md` §0.1 · `replica/premium-position.md` §2.5 item i |
+| 2 | **A user-facing update path exists.** `tools/update-engine.sh` is the maintainer's engine-*bump* discipline, not a user update channel. The ten missing pieces are numbered in `research-tech.md` §4; items 1 (artifact channel) and 3 (staging/atomic swap) block everything after them | **BLOCKING — not done** | `replica/research-tech.md` §4 · `tools/update-engine.sh` |
+| 3 | **The deploy gate passes against the packaged artifact.** Last full run is **48 passed / 0 failed / 2 skipped** on the rebuilt dev tree (§3, re-measured 2026-10-16); it must still be re-run on the real artifact. The SKIPs are the engine `--version` string and the playlist-panel probe | **BLOCKING — needs a re-run on the artifact** | §3 · `replica/premium-position.md` §2.5 item iii |
+| 4 | **The MPL §3.2(a) source-availability notice ships in the app dir** — where to get the engine source and the five patches, with the MPL link. **`build/ziy/` currently contains no license.txt at any depth ≤3**, and the upstream tarball ships none either, so the obligation is unmet for both the patched `omni.ja` and the engine binary | **BLOCKING — not done** | `replica/research-legal.md` §2.4, §1.1 Rule 4 (https://www.mozilla.org/en-US/MPL/2.0/#section-3) |
+| 5 | **`patches/` ships with the product**, MPL-licensed, internal notices untouched (§1.1 Rule 5). Present in the tree; nothing yet ships it | **BLOCKING — not wired into the artifact** | `replica/research-legal.md` §1.1 · `patches/README.md` |
+| 6 | **The not-affiliated-with-Mozilla notice ships at equal prominence** with the permitted "built on Mozilla open source technology" sentence, on every user-facing surface | **BLOCKING — not done** | `replica/research-legal.md` §2.2 · `replica/research-market.md` §4.3 Rule 1 (https://www.mozilla.org/en-US/foundation/trademarks/policy/) |
+| 7 | **The residual `Mozilla Firefox` marks problem is resolved or disclosed** — `./build/ziy/firefox --version` still reports `Mozilla Firefox 156.0.1` (the string comes from `libxul` and cannot be remapped from `App:Name`), plus `updater.ini` and engine-named executables. Under the modified-version regime this is a trademark risk; the fix is the banner strings or a clear not-affiliated notice plus the `ziy` entry point | **BLOCKING — open** | `replica/research-legal.md` §2.3 · §4's limitations table (this file) |
+| 8 | **The filter-list licence table is complete for all seven lists** — four of seven (`uabo-filters`, `urlhaus`, `antiadblock-warning-removal`, `brave-unbreak`) are missing from `extensions/ziy-shields/LICENSES`. Needed before the first public About panel or download page that displays a list name | **BLOCKING — not done** | `replica/research-legal.md` §6.1, §6.3 |
+| 9 | **The Brave-patent skim** for the core features (shields model, sync phrase handling, farbling). Brave's own ToU warns that "features and/or functionality of Brave's products may be protected under Brave patent applications or patents" | **OPEN — no patent search has been run; UNVERIFIED** | `replica/research-legal.md` §3.3 (unmitigated row), §3.4 action 3 |
+| 10 | **The Ko-fi page is live before the first public build announcement** — the donation link, the sentence that donations buy **time, not influence**, and the free download and build instructions beside it in the same breath | **BLOCKING — ordering rule** | `replica/premium-position.md` §2.5, §3, §6 item 6 |
+
+**Explicitly NOT blockers for this launch** (each was an obligation of the
+rejected paid model, recorded so the change is visible): the EU 14-day
+withdrawal right and its working withdrawal function, the pre-contract disclosure
+set (price, update period, guarantee of conformity), VAT/OSS registration and
+the 10-year record-keeping duty, and the refund/withdrawal flow test. All four
+attach to a *sale*; with no sale they are **NOT-APPLICABLE-now-sale** and are
+marked as such in `replica/research-legal.md` §4.4. If the pricing model ever
+changes, they return immediately.
+
+**One new, small open item:** Ko-fi's own terms as they apply to
+donation-supported software — what a supporter receives and what the page copy
+may say. **UNVERIFIED** (not fetched in the research pass) and worth a check
+before the page goes live. The rule that follows: the page must promise nothing
+deliverable (`replica/premium-position.md` §2.4).
+
+---
+
+## 6. If something fails
 
 | symptom | first thing to check |
 | --- | --- |
