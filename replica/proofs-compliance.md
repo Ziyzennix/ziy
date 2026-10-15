@@ -114,6 +114,15 @@ boundary bug that had been latent in the sync protocol all along (fixed:
 e2e re-run after the fix is **PASSED** with the record delivered —
 `replica/proofs-sync.md` §7 has the full account).
 
+**Post-fix re-run (2026-10-16):** `./tools/verify.sh` → **exit 0, 54 passed / 0 failed /
+2 skipped**, with the sync rows now **PASS** (`sync two-profile e2e transferred the record
+A wrote to B`; `sync unit suite passes (52 assertions)`; log
+`/tmp/opencode/verify-post-sync-fix.log`). The sync-e2e transfer-line SKIP above is gone.
+The two SKIPs of this re-run are `--version does not say Ziy` and the playlist panel probe
+— the known headless-media flake (its log ends `FAILED: 1 assertion(s): ['playback']`),
+unrelated to the sync fix. The account above is kept as written: it is the pre-fix run the
+boundary bug was root-caused from.
+
 ## 5. What this pass does NOT claim
 
 - **Rows 6 and 7 are partially closed by design.** The not-affiliated notice

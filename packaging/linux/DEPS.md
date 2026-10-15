@@ -497,6 +497,13 @@ official reader — `tools/lib/omni-ja.py --verify`, recomputed stored CRC
 plus both substitutions — and so does `make-deb.sh`; only this final re-read
 was written against `zipfile`. Fixed to verify **both** containers in the
 unpacked archive with the same official reader (`--patch ziy`,
-`--patch ziy-browser`). The re-run after the fix is in flight as this lands;
+`--patch ziy-browser`). ~~The re-run after the fix is in flight as this lands;
 its outcome is recorded in `replica/TODAY.md` §2 and `replica/deploy.md`
-row 1.
+row 1.~~ The re-run after the fix **PASSED** end to end (2026-10-16),
+including the assertion the first run died on — `ok the shipped omni.ja still
+carries both patches`. Artifact: `build/packaging/ziy-156.0.1-linux-x86_64.tar.xz`
+(95,995,124 B ≈ 92M compressed / 336M unpacked) + `.sha256` beside it. Boot
+evidence (fresh extraction, throwaway HOME + profile): non-blank 1280x720
+screenshot, 9/9 `ziy-*@ziy.app` add-ons `active=True`, engine `--version` =
+`Mozilla Firefox 156.0.1` (known behaviour). Full record: `replica/TODAY.md`
+§2 and `replica/deploy.md` row 1.
