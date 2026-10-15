@@ -192,38 +192,25 @@ jobs:
           echo "/usr/lib/llvm-19/bin" >> "$GITHUB_PATH"
 
       # ------------------------------------------------------------------
-      # c. rustup — the source's own Cargo.toml pins the version. We do NOT
-      #    hardcode it: rustup reads the tree's rust-toolchain/Cargo.toml
-      #    rust-version and installs the matching toolchain automatically
-      #    when `rustup` runs inside the source directory.
+      # c. rustup bootstrap. The PIN cannot be read here — the source tree
+      #    does not exist until d1-d3 run, and rustup does not read
+      #    Cargo.toml's rust-version. The first real run (2026-10-16, run
+      #    38794333725) died exactly here, one step before the download: the
+      #    old step cd'd into a directory that did not exist yet. The floor
+      #    is resolved from the tree at d4, after extraction.
       #    VERIFIED FACTS on this box (proofs-deep-fork.md §3):
       #      - python/mozboot/mozboot/util.py:18 MINIMUM_RUST_VERSION = "1.90.0"
       #      - Cargo.toml:157 rust-version = "1.90.0"
       #      - the box's rustc 1.90.0 (1159e78c4 2025-09-14) satisfied it.
-      #    So the floor is 1.90.0; the pin decides on CI. If the source ever
-      #    raises its rust-version, this step follows without editing.
+      #    So the floor is 1.90.0; the tree decides on CI. If the source ever
+      #    raises it, d4 follows without editing.
       # ------------------------------------------------------------------
-      - name: "c. rustup (toolchain resolved by the source's own rust-version)"
+      - name: "c. rustup bootstrap (the pinned toolchain resolves after extraction, step d4)"
         run: |
           set -euxo pipefail
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none --profile minimal
           echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
-          # Print the pin the tree requires so the log carries the trace.
-          grep -n "MINIMUM_RUST_VERSION" "$GITHUB_WORKSPACE"/_src/python/mozboot/mozboot/util.py || true
-          grep -n "^rust-version" "$GITHUB_WORKSPACE"/_src/Cargo.toml || true
-
-      - name: "c2. resolve the pinned toolchain and install cbindgen"
-        run: |
-          set -euxo pipefail
-          # Runs inside the source dir so rustup reads the tree's pin
-          # (rust-toolchain* if present, else Cargo.toml's rust-version).
-          cd "$GITHUB_WORKSPACE/_src"
-          rustup toolchain install
-          rustup default "$(rustup toolchain list | head -1 | awk '{print $1}')" 2>/dev/null || rustup default stable
-          rustc --version; cargo --version
-          # Local box: cbindgen 0.29.4 (proofs-deep-fork.md §3).
-          cargo install cbindgen --locked
-          cbindgen --version
+          rustup --version
 
       # ------------------------------------------------------------------
       # d. fetch + verify + extract the source IN FULL.
@@ -325,6 +312,36 @@ jobs:
           done
           du -sh . 
           cat sourcestamp.txt
+
+      # ------------------------------------------------------------------
+      # d4. the toolchain + cbindgen, resolved FROM the extracted tree.
+      #     (The old "c2" ran before the download and died on its own cd —
+      #     run 38794333725. The pin is not a rust-toolchain file: Firefox
+      #     ships none, and rustup never reads Cargo.toml's rust-version; the
+      #     floor lives in mozboot. Read it from the tree, after extraction.)
+      # ------------------------------------------------------------------
+      - name: "d4. resolve the pinned toolchain from the tree + install cbindgen"
+        run: |
+          set -euxo pipefail
+          cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          grep -n "MINIMUM_RUST_VERSION" python/mozboot/mozboot/util.py
+          grep -n "^rust-version" Cargo.toml || true
+          MIN="$(sed -n 's/^MINIMUM_RUST_VERSION = "\([0-9][0-9.]*\)".*/\1/p' python/mozboot/mozboot/util.py | head -1)"
+          if [ -z "$MIN" ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::MINIMUM_RUST_VERSION not found in python/mozboot/mozboot/util.py — cannot resolve the toolchain pin"
+            exit 1
+          fi
+          echo "tree rust floor: $MIN"
+          rustup toolchain install "$MIN" --profile minimal
+          rustup default "$MIN"
+          rustc --version; cargo --version
+          # cbindgen: noble's apt package is 0.26.0 — older than what the
+          # tree expects; 0.29.4 is the version the provenance survey
+          # recorded (line 111 above / proofs-deep-fork.md §3) and the newest
+          # on crates.io at this write. It lands in ~/.cargo/bin, which is
+          # ahead of /usr/bin on PATH, so it wins over the apt one.
+          cargo install cbindgen --version 0.29.4 --locked
+          cbindgen --version
 
       # ------------------------------------------------------------------
       # e. ccache + .mozconfig
