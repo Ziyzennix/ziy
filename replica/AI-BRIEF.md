@@ -53,16 +53,22 @@ re-fetching anything.
 | QR/zbar verification envs (`pyzbar`) | `/tmp/qrenv`, `/tmp/pzenv` | **ABSENT** | `replica/proofs-talk.md` §2 (the 5 silent bugs the decoder found) | only if re-proving the encoder; Pillow works today, `import zbar` does not |
 | Ziy flow/verify profiles (pre-reboot set) | `/tmp/ziy-fix-*`, `-flow-*`, `-block-profile`, `-v4` | **ABSENT** | `replica/proofs-fix-events.md`, `proofs-shields.md`, `proofs-desktop.md` (all boot-log evidence) | recreate with `tools/e2e/*.py` when re-running a flow |
 
-### 2.2a GitHub / git remote state (re-checked 2026-10-15)
+### 2.2a GitHub / git remote state — repo EXISTS, pushed 2026-10-15
 
 | item | state |
 | --- | --- |
-| git repo at the project root | **ABSENT.** `git rev-parse --show-toplevel`, `git remote -v`, `git status --porcelain` and `git log --oneline -3` all fail `fatal: not a git repository`. There is no `.git`, no commits, no remote. (The `Not on disk but already decided` line below said this too; it is re-confirmed as the current truth, and §1 of `compile-readiness.md` has the verbatim output.) |
-| GitHub remote | **ABSENT** — nothing exists at `github.com/Ziyzennix/ziy`. No repo was created, no push was made, no git write command was run. |
-| `gh` CLI | **PRESENT and authenticated** as **`Ziyzennix`** (`gh` 2.45.0, https protocol, keyring), token scopes `delete_repo, gist, read:org, repo` — `repo` is sufficient for `gh repo create --private --push`. |
-| `.gitignore` at the package root | **PRESENT, 3.9 K, written and verified** in the same pass (`build/` 355 MB, `replica/screens/*.png` + `behavior/` 4.8 MB, `*.xpi`, `node_modules/`). Verified with real `git check-ignore` in a scratch repo. |
-| what the co-owner runs | **One command** — `gh repo create ziy --private --source=. --remote=origin --push` — after (if `user.email` is unset, which it is) a `git config --global user.email`. Then two UI steps (enable Actions for the private repo; Run workflow on `build-gecko.yml`). Full sequence, URLs and the 1 MB/s arithmetic: `replica/compile-readiness.md` §6. |
-| push size | **44–46 MB** tracked at ~1 MB/s ≈ **7–8 minutes** of upload. `build/` is 355 MB and is ignored; ignoring it is also what keeps the push under GitHub's 100 MB per-file limit. |
+| git repo at the project root | **PRESENT.** Initialised 2026-10-15 (`git init -b main`, git 2.43.0), one commit `786f85b` *"Ziy browser: Gecko-branded shell, 9-extension MV3 suite, tooling, replica record"*, branch `main`. |
+| GitHub remote | **PRESENT and PUSHED — https://github.com/Ziyzennix/ziy** (PRIVATE). Created by the co-owner (`gh repo create ziy --private --source=. --remote=origin --push`); first push attempt was **rejected** because the OAuth token lacked the `workflow` scope, which GitHub requires to push `.github/workflows/build-gecko.yml`. The co-owner re-authorised (`gh auth refresh -h github.com -s workflow`), after which `git push -u origin main` succeeded. Local and remote `main` both at `786f85b`. |
+| repo visibility | **PRIVATE**, verified after the push: `gh repo view --json visibility,isPrivate` → `"visibility": "PRIVATE"`, `"isPrivate": true`, `pushedAt 2026-10-15T15:20:21Z`. |
+| Actions state | **ENABLED, no UI step needed.** `gh api repos/Ziyzennix/ziy/actions/permissions` → `{"enabled":true,"allowed_actions":"all","sha_pinning_required":false}`. `gh api repos/Ziyzennix/ziy/actions/workflows` → **1 workflow, `state: "active"`**: `build-gecko` at `.github/workflows/build-gecko.yml` (id 385699008). Both endpoints returned 200 — nothing here is `unverified`. |
+| Actions workflow dispatch | **AVAILABLE** — the workflow file landed and is active, and its `on:` block carries `workflow_dispatch` (input `note`, string) plus tag triggers. Dispatch manually with `gh workflow run build-gecko.yml --ref main` then `gh run watch`, or from `/actions/workflows/build-gecko.yml`. |
+| `gh` CLI | **PRESENT and authenticated** as **`Ziyzennix`** (`gh` 2.45.0, https protocol, keyring). Token scopes are now `delete_repo, gist, read:org, repo, workflow` — **`workflow` is the scope any push touching `.github/workflows/` needs**; without it GitHub rejects the whole ref with `refusing to allow an OAuth App to create or update workflow ... without workflow scope`. Nothing else about the token changed. |
+| git identity | **SET** (was absent — no `~/.gitconfig`): `user.name=Ziyzennix`, `user.email=70117583+Ziyzennix@users.noreply.github.com` (the GitHub noreply address derived from the account id). |
+| `.gitignore` at the package root | **PRESENT, 3.9 K** (globs `build/` 355 MB, `replica/screens/*.png` + `behavior/` 4.8 MB, `*.xpi`, `node_modules/`). Verified live: `git ls-files build/` = **0**, `git ls-files replica/screens/` = **1** (`MANIFEST.md` only). |
+| what the co-owner runs | **DONE.** Next actions are not git ones: decide the build host (self-hosted free vs 2,000 metered min/month) and dispatch `build-gecko.yml`. |
+| push size | **41.5 MB** tracked, pushed in ~10 s (the link is faster than the documented 1 MB/s ceiling). `git count-objects -v` → 529 loose objects, 10.46 MiB packed. Largest tracked file **3.1 MB**; no file is anywhere near GitHub's 100 MB per-file limit. |
+| what landed at the repo root | `.github`, `.gitignore`, `AGENTS.md`, `WATCHDOG.yml`, `brand`, `extensions`, `firefox-156.0.1`, `native`, `package.json`, `patches`, `replica`, `server`, `shell`, `tools` — **463 tracked files**. `firefox-156.0.1/` is the four upstream reference files (520 KB: `dom/canvas/ClientWebGLContext.cpp`, `dom/webgpu/Adapter.cpp`, `toolkit/components/resistfingerprinting/nsRFPService.cpp`, `toolkit/moz.configure`) the patch workstream cites; MPL-2.0 upstream source, not a build output and not a competitor asset. |
+| clean-room | **VERIFIED after the push.** Zero tracked PNGs from Brave: `git ls-files` has no `screens`/`capture`/`behavior`/`brave`-screenshot binaries. All 72 tracked PNGs are Ziy-authored (`brand/` icons + `extensions/*/icons/` + `replica/design/` mocks). The three `brave`-**named** files are Ziy's own text: `ziy-shields/lib/filterlist/snapshots/brave-unbreak.txt` (a filter-list snapshot), `ziy-shields/test/brave-parity.test.js`, `replica/brave-prefs-notes.md`. |
 
 ### 2.3 Hardware / infra facts (re-measured 2026-10-15)
 
@@ -75,8 +81,7 @@ re-fetching anything.
 - **1 MB/s changes everything**: resumable `curl -C -` only, never plan a fresh 800 MB fetch,
   and never start a second download while one is in flight.
 
-**Not on disk but already decided:** there is no git repo — `git remote -v` →
-`fatal: not a git repository` (`compile-readiness.md` §1); `gh repo create` is the co-owner's action.
+**Not on disk but already decided:** nothing about the repo remains undecided — it exists at `https://github.com/Ziyzennix/ziy`, PRIVATE, and `786f85b` is pushed on `main` (§2.2a). The old `fatal: not a git repository` state is history.
 
 ---
 
@@ -90,7 +95,7 @@ re-fetching anything.
 | **No user-requested features** | Parity rows only. Reviews (`fixes.md`, `reviews.csv`) **can deprioritize, never add**; the `user feedback` area (14 rows) is the only Ziy-own addition and is research backlog, not a build request | `replica/parity.md` §3, `fixes.md` §4 |
 | **Extension lib pattern** | **UMD IIFE classic scripts.** Gecko loads `background.scripts[]` as one HTML document of plain classic scripts — `import`/`export` = SyntaxError, duplicate top-level `const` = parse-time kill, bare `module.exports` = ReferenceError. The exception is `ziy-sync`, whose libs are genuinely ESM (shared with `native/ziy-sync-agent/` and `server/`), which uses `"type": "module"` | `replica/proofs-fix-events.md` §1 (quotes `WebExtensionPolicy.cpp BackgroundPageHTML()`) and §2 |
 | **Repo/build layout** | `build/`, `*.xpi`, `node_modules/`, `.ziy/`, `__pycache__/` are gitignored, as are `replica/screens/*.png` + `behavior/` (captures of Brave's own UI, clean-room rule); tracked input is `extensions/`, `shell/`, `tools/`, `server/`, `native/`, `brand/`. One suite id source of truth: `shell/extensions.list` (derived ids, `<id>.xpi` filenames) | `.gitignore` (comments), `shell/extensions.list` header; `replica/screens/MANIFEST.md` line 5 + `replica/evidence.md` clean-room paragraph |
-| **Git remote does not exist yet — co-owner action, do not create** | There is **no git repo and no GitHub remote**. The co-owner pushes with **one command**: `gh repo create ziy --private --source=. --remote=origin --push` (after `git config --global user.email` if unset). `gh` is authenticated as `Ziyzennix`. Then: enable Actions for the private repo (UI) and Run workflow on `build-gecko.yml`. Push is 44–46 MB ≈ 8 min at 1 MB/s | `replica/compile-readiness.md` §1, §6 (verbatim state + exact sequence); `replica/AI-BRIEF.md` §2.2a |
+| **Git remote EXISTS and is pushed — keep it clean** | The repo is **https://github.com/Ziyzennix/ziy, PRIVATE** (`786f85b` on `main`, 463 tracked files, pushed 2026-10-15). Commit and push as usual; do not create a second remote, do not rename. `.github/workflows/` pushes need the `workflow` OAuth scope — if a push is ever rejected with `refusing to allow an OAuth App to create or update workflow ... without workflow scope`, that is the cause and `gh auth refresh -h github.com -s workflow` is the fix (a browser step, needs the co-owner). `build-gecko.yml` is dispatch-only by design; never add a push/PR trigger to a private repo (burned minutes, §5 rule 10). `replica/compile-readiness.md` §1, §6; `replica/AI-BRIEF.md` §2.2a |
 | **Naming** | product id `ziy` (lowercase); user-visible dirs `Ziy`; executable `ziy`; extension dir `ziy-<area>`; **add-on id `ziy-<area>@ziy.app`**; pref namespace `ziy.<area>.*`; message op `<area>.<verb>`; native host `ziy-<area>d` | `replica/architecture.md` §8 Naming conventions |
 | **Search** | Engine picker with **Google default**; **no own search engine/index**. Option C (hybrid, local-first aggregator) is the plan's recommendation | `replica/recon.md` out-of-scope (index = `skip`), `replica/search-plan.md` §6 |
 | **Icon / mascot** | **App icon = sealed-eye shield** (`brand/logo.svg`, A1); the **cat mascot (`brand/MASCOT.md`) is personality surfaces only** — welcome screen, about panel, empty/loading states — and MUST NEVER be the app icon, a toolbar icon, a hicolor entry, a manifest `icons{}` entry, a favicon, or a state indicator | `replica/design/icon.md` §0 (palette/glyph rules), `brand/MASCOT.md` |
@@ -172,7 +177,15 @@ patch + prefs + policy) — `replica/deep-fork.md` §3; MV3 has no `storage` man
     (free for public repos and self-hosted runners — that asymmetry is the whole cost decision).
     A cold Gecko build is ~12–28 h ≈ 720–1 680 min = the whole monthly allowance. Trigger is
     `workflow_dispatch`/tag only. ccache is saved under a stable key with `if: always()`.
-    `compile-readiness.md` §5, `proofs-fix-ci.md` §5–§7.
+    `compile-readiness.md` §5, `proofs-fix-ci.md` §5–§7. **Actions were verified live on the pushed
+    repo (2026-10-15): `actions/permissions` → `enabled: true, allowed_actions: "all"`, and
+    `build-gecko.yml` is `state: "active"` — the "private repos block Actions until manually
+    enabled" worry was FALSE for this repo. `gh workflow run build-gecko.yml --ref main` works
+    without any UI step.** Separately: **a private repo is not the only thing that gates a push —
+    the `workflow` OAuth scope does.** Pushing `.github/workflows/*` is rejected outright with
+    `refusing to allow an OAuth App to create or update workflow ... without workflow scope`;
+    `gh auth refresh -h github.com -s workflow` fixes it, but it is a browser device flow and
+    needs the co-owner. Do not "fix" that rejection by dropping the workflow file.
 11. **Verification-harness quirks.**
     - The op helper already wraps its argument in `body` (mirroring `ui/popup.js`'s
       `send(op, body)`) — pass op args **directionally**, do not nest a second `body`
@@ -186,6 +199,23 @@ patch + prefs + policy) — `replica/deep-fork.md` §3; MV3 has no `storage` man
     - `privacy.spoof_english` defaults to 0, which means RFP never spoofs `JSLocale`; the real
       name for reset-on-restart is `privacy.resistFingerprinting.randomization.daily_reset.enabled`
       (`proofs-cpp-fingerprint.md` §5b).
+    - **A WebDriver BiDi harness needs the profile directory to exist BEFORE launch**, or the
+      engine prints "Could not find profile folder" and exits without opening 2828. Also: a
+      leftover browser holds 2828 and the next launch fails to bind it — kill the PARENT pid
+      (its contentproc children do not carry the profile string). And `script.evaluate` needs the
+      fixture's own context, found by URL match in `browsingContext.getTree` — tabs made with
+      `browsingContext.create` do not reliably appear there in this profile.
+    - **A `file://` fixture page has NO `browser`/`chrome` global**, so a fixture whose script
+      starts `var b = browser || chrome` throws on its first line and never publishes anything.
+      Read the page's state through a content script's own `window` bridge instead (a content
+      script runs in the isolated world and page JS cannot see its API, by design).
+    - **`JSON.stringify(x || {})` is a trap for boolean reads**: `false || {}` is `{}`, so the
+      value you most care about reads back as "nothing happened". Read scalars with an explicit
+      `undefined`->`null` fallback and check the result type.
+    - **A content script at `run_at: document_start` must not touch `document.documentElement`
+      unconditionally** — it is null on first execution, `observe(null)` throws, and the whole
+      script dies silently. This is a real bug that cost a workstream its end-to-end proof
+      (`content/spotify-adslot.js`, `proofs-blocking-strength.md` §5.4 item 7).
 12. **`/tmp` is REBOOT-VOLATILE.** A reboot on 2026-10-15 wiped `/tmp/firefox-src`,
     `/tmp/brave-src`, `/tmp/ziy-apply-test`, `/tmp/qrenv`, `/tmp/pzenv`, `/tmp/screens-tool` and
     the whole pre-reboot profile set — nothing under `/tmp` survived except what a worker had

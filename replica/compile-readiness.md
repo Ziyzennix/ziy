@@ -7,19 +7,22 @@ patches on GitHub Actions, and find every blocker *before* CI minutes are spent.
 `/tmp/firefox-src/firefox-156.0.1` (3.0 GB, extracted from the checksum-verified
 `firefox-156.0.1.source.tar.xz`)
 
-> ## STATUS — updated 2026-10-15, after the fix workstream (`replica/proofs-fix-ci.md`)
+> ## STATUS — **ALL BLOCKERS CLEARED** as of 2026-10-15. The repo exists, is
+> PRIVATE, and is pushed: https://github.com/Ziyzennix/ziy, commit `786f85b` on
+> `main`. The outcome and the two findings that came out of doing it are in **§6.6**.
 >
 > | # | blocker | status | where |
 > | --- | --- | --- | --- |
+> | 1 | no git repo — the co-owner's repo creation | **CLEARED (2026-10-15)** | §6.6 below (finding preserved) |
 > | 2 | patch 0002's configure file was never included — the gate was dead | **FIXED (2026-10-15)** | §3c below (finding preserved) + proofs-fix-ci.md §1-4 |
 > | 3 | private-repo runner spec / metered minutes / timeout / ccache | **FIXED (2026-10-15)** | §5 below (finding preserved) + proofs-fix-ci.md §5-7 |
-> | 1 | no git repo — the co-owner's repo creation | **CO-OWNER (open, not worked)** | §1 and §6 below, unchanged |
 >
 > The original findings below are preserved verbatim — they are the diagnosis,
 > and the record of what was wrong. Each fixed section now opens with a
-> **FIXED** banner above its original text; §1/§6 are untouched because creating
-> the repo is the co-owner's action. Verdict after the fixes: **BLOCKED on
-> §1 only** — the two engineering blockers are cleared.
+> **FIXED** banner above its original text. Section 6's own earlier text is
+> preserved too, with the outcome banner in **§6.6** above it.
+> What remains after the clear: the **cost decision** of §5 (a cold run is
+> essentially the whole monthly private-repo allowance), not any mechanical blocker.
 
 **Verdict: BLOCKED — 1 primary blocker (no git repo at all), 1 secondary blocker
 (will burn minutes), 1 correctness bug (the C++ gate can never compile in).**
@@ -46,11 +49,20 @@ for the 12h job cap.
 
 ## 1. REPO READINESS
 
-> **STATUS: CO-OWNER (open) — re-verified 2026-10-15, and now fully prepped.**
-> Creating the repo is still outside this workstream's remit: no git write command
-> was run, no auth was performed on the co-owner's behalf, nothing was created or
-> pushed. What this pass ADDED is the verified sizing, a written-and-checked
-> `.gitignore`, and the exact one-command sequence — §6 is the co-owner action list.
+> **STATUS: CLEARED 2026-10-15 — the repo EXISTS and the tree is PUSHED.**
+> The original text below recorded the blocker as open and "outside this
+> workstream's remit"; it is preserved as the record of that state. What changed:
+> the co-owner authorized and created the repo at
+> **https://github.com/Ziyzennix/ziy** (PRIVATE), git was initialised, the tree
+> was committed and pushed (**`786f85b` on `main`**, 463 tracked files), and
+> `build-gecko.yml` is live and `active` on GitHub. See **§6.6** for the outcome,
+> the five verification numbers, and the two findings (the `workflow` scope, and
+> the disproved "private repos block Actions" claim).
+> *(The three sentences below are the original "co-owner action" framing and now
+> read as history — the action was taken on 2026-10-15 with the co-owner's explicit
+> authorization. What that pass had ADDED was the verified sizing, a
+> written-and-checked `.gitignore`, and the exact command sequence — which is what
+> was executed.)*
 
 ### Commands (re-verified, this box, today)
 
@@ -565,6 +577,13 @@ minute allowance intact for genuine iteration. Keep the GitHub path for tag cuts
 
 ## 6. Creating the repo (co-owner action)
 
+> **DONE — 2026-10-15.** This section is the original preparation, preserved as
+> written. The action it describes was executed: the repo now exists at
+> https://github.com/Ziyzennix/ziy, **PRIVATE**, with commit `786f85b` pushed on
+> `main`. §6.3's step 3 (the Actions UI toggle) turned out to be **unnecessary** —
+> see **§6.6** for the measured outcome, the verification numbers, the token-scope
+> finding, and the Actions state.
+
 > **Re-verified 2026-10-15 (later pass).** The state recorded below is now
 > reproduced verbatim against the current box: there is still **no git
 > repository at the project root**, there is still **no remote**, and `gh` is
@@ -802,25 +821,39 @@ text. `brand/` and `extensions/` are the only tracked binaries.
 
 ## READY / BLOCKED verdict
 
-> **Updated 2026-10-15.** The verdict below was written before the fix
-> workstream and is preserved verbatim. Blocker 2 and Blocker 3 are now
-> **FIXED** (see the banners at §3c and §5, and `replica/proofs-fix-ci.md` for
-> the evidence). Only Blocker 1 remains, and it is the co-owner's action.
+> **Updated 2026-10-15 (final).** The verdict below was written before the fix
+> workstream and is preserved verbatim. **All three blockers are now cleared**:
+> Blocker 2 and Blocker 3 by the fix workstream (see the banners at §3c and §5,
+> and `replica/proofs-fix-ci.md` for the evidence), and **Blocker 1 on 2026-10-15
+> by the co-owner creating and pushing the private repo** — outcome, verification
+> numbers and the Actions finding are in **§6.6**.
 
-### **BLOCKED**
+### **READY — all three blockers cleared**
+
+> **2026-10-15 — Blocker 1 CLEARED.** The verdict text below is the original
+> diagnosis and is preserved. What changed: the repo was created by the co-owner at
+> **https://github.com/Ziyzennix/ziy**, **PRIVATE**, and the tree was pushed —
+> **commit `786f85b` on `main`**, 463 tracked files, `gh api repos/Ziyzennix/ziy/actions/workflows`
+> reporting `build-gecko` as **`state: "active"`**. The "private repos block Actions
+> until manually enabled" assumption from §6.4 is now **tested and FALSE** for this
+> repo: `actions/permissions` returned `{"enabled":true,"allowed_actions":"all"}`
+> (HTTP 200) and the workflow is live, so **no UI step is needed** and
+> `workflow_dispatch` is available (`gh workflow run build-gecko.yml --ref main`).
+> The one thing that did bite is recorded in §6.6: a push containing
+> `.github/workflows/` needs the `workflow` OAuth scope.
 
 The compile path is mechanically sound — patches apply, workflow parses, bash is
 valid, checksum and URL are correct — and none of that needs redoing. Three
 blockers, in the order they must be cleared:
 
-**Blocker 1 (primary, must be first): there is no git repository.** — **still
-open as of 2026-10-15 (re-checked), and now fully prepped for the co-owner.**
-`git rev-parse --show-toplevel`, `git remote -v`, `git log --oneline -3` all fail
-with `fatal: not a git repository`; there is no `.git`, no commits. The `.gitignore`
-that this blocker used to depend on **has been written and verified with real
-`git check-ignore`** (§6.2), and the exact command sequence for the co-owner is in
-§6.3. GitHub Actions runs nothing until the repo exists on github.com and the tree
-is pushed — so the push itself is required, not a formality.
+**Blocker 1 (primary, must be first): there is no git repository.** — **CLEARED
+2026-10-15; the original text is kept as the record of the blocker.**
+`git rev-parse --show-toplevel`, `git remote -v`, `git log --oneline -3` all failed
+with `fatal: not a git repository`; there was no `.git`, no commits. The `.gitignore`
+that this blocker used to depend on was written and verified with real
+`git check-ignore` (§6.2), and the exact command sequence for the co-owner is in
+§6.3. GitHub Actions ran nothing until the repo existed on github.com and the tree
+was pushed — so the push itself was required, not a formality.
 
 *Cleared by:* the co-owner running, from the project root:
 
@@ -865,3 +898,150 @@ private repo and should be corrected.
 `.gitignore` → co-owner creates the private repo and pushes (Blocker 1) → confirm
 the Actions tab state (cheap, `unverified` assumption) → first build on the
 self-hosted runner (Blocker 3) → then, and only then, a hosted tag-cut run.
+
+---
+
+## 6.6 THE REPO EXISTS — outcome of the Blocker-1 action (2026-10-15)
+
+> **STATUS: DONE.** The co-owner created **https://github.com/Ziyzennix/ziy**,
+> **PRIVATE**, and the tree was pushed. Blocker 1 is **CLEARED**. Everything below
+> is measured on this box after the push; the earlier §6.1–§6.5 text is the
+> original preparation and is preserved above this banner.
+
+**The repo, verified after the push.**
+
+```
+$ gh repo view --json url,visibility,isPrivate,pushedAt
+{"isPrivate":true,"pushedAt":"2026-10-15T15:20:21Z",
+ "url":"https://github.com/Ziyzennix/ziy","visibility":"PRIVATE"}
+
+$ git remote -v
+origin  https://github.com/Ziyzennix/ziy.git (fetch)
+origin  https://github.com/Ziyzennix/ziy.git (push)
+
+$ git log --oneline -1
+786f85b Ziy browser: Gecko-branded shell, 9-extension MV3 suite, tooling, replica record
+$ git ls-remote origin refs/heads/main
+786f85bef882dd271a80b5e0ddebae1600880e1c	refs/heads/main
+```
+
+Local and remote `main` are the same commit — the push is complete and there was
+**no force, no history rewrite, no deletion**. Repo created by the co-owner; the
+git init/commit was run from this box with the co-owner's authorization.
+
+**The five pre-push verification numbers (the gate, all PASS).**
+
+| check | required | measured |
+| --- | --- | --- |
+| a. `git ls-files build/ \| wc -l` | 0 | **0** |
+| b. `git ls-files replica/screens/` | ≤ `MANIFEST.md` | **1 — `replica/screens/MANIFEST.md`** only. Every `*.png` and `behavior/` was correctly excluded, so **no Brave UI capture is in the repo's permanent history** (the clean-room rule holds). |
+| c. `git ls-files extensions/ \| wc -l` | 100+ | **239** (the 9-extension suite) |
+| c2. `git ls-files shell/ tools/ patches/ brand/ .github/ native/ server/ \| wc -l` | — | **129**; total tracked **463** |
+| d. no file over 50 MB | none | **none.** The top 5: `extensions/ziy-shields/rules/static-ruleset.json` **3.1 MB**, `…/easylist.txt` 2.1 MB, `replica/design/app icon.jpeg` 1.9 MB, `…/easyprivacy.txt` 1.4 MB, `extensions/ziy-shell/icons/mascot.svg` 940 KB |
+| e. push size | ~46 MB | `.git` **12 MB**, tracked working tree **41.5 MB** (10.46 MiB packed, 529 objects). Uploaded in ~10 s. |
+
+`git ls-files` also contains no `tmp/`, no `firefox-src/`, no `obj/`, no `.pem`,
+no `.jks`, no `.env`. The 72 tracked PNGs are all Ziy-authored — `brand/` icon
+renders, `extensions/*/icons/`, and the `replica/design/` mocks. The three files
+with `brave` in the name are Ziy's own text (a filterlist snapshot, a parity test,
+and a prefs note). `firefox-156.0.1/` in the repo root is the four MPL-2.0
+upstream reference files (520 KB) that the patch workstream cites — evidence, not
+a competitor asset.
+
+**Finding 1 — `workflow` scope is required to push `.github/workflows/`.**
+The first push attempt failed, and it was not any of the predicted causes:
+
+```
+$ gh repo create ziy --private --source=. --remote=origin --push
+https://github.com/Ziyzennix/ziy
+To https://github.com/Ziyzennix/ziy.git
+ ! [remote rejected] HEAD -> main (refusing to allow an OAuth App to create or
+    update workflow `.github/workflows/build-gecko.yml` without `workflow` scope)
+error: failed to push some refs to 'https://github.com/Ziyzennix/ziy.git'
+```
+
+§6.1's claim that "`repo` is sufficient for `gh repo create --private --push`" is
+**wrong for this tree**, because this tree contains a workflow file. GitHub checks
+the scope on the *contents* of the push, and `repo` alone cannot create
+`.github/workflows/*`. Confirmed from the API, not just the error:
+
+```
+$ curl -H "Authorization: Bearer $TOKEN" -D - -o /dev/null https://api.github.com/user
+x-oauth-scopes: delete_repo, gist, read:org, repo
+```
+
+Fixed by the co-owner re-authorising (a browser device flow — not something an
+agent can do):
+
+```
+$ gh auth refresh -h github.com -s workflow      # → browser, then:
+x-oauth-scopes: delete_repo, gist, read:org, repo, workflow
+$ git push -u origin main
+To https://github.com/Ziyzennix/ziy.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+```
+
+Note for the next worker: nothing landed on the first attempt — a scope rejection
+rejects the whole ref, so the retry was a clean fast-forward, not a re-push of
+partial history. If this rejection is ever seen again, the fix is the scope
+re-authorisation, **never** dropping the workflow from the commit.
+
+**Finding 2 — the "private repos block Actions until manually enabled" claim was
+FALSE.** §6.4 carried it forward as `unverified`. It is now **tested on the real
+repo**, and it was false:
+
+```
+$ gh api repos/Ziyzennix/ziy/actions/permissions
+{"enabled":true,"allowed_actions":"all","sha_pinning_required":false}     # HTTP 200
+
+$ gh api repos/Ziyzennix/ziy/actions/workflows
+{"total_count":1,"workflows":[{"id":385699008,"name":"build-gecko",
+ "path":".github/workflows/build-gecko.yml","state":"active",
+ "html_url":"https://github.com/Ziyzennix/ziy/blob/main/.github/workflows/build-gecko.yml",
+ ...}]}
+```
+
+Actions are **enabled** (both endpoints 200 — neither is a 404, so nothing here is
+`unverified`), `allowed_actions` is `all`, and **`build-gecko.yml` is registered and
+`active`** with **`workflow_dispatch` available**. **No UI step at
+`/settings/actions` is needed** — §6.3's step 3 and §6.4's whole caveat are
+obsolete for this repo. Dispatch directly:
+
+```bash
+gh workflow run build-gecko.yml --ref main
+gh run watch
+```
+
+The private-repo gate that does exist is the one documented in §5 (2 CPU / 8 GB
+runners, 2,000 metered minutes/month) — a **cost** gate, not an enablement gate.
+Also untested and worth recording as such: whether a *fresh* GitHub Free account's
+Actions are enabled by default in general. For this repo they demonstrably are,
+which is what §6.4 needed.
+
+**The repo root, as it landed on GitHub.**
+
+```
+$ gh api repos/Ziyzennix/ziy/contents/ --jq '.[].name'
+.github
+.gitignore
+AGENTS.md
+WATCHDOG.yml
+brand
+extensions
+firefox-156.0.1
+native
+package.json
+patches
+replica
+server
+shell
+tools
+```
+
+**What is left to do is not engineering.** The compile path is unblocked and
+`build-gecko.yml` can be dispatched at will. The remaining decision is the §5 cost
+one: a cold run is ~12–28 h on a 2-core private runner = 720–1 680 minutes,
+essentially the entire monthly allowance, so the recommended first run is the
+**free self-hosted runner** on this box (§5(b)) with the hosted tag-cut path kept
+for cut releases.
