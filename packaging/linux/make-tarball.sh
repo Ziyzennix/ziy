@@ -306,12 +306,17 @@ STAGED_DIGEST="$(sha256sum "$STAGE/$STEM/omni.ja" | awk '{print $1}')"
   || die "omni.ja changed during packaging (staged $STAGED_DIGEST, unpacked $UNPACKED_DIGEST)"
 log_ok "omni.ja digest identical in the staged tree and the unpacked archive"
 
-python3 - "$R/omni.ja" <<'PY' || die "the shipped omni.ja lost the signing patch somewhere in packaging"
-import sys, zipfile
-zf = zipfile.ZipFile(sys.argv[1])
-m = zf.read("modules/AppConstants.sys.mjs").decode("utf-8", "replace")
-assert "MOZ_REQUIRE_SIGNING: false," in m and "MOZ_ALLOW_ADDON_SIDELOAD: true," in m
-PY
+# The same official verifier as the pre-staging check, aimed at the bytes that
+# survived the archive round-trip. Plain zipfile CANNOT be used here: omni.ja's
+# container defeats it on every Firefox, pristine or patched, with "Bad magic
+# number for central directory" — proven 2026-10-16 on this script's first
+# real run (/usr/lib/firefox/omni.ja fails identically; the digest check above
+# already showed the bytes are intact, so the failure was the reader). This
+# script's own first draft carried that check; the first run is what caught it.
+python3 "$ROOT/tools/lib/omni-ja.py" --verify "$R/omni.ja" --patch ziy >/dev/null 2>&1 \
+  || die "the shipped omni.ja lost the signing patch somewhere in packaging"
+python3 "$ROOT/tools/lib/omni-ja.py" --verify "$R/browser/omni.ja" --patch ziy-browser >/dev/null 2>&1 \
+  || die "the shipped browser/omni.ja lost the newtab-strip patch somewhere in packaging"
 log_ok "the shipped omni.ja still carries both patches"
 
 # Identity, from the archive's own bytes.

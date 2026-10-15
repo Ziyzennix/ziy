@@ -347,16 +347,18 @@ choice, not a bug to fix.
   is the workflow's). Every number in this file comes from `ldd`, `readelf`,
   `dpkg -S`, `apt-cache` and `strings`, not from a packaged artifact.
 
-## 9. Static probes: six defects fixed in both scripts (2026-10-16)
+## 9. Static probes: six defects fixed before the first run — and a seventh the run found (2026-10-16)
 
-Neither script has ever been executed anywhere (`build/packaging/` does not
-exist), so while grounding `.github/workflows/build-packages.yml` every
-behaviour the scripts assert about themselves was re-derived by running its
-primitives against this box's real tools (apt 2.8.3, dpkg-dev 1.22.6,
-dpkg-deb; no root). Six defects fell out. All six are fixed in
-`make-tarball.sh` / `make-deb.sh`, each carrying the probe in a comment next
-to the fix. The commands below reproduce them from the repo root with
-`mktemp -d` only — no root, no browser, no state outside the temp dir.
+Neither script had ever been executed when this section was first written
+(`build/packaging/` did not exist), so every behaviour the scripts assert
+about themselves was re-derived by running its primitives against this box's
+real tools (apt 2.8.3, dpkg-dev 1.22.6, dpkg-deb; no root). Six defects fell
+out. All six are fixed in `make-tarball.sh` / `make-deb.sh`, each carrying
+the probe in a comment next to the fix. The commands below reproduce them
+from the repo root with `mktemp -d` only — no root, no browser, no state
+outside the temp dir. `make-tarball.sh` has since had its first real run
+(2026-10-16; it produced `build/packaging/ziy-156.0.1-linux-x86_64.tar.xz`)
+and that run found a seventh defect — §9.8.
 
 ### 9.1 `/usr/bin/ziy` was a self-loop — `make-deb.sh`
 
@@ -471,3 +473,30 @@ virtual-name `Provides`. Proven here without root via `apt-get -s satisfy
 "<full Depends string>"` (no `E:` lines; the only gap on this box was
 `ffmpeg`, owned by a third-party repo). `--no-install-recommends` keeps the
 install set at the closure this file measured.
+
+### 9.8 the first real run's own re-read used `zipfile`, which cannot read omni.ja — `make-tarball.sh`
+
+`make-tarball.sh`'s first real execution (2026-10-16) failed at its final
+assertion: `BadZipFile: Bad magic number for central directory`, surfaced as
+"the shipped omni.ja lost the signing patch somewhere in packaging". It had
+not. The assertion directly above it prints `ok` — the digest of the
+unpacked omni.ja equals the staged one — and Python's `zipfile` fails
+identically on the **pristine** engine this product packages:
+
+```bash
+python3 -c 'import zipfile; zipfile.ZipFile("/usr/lib/firefox/omni.ja")'
+# → zipfile.BadZipFile: Bad magic number for central directory
+#   (an untouched Firefox omni.ja; also build/ziy/omni.ja, patched or not)
+```
+
+omni.ja is a non-standard zip container: its central directory sits at
+offset 4 behind a 4-byte envelope and the EOCD's `cd_offset=4` does not
+reach the EOCD position (Info-ZIP prints "extra bytes … compensating";
+stdlib `zipfile` refuses). Everything else in the script already used the
+official reader — `tools/lib/omni-ja.py --verify`, recomputed stored CRC
+plus both substitutions — and so does `make-deb.sh`; only this final re-read
+was written against `zipfile`. Fixed to verify **both** containers in the
+unpacked archive with the same official reader (`--patch ziy`,
+`--patch ziy-browser`). The re-run after the fix is in flight as this lands;
+its outcome is recorded in `replica/TODAY.md` §2 and `replica/deploy.md`
+row 1.
