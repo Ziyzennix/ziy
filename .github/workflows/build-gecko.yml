@@ -535,6 +535,19 @@ jobs:
           set -uo pipefail
           cd "$GITHUB_WORKSPACE"
           SRC="$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          # `$SRC` lives INSIDE the Ziy checkout, so plain `git apply` finds
+          # the Ziy repo by walking up and runs in repo-subdirectory mode:
+          # `diff --git` patches (0002 is the only one) are then treated as
+          # top-level-relative, judged outside the current directory, and
+          # SILENTLY SKIPPED — with exit status 0 (run 38797207327 counted
+          # the skip as "applied"; the post-apply gate below was what caught
+          # it). The ceiling stops discovery at the checkout root, so the
+          # apply runs in plain-directory mode — the mode the local
+          # `git apply --check` gate in patches/README.md validated all five
+          # patches in. Verified against a local repro, 2026-10-16: without
+          # the ceiling the skip reproduces; with it both patch formats land
+          # in the right files.
+          export GIT_CEILING_DIRECTORIES="$GITHUB_WORKSPACE"
           # `set -e` is deliberately off inside the loop: we want to inspect
           # each patch's status and report every failure, not abort on the
           # first one. FAILED>0 exits 1 at the end.
@@ -546,11 +559,11 @@ jobs:
             [ -e "$p" ] || continue   # empty set: glob did not expand, skip
             PATCH_COUNT=$((PATCH_COUNT+1))
             echo "::group::applying $p"
-            # Dry-run FIRST, so a rejected patch writes nothing. The source
-            # tree is a git repo after extraction? No — the release tarball
-            # is not a checkout. `git apply` works fine against a plain
-            # directory (it just needs no .git for --check/--stat; adding
-            # -p1 default path stripping matches the a/ b/ prefixes).
+            # Dry-run FIRST, so a rejected patch writes nothing. The
+            # extracted tree is not a checkout — and with the ceiling above,
+            # git agrees: `git apply` runs against a plain directory (no
+            # prefix rewriting; the default -p1 stripping matches the a/ b/
+            # prefixes of both patch formats).
             #
             # Note: we cd into the SOURCE tree and pass the repo-relative
             # patch path, so no $OLDPWD trickery is needed and the a/ b/
