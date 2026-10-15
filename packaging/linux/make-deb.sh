@@ -349,7 +349,13 @@ printf '%s\n' "$INFO" | grep -q '^ *Package: ziy$' || die "the package is not na
 printf '%s\n' "$INFO" | grep -q "^ *Version: $PKG_VERSION$" || die "the package version is not '$PKG_VERSION'"
 printf '%s\n' "$INFO" | grep -q "^ *Architecture: $DEB_ARCH$" || die "the package architecture is not '$DEB_ARCH'"
 printf '%s\n' "$INFO" | grep -q '^ *Maintainer: ' || die "the package has no Maintainer"
-printf '%s\n' "$INFO" | grep -q '^ *Depends: lib' || die "the package declares no library Depends — it cannot install anywhere real"
+# [2026-10-16, first real run] This first demanded the line START
+# `Depends: lib`, but the resolved list legitimately starts `ffmpeg,` — a
+# deliberate BASE_DEPS member — so a correct package failed here. Any
+# comma-separated entry may be the first lib* one; both shapes are proven:
+# the merged/sorted list (`ffmpeg,libasound2,…`) and the fallback BASE_DEPS
+# (`libglib2.0-0, libgtk-3-0, …`).
+printf '%s\n' "$INFO" | grep -qE '^ *Depends: (lib|.*, ?lib)' || die "the package declares no library Depends — it cannot install anywhere real"
 printf '%s\n' "$INFO" | grep -q '^ *Description: ' || die "the package has no Description"
 log_ok "metadata: Package/Version/Architecture/Maintainer/Depends all correct"
 
