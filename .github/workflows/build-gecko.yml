@@ -292,14 +292,17 @@ jobs:
           fi
           # Every subtree the local box dug out on demand during the 13
           # configure attempts. Any missing one aborts NOW.
-          for d in browser toolkit modules config python mach dom security \
+          for d in browser toolkit modules config python dom security \
                    build intl testing; do
             if [ ! -d "$d" ]; then
               echo "::error file=.github/workflows/build-gecko.yml::extracted tree is missing '$d' — the release tarball is incomplete"
               exit 1
             fi
           done
-          for f in configure.py GNUmakefile; do
+          # `mach` is a FILE (the 6887-byte Python entry point), not a
+          # directory — run 38795875890's full extraction tripped on it as a
+          # directory test. Asserted as a file from here on.
+          for f in mach configure.py GNUmakefile; do
             if [ ! -f "$f" ]; then
               echo "::error file=.github/workflows/build-gecko.yml::extracted tree is missing the root file '$f'"
               exit 1
@@ -376,7 +379,12 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p ~/.cache/ccache
-          cat > ~/.ccache/config <<'EOF'
+          # ccache 4.9 reads its config at $CCACHE_DIR/ccache.conf ONLY — the
+          # old `~/.ccache/config` target this step used is dead (probed
+          # locally 2026-10-16 on ccache 4.9.1: a file there was silently
+          # ignored; only the config inside the cache dir was picked up). The
+          # build sets CCACHE_DIR=$HOME/.cache/ccache in .mozconfig below.
+          cat > ~/.cache/ccache/ccache.conf <<'EOF'
           # ccache budget: the Rust toolchain plus most of libxul.
           max_size = 10G
           # The objdir is the only place ccache is consulted.
@@ -384,7 +392,11 @@ jobs:
           # Keep the preprocessor output (needed for this mode) and compress
           # the cache, which is what makes a 10G cache hold ~4x more objects.
           compression = true
-          compiler_check = clang-19
+          # content, not mtime: hash the compiler file's bytes so a compiler
+          # swap with an identical mtime cannot poison the cache. `content`
+          # is the documented value (local probe on 4.9.1: rc=0); a bare
+          # compiler name was never established to mean anything useful.
+          compiler_check = content
           EOF
 
           cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
@@ -766,19 +778,29 @@ jobs:
           # home is redirected too so the engine does not read the runner's
           # real HOME (it would find the runner's own Firefox-ish state).
           export HOME="$PROFILE"
-          # --headless=new is the modern headless mode; --screenshot is what
-          # the local workers used (proofs-deep-fork.md and tools/verify.sh),
-          # and --profile keeps this run isolated. Firefox returns 0 on a
-          # successful screenshot, but some builds exit non-zero after
-          # closing; we assert on the OUTPUT, not the exit code.
-          timeout 180 "$APP_DIR_ABS/firefox" \
+          # A CONTENT page, not about:blank or about:newtab: proven locally
+          # 2026-10-16 on the packaged build (and recorded in tools/verify.sh
+          # as its "fact 9") — about: pages produce NO screenshot headless on
+          # this engine, while a real page renders and is written. verify.sh's
+          # own probe-page technique, ported.
+          PROBE_PAGE="$PROFILE/probe.html"
+          cat > "$PROBE_PAGE" <<'HTML'
+          <!doctype html><html><head><meta charset="utf-8"><title>Ziy</title>
+          <style>body{margin:0;height:100vh;display:grid;place-items:center;background:#26118f;color:#fff;font:700 48px system-ui,sans-serif;letter-spacing:.2em}</style></head>
+          <body><h1>ZIY</h1></body></html>
+          HTML
+          # --headless=new is the modern headless mode; --profile keeps this
+          # run isolated. The process can HANG after writing the screenshot
+          # (observed on the packaged build, 2026-10-16) or exit non-zero, so
+          # `|| BOOT_RC=$?` keeps `set -e` from aborting — a bare command
+          # would kill the step before its own output assertions ever ran.
+          # We assert on the OUTPUT, not the exit code.
+          BOOT_RC=0
+          timeout 180 env MOZ_CRASHREPORTER_DISABLE=1 MOZ_DISABLE_SAFE_MODE=1 \
+            "$APP_DIR_ABS/firefox" \
             --headless=new --profile "$PROFILE" \
             --screenshot "$SCREENSHOT" --window-size=1280,720 \
-            about:blank > "$PROFILE/boot.log" 2>&1
-          # Capture the status explicitly: `set -e` would abort here, but a
-          # non-zero exit with a good screenshot is a real Gecko behaviour
-          # (the headless shell can exit non-zero after writing the file).
-          BOOT_RC=$?
+            "file://$PROBE_PAGE" > "$PROFILE/boot.log" 2>&1 || BOOT_RC=$?
           echo "firefox boot exit=$BOOT_RC"
           if [ "$BOOT_RC" -ne 0 ] && [ ! -s "$SCREENSHOT" ]; then
             echo "::error file=.github/workflows/build-gecko.yml::smoke test: firefox exited $BOOT_RC AND produced no screenshot"
