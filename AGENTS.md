@@ -11,7 +11,7 @@ is present, decided, proven, and already gone wrong.
 **Ziy** is a privacy-first, Brave-feature-clone browser built **on the Gecko engine by
 configuration, not by patch**: a branded Firefox 156.0.1 application directory
 (`build/ziy/`), a profile Ziy owns (`~/.ziy/profiles/`), a nine-extension MV3
-WebExtension suite, two native Node helpers, and a blind sync server. Every product
+WebExtension suite, three native helpers (two Node, one Rust), and a blind sync server. Every product
 decision traces to `replica/evidence.md`'s confidence classes, and every claim you make
 must trace to `replica/proofs-<area>.md`. Parity: 60.4% of the deliverable row set,
 must-rows 80.2% weighted (`replica/parity.md` §3).
@@ -30,13 +30,14 @@ Four layers plus a server; each is independently testable and replaceable.
 ```
 SHELL (build/ziy/)   application.ini · ziy.js + ziy-hardening.js prefs · mozilla.cfg
                      lockPrefs · distribution/policies.json · omni.ja + browser/omni.ja
-                     byte patches · ziy launcher · ziy.desktop · brand → hicolor icons
+                     byte patches · LICENSES.txt + patches/ (MPL notice) · ziy launcher · ziy.desktop · brand → hicolor icons
    ↓ profile bootstrap, distribution xpis
 9 MV3 EXTENSIONS      event page (classic scripts) + UI pages + content scripts;
                      storage.local (small) · IndexedDB (big tables)
    ↓ nativeMessaging (JSON + UInt32LE length)
 NATIVE HELPERS        ziy-sync-agent: BIP-39, Ed25519, all HTTP → chain.sqlite
                      ziy-pwd: credential vault, unlocked only in RAM → vault.sqlite
+                     ziy-blocks: Rust adblock engine — verdicts only, no store (T1)
    ↓ HTTPS /v1/*, bearer chain-scoped tokens
 SERVER (server/src)   blind store: one opaque blob per (chain_id, record_id), node:sqlite
 ```
@@ -51,7 +52,7 @@ per-extension `store.js` header):
 | native SQLite | the credential vault (`~/.ziy/pwd/vault.sqlite`, passwords encrypted, origin/username plaintext) and the sync chain (`~/.ziy/sync/chain.sqlite`) |
 | server SQLite | opaque encrypted blobs only — the server cannot read a record |
 
-**Message flow, extension UI page → background event page → native host:** a UI page (`ui/popup.html` / `ui/options.html` / `ui/panel.html`) loads its classic `<script>` libs then calls `browser.runtime.sendMessage({op, …})`. The **background event page** — one shared classic scope built from `background.scripts[]` — dispatches on `switch (message.op)` with ops named `<area>.<verb>` (`extensions/ziy-shields/background/background.js:529-540`, `extensions/ziy-pwd/background/background.js:105-197`) and reaches `storage.local` / IndexedDB through the lib namespaces. For anything the browser must not see it calls `browser.runtime.sendNativeMessage("ziy-<host>", msg)`: the host frames it as UTF-8 JSON prefixed by an unsigned 32-bit LE length, max 1 MB (`native/ziy-pwd/lib/native-protocol.js`), dispatches from a single `Map`, and replies `{ok, op, ms, result}` — errors are answers, not crashes, and `safeMessage` strips paths/passphrases from reply text (`native/ziy-pwd/ziy-pwd.js:229-263`). `ziy-sync`'s host does all HTTP to `server/src/server.js`'s `/v1/*`; records are AES-256-GCM encrypted with AAD binding before they leave the box. Both hosts refuse any extension but their own (`native/ziy-pwd/lib/native-protocol.js:23`, `native/ziy-sync-agent/lib/native-protocol.js:22`).
+**Message flow, extension UI page → background event page → native host:** a UI page (`ui/popup.html` / `ui/options.html` / `ui/panel.html`) loads its classic `<script>` libs then calls `browser.runtime.sendMessage({op, …})`. The **background event page** — one shared classic scope built from `background.scripts[]` — dispatches on `switch (message.op)` with ops named `<area>.<verb>` (`extensions/ziy-shields/background/background.js:529-540`, `extensions/ziy-pwd/background/background.js:105-197`) and reaches `storage.local` / IndexedDB through the lib namespaces. For anything the browser must not see it calls `browser.runtime.sendNativeMessage("ziy-<host>", msg)`: the host frames it as UTF-8 JSON prefixed by an unsigned 32-bit LE length, max 1 MB (`native/ziy-pwd/lib/native-protocol.js`), dispatches from a single `Map`, and replies `{ok, op, ms, result}` — errors are answers, not crashes, and `safeMessage` strips paths/passphrases from reply text (`native/ziy-pwd/ziy-pwd.js:229-263`). `ziy-sync`'s host does all HTTP to `server/src/server.js`'s `/v1/*`; records are AES-256-GCM encrypted with AAD binding before they leave the box. Every host refuses any extension but its own (`native/ziy-pwd/lib/native-protocol.js:23`, `native/ziy-sync-agent/lib/native-protocol.js:22`, the argv guard in `native/ziy-blocks/src/main.rs`).
 
 ---
 
@@ -70,10 +71,10 @@ per-extension `store.js` header):
 | `extensions/ziy-pwd/` | the native vault's UI; popup only, no options page, no fill path. |
 | `tools/` | build + verify + bootstrap + launcher + e2e harnesses; `tools/lib/` holds the shared helpers (`common.sh`, `omni-ja.py`, `zpxi.py`, `gen-tokens.sh`, `cleanroom-scan.py`). |
 | `shell/` | app-dir inputs: `application.ini`, pref defaults, `mozilla.cfg`, `policies-gen.py`, `preflight-prefs.py`, `ziy.desktop`, `brand-fallback/`, `omni.ja.patch/`, `extensions.list`. |
-| `native/` | the two Node ESM hosts (`ziy-sync-agent`, `ziy-pwd`), each with its own `lib/`, framing module and tests. |
+| `native/` | the three native hosts: `ziy-sync-agent` + `ziy-pwd` (Node ESM, each with its own `lib/`, framing module and tests) and `ziy-blocks` (Rust, adblock-rust; engine built by `tools/build-blocks-engine.sh`). |
 | `server/` | the blind sync server: `src/server.js`, `src/store.js`, `lib/ziy-crypto.js`, `test/`. |
 | `brand/` | the co-owner's master raster `ziy.png` (the app icon), `logo*.svg/png`, `mascot*.svg`, `MASCOT.md`, `README.md`. |
-| `patches/` | four C++/configure patches (0001–0004) + `README.md` (the patch-set contract). All authored, none compiled. |
+| `patches/` | five C++/configure patches (0001–0005) + `README.md` (the patch-set contract). All authored, none compiled. |
 | `replica/` | the project's memory: `AI-BRIEF.md`, `proofs-*.md`, `parity.md`, `test-report.md`, `deploy.md`, the clean-room record. |
 | `.github/workflows/` | `build-gecko.yml` only — the one permitted Gecko compile path (tag / dispatch only). |
 
@@ -91,7 +92,7 @@ Run in this order. `build/`, `*.xpi`, `node_modules/`, `.ziy/` are gitignored
 # 0. get the tree. No git remote exists yet — `gh repo create` is the co-owner's action.
 git clone <repo> ziy && cd ziy          # or unzip the tree (replica/compile-readiness.md §1)
 
-# 1. unit tests for the whole extension suite (~1 min, 628 assertions)
+# 1. unit tests for the whole extension suite (~1 min, 674 assertions)
 npm test                                # = node --test extensions/*/test
 
 # 2. build the app dir — this IS the product shell. --force is required once build/ziy exists.
@@ -232,7 +233,7 @@ checkpoints the journal (`:425-427`).
 
 ### (f) C++ patch conventions (`patches/README.md`)
 
-Four patches, all `AUTHORED, NOT COMPILED`:
+Five patches, all `AUTHORED, NOT COMPILED`:
 
 | patch | touches | delta |
 | --- | --- | --- |
@@ -240,6 +241,7 @@ Four patches, all `AUTHORED, NOT COMPILED`:
 | `0002-ziy-fingerprinting-option.patch` | new `toolkit/ziy-fingerprinting.configure` + one `include()` in `toolkit/moz.configure` | declares `--enable-ziy-fingerprinting`; `configure_error()` if the gate and the shipped prefs disagree |
 | `0003-webgpu-adapter-strings.patch` | `dom/webgpu/Adapter.cpp` | empties the four unguarded `GPUAdapterInfo` wgpu* strings under RFP |
 | `0004-webgl-fake-extension.patch` | `dom/canvas/ClientWebGLContext.cpp` | appends one fake extension name under RFP, idempotently |
+| `0005-dns-disable-prefetch-from-https.patch` | `netwerk/dns/nsDNSService2.cpp` | adds the missing consumer for `network.dns.disablePrefetchFromHTTPS` — the pref was registered, locked by the shell, and read by nothing |
 
 Rules: ground the change in real engine source with line numbers **first**; generate the
 diff with `diff -u --label a/… --label b/…` against a pristine copy (never `git diff` in a
@@ -248,8 +250,8 @@ dirty tree); prepend a commit header carrying the why and the citations; verify 
 extraction — *"a patch you have not checked against the real tree is not finished"*; prove
 the gate-off path is byte-identical to pristine. Compilation happens **only** in
 `.github/workflows/build-gecko.yml` (tag / `workflow_dispatch`); nothing may claim a patch
-works at runtime. Note `patches/README.md`'s index still says "2 patches" — 0003 and 0004
-are on disk and correct that when you touch it.
+works at runtime. The `patches/README.md` index lists all five; none is compiled yet
+— the first compile is a `build-gecko.yml` dispatch (see `replica/TODAY.md`).
 
 ---
 
@@ -260,10 +262,10 @@ are on disk and correct that when you touch it.
 | `replica/AI-BRIEF.md` | **READ THIS FIRST.** What is on the box, what is decided, what is proven, the 12 traps, the first-five-minutes guide. |
 | `tools/build-shell.sh` | the 12-stage app-dir build; the single script that produces the product shell. |
 | `tools/ziy` | the one launcher: app-dir resolution, profile bootstrap-on-demand, `--headless`, `--profile`, arg passthrough. |
-| `shell/mozilla.cfg` | the `lockPref` layer — all locks, 11 sections, 96 pref calls. Every pref locked here must also have a default in `ziy.js`/`ziy-hardening.js` (enforced by the preflight). |
+| `shell/mozilla.cfg` | the `lockPref` layer — all locks, 11 sections, 97 pref calls. Every pref locked here must also have a default in `ziy.js`/`ziy-hardening.js` (enforced by the preflight). |
 | `shell/policies-gen.py` | regenerates **and** schema-validates `shell/distribution/policies.json` against the engine's own `policies-schema.json`, extracted from `browser/omni.ja`. Run on every build. |
 | `extensions/ziy-shields/manifest.json` | the reference manifest: 13-entry classic `background.scripts` array, 9 permissions, `host_permissions: <all_urls>`, DNR rule resource, both options entries. |
-| `tools/verify.sh` | the acceptance gate (12 sections, 831 lines); its header documents the process-hygiene rules. |
+| `tools/verify.sh` | the acceptance gate (12 sections, 917 lines); its header documents the process-hygiene rules. |
 | `patches/README.md` | the patch-set contract: format, the `git apply --check` gate, gate-off byte-identity, how to add one. |
 | `shell/extensions.list` | the one source of truth for the 9 suite ids. |
 | `tools/lib/cleanroom-scan.py` | the code-level clean-room guard. |
@@ -304,8 +306,8 @@ are on disk and correct that when you touch it.
 
 ### The unit suite
 
-`npm test` runs `node --test extensions/*/test` — **628 assertions, 0 fails** (re-measured
-2026-10-15). The trailing `/` makes the glob tolerant of an extension with no `test/` dir.
+`npm test` runs `node --test extensions/*/test` — **674 assertions, 0 fails** (re-measured
+2026-10-16). The trailing `/` makes the glob tolerant of an extension with no `test/` dir.
 Per-extension `package.json` adds `"test": "node --test test/"` and `"type":"commonjs"`;
 `ziy-shell`/`ziy-sync` have none but are still swept by the glob. `server/` and `native/*`
 are outside it (ESM suites) — run them by path.
@@ -316,13 +318,14 @@ are outside it (ESM suites) — run them by path.
 | `extensions/ziy-talk/test` | `node --test extensions/ziy-talk/test` | 98 |
 | `ziy-news` / `ziy-playlist` | `node --test extensions/ziy-<name>/test` | 83 each |
 | `extensions/ziy-ntp/test` | `node --test extensions/ziy-ntp/test` | 81 |
-| `extensions/ziy-sync/test` | `node --test extensions/ziy-sync/test` | 51 |
+| `extensions/ziy-sync/test` | `node --test extensions/ziy-sync/test` | 52 |
 | `extensions/ziy-desktop/test` | `node --test extensions/ziy-desktop/test` | 27 |
 | `extensions/ziy-pwd/test` | `node --test extensions/ziy-pwd/test` | 19 |
 | `extensions/ziy-shell/test` | `node --test extensions/ziy-shell/test` | 10 |
-| `server/test` | `node --test server/test` | 16 (≥120 s — a 60 s timeout reports a spurious `cancelled 1`) |
+| `server/test` | `node --test server/test` | 18 (~11 s since the WAL pragma; fsync-bound 47–120 s before) |
 | `native/ziy-pwd/test` | `node --test native/ziy-pwd/test` | 35 (~23 s) |
 | `native/ziy-sync-agent/test/` | — | empty dir; covered by `tools/e2e-ziy-sync.sh` + `agent-driver.py` |
+| `native/ziy-blocks/test` | `node --test native/ziy-blocks/test` | 13 (real binary over a real pipe; builds its artifacts on demand) |
 
 **These counts must not drop.** A change that narrows a suite must restore the coverage or
 record exactly what is no longer asserted, and why, in the proof doc. Shields is the
@@ -437,8 +440,8 @@ etc. run one at a time. Documented baseline (`replica/deploy.md:96-108`): **46 p
 3. **Read the relevant proof doc and the shipped code before editing it.** Do not iterate
    by guessing, and do not re-prove what a proof doc already shows (`replica/AI-BRIEF.md` §4).
 4. **Run the area's suite before and after your change:** `node --test extensions/<area>/test`,
-   `npm test` for the whole suite, and `node --test server/test` (≥120 s) /
-   `node --test native/ziy-pwd/test` separately.
+   `npm test` for the whole suite, and `node --test server/test` /
+   `node --test native/ziy-pwd/test` (the blocking host's `node --test native/ziy-blocks/test` too) separately.
 5. **Use throwaway profiles and anchored kills** — `--profile /tmp/ziy-<purpose>`,
    `MOZ_CRASHREPORTER_DISABLE=1`, then `pgrep -f '/tmp/ziy-<purpose>-profile'` and kill
    only those PIDs. Never a bare `pkill`.

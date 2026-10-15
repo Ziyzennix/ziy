@@ -1,0 +1,57 @@
+# ziy-blocks — Ziy's native blocking host.
+#
+# WHY THIS CRATE EXISTS (replica/native-expansion.md §2a, §7.1 T1): Ziy's
+# in-browser blocking is capped by the engine's DNR quota (30,000 guaranteed
+# static rules, an over-quota ruleset is dropped whole) plus a JS residual tier
+# that measures 0.34–9.67 ms per request. adblock-rust — the engine Brave
+# itself ships — replaces both: 0.0032–0.0050 ms per request, no rule ceiling,
+# one 7.5 MiB serialized engine built from the 7 shipped snapshots.
+#
+# The numbers above are measured on this box, not estimated:
+# replica/native-expansion.md §6.1/§6.4.
+#
+# LICENSE: MPL-2.0, like the rest of Ziy (package.json) and like adblock-rust
+# itself. See native/ziy-blocks/README.md for the dependency record.
+
+[package]
+name = "ziy-blocks"
+version = "0.1.0"
+edition = "2021"
+license = "MPL-2.0"
+publish = false
+description = "Ziy's native blocking host — adblock-rust over MDN native-messaging stdio"
+
+# Two binaries, one crate:
+#   ziy-blocks      — the long-lived native messaging host (stdio loop)
+#   ziy-blocks-gen  — the build-time generator that serializes the engine
+#                     from the shipped snapshots (run via
+#                     tools/build-blocks-engine.sh; never at browser runtime).
+[[bin]]
+name = "ziy-blocks"
+path = "src/main.rs"
+
+[[bin]]
+name = "ziy-blocks-gen"
+path = "src/bin/gen.rs"
+
+[dependencies]
+# Pinned exactly: the serialized engine format is only guaranteed stable within
+# a version, and the measurement work in native-expansion.md §6.1 was taken at
+# this version on this box. Bump deliberately, with a re-measurement.
+#
+# DEFAULT features are on, deliberately — the plan's §6.1 repro line records a
+# build that is not reproducible as a feature set, and the defaults are the
+# correct configuration for a request-answering host:
+#   * embedded-domain-resolver — REQUIRED at runtime: `url_parser/mod.rs:104-106`
+#     panics on every URL parse without it unless an external resolver was
+#     registered first; it also supplies the public-suffix-aware domain
+#     extraction that `$domain=` rules and the third-party test depend on.
+#   * full-regex-handling — keeps regex filters live rather than skipped.
+#   * single-thread — one stdio connection, one thread; no lock overhead.
+adblock = { version = "=0.13.3" }
+serde_json = "1"
+
+[profile.release]
+# Ship small and fast; the engine data lives in a file, not in the binary.
+lto = true
+strip = true

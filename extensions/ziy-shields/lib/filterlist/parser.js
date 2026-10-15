@@ -21,6 +21,12 @@
  *   resource types   $script $image $stylesheet $subdocument $xmlhttprequest ...
  *   domain options   $domain=a|b|~c , $third-party , ~third-party , $important
  *
+ * Provenance: written against the public uBlock Origin static-filter syntax
+ * documentation (https://github.com/gorhill/uBlock/wiki/Static-filter-syntax);
+ * the snapshots it parses live in lib/filterlist/snapshots/ (each source URL
+ * is the `url` field in lists.js), and the licences that cover them are
+ * recorded in LICENSES beside the manifest.
+ *
  * Output is a normalised rule table (plain objects, JSON-serialisable), which
  * lib/engine/ compiles into declarativeNetRequest rules. This module is pure:
  * no DOM, no storage, no browser APIs, so the unit tests run under plain node.

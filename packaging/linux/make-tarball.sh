@@ -62,7 +62,11 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --out) [ $# -ge 2 ] || die "--out needs a directory"; OUT_DIR="$2"; shift 2 ;;
     --name) [ $# -ge 2 ] || die "--name needs a stem"; STEM="$2"; shift 2 ;;
-    -h|--help) sed -n '2,40p' "${BASH_SOURCE[0]}"; exit 0 ;;
+    # Print the whole usage header: every leading comment line from line 2 up
+    # to the first non-comment line. (The old `sed -n '2,40p'` range stopped
+    # one line short of the Env block's ZIY_VERSION, so --help silently
+    # omitted a documented input.)
+    -h|--help) awk 'NR==1{next} /^#/{print; next} {exit}' "${BASH_SOURCE[0]}"; exit 0 ;;
     *) die "unknown option: $1 (try --help)" ;;
   esac
 done
@@ -244,7 +248,14 @@ EOF
 # A checksum file at the archive root: the cheapest possible integrity story
 # for a tarball downloaded over HTTPS, and it makes the workflow's own
 # artifact verification a one-line sha256sum -c.
-( cd "$STAGE/$STEM" && find . -type f | LC_ALL=C sort | xargs sha256sum > CHECKSUMS.sha256 ) 2>/dev/null
+#
+# CHECKSUMS.sha256 covers every shipped file EXCEPT itself. The redirect
+# creates the file before find runs, so without the exclusion it hashes its
+# own 0-byte self (e3b0c442…, the empty-string digest) and every later
+# `sha256sum -c CHECKSUMS.sha256` fails on its own line — reproduced 3/3 runs
+# on a throwaway tree, 2026-10-16. The workflow's smoke step relies on this
+# file verifying cleanly.
+( cd "$STAGE/$STEM" && find . -type f ! -name CHECKSUMS.sha256 | LC_ALL=C sort | xargs sha256sum > CHECKSUMS.sha256 ) 2>/dev/null
 log_ok "README.md + CHECKSUMS.sha256 written"
 
 # ---------------------------------------------------------------------------
@@ -313,9 +324,12 @@ log_ok "identity + suite verified from the unpacked archive"
 
 # Size report: the packaging number that bites (research-tech.md §3 records the
 # installer-size metric as a first-class one).
+# The checksum line is the archive's BASENAME, not the absolute build path,
+# so the .sha256 verifies on the machine that downloaded it: drop the two
+# files side by side and `sha256sum -c <name>.tar.xz.sha256` works there.
 TARBALL_SIZE="$(du -h "$TARBALL" | cut -f1)"
 UNPACKED_SIZE="$(du -sh "$R" | cut -f1)"
-sha256sum "$TARBALL" > "$TARBALL.sha256"
+( cd "$OUT_DIR" && sha256sum "$STEM.tar.xz" > "$STEM.tar.xz.sha256" )
 log_ok "wrote $TARBALL.sha256"
 log_ok "artifact: $TARBALL ($TARBALL_SIZE compressed, $UNPACKED_SIZE unpacked)"
 

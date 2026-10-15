@@ -622,6 +622,20 @@ current 0.34–9.67 ms / 1.10 ms / 0.147 ms figures. **Nothing about the
 `webRequest` listener changes in T1** — the host only *answers*; the extension
 still blocks. That is the honest increment.
 
+**STATUS (2026-10-16) — DONE.** `native/ziy-blocks` is in the tree: the host,
+the generator, the JS protocol side, the install script, a 13-test gate that
+boots the real binary over the real pipe, and the benchmark. Measured in this
+pass, same box: engine build **214 ms** over the same 7 snapshots, serialized
+engine **7,864,005 bytes (7.50 MiB)**, host load ~50 ms, and **0.0574
+ms/request end-to-end over the pipe** (1000 block + 1000 clean) — read beside
+the §6.2/§6.4 tiers (1.10 ms mean static, 0.147 ms indexed). Two deviations,
+recorded: (a) §6.1's `default-features=false` is not shippable as written —
+`Request::new` panics without the embedded PSL resolver
+(`url_parser/mod.rs:104-106`), so the crate pins **default features** and the
+engine size differs by 400 bytes from §6.1's figure; (b) with debug info off
+(the 7.50 MiB choice), verdicts carry no rule text — `filter`/`exception` are
+reserved and null by design. Evidence: `replica/proofs-native-blocks.md`.
+
 **Why first and why pre-packaging:** it is the only candidate with a real win, it
 is a ~100-second local build, it costs no engine compile, and it removes the
 one place Brave is measurably stronger than Ziy (the 30,000-rule ceiling,
@@ -642,6 +656,17 @@ protections the product tells users are active are no-ops. It is ~10 lines in
 packaging because it changes what the shipped hardening set actually does. It is
 listed here because it is the cheapest real correctness fix on the board and it
 belongs in the same pre-ship pass.
+
+**STATUS (2026-10-16) — landed, including the last line.** `shell/mozilla.cfg`
+locks the real engine names (`webgl.override-unmasked-renderer`,
+`dom.webserial.enabled`, `dom.fs.enabled` — the old names survive only in the
+comments that record why they were wrong), `network.cookie.lifetimePolicy` is
+removed with a note, and `device.sensors.enabled` is present. The one item
+still missing at the start of this pass — `privacy.spoof_english` sitting at
+its `0` prompt default, which silently disables JSLocale spoofing in RFP mode
+(`replica/proofs-cpp-fingerprint.md` §5b) — is now locked to `2` in
+`mozilla.cfg` and mirrored as a default in `ziy.js` + `ziy-hardening.js`.
+`preflight-prefs.py`: **97 locks, 172 declared, layers agree**.
 
 **T3. One Gecko compile, with the 5 patches.** *First deliverable:* dispatch
 `.github/workflows/build-gecko.yml` once, on a tag, and record the outcome —
@@ -668,6 +693,19 @@ product should not ship a store 1,000× slower than the same language allows, an
 it costs no native code whatsoever. It belongs in the plan precisely because it
 is the measurement that kills the "rewrite the server in Rust" candidate: the
 win was never in the language.
+
+**STATUS (2026-10-16) — DONE.** The pragma pair sits in `server/src/store.js`'s
+constructor with the durability trade-off written down beside it, and
+`server/test/durability.test.mjs` reads both pragmas back through the real
+store connection and prints the write path: **0.186–0.389 ms/blob** across
+runs (100 `putBlob` calls; checkpoint placement moves the figure) against the
+144.059 ms/blob baseline — the server suite went from fsync-bound (47.1 s
+without the pragma, with the new test failing `'delete' !== 'wal'`) to
+**18/18 pass in ~11 s**. Process-crash durability was checked, not assumed: a
+SIGKILLed writer's 200/200 acknowledged rows survived on reopen (3.36 MB of WAL
+replayed). The power-loss limb rests on SQLite's documented semantics —
+untestable on this box, and stated as such in the code. Evidence:
+`replica/proofs-native-blocks.md` §6.
 
 ### 7.2 — AFTER Linux/Windows packaging ships
 

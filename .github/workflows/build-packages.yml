@@ -1,0 +1,489 @@
+# .github/workflows/build-packages.yml — package Ziy for Linux (tarball + .deb).
+#
+# WHAT THIS PRODUCES (two artifacts, each with its .sha256 alongside):
+#   build/packaging/ziy-<version>-linux-x86_64.tar.xz
+#     the portable path: the whole app dir + the bundled engine, no root, no
+#     package manager, runs from an unpacked directory on any distro.
+#   build/packaging/ziy_<version>-1_amd64.deb
+#     the Debian/Ubuntu path: installs to /usr/lib/ziy with /usr/bin/ziy.
+#
+# THE CHAIN (every step is one command this repo already owns):
+#   a  checkout
+#   b  the packaging toolchain (dpkg-dev, lintian, python3-jsonschema,
+#      python3-pil, desktop-file-utils, libgtk-3-bin, xz-utils)
+#   c  fetch-engine.sh — Mozilla's PREBUILT Gecko tarball, SHA512-verified
+#      against Mozilla's published SHA512SUMS. Nothing here compiles Gecko;
+#      C++ compilation is build-gecko.yml's job (tags / manual dispatch only).
+#   d  build-shell.sh --force --engine … — the product app dir, build/ziy
+#   e  build-extension.sh --all — the 9-add-on WebExtension suite as XPIs
+#   f  make-tarball.sh — the portable tarball (self-verified by the script)
+#   g  make-deb.sh — the .deb (dpkg-shlibdeps + lintian run inside it)
+#   h  install the .deb's own Depends — every name it declares is exercised
+#   i  smoke: unpack the tarball, verify CHECKSUMS.sha256 over every file,
+#      boot it headless through its own ./ziy, assert the pixels
+#   j  install the .deb with apt, assert the installed tree + postinst, boot
+#      /usr/bin/ziy, then purge — the first place dpkg/apt ever see it
+#   k  upload both artifacts
+#   l  the job summary
+#
+# WHY THIS IS NOT ON EVERY PUSH (why `push:` is tag-gated, not branch-gated):
+# a private-repo runner's minutes are METERED (GitHub Free: 2,000 min/month;
+# build-gecko.yml's header carries the tables) and this job installs ~1 GB of
+# apt packages, builds a ~330 MB app dir, compresses two artifacts and boots
+# the browser twice. That is minutes, not the 12-28 h build-gecko.yml costs —
+# but a single force-push sprint must not queue a dozen copies of it. The
+# trigger is therefore:
+#   * workflow_dispatch  — manual; costs minutes only when a human decides.
+#   * push, on a "v*" tag — a cut is an explicit, reviewable event.
+# This mirrors build-gecko.yml's documented policy (architecture.md §0.5).
+#
+# WHAT IS VERIFIED WHERE (read before trusting any line of this file):
+#   * PROVEN ON THE CO-OWNER'S BOX: build-shell.sh, build-extension.sh,
+#     fetch-engine.sh and the headless-boot technique (tools/verify.sh §3 —
+#     the 800x600 brand-violet probe and pixel thresholds this workflow
+#     reuses verbatim) all run there routinely. packaging/linux/DEPS.md is
+#     grounded in ldd/readelf/dpkg output from that box.
+#   * NOT YET RUN ON ANY MACHINE when this workflow was written: the two
+#     packaging scripts (build/packaging/ does not exist on the co-owner's
+#     box; replica/TODAY.md §3 names the first real run as this workflow's).
+#     The defects that first run would have tripped on were found by static
+#     probing on 2026-10-16 and fixed, each with its probe recorded in the
+#     script's own comment:
+#       - the /usr/bin/ziy self-loop (make-deb.sh's symlink target),
+#       - the dpkg-deb --contents symlink-line pattern (make-deb.sh),
+#       - the CHECKSUMS.sha256 self-hash (make-tarball.sh),
+#       - the .sha256 files naming absolute build paths instead of the
+#         artifact basename (both scripts),
+#       - the dpkg-shlibdeps -O / debian/substvars mismatch (make-deb.sh),
+#       - both scripts' --help line ranges.
+#   * NOT VERIFIED ON THE CO-OWNER'S BOX — this job is where they first run:
+#     lintian; apt-get installing the built .deb; the deb's postinst; the
+#     dpkg-shlibdeps resolution against a full apt database.
+#   * THIS WORKFLOW ITSELF has only been YAML-parsed and every run: block
+#     syntax-checked (bash -n); a hosted runner is the only place it can
+#     actually execute.
+#
+# PROCESS HYGIENE: everything runs on the runner. The throwaway profiles
+# live under $RUNNER_TEMP, every boot is timeout-bounded, and no kill of any
+# process is ever needed — the co-owner's anchored-kill rule is for the
+# co-owner's box, which this workflow never touches. This file never pushes
+# and never creates a Release (contents: read); publishing is a human act.
+
+name: build-packages
+
+on:
+  # Manual by default: minutes are metered, so this costs them only when a
+  # human decides. The input is a free-text note, not a build knob — the
+  # build configuration lives in the repo (build-shell.sh's pins, the
+  # packaging scripts' defaults), so a manually dispatched run and a
+  # tag-pushed run stay identical.
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "Why this run is being made (recorded in the summary)"
+        required: false
+        default: ""
+        type: string
+  # A tag is an explicit, reviewable event. NOT a branch push: a single
+  # force-push sprint would queue a dozen multi-minute jobs, and the queue
+  # would eat the free tier the repo's other workflows depend on.
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+env:
+  # The product version. Must agree with build-shell.sh's pinned engine
+  # version (156.0.1 — enforced by its own version-agreement check) and with
+  # package.json / shell/browser/application.ini / tools/ziy; a bump moves
+  # them together (tools/update-engine.sh does it).
+  ZIY_VERSION: "156.0.1"
+  # A packaging job must never stop to ask a question.
+  DEBIAN_FRONTEND: "noninteractive"
+
+jobs:
+  build-packages:
+    # ubuntu-latest on a PRIVATE repo = 2 CPU / 8 GB, minutes metered
+    # (build-gecko.yml's header has both tables). This job is small enough
+    # not to need the self-hosted runner: estimate 15-40 min, dominated by
+    # the apt installs and the two xz compressions.
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      # ------------------------------------------------------------------
+      # a. checkout
+      # ------------------------------------------------------------------
+      - name: "a. checkout (the Ziy repo: tools/, shell/, packaging/, extensions/)"
+        uses: actions/checkout@v4
+        # No fetch-depth: 0. Unlike build-gecko.yml this job applies no
+        # patches to a source tree; the app dir is assembled from the
+        # checkout's own files.
+
+      # ------------------------------------------------------------------
+      # b. the tools the packaging layer consumes, each named with its
+      #    consumer. Every one of these is a real consumer in this repo.
+      # ------------------------------------------------------------------
+      - name: "b. install the packaging toolchain"
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          #   dpkg-dev           -> dpkg-shlibdeps, make-deb.sh's Depends resolver
+          #   lintian            -> make-deb.sh runs it automatically when present
+          #                         (it is NOT installed on the co-owner's box)
+          #   python3-jsonschema -> policies-gen.py validates policies.json against
+          #                         the engine's schema; its `pip install jsonschema`
+          #                         fallback is refused by PEP 668 on noble, so the
+          #                         apt package is the supported path here
+          #   python3-pil        -> the smoke steps' pixel assertions (and
+          #                         render-icons.py's Pillow fallback backend)
+          #   desktop-file-utils -> update-desktop-database, called by the deb postinst
+          #   libgtk-3-bin       -> gtk-update-icon-cache, called by the same postinst
+          #   xz-utils           -> tar -cJf and dpkg-deb -Zxz
+          sudo apt-get install -y --no-install-recommends \
+            dpkg-dev lintian python3-jsonschema python3-pil \
+            desktop-file-utils libgtk-3-bin xz-utils
+
+      # ------------------------------------------------------------------
+      # c. the engine: Mozilla's own prebuilt tarball, checksum-verified.
+      #    EXPLICIT fetch + explicit --engine, not build-shell.sh's own
+      #    discovery: the runner image must never be the source of the
+      #    engine. build-shell.sh's resolution order would accept an
+      #    already-extracted tree or a SYSTEM install before it fetches —
+      #    and a browser that happens to exist on the runner must never
+      #    become what our artifact is built from. fetch-engine.sh downloads
+      #    linux-x86_64/en-US/firefox-<version>.tar.xz and verifies its SHA512
+      #    against Mozilla's published SHA512SUMS before extracting a byte.
+      # ------------------------------------------------------------------
+      - name: "c. fetch the engine (Mozilla's prebuilt tarball, SHA512-verified)"
+        run: |
+          set -euxo pipefail
+          ENGINE_DIR="$(bash tools/lib/fetch-engine.sh)"
+          test -x "$ENGINE_DIR/firefox"
+          test -f "$ENGINE_DIR/omni.ja"
+          test -f "$ENGINE_DIR/browser/omni.ja"
+          echo "ENGINE_DIR=$ENGINE_DIR" >> "$GITHUB_ENV"
+          echo "engine fetched and verified: $ENGINE_DIR"
+
+      # ------------------------------------------------------------------
+      # d. the app dir. --force is required once build/ziy exists: without it
+      #    build-shell.sh exits 0 with "already built" (tools/build-shell.sh
+      #    :156-160), and this job must build from THIS checkout every time.
+      # ------------------------------------------------------------------
+      - name: "d. build the app dir (build/ziy) from the pinned engine"
+        run: |
+          set -euxo pipefail
+          ./tools/build-shell.sh --force --engine "$ENGINE_DIR"
+          # The product the packaging scripts are about to ship:
+          test -x build/ziy/firefox
+          test -x build/ziy/ziy
+          test "$(sed -n 's/^Name=//p' build/ziy/browser/application.ini | head -1)" = "Ziy"
+          # The provenance record make-tarball.sh's README reads, tied to the
+          # version pin above: source=tarball means no Firefox install is
+          # needed anywhere downstream.
+          grep -q '^source=tarball$' build/engine-provenance.txt
+          grep -q "^engine_version=$ZIY_VERSION\$" build/engine-provenance.txt
+          # MPL-2.0 §3.2(a) notices — tools/verify.sh §1 checks the same two,
+          # so a release that skipped them would already fail the local gate.
+          test -s build/ziy/LICENSES.txt
+          test "$(ls build/ziy/patches/*.patch 2>/dev/null | wc -l | tr -d ' ')" -ge 5
+
+      # ------------------------------------------------------------------
+      # e. the suite. BASH, not node: `npm run build:xpi` maps to
+      #    `node tools/build-extension.sh`, which dies with
+      #    ERR_UNKNOWN_FILE_EXTENSION (a bash script is not a node entry
+      #    point). The invocation below is the documented one.
+      # ------------------------------------------------------------------
+      - name: "e. package the WebExtension suite (BASH, not node)"
+        run: |
+          set -euxo pipefail
+          bash tools/build-extension.sh --all
+          # The add-on id is derived from the XPI FILENAME by the engine's
+          # distribution installer, so filename vs manifest gecko.id
+          # agreement is load-bearing; --check verifies it and exits non-zero
+          # on any mismatch.
+          bash tools/build-extension.sh --check
+          # Every id in shell/extensions.list (the one source of truth, 9 of
+          # them) must have packaged: a release artifact missing a suite
+          # add-on is worse than a loud failure here.
+          EXPECTED="$(grep -cE '^[a-z][a-z0-9-]*@ziy\.app$' shell/extensions.list)"
+          ACTUAL="$(ls build/ziy/distribution/extensions/*.xpi 2>/dev/null | wc -l | tr -d ' ')"
+          echo "suite: $ACTUAL of $EXPECTED ids packaged"
+          ls -la build/ziy/distribution/extensions/
+          test "$ACTUAL" = "$EXPECTED"
+
+      # ------------------------------------------------------------------
+      # f. the portable tarball. The script verifies its own output
+      #    (tree completeness, both omni.ja patches, identity, suite count,
+      #    archive round-trip) before it declares success.
+      # ------------------------------------------------------------------
+      - name: "f. make the portable tarball (no root, no package manager)"
+        run: |
+          set -euxo pipefail
+          bash packaging/linux/make-tarball.sh
+          ls -la build/packaging/
+          test "$(ls build/packaging/*.tar.xz 2>/dev/null | wc -l | tr -d ' ')" = "1"
+
+      # ------------------------------------------------------------------
+      # g. the .deb. make-deb.sh self-checks its own output (dpkg -I,
+      #    dpkg-deb --contents, the control archive) and runs lintian when
+      #    present — step b installed it. dpkg-shlibdeps runs inside too;
+      #    the co-owner's box has neither lintian nor root, so this is the
+      #    differential verification that box could not perform.
+      # ------------------------------------------------------------------
+      - name: "g. make the .deb (dpkg-deb; dpkg-shlibdeps + lintian run inside)"
+        run: |
+          set -euxo pipefail
+          bash packaging/linux/make-deb.sh
+          ls -la build/packaging/
+          test "$(ls build/packaging/*.deb 2>/dev/null | wc -l | tr -d ' ')" = "1"
+
+      # ------------------------------------------------------------------
+      # h. the dependency contract, exercised. The deb's OWN Depends string
+      #    goes to apt's dependency resolver through `apt-get satisfy` — the
+      #    same resolution an install of the deb itself performs. NOT
+      #    `apt-get install <names>`: on noble five of the names are pure
+      #    virtuals (libglib2.0-0, libgtk-3-0, libasound2, libatk1.0-0,
+      #    libatk-bridge2.0-0, Provides-ed by their -t64 packages), and a
+      #    MULTI-provider virtual is refused when named on the command line.
+      #    Verified on the co-owner's box 2026-10-16 with apt 2.8.3:
+      #      apt-get -s install … libasound2 …  -> exit 100, "E: Package
+      #        'libasound2' has no installation candidate" (it has two
+      #        providers: libasound2t64, liboss4-salsa-asound2)
+      #      apt-get -s satisfy "<the same list>" -> exit 0, no E: lines
+      #    In dependency position apt selects the provider itself; the
+      #    satisfy form is the honest spelling of "install exactly what this
+      #    deb declares, as resolved by apt". (The earlier dummy-deb +
+      #    `apt-get -s install <deb>` proof is DEPS.md §7's.)
+      #    NOTE: the runner image already carries most of these libraries, so
+      #    this proves RESOLVABILITY of every declared name, not sufficiency
+      #    on a bare system — the sufficiency bound is DEPS.md §8's.
+      # ------------------------------------------------------------------
+      - name: "h. install the .deb's own Depends (the dependency contract, resolved by apt)"
+        run: |
+          set -euxo pipefail
+          DEB="$(ls build/packaging/ziy_*.deb)"
+          DEPS="$(dpkg-deb -f "$DEB" Depends)"
+          echo "Depends ($(printf '%s\n' "$DEPS" | tr ',' '\n' | grep -c .) entries):"
+          printf '%s\n' "$DEPS"
+          # The quoted string is ONE apt argument: apt parses the dependency
+          # syntax itself (names, version clauses), exactly as it would for
+          # the deb's control file. --no-install-recommends: recommends are
+          # extras the dependency list does not claim.
+          sudo apt-get satisfy -y --no-install-recommends "$DEPS" \
+            || { echo "::error file=.github/workflows/build-packages.yml::apt-get satisfy of the deb's Depends failed — the dependency contract is broken"; exit 1; }
+
+      # ------------------------------------------------------------------
+      # i. SMOKE — the step make-tarball.sh's closing note names:
+      #    "that the browser BOOTS ... is CI's job
+      #     (.github/workflows/build-packages.yml, step "smoke")".
+      #    Unpack the artifact we just built, verify every shipped file
+      #    against the archive's own CHECKSUMS.sha256, then boot it headless
+      #    through its own ./ziy launcher and assert the rendered pixels.
+      # ------------------------------------------------------------------
+      - name: "i. smoke: verify the unpacked tarball's CHECKSUMS.sha256 and boot it headless"
+        run: |
+          set -euxo pipefail
+          TARBALL="$(ls build/packaging/ziy-*.tar.xz)"
+          STEM="$(basename "$TARBALL" .tar.xz)"
+          WORK="$RUNNER_TEMP/ziy-smoke-tarball"
+          rm -rf "$WORK"; mkdir -p "$WORK"
+          tar -xJf "$TARBALL" -C "$WORK"
+          cd "$WORK/$STEM"
+          # 1. the archive verifies itself: every file against the list
+          #    written at packaging time (which excludes itself — the probe
+          #    that found the self-hash is in make-tarball.sh §3).
+          FILES="$(wc -l < CHECKSUMS.sha256 | tr -d ' ')"
+          sha256sum -c --quiet CHECKSUMS.sha256 \
+            || { echo "::error file=.github/workflows/build-packages.yml::the tarball's own CHECKSUMS.sha256 failed"; exit 1; }
+          echo "CHECKSUMS.sha256: all $FILES files verified"
+          # 2. the probe page + pixel thresholds are tools/verify.sh §3's,
+          #    proven on the co-owner's box: brand violet #26118F background,
+          #    ZIY wordmark at 48px, rendered at 800x600.
+          cat > "$WORK/ziy-probe.html" <<'HTML'
+          <!doctype html><html><head><meta charset="utf-8"><title>Ziy</title>
+          <style>body{margin:0;height:100vh;display:grid;place-items:center;background:#26118f;
+          color:#fff;font:700 48px system-ui,sans-serif;letter-spacing:.2em}</style></head>
+          <body><h1>ZIY</h1></body></html>
+          HTML
+          PROFILE="$WORK/profile"; mkdir -p "$PROFILE"
+          SHOT="$WORK/shot.png"
+          export HOME="$WORK/home"; mkdir -p "$HOME"
+          # 3. boot through the tarball's OWN ./ziy launcher, not the bare
+          #    binary: the launcher stub is what a user runs, and booting it
+          #    proves its readlink -f app-dir resolution survived packaging.
+          #    The MOZ_* variables, the flags and the throwaway profile mirror
+          #    tools/verify.sh:193-196. Every boot is timeout-bounded; the
+          #    runner is ephemeral, so there is nothing to kill afterwards.
+          timeout 180 env MOZ_CRASHREPORTER_DISABLE=1 MOZ_DISABLE_SAFE_MODE=1 \
+              ./ziy --headless=new --profile "$PROFILE" \
+              --window-size=800,600 --screenshot "$SHOT" "file://$WORK/ziy-probe.html" \
+              > "$WORK/boot.log" 2>&1 || true
+          echo "--- boot log ---"
+          sed -e 's/^/    /' "$WORK/boot.log" || true
+          test -s "$SHOT" \
+            || { echo "::error file=.github/workflows/build-packages.yml::smoke: no screenshot — the unpacked tarball did not boot"; exit 1; }
+          python3 - "$SHOT" <<'PY'
+          import sys
+          from PIL import Image
+          im = Image.open(sys.argv[1]).convert("RGB")
+          w, h = im.size
+          px = im.load()
+          violet = white = 0
+          for y in range(h):
+              for x in range(w):
+                  r, g, b = px[x, y]
+                  if abs(r - 0x26) < 12 and abs(g - 0x11) < 12 and abs(b - 0x8F) < 12:
+                      violet += 1
+                  elif r > 240 and g > 240 and b > 240:
+                      white += 1
+          if violet < 50000:
+              sys.exit(f"Ziy's brand violet (#26118F) covers only {violet}px; the page did not render")
+          if white < 500:
+              sys.exit(f"the wordmark's white covers only {white}px; no wordmark rendered")
+          print(f"{w}x{h}: {violet} brand-violet px, {white} wordmark-white px")
+          PY
+          echo "tarball smoke OK"
+
+      # ------------------------------------------------------------------
+      # j. the .deb, installed. DEPS.md §8 names this step: the co-owner's
+      #    box has no root, so this is the first place dpkg/apt ever see the
+      #    package. apt (not `dpkg -i`) resolves Depends from the archive
+      #    and refuses loudly if one is unsatisfiable — the same command a
+      #    user runs. dpkg marks a package "install ok installed" only after
+      #    its postinst exits 0, so the status assertion below IS the
+      #    postinst-ran assertion.
+      # ------------------------------------------------------------------
+      - name: "j. install the .deb with apt, assert the installed tree, boot /usr/bin/ziy, remove"
+        run: |
+          set -euxo pipefail
+          DEB="$PWD/$(ls build/packaging/ziy_*.deb)"
+          ( cd build/packaging && sha256sum -c "$(basename "$DEB").sha256" )
+          sudo apt-get install -y "$DEB" \
+            || { echo "::error file=.github/workflows/build-packages.yml::apt-get install of the built .deb failed"; exit 1; }
+          dpkg-query -W -f='${Status}\n' ziy | grep -qx 'install ok installed'
+          echo "installed files: $(dpkg -L ziy | wc -l | tr -d ' ')"
+          # The paths the package promises, and the /usr/bin/ziy symlink
+          # whose target is the fix this workflow's first run would otherwise
+          # have tripped on (the self-loop — make-deb.sh's comment carries
+          # the probe):
+          test -L /usr/bin/ziy
+          test "$(readlink /usr/bin/ziy)" = "../lib/ziy/ziy"
+          test -x /usr/lib/ziy/ziy
+          test -x /usr/lib/ziy/firefox
+          grep -q '^Name=Ziy' /usr/lib/ziy/browser/application.ini
+          test -f /usr/share/applications/ziy.desktop
+          test -f /var/lib/dpkg/info/ziy.postinst
+          # The icons the payload ships at the theme path (the postinst's
+          # second copy loop is a no-op when dpkg already unpacked the same
+          # file — make-deb.sh §4 — so this asserts the payload, and
+          # `install ok installed` above already proves the postinst ran).
+          ls /usr/share/icons/hicolor/*/apps/ziy.png
+          # Boot through /usr/bin/ziy: the packaged symlink + the /usr/lib/ziy
+          # prefix, i.e. the exact path a user takes. Same probe and pixel
+          # thresholds as step i.
+          WORK="$RUNNER_TEMP/ziy-smoke-deb"
+          rm -rf "$WORK"; mkdir -p "$WORK"
+          cat > "$WORK/ziy-probe.html" <<'HTML'
+          <!doctype html><html><head><meta charset="utf-8"><title>Ziy</title>
+          <style>body{margin:0;height:100vh;display:grid;place-items:center;background:#26118f;
+          color:#fff;font:700 48px system-ui,sans-serif;letter-spacing:.2em}</style></head>
+          <body><h1>ZIY</h1></body></html>
+          HTML
+          PROFILE="$WORK/profile"; mkdir -p "$PROFILE"
+          SHOT="$WORK/shot.png"
+          export HOME="$WORK/home"; mkdir -p "$HOME"
+          timeout 180 env MOZ_CRASHREPORTER_DISABLE=1 MOZ_DISABLE_SAFE_MODE=1 \
+              /usr/bin/ziy --headless=new --profile "$PROFILE" \
+              --window-size=800,600 --screenshot "$SHOT" "file://$WORK/ziy-probe.html" \
+              > "$WORK/boot.log" 2>&1 || true
+          echo "--- boot log ---"
+          sed -e 's/^/    /' "$WORK/boot.log" || true
+          test -s "$SHOT" \
+            || { echo "::error file=.github/workflows/build-packages.yml::smoke: no screenshot — /usr/bin/ziy did not boot"; exit 1; }
+          python3 - "$SHOT" <<'PY'
+          import sys
+          from PIL import Image
+          im = Image.open(sys.argv[1]).convert("RGB")
+          w, h = im.size
+          px = im.load()
+          violet = white = 0
+          for y in range(h):
+              for x in range(w):
+                  r, g, b = px[x, y]
+                  if abs(r - 0x26) < 12 and abs(g - 0x11) < 12 and abs(b - 0x8F) < 12:
+                      violet += 1
+                  elif r > 240 and g > 240 and b > 240:
+                      white += 1
+          if violet < 50000:
+              sys.exit(f"Ziy's brand violet (#26118F) covers only {violet}px; the page did not render")
+          if white < 500:
+              sys.exit(f"the wordmark's white covers only {white}px; no wordmark rendered")
+          print(f"{w}x{h}: {violet} brand-violet px, {white} white px")
+          PY
+          echo "deb smoke OK"
+          # Remove: prove the package uninstalls and leaves nothing behind.
+          sudo apt-get purge -y ziy
+          test ! -e /usr/lib/ziy
+          test ! -L /usr/bin/ziy
+          test ! -e /usr/share/applications/ziy.desktop
+          if dpkg-query -W ziy >/dev/null 2>&1; then
+            echo "::error file=.github/workflows/build-packages.yml::dpkg still knows 'ziy' after purge"
+            exit 1
+          fi
+          echo "purged: dpkg no longer knows ziy"
+
+      # ------------------------------------------------------------------
+      # k. upload. Both artifacts travel with their .sha256. 7 days:
+      #    long enough to hand a build to another job or a human, short
+      #    enough not to bill storage (same policy as build-gecko.yml).
+      # ------------------------------------------------------------------
+      - name: "k1. upload the tarball + its checksum"
+        uses: actions/upload-artifact@v4
+        with:
+          name: ziy-linux-tarball-${{ env.ZIY_VERSION }}
+          path: |
+            build/packaging/*.tar.xz
+            build/packaging/*.tar.xz.sha256
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: "k2. upload the .deb + its checksum"
+        uses: actions/upload-artifact@v4
+        with:
+          name: ziy-linux-deb-${{ env.ZIY_VERSION }}
+          path: |
+            build/packaging/*.deb
+            build/packaging/*.deb.sha256
+          retention-days: 7
+          if-no-files-found: error
+
+      # ------------------------------------------------------------------
+      # l. the record. Same shape as build-gecko.yml's summary step: what
+      #    was produced, what this run proved, and what it deliberately
+      #    did not reach.
+      # ------------------------------------------------------------------
+      - name: "l. record what was built and what was proven in the job summary"
+        if: always()
+        run: |
+          {
+            echo "### Ziy Linux packages"
+            echo ""
+            echo "- artifacts: \`ziy-linux-tarball-$ZIY_VERSION\` and"
+            echo "  \`ziy-linux-deb-$ZIY_VERSION\` (7-day retention; each"
+            echo "  carries its \`.sha256\`)"
+            echo "- engine: Mozilla's prebuilt tarball, SHA512-verified"
+            echo "  (\`build/engine-provenance.txt\`)"
+            echo "- proven by this run: \`sha256sum -c\` over every file in the"
+            echo "  unpacked tarball; two headless boots (the tarball through"
+            echo "  its own \`./ziy\`; \`/usr/bin/ziy\` after an apt install);"
+            echo "  the deb's Depends resolvable in full; the postinst ran;"
+            echo "  purge leaves nothing behind; lintian ran inside make-deb.sh"
+            echo "- NOT reached here: a real desktop session, upgrades, or any"
+            echo "  distro but this runner's Ubuntu release"
+            echo "- this workflow never pushes and never creates a Release"
+            echo "  (\`permissions: contents: read\`); publishing is a human act"
+            if [ -n "${{ github.event.inputs.note }}" ]; then
+              echo "- dispatch note: ${{ github.event.inputs.note }}"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

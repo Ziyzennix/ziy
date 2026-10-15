@@ -74,7 +74,10 @@ while [ $# -gt 0 ]; do
     --out) [ $# -ge 2 ] || die "--out needs a directory"; OUT_DIR="$2"; shift 2 ;;
     --arch) [ $# -ge 2 ] || die "--arch needs an architecture"; DEB_ARCH="$2"; shift 2 ;;
     --version) [ $# -ge 2 ] || die "--version needs a version"; VERSION="$2"; PKG_VERSION="$VERSION-$DEB_REVISION"; DEB="ziy_${PKG_VERSION}_${DEB_ARCH}.deb"; shift 2 ;;
-    -h|--help) sed -n '2,40p' "${BASH_SOURCE[0]}"; exit 0 ;;
+    # Print the whole usage header: every leading comment line from line 2 up
+    # to the first non-comment line. (The old `sed -n '2,40p'` range stopped
+    # short of the Env line, so --help silently omitted a documented input.)
+    -h|--help) awk 'NR==1{next} /^#/{print; next} {exit}' "${BASH_SOURCE[0]}"; exit 0 ;;
     *) die "unknown option: $1 (try --help)" ;;
   esac
 done
@@ -118,10 +121,10 @@ SUITE_COUNT=$(ls "$APP_DIR"/distribution/extensions/*.xpi 2>/dev/null | wc -l | 
 # in every shipped .so to a Debian package name, which is what lintian and
 # apt will check at install time. It is the only source of truth available
 # without root, and it is what a hand-written Depends list gets wrong.
-# NOTE: dpkg-shlibdeps wants to run inside the package's own build tree and
-# writes a debian/control fragment; we run it on the staging tree and keep it
-# advisory — the generated list is written to the staging dir as
-# deb-shlibdeps.txt so the maintainer can see what it decided, and the hand
+# NOTE: dpkg-shlibdeps wants to run inside the package's own build tree (it
+# reads debian/control and the system's own shlibs/symbols records); we run it
+# on the staging tree and keep it advisory — the generated list is printed
+# below and written to the staging dir as deb-shlibdeps.txt, and the hand
 # maintained Depends line below stays authoritative. If dpkg-shlibdeps fails
 # (no debian dir, no shlibs), we say so and keep going with the list in
 # DEPS.md, because a missing resolver is not a reason to ship no Depends.
@@ -150,11 +153,19 @@ if [ -n "$DEPS_SH" ]; then
     [ -e "$APP_DIR/$f" ] && cp -a "$APP_DIR/$f" "$STAGE/bin/" 2>/dev/null || true
   done
   if [ -n "$(ls -A "$STAGE/bin" 2>/dev/null)" ]; then
-    ( cd "$STAGE" && dpkg-shlibdeps -O --ignore-missing-info bin/* 2>"$STAGE/shlibdeps.err" ) \
+    # -O prints the dependency list to STDOUT and does NOT write
+    # debian/substvars (verified against dpkg-dev 1.22.6 on 2026-10-16 with a
+    # throwaway package: the debian/ dir held only control afterward). The
+    # earlier code read that never-written substvars file, so the resolver's
+    # result was always empty and the fallback below warned "Install
+    # dpkg-dev" even with dpkg-dev installed. Capture stdout instead — it is
+    # the one place -O puts the list.
+    SHLIBDEPS_OUT="$( cd "$STAGE" && dpkg-shlibdeps -O --ignore-missing-info bin/* 2>"$STAGE/shlibdeps.err" )" \
       || log_warn "dpkg-shlibdeps could not resolve every library ($(head -2 "$STAGE/shlibdeps.err" 2>/dev/null | tr '\n' ' '))"
-    if [ -f "$STAGE/debian/substvars" ]; then
-      GEN_DEPS="$(sed -n 's/^shlibs:Depends=//p' "$STAGE/debian/substvars" 2>/dev/null || true)"
-      [ -n "$GEN_DEPS" ] && printf '%s\n' "$GEN_DEPS" > "$STAGE/deb-shlibdeps.txt"
+    GEN_DEPS="$(printf '%s\n' "$SHLIBDEPS_OUT" | sed -n 's/^shlibs:Depends=//p')"
+    if [ -n "$GEN_DEPS" ]; then
+      printf '%s\n' "$GEN_DEPS" > "$STAGE/deb-shlibdeps.txt"
+      log_ok "dpkg-shlibdeps resolved: $GEN_DEPS"
     fi
   fi
 fi
@@ -200,13 +211,18 @@ chmod -R u+w "$STAGE/usr/lib/ziy" 2>/dev/null || true
 # --- /usr/bin/ziy: a symlink, not a wrapper ---------------------------------
 # A symlink keeps ONE copy of the launcher (no wrapper script that can drift
 # from shell/launcher.sh) and puts the documented /usr/bin/ziy name in PATH.
-# The target is RELATIVE ("ziy") on purpose: a symlink stored in a package
-# must resolve inside the installed tree, and the launcher itself resolves its
-# own app dir with readlink -f, so the relative link lands on the real
-# launcher no matter where the package is unpacked.
-ln -sfn ziy "$STAGE/usr/bin/ziy" || die "failed to create the /usr/bin/ziy symlink"
-[ "$(readlink "$STAGE/usr/bin/ziy")" = "ziy" ] \
-  || die "the /usr/bin/ziy symlink points at '$(readlink "$STAGE/usr/bin/ziy")', expected 'ziy'"
+# The target is RELATIVE on purpose — a symlink stored in a package must
+# resolve inside the installed tree — but it must be relative FROM THE LINK'S
+# OWN DIRECTORY: the link lives in /usr/bin, so the target is
+# "../lib/ziy/ziy". The earlier target "ziy" resolved to /usr/bin/ziy itself
+# (a self-loop): readlink -f failed on it and every exec died with "Too many
+# levels of symbolic links" (verified against a staging tree in /tmp on
+# 2026-10-16). With "../lib/ziy/ziy" the link lands on the real launcher,
+# whose own readlink -f resolution then works no matter where the package is
+# unpacked.
+ln -sfn ../lib/ziy/ziy "$STAGE/usr/bin/ziy" || die "failed to create the /usr/bin/ziy symlink"
+[ "$(readlink "$STAGE/usr/bin/ziy")" = "../lib/ziy/ziy" ] \
+  || die "the /usr/bin/ziy symlink points at '$(readlink "$STAGE/usr/bin/ziy")', expected '../lib/ziy/ziy'"
 
 # --- the desktop entry + icons ----------------------------------------------
 install -m 0644 "$ROOT/shell/ziy.desktop" "$STAGE/usr/share/applications/ziy.desktop"
@@ -357,12 +373,23 @@ printf '%s\n' "$CONTENTS" | grep -q '^ *\./usr/lib/ziy/distribution/extensions/.
 printf '%s\n' "$CONTENTS" | grep -q '^ *\./usr/share/applications/ziy\.desktop$' \
   || die "the package does not ship the .desktop entry"
 
-# /usr/bin/ziy must be a SYMLINK in the archive (an 'l' mode), because that is
-# what keeps it from drifting from shell/launcher.sh. A regular file here means
-# something installed a second copy of the launcher.
-LINK_LINE="$(printf '%s\n' "$CONTENTS" | grep '^ *l[^ ]* .*\./usr/bin/ziy$' || true)"
+# /usr/bin/ziy must be a SYMLINK in the archive (an 'l' mode) and its target
+# must be the relative "../lib/ziy/ziy", because that is what keeps it from
+# drifting from shell/launcher.sh and makes it resolve inside the installed
+# tree. A regular file here means something installed a second copy of the
+# launcher.
+# NOTE: dpkg-deb --contents prints a symlink entry as
+#   lrwxrwxrwx root/root 0 <date> ./usr/bin/ziy -> ../lib/ziy/ziy
+# — i.e. with a "-> target" suffix that the earlier `\./usr/bin/ziy$` pattern
+# could never match (verified against a throwaway package built with this
+# box's dpkg-deb on 2026-10-16). The tolerant pattern is the one that
+# actually reads the entry.
+LINK_LINE="$(printf '%s\n' "$CONTENTS" | grep -E '^ *l[^ ]* .*\./usr/bin/ziy( -> .*)?$' || true)"
 if [ -n "$LINK_LINE" ]; then
-  log_ok "/usr/bin/ziy is a symlink: $(printf '%s' "$LINK_LINE" | awk '{print $NF}')"
+  LINK_TARGET="$(printf '%s' "$LINK_LINE" | awk '{print $NF}')"
+  [ "$LINK_TARGET" = "../lib/ziy/ziy" ] \
+    || die "/usr/bin/ziy is a symlink to '$LINK_TARGET', expected '../lib/ziy/ziy' — a self-loop here is a /usr/bin/ziy that cannot exec"
+  log_ok "/usr/bin/ziy is a symlink: $LINK_TARGET"
 else
   die "/usr/bin/ziy is not a symlink in the package (expected 'l' mode) — it would drift from shell/launcher.sh"
 fi
@@ -402,7 +429,10 @@ fi
 # ---------------------------------------------------------------------------
 # 6. the report. Both what was verified and what was not, in the same output.
 # ---------------------------------------------------------------------------
-sha256sum "$DEB_PATH" > "$DEB_PATH.sha256"
+# The checksum line is the package's BASENAME, not the absolute build path,
+# so the .sha256 verifies on the machine that downloaded it: drop the two
+# files side by side and `sha256sum -c <name>.deb.sha256` works there.
+( cd "$OUT_DIR" && sha256sum "$DEB" > "$DEB.sha256" )
 log_ok "wrote $DEB_PATH.sha256"
 
 cat <<EOF

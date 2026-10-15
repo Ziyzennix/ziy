@@ -688,3 +688,35 @@ $ cmp shell/distribution/policies.json build/ziy/distribution/policies.json
   identical
 ```
 
+---
+
+## 6. Addendum — 2026-10-16 (the batch pass): `privacy.spoof_english`
+
+Closing `replica/proofs-cpp-fingerprint.md` §5b's open recommendation. The pref
+was sitting at its `0` ("will prompt") default, and RFP's JSLocale spoofing
+only fires at exactly `2` (`nsRFPService.cpp:308-313`,
+`HandleExceptionalRFPTargets`), so RFP mode silently never spoofed the JS
+locale. §5b's verdict was explicit: not a patch — the reachable fix.
+
+| layer | change |
+| --- | --- |
+| `shell/mozilla.cfg` §1 | `lockPref("privacy.spoof_english", 2)`, comment carries the `:308-313` / `StaticPrefList.yaml:17946-17953` citations |
+| `ziy.js` | `pref("privacy.spoof_english", 2)` — default mirror |
+| `ziy-hardening.js` | `pref("privacy.spoof_english", 2)` — default mirror |
+
+Verified:
+
+```
+$ python3 shell/preflight-prefs.py
+preflight-prefs.py: OK — 97 locks, 172 declared, layers agree
+
+$ ./tools/verify.sh --prefs-lock   (summary rows)
+  PASS  the preflight asserts the pref layers agree (1 lines)
+  PASS  mozilla.cfg declares 97 pref calls
+```
+
+**Not runtime-read-back:** proving `JSLocale` actually returns the spoofed
+locale needs a chrome-privileged context (the same boundary as §4.5). The
+evidence is the engine-source read in `proofs-cpp-fingerprint.md` §5b, not a
+browser read, and this note says so on purpose.
+

@@ -22,6 +22,10 @@ pref("privacy.resistFingerprinting.letterboxing", true);
 pref("privacy.resistFingerprinting.randomizationOnRestart", true);
 pref("privacy.fingerprintingProtection.enabled", true);
 pref("privacy.fingerprintingProtection.pbmode", true);
+// RFP's JSLocale spoofing only fires when this equals exactly 2; the default 0
+// ("will prompt") means RFP mode never reaches the spoof (nsRFPService.cpp:308-313).
+// Locked to 2 in mozilla.cfg — replica/proofs-cpp-fingerprint.md §5b.
+pref("privacy.spoof_english", 2);
 // A JSON array — see the long note in ziy.js. A bare string here is a hard
 // parse error in FingerprintingWebCompatService and will abort autoconfig.
 pref("privacy.fingerprintingProtection.overrides", "+AllTargets,-CSSPrefersColorScheme");

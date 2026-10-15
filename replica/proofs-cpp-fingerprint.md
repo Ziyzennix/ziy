@@ -269,6 +269,14 @@ consent mechanism, which is a policy decision for the shell
 **The correct fix is one line in `shell/mozilla.cfg`.** Recorded here so it is
 not lost, and explicitly not patched.
 
+**Landed 2026-10-16** (the batch pass): `lockPref("privacy.spoof_english", 2)`
+sits in `shell/mozilla.cfg` §1 with the deciding engine lines cited beside it,
+mirrored as a default in `ziy.js` + `ziy-hardening.js`;
+`preflight-prefs.py` → 97 locks, 172 declared, layers agree. Not
+runtime-read-back (the same chrome-context boundary as `proofs-fix-prefs.md`
+§4.5) — the record is source-cited, and the addendum lives in
+`replica/proofs-fix-prefs.md` §6.
+
 ### 5c. `navigator.plugins` / `mimeTypes` — already covered, see §6 row 10.
 
 ---

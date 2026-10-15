@@ -338,6 +338,25 @@ else
   log_ok "installed $COPIED suite xpis"
 fi
 
+# --- 8b. the MPL notice and the C++ patch set --------------------------------
+# MPL-2.0 §3.2(a): shipping a modified engine in executable form obliges us to
+# tell recipients where the source is. The notice (shell/LICENSES.txt) carries
+# that pointer, the not-affiliated statement and the residual-version-string
+# disclosure (replica/research-legal.md §2.3-§2.4, §1.1 Rule 4; replica/deploy.md
+# §5 rows 4-7), and the patch set ships verbatim beside it so the "how to
+# obtain" is material in the product and not only a URL (research-legal.md
+# §1.2, §4.4; patches/README.md).
+log_step "install" "LICENSES.txt (MPL §3.2(a) notice) + patches/ (engine source diffs)"
+install -Dm 0644 "$ROOT/shell/LICENSES.txt" "$OUT/LICENSES.txt"
+mkdir -p "$OUT/patches"
+PATCH_SHIPPED=0
+for p in "$ROOT"/patches/*.patch "$ROOT"/patches/README.md; do
+  [ -e "$p" ] || continue
+  install -m 0644 "$p" "$OUT/patches/"
+  PATCH_SHIPPED=$((PATCH_SHIPPED + 1))
+done
+log_ok "shipped the notice + $PATCH_SHIPPED engine source file(s) in $OUT/patches/"
+
 # --- 9. the launcher ---------------------------------------------------------
 log_step "install" "build/ziy/ziy launcher stub"
 install -Dm 0755 "$ROOT/shell/launcher.sh" "$OUT/ziy"
@@ -410,6 +429,7 @@ $(tput bold 2>/dev/null || echo "")build/ziy ready$(tput sgr0 2>/dev/null || ech
   suite xpis     $COPIED
   engine         $ENGINE (source: $ENGINE_SOURCE)
   omni.ja        patched (log: build/omni.ja.patch.log)
+  notices        LICENSES.txt + patches/ ($PATCH_SHIPPED files, MPL §3.2(a))
 
 Next:
   ./tools/bootstrap-profile.py            -> ~/.ziy/profiles/default/

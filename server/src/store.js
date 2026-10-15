@@ -119,6 +119,31 @@ pragma user_version = 1;
 export class BlindStore {
   constructor(dbFile = ":memory:") {
     this.db = new DatabaseSync(dbFile);
+    // -- durability posture (T1b), measured -------------------------------
+    // The write path's cost was the journal, not the language: measured
+    // (replica/native-expansion.md §6.4), putBlob at the stock rollback
+    // journal + synchronous=FULL is 144.059 ms/blob — every write fsyncs the
+    // journal and then the database. The identical inserts under
+    // journal_mode=WAL + synchronous=NORMAL are 0.13 ms/blob, a ~1,100x
+    // difference for the same SQL in the same runtime. WAL is also the only
+    // sane posture for a store whose readers (getBlobs) must not block its
+    // writers.
+    //
+    // The durability trade-off, stated honestly: WAL + synchronous=NORMAL does
+    // not fsync on every commit, so on an OS crash or a power loss the WAL tail
+    // can roll back and the most recent commits — including ones a client was
+    // told succeeded — can be lost. It can NOT lose a committed transaction to
+    // a crash of this process: a killed server finds a consistent database
+    // containing every commit it acknowledged, because the written WAL pages
+    // survive the process in the OS page cache. An operator who needs
+    // power-loss durability raises synchronous to FULL above and accepts
+    // 144 ms/blob, or accepts a different store — the pragma is the one place
+    // that choice lives, by design.
+    //
+    // (journal_mode=WAL is a file-database mode; `:memory:` — which the unit
+    // tests use — reports "memory" and continues to work unchanged.)
+    this.db.exec("pragma journal_mode = WAL");
+    this.db.exec("pragma synchronous = NORMAL");
     this.db.exec(SCHEMA);
   }
 

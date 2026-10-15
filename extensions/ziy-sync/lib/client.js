@@ -37,6 +37,21 @@ import { sign } from "./keyderivation.js";
 
 const API_VERSION = "v1";
 
+/**
+ * The `since` value a pull must ask from. The store filters pulls with a
+ * STRICT `updated_at > since` over a whole-second watermark, so asking from
+ * the cursor second itself loses every record stamped inside it — the e2e
+ * caught exactly that (join and push in the same second; the record sat
+ * behind B's cursor forever). Ask from one second earlier: that re-admits the
+ * cursor second, and re-delivery is idempotent (`putRecord`/`applyToView`
+ * report only real changes). The full account lives with the agent's pull,
+ * `native/ziy-sync-agent/lib/ops-sync.js`; this helper exists so the agent's
+ * pull and `SyncClient.pull` cannot drift apart.
+ */
+export function pullSince(lastSyncAt) {
+  return Math.max(0, (lastSyncAt || 0) - 1);
+}
+
 export class ProtocolError extends Error {
   constructor(code, message, status = 0) {
     super(message);
@@ -126,7 +141,7 @@ export class SyncClient {
   /** Pull the server's delta for this chain and fold it into `store`. */
   async pull(store, { now = Math.floor(Date.now() / 1000) } = {}) {
     const delta = await this.request(
-      `/${API_VERSION}/chains/${encodeURIComponent(this.keys.chainId)}/records?since=${this.lastSyncAt}`,
+      `/${API_VERSION}/chains/${encodeURIComponent(this.keys.chainId)}/records?since=${pullSince(this.lastSyncAt)}`,
     );
     const results = { accepted: [], rejected: [] };
     for (const raw of delta.records || []) {

@@ -7,7 +7,7 @@
 # Every check prints one line: PASS, FAIL or SKIP plus the evidence, and the
 # run exits non-zero on any FAIL. Sections:
 #
-#   1. build/ziy exists and its omni.ja carries MOZ_REQUIRE_SIGNING: false   (--identity)
+#   1. build/ziy exists, its omni.ja is patched, its MPL notice ships      (--identity)
 #   2. the app boots headless and renders a non-blank screenshot              (--boot)
 #   3. our prefs are present in prefs.js after a real boot                    (--prefs)
 #   4. the suite extensions directory is wired                                (--extensions)
@@ -130,6 +130,32 @@ if po.OLD_SIDELOAD.decode() in raw or po.NEW_SIDELOAD.decode() not in raw:
 print("MOZ_REQUIRE_SIGNING: false, MOZ_ALLOW_ADDON_SIDELOAD: true")
 PY
 if [ $? -eq 0 ]; then ok "omni.ja is patched (signing off, sideload on)"; else bad "omni.ja patch check failed"; fi
+
+# The MPL-2.0 §3.2(a) source-availability notice, plus the material it points
+# at: the notice itself in the app-dir root, and the engine patch set it
+# tells the recipient how to use (replica/research-legal.md §2.4, §1.1 Rule 4;
+# replica/deploy.md §5 rows 4-5). Plain text on purpose, so the code-level
+# clean-room scan (section 12, .js/.json/.css/.html/.py/.sh only) never reads
+# a file whose job is to name the engine's vendor.
+NOTICE="$APP_DIR/LICENSES.txt"
+if [ -f "$NOTICE" ]; then
+  ok "the MPL §3.2(a) notice ships in the app dir ($(stat -c%s "$NOTICE") bytes)"
+  for want in 'mozilla.org/MPL/2.0/' 'not officially associated with Mozilla' 'Mozilla Firefox 156.0.1' 'patches/'; do
+    if grep -qF "$want" "$NOTICE"; then
+      ok "LICENSES.txt names $want"
+    else
+      bad "LICENSES.txt does not name $want"
+    fi
+  done
+else
+  bad "LICENSES.txt is missing from the app dir — MPL §3.2(a) is unmet (re-run ./tools/build-shell.sh --force)"
+fi
+PATCH_SHIPPED=$(ls "$APP_DIR/patches/"*.patch 2>/dev/null | wc -l | tr -d ' ')
+if [ "$PATCH_SHIPPED" -ge 5 ]; then
+  ok "the app dir ships the engine source patch set ($PATCH_SHIPPED patches)"
+else
+  bad "the app dir ships $PATCH_SHIPPED engine patch(es) — the §3.2(a) notice points at material that is not there"
+fi
 
 # ---------------------------------------------------------------------------
 note "2. identity: --version reports Ziy"

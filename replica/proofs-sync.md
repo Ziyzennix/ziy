@@ -420,6 +420,31 @@ divergence from Brave (see §7).
   with a wrong clock can win a comparison it should lose. Migrating to
   server-stamped versions plus conditional writes is the known follow-up; it was
   not in this slice's scope and is recorded rather than glossed over.
+- **The pull cursor needed a one-second backstep — its absence was silent data
+  loss.** Found 2026-10-16, when the two-device e2e began failing
+  deterministically (and showed up as a `verify.sh` SKIP) after the WAL change
+  (T1b) compressed the whole join→push→pull sequence inside one wall-clock
+  second. Run evidence: B joined at second 1792091343 (`putChain` seeds
+  `last_sync_at = createdAt`), A pushed a record stamped 1792091343, B's pull
+  asked `?since=1792091343`, and the store's strict `updated_at > since`
+  dropped it; `touchSync` then advanced B to `server_time = 1792091344`, so
+  the record sat behind B's cursor forever with no error anywhere. The fix is
+  `pullSince()` in `extensions/ziy-sync/lib/client.js`
+  (`max(0, last_sync_at - 1)`), used by both the agent's `handlePull` and
+  `SyncClient.pull`, with its own unit test; re-delivery of the cursor second
+  is idempotent (`putRecord` reports only real changes). The e2e re-run after
+  the fix is PASSED. This closes the same-second case only — a pusher whose
+  clock is more than a second behind another device's cursor is still lost
+  until the server-stamped-version migration above happens.
+- **Two same-family gaps in the same pull path are recorded, not fixed.**
+  (a) A device joining an existing chain never receives records older than its
+  join: `putChain` seeds the cursor with the join second, so the first pull
+  asks from ~now and the chain's prior history is never fetched — whether join
+  should backfill from epoch 0 is a product decision this slice never made,
+  and it is untested either way. (b) `handlePull` makes a single unpaginated
+  request; `DEFAULT_PAGE` is 500, so a delta larger than one page is silently
+  truncated while the cursor advances past it — the same silent-loss shape,
+  one size class up. Both want their own tests, not just a patch.
 - **Quotas and limits are not enforced.** Brave's server enforces a 10 MB request
   cap, 90 entries per commit batch, 500 per GetUpdates, 50k/30k object quotas and
   a 50-device cap. Ziy enforces a 4 MB body cap, a 500-record-per-PUT cap and a

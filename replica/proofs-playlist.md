@@ -353,7 +353,11 @@ The `strict_min_version` is `115.0`, the same floor the sibling extensions use.
 # the model suites (no browser needed)
 node --test 'extensions/ziy-playlist/test/'
 
-# regenerate the fixtures (gstreamer; deterministic)
+# regenerate the fixtures (gstreamer; deterministic BY BYTE COUNT — the muxers
+# embed their own metadata, so a re-run writes byte-different files of the same
+# size, and decode.test.js regenerates them in place on every test run; the trio
+# under test/fixtures/ will show dirty after `npm test` — restore before a
+# commit: git checkout -- extensions/ziy-playlist/test/fixtures/)
 python3 extensions/ziy-playlist/tools/make-fixtures.py
 
 # package the xpi (deterministic; same bytes on re-run)

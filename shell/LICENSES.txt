@@ -1,0 +1,66 @@
+Ziy — licences, source and engine notices
+=========================================
+
+Ziy is a browser built on the Gecko engine. What you are running is a Ziy
+application directory: its own name, vendor, icons, preferences layer and
+extension suite. Ziy is an independent project.
+
+Ziy's own code — the shell layer, the extension suite and the native helpers,
+as declared in the Ziy source tree's package.json — is licensed under the
+Mozilla Public License, version 2.0 (MPL-2.0). The licence text is at
+<https://mozilla.org/MPL/2.0/>.
+
+
+Source code — how to obtain it (MPL-2.0 §3.2(a))
+------------------------------------------------
+
+This application is distributed in executable form. The source it is built
+from can be obtained as follows:
+
+  * The engine. This application carries Mozilla's 156.0.1 engine binaries.
+    Mozilla publishes the complete source for that release at
+
+        https://ftp.mozilla.org/pub/firefox/releases/156.0.1/source/firefox-156.0.1.source.tar.xz
+
+    with the SHA512SUMS manifest beside it so the download can be verified.
+
+  * Ziy's modifications and Ziy's own code. Ziy's engine changes are the five
+    source patches in the patches/ directory beside this notice (README.md
+    there describes each one), plus the build tools that apply the byte-level
+    changes to omni.ja and browser/omni.ja (shell/omni.ja.patch/,
+    tools/lib/omni-ja.py and tools/patches/ in the Ziy source tree). The
+    complete Ziy source tree, including the whole extension suite, is
+    published at
+
+        https://github.com/Ziyzennix/ziy
+
+The MPL notices carried inside the engine files themselves are left
+untouched, as the licence requires.
+
+
+Ziy is not Mozilla
+------------------
+
+Ziy is built on Mozilla's open source Gecko technology.
+Ziy is not officially associated with Mozilla or its products.
+
+Ziy's name, icons and artwork are its own. Ziy is an independent project and
+is not affiliated with, sponsored by or endorsed by the vendor of its engine.
+
+
+Residual engine marks, disclosed
+--------------------------------
+
+Two engine-level items keep the engine's own identity. Ziy discloses them
+here rather than presenting them as its own:
+
+  * The engine's version banner. The bundled binary is named `firefox`, and
+    running it with --version still prints `Mozilla Firefox 156.0.1`. That
+    string comes from the engine's own libxul binary and cannot be remapped
+    from the application directory's name. Ziy's identity is carried by the
+    app name, the app icons, and the `ziy` launcher beside this notice.
+
+  * The engine's own file names. `firefox`, `firefox-bin`, `updater.ini`,
+    `crashhelper` and `crashreporter` are engine files, not Ziy's.
+
+Neither item is a claim of affiliation; the statement above covers them both.

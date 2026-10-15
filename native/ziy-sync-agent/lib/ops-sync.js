@@ -13,7 +13,7 @@ import { lwwWins } from "./store.js";
 // relative path outside its own directory (tools/install-ziy-sync-native.js
 // rewrites the bridge to the repo's absolute path).
 import { SyncClient } from "./ziy-crypto.js";
-import { createRecord, readRecord, applyToView, canSend, canReceive, normalizeRecord } from "./ziy-crypto.js";
+import { createRecord, readRecord, applyToView, canSend, canReceive, normalizeRecord, pullSince } from "./ziy-crypto.js";
 import { httpRequest } from "./http.js";
 
 /** Build a client bound to this agent's live session. */
@@ -107,8 +107,22 @@ export async function handlePull(agent, store, payload) {
   await client.connect();
   const storeView = {};
   const results = { accepted: [], rejected: [] };
+  // The cursor is a whole-second watermark and the store filters it with a
+  // STRICT `updated_at > since` (server.js getBlobs; pinned by
+  // server/test/server.test.mjs "since= returns only newer records"). Asking
+  // from the cursor second itself loses every record stamped inside that
+  // second: the e2e proved it — B joined at second T (putChain seeds
+  // last_sync_at = createdAt = T), A pushed a record stamped T, B asked
+  // `?since=T`, the strict filter dropped it, and touchSync then advanced B
+  // to `server_time = T+1`, leaving the record behind B's cursor forever with
+  // no error anywhere. `pullSince` asks from one second earlier, which
+  // re-admits the cursor second; re-delivery is idempotent (putRecord reports
+  // only real changes). The remaining hole — a pusher whose clock is more
+  // than a second behind another device's cursor — is the recorded clock-skew
+  // limitation (replica/proofs-sync.md §7), curable only by server-stamped
+  // versions. The boundary bug and two same-family gaps are recorded there.
   const delta = await client.request(
-    `/v1/chains/${encodeURIComponent(agent.chainKeys.chainId)}/records?since=${store.getChain().last_sync_at || 0}`,
+    `/v1/chains/${encodeURIComponent(agent.chainKeys.chainId)}/records?since=${pullSince(store.getChain().last_sync_at)}`,
   );
   const now = payload.now || nowSeconds();
   for (const raw of delta.records || []) {

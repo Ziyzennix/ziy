@@ -5,7 +5,9 @@ Ziy Shields is a blocking engine, and the data it blocks with is public filter
 lists. Those lists are DATA, in the same way a dictionary is data: Ziy reads
 them, compiles them into rules, and ships the compiled result. Ziy's own code —
 the parser, the compiler, the precedence resolver, the UI — is written for Ziy
-and contains nothing copied from any other product.
+and contains nothing copied from any other product. Ziy's own code carries
+Ziy's own licence: MPL-2.0, declared in the source tree's package.json. The
+notices below cover the list data only.
 
 The lists below are redistributed with their licenses and attributions intact.
 The list BODIES are bundled verbatim (they are the data); the attribution and
@@ -16,15 +18,16 @@ EasyList
 --------
 
   Homepage:   https://easylist.to/
-  Licence:    GPLv3
+  Licence:    GPLv3 or CC-BY-SA-3.0 (dual — see the record below)
   Licence URL: https://easylist.to/pages/licence.html
   Bundled as: extensions/ziy-shields/lib/filterlist/snapshots/easylist.txt
   Sha256:     2e86ae8d092f24cfb6b0845e23c458e4f696d215ca43ff9f3fc83f555443173d
   Lines:      82,175
 
   EasyList is the primary subscription for removing adverts from websites,
-  including unwanted frames, images and objects. It is distributed under the
-  GNU General Public License version 3, which is why this extension's list
+  including unwanted frames, images and objects. It is dual licensed under
+  the GNU General Public License version 3 and CC-BY-SA 3.0 (the record below
+  states which branch Ziy relies on), which is why this extension's list
   handling is attributed and why the list's own home page is linked from the
   options page.
 
@@ -33,7 +36,7 @@ EasyPrivacy
 -----------
 
   Homepage:   https://easylist.to/
-  Licence:    GPLv3
+  Licence:    GPLv3 or CC-BY-SA-3.0 (dual — see the record below)
   Licence URL: https://easylist.to/pages/licence.html
   Bundled as: extensions/ziy-shields/lib/filterlist/snapshots/easyprivacy.txt
   Sha256:     f2ba5af50caa57a9d66926917ba97031c5a86f77ece6210dc3a7ac8c255e3724
@@ -56,6 +59,94 @@ EasyList Cookie List
   Lines:      26,090
 
   Cookie-consent and notice banners, and the overlays that hide them.
+
+
+uBlock Origin filters
+---------------------
+
+  Homepage:   https://github.com/uBlockOrigin/uAssets
+  Licence:    GPL-3.0
+  Licence URL: https://github.com/uBlockOrigin/uAssets/blob/master/LICENSE
+  Bundled as: extensions/ziy-shields/lib/filterlist/snapshots/uabo-filters.txt
+  Sha256:     3bde7d558863ea2431b868f4d910a8d6d484486fbd576e464d0ecc85446ef3c6
+  Lines:      10,876
+
+  uBlock Origin's base filter list, optimized for uBlock and used alongside
+  EasyList. It is distributed under the GNU General Public License version 3;
+  the snapshot's own header carries the licence URL above, and the registry
+  (`lib/filterlist/lists.js`) records the same licence and URL per list.
+
+
+URLhaus Malicious URL Blocklist (AdGuard Home variant)
+------------------------------------------------------
+
+  Homepage:   https://urlhaus.abuse.ch/
+  Licence:    CC0-1.0 and MIT (dual)
+  Licence URL: https://gitlab.com/malware-filter/urlhaus-filter#license
+  Bundled as: extensions/ziy-shields/lib/filterlist/snapshots/urlhaus.txt
+  Sha256:     43ddcd40a0379062cce28932a7e5171e76ddc4e860cd4697312585578022178d
+  Lines:      1,787
+
+  Live malicious-distribution URLs from abuse.ch, in the maintainer project's
+  AdGuard Home format. The upstream project dual-licenses the list under
+  CC0-1.0 and MIT; the snapshot's own header links the same licence page.
+  CC0 requires no attribution and MIT's notice is preserved by shipping the
+  list verbatim; the upstream credit to abuse.ch is kept because the project
+  asks for it. The registry records CC0-1.0 alone.
+
+
+Adblock Warning Removal List
+----------------------------
+
+  Homepage:   https://github.com/easylist/antiadblockfilters
+  Licence:    GPLv3 or CC-BY-SA-3.0 (dual — see the record below)
+  Licence URL: https://easylist.to/pages/licence.html
+  Bundled as: extensions/ziy-shields/lib/filterlist/snapshots/antiadblock-warning-removal.txt
+  Sha256:     22b6f442b2fc87874e204aff2ee26c0baed03cfe7037b7aadc1e8d8b97c97dbf
+  Lines:      3,028
+
+  The anti-adblock list: hides the "please disable your ad blocker" walls
+  and blocks the detector scripts that raise them. Same EasyList-family dual
+  licence as EasyList and EasyPrivacy; the snapshot's own header carries the
+  licence URL above.
+
+
+Brave Unbreak
+-------------
+
+  Homepage:   https://github.com/brave/adblock-lists
+  Licence:    MPL-2.0, at repository level only
+  Licence URL: https://github.com/brave/adblock-lists
+  Bundled as: extensions/ziy-shields/lib/filterlist/snapshots/brave-unbreak.txt
+  Sha256:     57c08f868a2a886105b2047580fc06ee79f3ded076aca66968da885956812eb0
+  Lines:      1,563
+
+  Exception rules that repair sites the other lists break, maintained in the
+  `brave/adblock-lists` repository. The repository carries an MPL-2.0 LICENSE
+  file and the registry records that licence — but note: the list FILE itself
+  declares no `! Licence:` header at all, so the repository is the only place
+  a reader can verify the licence. If MPL-2.0 governs this data, the MPL
+  §3.2(a) source pointer is the repository above.
+
+
+The EasyList-family dual licence — which branch Ziy relies on
+--------------------------------------------------------------
+
+EasyList, EasyPrivacy and the Adblock Warning Removal List are offered by
+their maintainers under a dual grant: the GNU General Public License version
+3, or the Creative Commons Attribution-ShareAlike 3.0 Unported licence
+(CC-BY-SA 3.0). The upstream licence page describes the lists as "dual
+licensed under the GNU General Public License version 3 … and Creative
+Commons Attribution-ShareAlike 3.0 Unported", with "The EasyList authors"
+attributed as the source — https://easylist.to/pages/licence.html.
+
+Ziy ships the verbatim list bodies (above) with attribution and a link to
+the upstream licence, which satisfies either branch of the grant. Where a
+single branch must be chosen — for the compiled ruleset that ships in the xpi
+(`rules/static-ruleset.json`, written by `tools/gen-static-ruleset.js`) — Ziy
+relies on the CC-BY-SA 3.0 branch. No Ziy authorship is claimed over the
+ruleset: it is a mechanical compilation of the lists above, and this file
+(which ships inside the same xpi) is the attribution that travels with it.
 
 
 What the extension does with these files

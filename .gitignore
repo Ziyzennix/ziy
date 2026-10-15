@@ -25,6 +25,14 @@ build/
 node_modules/
 **/node_modules/
 
+# ── Rust build output + generated engine (native/ziy-blocks) ────────────────
+# Same rule as build/: derived, never committed. `target/` is cargo's output;
+# `dist/` holds the serialized adblock engine (7.5 MiB, rebuilt from the
+# tracked snapshots by tools/build-blocks-engine.sh — see that script's header).
+# Cargo.lock IS committed (binary crate: reproducible builds want it).
+native/ziy-blocks/target/
+native/ziy-blocks/dist/
+
 # ── Ziy runtime/state dirs ──────────────────────────────────────────────────
 # tools/bootstrap-profile.py writes profile state and the build writes scratch
 # state here. Neither belongs in the repo.

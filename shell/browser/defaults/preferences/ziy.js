@@ -146,6 +146,11 @@ pref("privacy.resistFingerprinting.randomizationOnRestart", true);
 pref("privacy.resistFingerprinting.exemptedDomains", "");
 pref("privacy.fingerprintingProtection.enabled", true);
 pref("privacy.fingerprintingProtection.pbmode", true);
+// RFP only spoofs JSLocale when this equals exactly 2; the default 0 ("will
+// prompt") is why the spoof silently never happens in RFP mode
+// (nsRFPService.cpp:308-313; StaticPrefList.yaml:17946-17953). Locked to 2 in
+// mozilla.cfg and mirrored in ziy-hardening.js — replica/proofs-cpp-fingerprint.md §5b.
+pref("privacy.spoof_english", 2);
 // The RFP target string (this is the one that takes a bare string).
 pref("privacy.fingerprintingProtection.overrides", "+AllTargets,-CSSPrefersColorScheme");
 // The per-site JSON array. Empty array = no per-site overrides yet; the Shields
