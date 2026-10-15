@@ -1,0 +1,96 @@
+/*
+ * Ziy window chrome.
+ *
+ * This file lands as <appdir>/browser/chrome/userChrome.css and is loaded only
+ * when the profile enables it, which is why bootstrap-profile.py writes
+ * `toolkit.legacyUserProfileCustomizations.stylesheets = true` into user.js —
+ * the pref is what makes Gecko read this file at all, and it is one of the few
+ * prefs the policy `Preferences` list explicitly allows.
+ *
+ * This is the SHELL's minimal chrome: enough that a Ziy window does not look
+ * like a stock Firefox window, and nothing that competes with the branding the
+ * ziy-shell extension installs as a theme + browserAction. When brand/ lands
+ * (design worker), the tokens at the top of this file are the seam — replace
+ * the values, keep the variable names.
+ */
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/*
+ * ── Ziy design tokens (provisional; brand/tokens.css supersedes these) ─────
+ * Kept as CSS custom properties so a later brand drop replaces one block.
+ */
+:root {
+  --ziy-violet: #4c2eff;
+  --ziy-violet-deep: #26118f;
+  --ziy-ink: #0e0630;
+  --ziy-orange: #ff6b35;
+  --ziy-paper: #ffffff;
+  --ziy-radius: 10px;
+}
+
+/* Ziy's own accent in the window: selected tab, toolbar hover, focus rings. */
+:root:not([lwtheme]) {
+  --arrowpanel-background: var(--ziy-paper) !important;
+  --panel-border-color: color-mix(in srgb, var(--ziy-ink) 20%, white) !important;
+  --lwt-accent-color: var(--ziy-violet-deep) !important;
+  --toolbar-field-focus-border-color: var(--ziy-violet) !important;
+  --focus-outline-color: var(--ziy-violet) !important;
+  --tab-selected-bgcolor: var(--ziy-paper) !important;
+  --tab-selected-textcolor: var(--ziy-ink) !important;
+  --tabs-border-color: color-mix(in srgb, var(--ziy-ink) 25%, transparent) !important;
+}
+
+/* Toolbar: the layered look Ziy wants instead of the flat Firefox default. */
+#navigator-toolbox {
+  border-bottom: 1px solid color-mix(in srgb, var(--ziy-ink) 15%, transparent) !important;
+}
+
+#TabsToolbar {
+  background-image: linear-gradient(
+    180deg,
+    var(--ziy-violet-deep) 0%,
+    var(--ziy-ink) 100%
+  ) !important;
+}
+
+.tabbrowser-tab[selected] .tab-label {
+  font-weight: 600 !important;
+  color: var(--ziy-ink) !important;
+}
+
+/* The URL bar is the most-looked-at element in the product: give it a clear
+   Ziy silhouette. */
+#urlbar-background {
+  border-radius: var(--ziy-radius) !important;
+  border: 1px solid color-mix(in srgb, var(--ziy-violet) 45%, transparent) !important;
+}
+
+#urlbar[focused] #urlbar-background {
+  border-color: var(--ziy-violet) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ziy-violet) 25%, transparent) !important;
+}
+
+/* Brand the app menu button: replaces the "hamburger" glyph with our own mark
+   from the app dir's icon set. */
+#PanelUI-menu-button .toolbarbutton-badge-stack {
+  list-style-image: url("chrome://branding/content/icon16.png") !important;
+}
+
+/* Identicons of every PiP and permission bubble get our accent. */
+notification-message[message-bar-type="infobar"] {
+  border-left: 3px solid var(--ziy-violet) !important;
+}
+
+/* Ziy's own wordmark, drawn into the titlebar spacer (hidden by the in-titlebar
+   toolbar, present when the user separates the toolbar). */
+:root:not([sizemode="fullscreen"]) #TabsToolbar-customization-target::after {
+  content: "Ziy";
+  color: color-mix(in srgb, white 70%, transparent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding-inline-end: 4px;
+  opacity: 0.85;
+}

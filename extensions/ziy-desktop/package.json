@@ -1,0 +1,11 @@
+{
+  "name": "ziy-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ziy desktop glue: the app menu, import/export, default-browser status. Workspace package for extensions/ziy-desktop only; no build step, no dependencies, node:test for tests.",
+  "type": "commonjs",
+  "main": "lib/desktop.js",
+  "scripts": {
+    "test": "node --test test/"
+  }
+}

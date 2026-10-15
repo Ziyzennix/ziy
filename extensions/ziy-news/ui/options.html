@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>Ziy News sources</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="options.css">
+</head>
+<body class="news-options">
+  <main class="news-options__main">
+    <header class="news-options__header">
+      <h1 class="news-options__title">Ziy News</h1>
+      <p class="news-options__subtitle">
+        Your own feeds, read in the sidebar and on the new tab page. No catalog, no CDN,
+        and nothing you read leaves this machine.
+      </p>
+    </header>
+
+    <!-- The permission paragraph. host_permissions &lt;all_urls&gt; is a real,
+         wide grant for a feature whose whole job is reading URLs the user
+         pasted, so it is stated here in plain words rather than buried. -->
+    <section class="news-note" aria-labelledby="news-note-title">
+      <h2 id="news-note-title" class="news-note__title">Why this needs every site</h2>
+      <p class="news-note__body">
+        Ziy News fetches the feeds you add, and a feed can live on any host. On this
+        engine an extension page is not allowed to read another site, but its background
+        page is, so all fetching happens there — which is why the extension asks for
+        access to every site. The fetch carries no login and no cookies
+        (<code>credentials: "omit"</code>), so it can only ever read what is public on
+        that page. Nothing is logged, sent anywhere, or shared with anyone: your feeds,
+        your machine.
+      </p>
+    </section>
+
+    <section class="news-section" aria-labelledby="add-title">
+      <h2 id="add-title" class="news-section__title">Add a source</h2>
+      <form id="source-form" class="source-form" novalidate>
+        <label class="news-field news-field--grow">
+          <span class="news-field__label">Feed URL (RSS, Atom or JSON Feed)</span>
+          <input id="source-url" class="news-input" type="url" inputmode="url"
+                 placeholder="https://example.com/feed.xml" required>
+        </label>
+        <label class="news-field">
+          <span class="news-field__label">Label (optional)</span>
+          <input id="source-title" class="news-input" type="text" placeholder="Leave blank to use the feed's title">
+        </label>
+        <label class="news-field">
+          <span class="news-field__label">Channel</span>
+          <select id="source-category" class="news-select">
+            <option value="World">World</option>
+            <option value="Technology">Technology</option>
+            <option value="Science">Science</option>
+            <option value="Following">Following</option>
+            <option value="Uncategorised">Uncategorised</option>
+          </select>
+        </label>
+        <button id="source-add" class="news-btn" type="submit">Add source</button>
+      </form>
+      <p class="news-hint">A new source is fetched immediately, so you see its stories right away.</p>
+    </section>
+
+    <section class="news-section" aria-labelledby="sources-title">
+      <div class="news-section__head">
+        <h2 id="sources-title" class="news-section__title">Your sources</h2>
+        <div class="news-section__actions">
+          <button id="opml-export" class="news-btn news-btn--quiet" type="button">Export OPML</button>
+          <button id="opml-import-btn" class="news-btn news-btn--quiet" type="button">Import OPML</button>
+          <button id="sources-reset" class="news-btn news-btn--quiet" type="button">Starter set</button>
+          <input id="opml-import" class="visually-hidden" type="file"
+                 accept=".opml,.xml,text/x-opml,application/xml,text/xml" aria-hidden="true" tabindex="-1">
+        </div>
+      </div>
+      <div id="source-list" class="source-list"></div>
+      <p id="source-empty" class="news-empty" hidden>
+        You have no sources yet. Add one by URL, or start from the starter set and trim it to what you read.
+      </p>
+    </section>
+
+    <section class="news-section" aria-labelledby="reading-title">
+      <h2 id="reading-title" class="news-section__title">Reading</h2>
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-open-links">Open links where</label>
+        <select id="setting-open-links" class="news-select">
+          <option value="current">Current tab</option>
+          <option value="newtab">New tab</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-window">Show stories from</label>
+        <select id="setting-window" class="news-select">
+          <option value="24">Last 24 hours</option>
+          <option value="72">Last 3 days</option>
+          <option value="168">Last 7 days</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-images">
+          <input id="setting-images" type="checkbox">
+          Show story images
+        </label>
+      </div>
+    </section>
+
+    <!-- Status is a polite live region: the result of an action, announced
+         once, without interrupting. -->
+    <p id="options-status" class="news-options__status" role="status" aria-live="polite"></p>
+  </main>
+  <script src="../lib/ui/shared.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

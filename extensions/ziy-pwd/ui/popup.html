@@ -1,0 +1,87 @@
+<!doctype html>
+<!--
+  Ziy passwords — the browser_action popup (recon S49's password manager).
+
+  The honest shape of this surface, in one paragraph: the panel does NOT show
+  any credential it cannot have shown. Every password shown or typed is the
+  user's own input in this document or a reply from the native helper, never a
+  copy held in browser storage.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ziy Passwords</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="popup.css">
+</head>
+<body class="ziy-pwd">
+  <header class="ziy-pwd__head">
+    <h1 class="ziy-pwd__title" id="ziy-title">Passwords</h1>
+    <span class="ziy-pwd__badge" id="ziy-badge" role="status">checking</span>
+  </header>
+
+  <!-- The one live region: every state change is announced, and the count
+       changes when a credential is added or removed. -->
+  <p class="ziy-pwd__status" id="ziy-status" role="status" aria-live="polite">Loading the vault status.</p>
+
+  <!-- No vault yet: the passphrase is created here, once. -->
+  <form class="ziy-pwd__form" id="ziy-create" hidden>
+    <label class="ziy-pwd__label" for="ziy-new-pass">Create a passphrase for your password vault</label>
+    <input class="ziy-pwd__input" id="ziy-new-pass" type="password" autocomplete="new-password"
+           placeholder="A long passphrase, not a PIN" required>
+    <div class="ziy-pwd__row">
+      <button class="ziy-pwd__btn ziy-pwd__btn--primary" id="ziy-create-btn" type="submit">Create the vault</button>
+    </div>
+    <p class="ziy-pwd__hint">
+      This passphrase encrypts the vault. It is never stored, and nothing can
+      recover your passwords without it.
+    </p>
+  </form>
+
+  <!-- Locked: the passphrase unlocks it. -->
+  <form class="ziy-pwd__form" id="ziy-unlock" hidden>
+    <label class="ziy-pwd__label" for="ziy-unlock-pass">Unlock the vault</label>
+    <input class="ziy-pwd__input" id="ziy-unlock-pass" type="password" autocomplete="current-password"
+           placeholder="Your vault passphrase" required>
+    <div class="ziy-pwd__row">
+      <button class="ziy-pwd__btn ziy-pwd__btn--primary" id="ziy-unlock-btn" type="submit">Unlock</button>
+      <button class="ziy-pwd__btn" id="ziy-lock-btn" type="button" hidden>Lock</button>
+    </div>
+  </form>
+
+  <!-- Unlocked: list, save, import, export. -->
+  <section class="ziy-pwd__main" id="ziy-main" hidden>
+    <ul class="ziy-pwd__list" id="ziy-list" aria-labelledby="ziy-list-label"></ul>
+    <p class="ziy-pwd__hint" id="ziy-list-label">Saved logins</p>
+
+    <form class="ziy-pwd__save" id="ziy-save">
+      <label class="ziy-pwd__label" for="ziy-save-origin">Site</label>
+      <input class="ziy-pwd__input" id="ziy-save-origin" type="url" placeholder="https://example.com" required>
+      <label class="ziy-pwd__label" for="ziy-save-user">Username</label>
+      <input class="ziy-pwd__input" id="ziy-save-user" type="text" autocomplete="username" required>
+      <label class="ziy-pwd__label" for="ziy-save-pass">Password</label>
+      <input class="ziy-pwd__input" id="ziy-save-pass" type="password" autocomplete="new-password" required>
+      <div class="ziy-pwd__row">
+        <button class="ziy-pwd__btn ziy-pwd__btn--primary" id="ziy-save-btn" type="submit">Save</button>
+      </div>
+    </form>
+
+    <div class="ziy-pwd__row">
+      <button class="ziy-pwd__btn" id="ziy-import-btn" type="button">Import CSV</button>
+      <button class="ziy-pwd__btn" id="ziy-export-btn" type="button">Export CSV</button>
+      <input class="ziy-pwd__visually-hidden" id="ziy-import-file" type="file" accept=".csv,text/csv" aria-hidden="true" tabindex="-1">
+      <button class="ziy-pwd__btn ziy-pwd__btn--danger" id="ziy-clear-btn" type="button">Delete all</button>
+    </div>
+  </section>
+
+  <p class="ziy-pwd__foot" id="ziy-foot">
+    Passwords are held by Ziy's native helper, encrypted under your passphrase.
+    The engine has no password-manager API for extensions, so this vault lives
+    outside the browser on purpose. Form filling is not part of this build.
+  </p>
+
+  <script src="../lib/pwd-client.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

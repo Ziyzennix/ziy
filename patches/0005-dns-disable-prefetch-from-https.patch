@@ -1,0 +1,103 @@
+From: Ziy engine fork <ziy@ziy.app>
+Date: 2026-10-15
+Subject: [PATCH] dns: honour network.dns.disablePrefetchFromHTTPS, which the
+ engine registers and never reads
+
+Ziy locks network.dns.disablePrefetchFromHTTPS in the shell. It does nothing,
+and the reason is the 0001 pattern in a new area: the engine documents the
+capability, and no engine code reads it.
+
+The pref is registered at modules/libpref/init/StaticPrefList.yaml:15433-15437
+as a bool StaticPref (mirror: always). The only occurrence of its generated
+accessor anywhere in the tree is the comment at netwerk/dns/DNSServiceBase.cpp:
+36-37, which asserts the opposite of what is true -- "network.dns.
+disablePrefetchFromHTTPS is a StaticPref and needs no callback". A pref that
+needs no callback still needs a consumer: DNSServiceBase::AddPrefObserver()
+(that same file, :33-44) correctly declines to observe it BECAUSE it believes a
+StaticPref read exists somewhere. Nothing reads it. mDisablePrefetch
+(DNSServiceBase.h:31) is maintained for the sibling pref network.dns.
+disablePrefetch (read at :65-68) and is applied at nsDNSService2.cpp:1039; there
+is no equivalent for the HTTPS variant.
+
+This adds the consumer, at the engine's own chosen place. nsDNSService::
+AsyncResolveInternal() (nsDNSService2.cpp:1025-1041) is the single funnel every
+async DNS lookup passes through, and it already returns early inside the lock
+block for the pref-controlled speculative path two lines above. The new check
+mirrors that shape exactly: same early return, same enclosing lock scope, same
+structure, no restructuring of the surrounding code.
+
+Why the pref matters for this product. HTTPS RR (SVCB) records are the
+fingerprinting-relevant half of prefetch: an HTTPSSVC answer carries the
+server's ECH config list and alt-service hints, which is per-server identity
+material the querying client has no need to obtain speculatively. Ziy's shell
+already refuses the whole prefetch family for the ordinary case; this closes
+the one member that was silently exempt because its pref was dead.
+
+Return NS_ERROR_NOT_AVAILABLE, not NS_ERROR_DNS_LOOKUP_QUEUE_FULL: the latter
+means "queued but suppressed, retry later" and is the code the sibling pref uses
+for speculative lookups. A user-disabled pref is not a queue condition, and
+NS_ERROR_NOT_AVAILABLE is the engine's existing code for "this resolve cannot
+be satisfied here" (it is what nsDNSService2.cpp returns for a null resolver at
+the same site, :1053).
+
+Gated behind MOZ_ZIY_FINGERPRINTING, set by the --enable-ziy-fingerprinting
+configure option (patches/0002-ziy-fingerprinting-option.patch), so a build
+with the gate off is stock Gecko: the pref stays registered and stays unread,
+exactly as it is today.
+
+Sources for every claim in this commit message:
+  modules/libpref/init/StaticPrefList.yaml:15433-15437
+    network.dns.disablePrefetchFromHTTPS registration (the documentation)
+  netwerk/dns/DNSServiceBase.cpp:33-44 AddPrefObserver (declines to observe it)
+  netwerk/dns/DNSServiceBase.cpp:36-37 the comment that claims a reader exists
+  netwerk/dns/DNSServiceBase.cpp:49-71 ReadPrefs (reads the sibling only)
+  netwerk/dns/DNSServiceBase.h:31 mDisablePrefetch (no HTTPS counterpart)
+  netwerk/dns/nsDNSService2.cpp:1039 the honoured sibling's early return
+  netwerk/dns/nsDNSService2.cpp:1053 NS_ERROR_DNS_LOOKUP_QUEUE_FULL sibling
+  netwerk/dns/nsDNSService2.cpp:11 the mozilla/StaticPrefs_network.h include
+    that already carries network.dns.offline-localhost, from the same YAML
+    pref group, so the new accessor needs no new include
+  toolkit/components/antitracking/bouncetrackingprotection/* (pattern precedent
+    for a per-BC hash keyed by BrowserId, cited in the companion report)
+
+Not audited for consumers in files not extracted (dom/, toolkit/mozapps/): the
+absence grep was run over the extracted netwerk/{cookie,dns,protocol,base},
+toolkit/components/antitracking, docshell, dom/webidl, dom/storage, dom/quota,
+toolkit/components/{cleardata,extensions}, browser/modules and
+modules/libpref subtrees.
+---
+--- a/netwerk/dns/nsDNSService2.cpp
++++ b/netwerk/dns/nsDNSService2.cpp
+@@ -1040,6 +1040,32 @@
+       return NS_ERROR_DNS_LOOKUP_QUEUE_FULL;
+     }
+ 
++#ifdef MOZ_ZIY_FINGERPRINTING
++    // Ziy delta 2: the HTTPS-record prefetch gate the engine registers but
++    // never reads.
++    //
++    // modules/libpref/init/StaticPrefList.yaml:15433-15437 registers
++    // network.dns.disablePrefetchFromHTTPS as a bool StaticPref, mirror: always.
++    // Nothing anywhere reads it: a grep of the whole tree for the generated
++    // accessor finds exactly one hit, and it is the comment in
++    // netwerk/dns/DNSServiceBase.cpp:36-37 asserting the opposite --
++    // "network.dns.disablePrefetchFromHTTPS is a StaticPref and needs no
++    // callback". A pref that needs no callback still needs A CONSUMER. This is
++    // the 0001 pattern: the pref layer expresses a capability, the engine
++    // documents it, and no engine code honours it.
++    //
++    // The pref's name says what it should do. Ziy locks it in the shell, and
++    // HTTPS RR (SVCB) prefetch is the fingerprinting-relevant half of prefetch:
++    // the HTTPSSVC record carries the server's ECH config and alt-service hints,
++    // which are per-server identity material a querying client does not need to
++    // see. The sibling pref network.dns.disablePrefetch IS honoured, two lines
++    // above, by exactly this early-return shape; the gate below follows it.
++    if (type == RESOLVE_TYPE_HTTPSSVC &&
++        StaticPrefs::network_dns_disablePrefetchFromHTTPS()) {
++      return NS_ERROR_NOT_AVAILABLE;
++    }
++#endif  // MOZ_ZIY_FINGERPRINTING
++
+     res = mResolver;
+ 
+     localDomain = IsLocalDomain(aHostname);

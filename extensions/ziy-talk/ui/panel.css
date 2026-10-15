@@ -1,0 +1,384 @@
+/* Ziy Talk panel — the sidebar surface (recon S39, components.md §14/§15/§20).
+ *
+ * Every value is a token from tokens.css. There is no raw hex in this file, and
+ * no second naming convention: this is the same token set the rest of the suite
+ * uses, so the panel sits correctly in light, dark and forced-colors modes
+ * without any per-mode code here.
+ *
+ * Accessibility contract, from replica/design/components.md's conventions:
+ *   - focus-visible is the tokens.css definition: 2px solid var(--focus) with a
+ *     2px offset, never removed.
+ *   - state is never colour-only: each state also carries text (the heading and
+ *     the body), and the live region announces changes.
+ *   - disabled stays in the tab order with aria-disabled, so keyboard users keep
+ *     the context of why a control is inert.
+ *   - the loading state keeps the accessible name; the spinner is aria-hidden.
+ */
+
+.ziy-talk {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  color: var(--text);
+  background: var(--surface);
+  margin: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.ziy-talk *,
+.ziy-talk *::before,
+.ziy-talk *::after { box-sizing: inherit; }
+
+.skip-link {
+  position: absolute;
+  left: var(--space-2);
+  top: calc(-1 * var(--space-7));
+  z-index: 10;
+  padding: var(--space-2) var(--space-3);
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius-sm);
+  font-weight: var(--weight-xs);
+  text-decoration: none;
+  transition: top var(--motion-fast) var(--motion-ease);
+}
+.skip-link:focus-visible { top: var(--space-2); }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ------------------------------------------------------------------ *
+ * Layout
+ * ------------------------------------------------------------------ */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  /* The sidebar panel width from the token set. */
+  max-width: var(--side-panel-width);
+  margin: 0 auto;
+}
+
+.panel__header { display: flex; flex-direction: column; gap: var(--space-1); }
+
+.panel__title {
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+  font-weight: var(--weight-lg);
+  margin: 0;
+}
+
+.panel__sub {
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  font-weight: var(--weight-xs);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.view { display: flex; flex-direction: column; gap: var(--space-3); }
+.view__title { font-size: var(--text-base); line-height: var(--leading-base); font-weight: var(--weight-lg); margin: 0; }
+
+/* ------------------------------------------------------------------ *
+ * States — each pairs a token colour change with visible text.
+ * ------------------------------------------------------------------ */
+
+.state {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+.state__title { font-size: var(--text-base); line-height: var(--leading-base); font-weight: var(--weight-lg); margin: 0; }
+.state__body { margin: 0; color: var(--text-muted); }
+.state__body strong { color: var(--text); }
+
+.state--warning { border-color: var(--warning); background: var(--warning-bg); }
+.state--warning .state__title { color: var(--warning); }
+.state--error { border-color: var(--danger); background: var(--danger-bg); }
+.state--error .state__title { color: var(--danger); }
+.state--blocked { border-color: var(--border-strong); background: var(--surface-sunken); }
+.state--blocked .state__title { color: var(--text-muted); }
+
+.warning__list {
+  margin: 0;
+  padding-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: var(--text-muted);
+}
+.warning__list li { margin: 0; }
+
+/* ------------------------------------------------------------------ *
+ * Fields
+ * ------------------------------------------------------------------ */
+
+.field { display: flex; flex-direction: column; gap: var(--space-1); }
+.field__label { font-size: var(--text-xs); line-height: var(--leading-xs); font-weight: var(--weight-xs); }
+
+.field__input {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  min-height: 32px;
+}
+.field__input:hover { border-color: var(--border-strong); }
+.field__input:focus-visible { border-color: var(--focus); }
+.field__input[aria-invalid="true"] { border-color: var(--danger); }
+
+.field__hint { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--text-muted); margin: 0; }
+.field__error { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--danger); margin: 0; }
+
+.check { display: flex; align-items: flex-start; gap: var(--space-2); font-size: var(--text-xs); line-height: var(--leading-xs); }
+.check input { margin: 0; }
+
+/* ------------------------------------------------------------------ *
+ * Buttons — row 40px, the components.md row height.
+ * ------------------------------------------------------------------ */
+
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+
+.btn {
+  font: inherit;
+  font-weight: var(--weight-xs);
+  min-height: 32px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease);
+}
+.btn:hover { background: var(--surface-sunken); border-color: var(--border-strong); }
+.btn:active { background: var(--surface-sunken); }
+
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn--primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn--primary:active { background: var(--accent-active); border-color: var(--accent-active); }
+
+.btn--danger { background: var(--danger); border-color: var(--danger); color: var(--on-danger); }
+.btn--danger:hover { background: var(--danger-hover); border-color: var(--danger-hover); }
+
+.btn--icon { min-width: 32px; padding: var(--space-2); }
+
+/* The disabled rule: aria-disabled keeps the control focusable and explained.
+   The native `disabled` attribute is only used on real form controls. */
+.btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+.btn[aria-disabled="true"]:hover { background: var(--bg); border-color: var(--border); }
+.btn--primary[aria-disabled="true"]:hover { background: var(--accent); border-color: var(--accent); }
+.btn--danger[aria-disabled="true"]:hover { background: var(--danger); border-color: var(--danger); }
+
+/* ------------------------------------------------------------------ *
+ * Room link + QR
+ * ------------------------------------------------------------------ */
+
+.room__url-label { font-size: var(--text-xs); line-height: var(--leading-xs); font-weight: var(--weight-xs); margin: 0; }
+.room__url { display: flex; gap: var(--space-2); align-items: stretch; }
+
+.room__code {
+  flex: 1 1 auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  word-break: break-all;
+}
+
+.qr { margin: 0; display: flex; flex-direction: column; gap: var(--space-2); align-items: center; }
+.qr__canvas {
+  padding: var(--space-2);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  line-height: 0;
+  /* 176px keeps the v3 symbol (29 modules + quiet zone) at ~5px per module:
+     above the zbar floor of 2px per module this panel verified. */
+  max-width: 176px;
+}
+.qr__canvas svg { width: 100%; height: auto; display: block; }
+.qr__caption { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--text-muted); text-align: center; }
+
+/* ------------------------------------------------------------------ *
+ * Camera preview
+ * ------------------------------------------------------------------ */
+
+.preview { display: flex; flex-direction: column; gap: var(--space-2); }
+.preview__title { font-size: var(--text-xs); line-height: var(--leading-xs); font-weight: var(--weight-xs); margin: 0; }
+.preview__video {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.preview__note { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--text-muted); margin: 0; }
+
+/* ------------------------------------------------------------------ *
+ * Control chips — components.md §20: bar 48px, buttons 36px, every chip is a
+ * real <button> with aria-pressed and a state in its name.
+ * ------------------------------------------------------------------ */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  min-height: 48px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  width: 36px; height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--motion-ease),
+              border-color var(--motion-fast) var(--motion-ease),
+              color var(--motion-fast) var(--motion-ease);
+}
+.chip:hover { background: var(--surface-sunken); border-color: var(--border-strong); color: var(--text); }
+
+/* On: accent fill plus the accent icon. The accessible name carries the state,
+   so this is decoration layered on a name, never the only signal. */
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.chip[aria-pressed="true"]:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+.chip__glyph { width: 18px; height: 18px; flex: none; }
+.chip__glyph--on { display: none; }
+.chip[aria-pressed="true"] .chip__glyph--off { display: none; }
+.chip[aria-pressed="true"] .chip__glyph--on { display: block; }
+
+.chip--leave { border-color: var(--danger); color: var(--danger); }
+.chip--leave:hover { background: var(--danger); border-color: var(--danger); color: var(--on-danger); }
+
+.chip[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+.chip[aria-disabled="true"]:hover { background: var(--bg); border-color: var(--border); color: var(--text-muted); }
+
+/* Degraded chips: a link that names where the control lives. They are honest
+   about being navigation, so they are styled as links, not toggles. */
+.chips--degraded { background: var(--surface-sunken); border-style: dashed; }
+.chip--degraded {
+  border-style: dashed;
+  background: transparent;
+  cursor: pointer;
+  width: auto;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.chip--degraded:hover { background: var(--bg); color: var(--text); border-style: solid; }
+
+.chips__live { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--text-muted); margin: 0; min-height: var(--leading-xs); }
+
+/* ------------------------------------------------------------------ *
+ * Meeting frame (sidebar mode)
+ * ------------------------------------------------------------------ */
+
+.meeting {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.meeting iframe {
+  width: 100%; height: 100%;
+  border: 0;
+  display: block;
+}
+/* A loading label over the iframe area, announced politely and aria-hidden so
+   it is decoration only. */
+.meeting__loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  background: var(--surface-sunken);
+}
+.call__note { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--text-muted); margin: 0; }
+.call__url { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent); word-break: break-all; }
+.call__link { margin: 0; }
+
+/* ------------------------------------------------------------------ *
+ * Recent rooms
+ * ------------------------------------------------------------------ */
+
+.recent { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-1); }
+.recent__row { display: flex; align-items: center; gap: var(--space-2); }
+.recent__code {
+  flex: 1 1 auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  padding: var(--space-2);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  color: var(--text);
+  cursor: pointer;
+}
+.recent__code:hover { background: var(--bg); border-color: var(--border-strong); }
+.recent__meta { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--text-muted); margin: var(--space-1) 0 0; }
+.recent__empty { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--text-muted); margin: 0; }
+.recent__remove { flex: none; }
+
+/* ------------------------------------------------------------------ *
+ * Settings summary (definition list, so the pairing is inherent)
+ * ------------------------------------------------------------------ */
+
+.summary { display: grid; grid-template-columns: auto 1fr; gap: var(--space-2) var(--space-4); margin: 0; }
+.summary dt { font-size: var(--text-xs); line-height: var(--leading-xs); color: var(--text-muted); }
+.summary dd { font-size: var(--text-xs); line-height: var(--leading-xs); margin: 0; word-break: break-word; }
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link { transition: none; }
+}
+
+@media (forced-colors: active) {
+  .chip[aria-pressed="true"] { forced-color-adjust: none; }
+  .state, .field__input, .btn, .chip, .meeting, .qr__canvas { border-color: CanvasText; }
+}

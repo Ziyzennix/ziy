@@ -1,0 +1,22 @@
+// Ziy extension suite.
+//
+// ONE SOURCE OF TRUTH for the add-on ids shipped in the Ziy suite. The ids are
+// derived from the filename, not the manifest — XPIProvider.sys.mjs's
+// getExpectedID() turns "ziy-shields@ziy.app.xpi" into the add-on id
+// "ziy-shields@ziy.app". That is why distribution/extensions/ must contain
+// files named exactly `<id>.xpi`, and why ids in this list, in
+// distribution/policies.json and in native messaging manifests have to agree.
+//
+// Consumed by: tools/build-shell.sh, tools/verify.sh, native/manifest writers.
+// Format: one id per line, '#" comments allowed. No extension is built in the
+// shell slice; the suite is filled in by tools/build-extension.sh later.
+
+ziy-shell@ziy.app
+ziy-shields@ziy.app
+ziy-ntp@ziy.app
+ziy-news@ziy.app
+ziy-playlist@ziy.app
+ziy-talk@ziy.app
+ziy-sync@ziy.app
+ziy-desktop@ziy.app
+ziy-pwd@ziy.app

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziy Sync</title>
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<main id="main" class="page">
+  <!-- Ziy's word for the whole surface: the chain. The headings and labels are
+       Ziy-voiced per the conventions in replica/design/components.md. -->
+  <header class="page-header">
+    <h1 class="title-xl">Sync chain</h1>
+    <p class="text-muted" id="page-intro">
+      A sync chain copies your own data between your own devices. The words below
+      are the only key; Ziy's server stores copies it cannot read.
+    </p>
+  </header>
+
+  <!-- The three states of S27, one visible at a time. aria-live so a screen
+       reader hears the state change rather than having to hunt for it. -->
+  <div id="state-region" aria-live="polite"></div>
+
+  <!-- 1. NOT SYNCING: the two entry points recon S27 lists. -->
+  <section id="view-start" class="card" hidden aria-labelledby="start-heading">
+    <h2 class="title-lg" id="start-heading">Set up a new chain</h2>
+    <p class="text-muted">
+      A chain is a group of your devices that keep the same copy of your data.
+      Start one on this device, then join it from the others.
+    </p>
+
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="btn-start">
+        Start a new chain
+      </button>
+      <button type="button" class="btn" id="btn-join-open">
+        I have a chain code
+      </button>
+    </div>
+    <p class="text-muted" id="agent-hint">
+      <span id="agent-status" class="pill pill-warn">Checking the sync agent…</span>
+      The sync agent is a small helper that holds your keys and talks to the
+      server, so nothing key-shaped ever sits in the browser.
+    </p>
+  </section>
+
+  <!-- 1a. THE CODE: shown once, exactly as recon's "fresh, used, copied" states. -->
+  <section id="view-code" class="card" hidden aria-labelledby="code-heading">
+    <h2 class="title-lg" id="code-heading">Your chain code</h2>
+    <p class="text-muted">
+      This is the only key to your data. Ziy stores a <em>derived</em> key, never
+      these words. Write them down now — they will not be shown again.
+    </p>
+
+    <ol id="code-words" class="word-grid"></ol>
+
+    <div class="code-meta">
+      <p id="rotating-note" class="notice"></p>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="btn-copy-code">Copy the code</button>
+      <button type="button" class="btn" id="btn-code-done" disabled>
+        I have written it down
+      </button>
+    </div>
+    <p id="code-copied" class="text-success" role="status" hidden>Code copied to the clipboard.</p>
+  </section>
+
+  <!-- 1b. JOIN: enter a code another device published. -->
+  <section id="view-join" class="card" hidden aria-labelledby="join-heading">
+    <h2 class="title-lg" id="join-heading">Join a chain</h2>
+    <form id="join-form" novalidate>
+      <div class="field">
+        <label for="join-words">The 24 words, in order</label>
+        <textarea id="join-words" rows="4" spellcheck="false" autocomplete="off"
+                  aria-describedby="join-words-help"
+                  placeholder="abandon ability able…"></textarea>
+        <p class="field-help" id="join-words-help">
+          The word list the first device showed you. Word count and checksum are
+          checked on this device before anything is sent.
+        </p>
+        <p class="field-error" id="join-words-error" role="alert" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="join-chain-id">Chain code</label>
+        <input id="join-chain-id" type="text" spellcheck="false" autocomplete="off"
+               aria-describedby="join-chain-help" inputmode="latin">
+        <p class="field-help" id="join-chain-help">
+          The second half of the code: the chain id the first device displayed
+          next to the words. It is not secret — it only says which chain's blobs
+          to look for.
+        </p>
+        <p class="field-error" id="join-chain-error" role="alert" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="join-device-name">This device's name</label>
+        <input id="join-device-name" type="text" value="Ziy desktop" maxlength="64">
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Join this chain</button>
+        <button type="button" class="btn" id="btn-join-cancel">Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 2. IN A CHAIN: the category toggles and the device list. -->
+  <section id="view-chain" class="stack" hidden>
+    <div class="card">
+      <h2 class="title-lg">Devices in this chain</h2>
+      <ul id="device-list" class="device-list"></ul>
+      <p class="text-muted">
+        This device's key signs what it sends. Removing a device here stops this
+        device from applying its records; leaving the chain also deletes the
+        server's copy for everyone.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2 class="title-lg">What this device shares</h2>
+      <p class="text-muted">
+        A category that is off is <strong>neither sent nor accepted</strong> on
+        this device — the switch is enforced here, not on the server, so turning
+        one off cannot be used to read another device's data.
+      </p>
+      <div id="category-list" class="toggle-list"></div>
+    </div>
+
+    <div class="card">
+      <h2 class="title-lg">Sync</h2>
+      <dl class="meta-grid">
+        <dt>Chain</dt><dd id="chain-id" class="mono"></dd>
+        <dt>This device</dt><dd id="device-name"></dd>
+        <dt>Last sync</dt><dd id="last-sync">never</dd>
+        <dt>Server</dt><dd id="server-url" class="mono"></dd>
+      </dl>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="btn-sync-now">Sync now</button>
+      </div>
+      <p id="sync-result" class="text-success" role="status" hidden></p>
+    </div>
+
+    <div class="card card-danger">
+      <h2 class="title-lg">Leave or delete</h2>
+      <div class="actions">
+        <button type="button" class="btn btn-danger" id="btn-leave">Leave this chain</button>
+        <button type="button" class="btn btn-danger" id="btn-delete">Delete my sync data</button>
+      </div>
+      <p class="text-muted">
+        Leaving removes the server's copy of the chain's blobs for every device.
+        Deleting does that and also erases this device's keys. Neither can be
+        undone.
+      </p>
+    </div>
+  </section>
+</main>
+
+<!-- A confirm dialog for the irreversible actions (recon S27's
+     "Confirm/destructive dialog"). -->
+<dialog id="confirm-dialog" aria-labelledby="confirm-title">
+  <h2 class="title-lg" id="confirm-title">Are you sure?</h2>
+  <p id="confirm-body" class="text-muted"></p>
+  <div class="actions">
+    <button type="button" class="btn btn-danger" id="btn-confirm-accept">Confirm</button>
+    <button type="button" class="btn" id="btn-confirm-cancel">Cancel</button>
+  </div>
+</dialog>
+
+<script type="module" src="options.js"></script>
+</body>
+</html>

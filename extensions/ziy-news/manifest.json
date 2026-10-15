@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "Ziy News",
+  "version": "1.0.0",
+  "description": "Ziy's news feed: your own sources, read in the sidebar and on the new tab page. No catalog, no CDN, nothing leaves this machine.",
+  "author": "Ziy",
+  "homepage_url": "https://ziy.app/news",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ziy-news@ziy.app",
+      "strict_min_version": "115.0"
+    }
+  },
+  "permissions": [
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "lib/feed/xml.js",
+      "lib/feed/item.js",
+      "lib/feed/parser.js",
+      "lib/feed/fetcher.js",
+      "lib/feed/aggregate.js",
+      "lib/store/source.js",
+      "lib/store/settings.js",
+      "lib/store/opml.js",
+      "lib/store/store.js",
+      "background/background.js"
+    ],
+    "type": "classic"
+  },
+  "sidebar_action": {
+    "default_title": "Ziy News",
+    "default_panel": "ui/panel.html",
+    "open_at_install": false
+  },
+  "options_page": "ui/options.html",
+  "options_ui": {
+    "page": "ui/options.html",
+    "open_in_tab": true
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; connect-src 'self'"
+  },
+  "icons": {
+    "16": "icons/news-16.png",
+    "32": "icons/news-32.png",
+    "48": "icons/news-48.png",
+    "96": "icons/news-96.png"
+  }
+}

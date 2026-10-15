@@ -1,0 +1,149 @@
+From: Ziy engine fork <ziy@ziy.app>
+Date: 2026-10-15
+Subject: [PATCH 0004] WebGL: inject a fake extension name into getSupportedExtensions() under RFP
+
+Brave's balanced WebGL farbling injects one fake extension name into
+`getSupportedExtensions()` (replica/re-deep-shields.md §5 row 15,
+brave-webcompat-webgl: third_party/blink/renderer/core/farbling/
+webgl_farbled_extension_handler.cc plus webgl_rendering_context_base.cc, the
+name drawn from a pool of 21 fakes; Maximum mode additionally scrubs the vendor
+and architecture). The list of supported extensions is a real fingerprint: the
+EXT_texture_compression_* / WEBGL_compressed_texture_astc / OVR_multiview2 /
+WEBGL_provoking_vertex combination names the GPU family directly, and the list
+LENGTH is a function of the driver's capability mask.
+
+Gecko has no equivalent. `ClientWebGLContext::GetSupportedExtensions()`
+(dom/canvas/ClientWebGLContext.cpp:6399-6415) builds the list straight from the
+`Limits().supportedExtensions` bitmask (see IsSupported at :6389) and has no RFP
+branch of any kind. Gecko's entire WebGL RFP coverage is:
+
+  ClientWebGLContext.cpp:2521  WebGLRenderInfo        (masked renderer)
+  ClientWebGLContext.cpp:2524  WebGLVendorRandomize  ("Mozilla <base64>")
+  ClientWebGLContext.cpp:2542  WebGLVendorConstant
+  ClientWebGLContext.cpp:2547  WebGLVendorSanitize
+  ClientWebGLContext.cpp:6382  WebGLRenderInfo       (WEBGL_debug_shaders off)
+  ClientWebGLContext.cpp:894,:1080 WebGLRenderCapability
+  CanvasRandomization / WebGLRandomization (the pixels)
+
+Every one of those guards a *string* or the *pixels*. None touches the extension
+list. And the pref layer cannot reach it: in RFP mode
+`nsRFPService::IsRFPEnabledFor()` (nsRFPService.cpp:335) returns true for every
+target before it consults the override set -- the same dead-pref mechanism 0001
+documented.
+
+This patch appends one fake extension name under RFP. The name is drawn from the
+real WebGL/Khronos namespace so it is not obviously synthetic, and from one that
+the `GetExtensionName()` table (dom/canvas/WebGLContextExtensions.cpp:20-66) does
+NOT contain, so `getExtension(<fake>)` returns null -- the resolution loop at
+WebGLContextExtensions.cpp:88-98 matches against that same table, so a page that
+tries to use the fake name gets nothing and cannot break. The `alreadyListed`
+guard keeps the change idempotent if a future engine build adds the name for
+real.
+
+Scope note: Brave draws the fake name per site from a pool of 21. That needs a
+per-site entropy source, which is candidate 2 of this workstream and is
+documented as NOT implementable on the Gecko side yet (see
+replica/proofs-cpp-fingerprint.md). A fixed name still removes the
+GPU-dependent list *length* and inserts an unreported name; it just does not
+vary per site. Stated plainly: this is a partial implementation of Brave's row
+15, deliberately so, because the per-site half is not implementable without the
+per-site key described in candidate 2.
+
+Shape note: the `#ifdef MOZ_ZIY_FINGERPRINTING` block ends flush at the function's
+closing brace with no trailing blank line, so stripping the gate from the patched
+file yields a file BYTE-IDENTICAL to pristine -- the gate-off proof
+patches/README.md step 6 requires, verified by strip-and-cmp in
+replica/proofs-cpp-fingerprint.md.
+
+STATUS: authored and apply-verified (git apply --check, git apply,
+git apply --reverse --check, and a real reverse followed by cmp against
+pristine, all RC=0 -- see replica/proofs-cpp-fingerprint.md). NOT COMPILED: the
+first compilation is the first CI run of
+.github/workflows/build-gecko.yml.
+
+Gated behind MOZ_ZIY_FINGERPRINTING, set by the
+--enable-ziy-fingerprinting configure option declared in
+0002-ziy-fingerprinting-option.patch. Applies cleanly after 0001, 0002 and 0003.
+
+Sources for every claim in this commit message:
+  dom/canvas/ClientWebGLContext.cpp:6399 GetSupportedExtensions (no RFP branch)
+  dom/canvas/ClientWebGLContext.cpp:6414 the append loop over WebGLExtensionID::Max
+  dom/canvas/ClientWebGLContext.cpp:6389 IsSupported -> Limits().supportedExtensions
+  dom/canvas/ClientWebGLContext.cpp:6364 IsExtensionForbiddenForCaller
+    (WebGLRenderInfo only for WEBGL_debug_shaders, :6382)
+  dom/canvas/ClientWebGLContext.cpp:2521,:2524,:2542,:2547 the vendor/renderer targets
+  dom/canvas/ClientWebGLContext.cpp:894,:1080 WebGLRenderCapability
+  dom/canvas/WebGLContextExtensions.cpp:20-66 the GetExtensionName table
+  dom/canvas/WebGLContextExtensions.cpp:88-98 GetExtension's name resolution
+  toolkit/components/resistfingerprinting/RFPTargets.inc:91,109,111-113
+    WebGLRenderCapability / WebGLRandomization / WebGLVendor* (the whole WebGL set)
+  toolkit/components/resistfingerprinting/nsRFPService.cpp:335
+    IsRFPEnabledFor's RFP short-circuit
+---
+--- a/dom/canvas/ClientWebGLContext.cpp
++++ b/dom/canvas/ClientWebGLContext.cpp
+@@ -6412,6 +6412,64 @@
+     const auto& extStr = GetExtensionName(i);
+     retarr.AppendElement(NS_ConvertUTF8toUTF16(extStr));
+   }
++#ifdef MOZ_ZIY_FINGERPRINTING
++  // Ziy delta 4: Brave's fake WebGL extension, which RFP does not do.
++  //
++  // WHY A C++ CHANGE IS REQUIRED. Brave's balanced WebGL farbling injects one
++  // fake extension NAME into getSupportedExtensions() (re-deep-shields.md §5
++  // row 15, brave-webcompat-webgl: webgl_farbled_extension_handler.cc +
++  // webgl_rendering_context_base.cc, drawing the fake name from 21 candidates).
++  // The list of supported extensions is a strong fingerprint: it names the
++  // exact GPU family via EXT_texture_compression_* / WEBGL_compressed_
++  // texture_astc / OVR_multiview2 / WEBGL_provoking_vertex, and the list LENGTH
++  // is a function of the driver's capability mask.
++  //
++  // Gecko never touches that list. The whole of Gecko's WebGL RFP coverage
++  // guards the vendor/renderer strings (WebGLRenderInfo at ClientWebGLContext
++  // .cpp:2521, WebGLVendorRandomize at :2524, WebGLVendorConstant at :2542,
++  // WebGLVendorSanitize at :2547, WebGLRenderCapability at :894 and :1080), the
++  // WEBGL_debug_shaders extension at IsExtensionForbiddenForCaller (:6382), and
++  // the random pixels (WebGLRandomization). GetSupportedExtensions() has no RFP
++  // branch at all. As always, the pref layer cannot express it: in RFP mode
++  // nsRFPService::IsRFPEnabledFor() (nsRFPService.cpp:335) returns true for
++  // every target before it consults the override set.
++  //
++  // The fake name is a FIXED one, not a random one. Brave draws it from a pool
++  // of 21 so the value differs per site; that needs a per-site entropy source,
++  // which is candidate 2 of this workstream and is documented as NOT
++  // implementable yet (see replica/proofs-cpp-fingerprint.md). A fixed fake
++  // still does the thing that does not need per-site entropy: it moves the
++  // list's LENGTH by one and inserts a name no GPU in the table ever reports,
++  // so the length stops being a function of the installed GPU. The name is
++  // chosen from the real WebGL/Khronos extension names so it is not obviously
++  // synthetic, and from one the GetExtensionName table in
++  // WebGLContextExtensions.cpp:20-66 does NOT contain — that way
++  // getExtension(<fake>) returns null (GetExtension resolves the name against
++  // the same table, WebGLContextExtensions.cpp:88-98) and no page can acquire
++  // an object it will then fail to use. The alreadyListed guard keeps the
++  // patch idempotent if a future engine build adds the name for real.
++  //
++  // No RFPTarget is added: the gate is the existing WebGLRenderCapability,
++  // the target Gecko already uses for "is this context allowed to reveal its
++  // render capabilities".
++  //
++  // Note the shape: the #ifdef sits inside the function body with the block
++  // ending flush at the closing brace, so stripping it leaves a file
++  // byte-identical to pristine (patches/README.md step 6 gate-off proof).
++  if (ShouldResistFingerprinting(RFPTarget::WebGLRenderCapability)) {
++    constexpr auto kFakeExtensionName = u"KHR_parallel_shader_compile"_ns;
++    bool alreadyListed = false;
++    for (const auto& listed : retarr) {
++      if (listed.LowerCaseEqualsLiteral("khr_parallel_shader_compile")) {
++        alreadyListed = true;
++        break;
++      }
++    }
++    if (!alreadyListed) {
++      retarr.AppendElement(nsString(kFakeExtensionName));
++    }
++  }
++#endif  // MOZ_ZIY_FINGERPRINTING
+ }
+ 
+ // -

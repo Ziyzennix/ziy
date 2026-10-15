@@ -1,0 +1,373 @@
+/* Ziy Shields — component styles.
+ *
+ * Every value here is a role from tokens.css (the copy of replica/design/
+ * tokens.css shipped alongside). No raw hex appears in this file.
+ *
+ * The component specs followed, in order:
+ *   #2 Shields panel  — dialog semantics, focus to the heading, Esc closes,
+ *                       domain as a real <h2>, read-only Simple view.
+ *   #3 toggle row     — 40px row, dash never a half-filled pill, aria-checked
+ *                       mixed, Space toggles, the label is a real <label for>.
+ *   #4 segmented      — radiogroup + aria-checked radios, Left/Right/Home/End.
+ *   #5 dropdown       — native <select> for a short static list.
+ *   #6 count link     — real <button>, enabled at 0, empty state is real
+ *                       information and stays reachable from the keyboard.
+ *   #1 Shields button — the up/down state is aria-pressed, not a colour.
+ */
+
+.ziy-panel { width: 360px; }
+.ziy-panel__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  color: var(--text);
+  font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans);
+}
+
+.ziy-panel__title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin: 0;
+  font: var(--weight-lg) var(--text-lg) / var(--leading-lg) var(--font-sans);
+}
+
+.ziy-panel__domain {
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ziy-state {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  white-space: nowrap;
+}
+.ziy-state--up { background: var(--accent-bg); color: var(--accent); }
+.ziy-state--down { background: var(--surface-sunken); color: var(--text-muted); }
+
+.ziy-panel__summary { display: flex; flex-direction: column; gap: var(--space-2); }
+
+/* Component 6: blocked-items count link. */
+.ziy-count {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  min-height: 20px;
+  padding: var(--space-1) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--accent-bg);
+  color: var(--accent);
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease);
+}
+.ziy-count:hover { background: var(--accent); color: var(--on-accent); }
+.ziy-count[aria-expanded="true"] { background: var(--accent); color: var(--on-accent); }
+.ziy-count__n { font-variant-numeric: tabular-nums; font-weight: 700; }
+
+/* Buttons */
+.ziy-btn {
+  min-height: 36px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans);
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--motion-ease),
+              border-color var(--motion-fast) var(--motion-ease);
+}
+.ziy-btn:hover { background: var(--surface-sunken); }
+.ziy-btn--quiet { border-color: transparent; background: transparent; color: var(--accent); }
+.ziy-btn--quiet:hover { background: var(--accent-bg); }
+.ziy-btn[aria-pressed="true"] { border-color: var(--border-strong); color: var(--text-muted); }
+
+/* Rows (component 3) */
+.ziy-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--border);
+}
+.ziy-row:first-child { border-top: 0; }
+.ziy-row__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans);
+  color: var(--text);
+}
+.ziy-row__hint, .ziy-row__why {
+  grid-column: 1 / -1;
+  margin: 0;
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  color: var(--text-muted);
+}
+.ziy-row__dot {
+  width: 6px; height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+.ziy-row__overridden {
+  grid-column: 1 / -1;
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  color: var(--accent);
+}
+
+/* The switch itself: a real checkbox with role=switch, visually styled. */
+.ziy-switch {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 40px;
+  height: 22px;
+  margin: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--motion-ease),
+              border-color var(--motion-fast) var(--motion-ease);
+}
+.ziy-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  border-radius: var(--radius-pill);
+  background: var(--text-inverse);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--motion-fast) var(--motion-ease);
+}
+.ziy-switch[aria-checked="true"], .ziy-switch:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.ziy-switch[aria-checked="true"]::after, .ziy-switch:checked::after { transform: translateX(18px); }
+.ziy-switch[aria-disabled="true"] { opacity: .6; cursor: not-allowed; }
+
+/* Component 4: segmented control. */
+.ziy-segmented {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  overflow: hidden;
+}
+.ziy-segmented__opt {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+  font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease);
+}
+.ziy-segmented input {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+  white-space: nowrap;
+}
+.ziy-segmented__opt:hover { color: var(--text); }
+.ziy-segmented input:checked + .ziy-segmented__opt {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.ziy-segmented input:focus-visible + .ziy-segmented__opt {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.ziy-segmented--sub { min-height: 28px; }
+.ziy-subs {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-left: var(--space-3);
+}
+.ziy-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.ziy-sub__label { font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans); color: var(--text-muted); }
+
+/* Component 5: dropdown. */
+.ziy-select {
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  color: var(--text);
+  font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans);
+  cursor: pointer;
+}
+
+/* Blocked items list (S09). */
+.ziy-items {
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-3);
+}
+.ziy-items__title {
+  margin: 0 0 var(--space-2);
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  color: var(--text-muted);
+}
+.ziy-items__list {
+  max-height: 192px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ziy-items__list li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+  font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans);
+}
+.ziy-items__list li:last-child { border-bottom: 0; }
+.ziy-items__url { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text); word-break: break-all; }
+.ziy-items__cat { font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans); color: var(--accent); }
+.ziy-items__empty { margin: 0; font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans); color: var(--text-muted); }
+
+.ziy-simple__title, .ziy-advanced__title {
+  margin: 0 0 var(--space-2);
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  color: var(--text-muted);
+}
+.ziy-simple__hint { margin: 0; font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans); color: var(--text-muted); }
+
+/* The options page (S10). */
+.ziy-options { background: var(--bg); color: var(--text); }
+.ziy-options__inner {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans);
+}
+.ziy-options__title { margin: 0; font: var(--weight-lg) var(--text-xl) / var(--leading-xl) var(--font-sans); }
+.ziy-options__intro, .ziy-options__sectionintro { margin: 0; color: var(--text-muted); }
+.ziy-options__status { min-height: var(--leading-sm); margin: 0; color: var(--success); }
+.ziy-options__section { display: flex; flex-direction: column; gap: var(--space-3); }
+.ziy-options__heading {
+  margin: 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+  font: var(--weight-lg) var(--text-lg) / var(--leading-lg) var(--font-sans);
+}
+.ziy-options__actions { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+
+.ziy-lists { display: flex; flex-direction: column; gap: var(--space-2); }
+.ziy-list {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.ziy-list__name { font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans); color: var(--text); }
+.ziy-list__meta {
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  color: var(--text-muted);
+}
+.ziy-lists__meta { font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans); color: var(--text-muted); }
+.ziy-list input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); }
+
+.ziy-addlist { display: flex; flex-direction: column; gap: var(--space-2); }
+.ziy-addlist__label { font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans); }
+.ziy-addlist__row { display: flex; gap: var(--space-2); }
+.ziy-addlist__input {
+  flex: 1;
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  color: var(--text);
+  font: var(--weight-sm) var(--text-sm) / var(--leading-sm) var(--font-sans);
+}
+.ziy-addlist__input[aria-invalid="true"] { border-color: var(--danger); }
+.ziy-addlist__error { margin: 0; color: var(--danger); font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ziy-count, .ziy-btn, .ziy-switch, .ziy-switch::after, .ziy-segmented__opt { transition: none; }
+}
+
+@media (forced-colors: active) {
+  .ziy-segmented, .ziy-select { border-color: ButtonBorder; }
+}
+
+/* The stats block: one combined count, bandwidth in kB, time in seconds.
+   Mirrors the observed widget's shape (recon-behavior.md); all wording is
+   Ziy's own and the derived figures are labelled estimates. */
+.ziy-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-2) 0 0;
+  border-top: 1px solid var(--border);
+}
+.ziy-stats__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.ziy-stats dt {
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  color: var(--text-muted);
+}
+.ziy-stats dd {
+  margin: 0;
+  font: var(--weight-lg) var(--text-lg) / var(--leading-lg) var(--font-sans);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.ziy-stats__note {
+  margin: 0;
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  color: var(--text-muted);
+}
+
+/* The licence link next to a list's name (LICENSES promises it is shown). */
+.ziy-list__link {
+  font: var(--weight-xs) var(--text-xs) / var(--leading-xs) var(--font-sans);
+  color: var(--accent);
+  text-decoration: underline;
+}
+.ziy-list__link:hover { color: var(--accent-hover); }

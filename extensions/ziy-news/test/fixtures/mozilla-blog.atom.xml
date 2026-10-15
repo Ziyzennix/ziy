@@ -1,0 +1,1999 @@
+<?xml version="1.0" encoding="UTF-8"?><feed
+	xmlns="http://www.w3.org/2005/Atom"
+	xmlns:thr="http://purl.org/syndication/thread/1.0"
+	xml:lang="en-US"
+	>
+	<title type="text">The Mozilla Blog</title>
+	<subtitle type="text">News and Updates about Mozilla</subtitle>
+
+	<updated>2026-10-13T13:31:38Z</updated>
+
+	<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/" />
+	<id>https://blog.mozilla.org/en/feed/atom/</id>
+	<link rel="self" type="application/atom+xml" href="https://blog.mozilla.org/en/feed/atom/" />
+
+	<generator uri="https://wordpress.org/" version="6.3.13">WordPress</generator>
+	<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Mozilla introduces Firefox Enterprise]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/introducing-firefox-enterprise/" />
+
+		<id>https://blog.mozilla.org/?p=87828</id>
+		<updated>2026-10-13T13:31:38Z</updated>
+		<published>2026-10-13T04:01:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Institutions are recalculating who controls the technology they rely on. Mozilla has an independent option to offer. For years, organizations consolidated technology around a small number of providers to make things simpler. Fewer systems. Tighter integrations. More economies of scale. But that consolidation went well beyond technology. It consolidated dependency, too. The resulting risks have [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/introducing-firefox-enterprise/">Mozilla introduces Firefox Enterprise</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/introducing-firefox-enterprise/"><![CDATA[
+<figure class="wp-block-image size-large"><img decoding="async" fetchpriority="high" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Distilled-Thumbnail1-1-1024x576.png" alt="" class="wp-image-88257" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Distilled-Thumbnail1-1-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Distilled-Thumbnail1-1-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Distilled-Thumbnail1-1-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Distilled-Thumbnail1-1-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Distilled-Thumbnail1-1-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Distilled-Thumbnail1-1-1280x720.png 1280w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Distilled-Thumbnail1-1.png 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p><em>Institutions are recalculating who controls the technology they rely on. Mozilla has an independent option to offer.</em></p>
+
+
+
+<p>For years, organizations consolidated technology around a small number of providers to make things simpler. Fewer systems. Tighter integrations. More economies of scale. But that consolidation went well beyond technology. It consolidated dependency, too. The resulting risks have been debated, studied, and challenged along the way, but concentration continued. More work, data and critical infrastructure kept moving to the same few providers, while credible alternatives narrowed.<br><br>The deeper that dependency runs, the harder and more costly it becomes to change course. When something fails, changes or falls outside an institution’s control, that dependency becomes a risk for CIOs and CISOs to manage.</p>
+
+
+
+<p>Nowhere are these stakes more visible than in Europe. Now institutions are re-assessing. Governments are pushing for greater digital autonomy, while regulated industries face growing pressure to find and manage their dependencies.&nbsp;</p>
+
+
+
+<p>There’s a name for much of this debate about technological control: “sovereignty.”&nbsp;</p>
+
+
+
+<p>What digital sovereignty means in practice varies. Across Europe, governments are investing in the security and resilience of critical IT infrastructure, reducing strategic dependencies and putting technological autonomy higher on national agendas. Different approaches, same underlying concern. Strip away the regional policy definitions and industry distinctions and a pretty practical, universal question emerges: how much technological dependency should we risk?</p>
+
+
+
+<p>And a very specific, very important layer has been largely missing from that conversation: the browser.</p>
+
+
+
+<h2 class="wp-block-heading">The overlooked layer of modern business</h2>
+
+
+
+<p>The browser. Applications run there. Employees authenticate in it. Sensitive data transits through it. Files are uploaded and downloaded and AI tools are increasingly used through it. That raises the same questions of dependency and control: whose browser technology are you relying on, and who controls the infrastructure used to manage it?</p>
+
+
+
+<h2 class="wp-block-heading">Introducing Firefox Enterprise</h2>
+
+
+<div class="wp-block-image">
+<figure class="aligncenter size-large is-resized"><img decoding="async" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Data-Control-Hero1-1024x576.png" alt="" class="wp-image-88304" style="aspect-ratio:1.7777777777777777;width:696px;height:auto" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Data-Control-Hero1-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Data-Control-Hero1-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Data-Control-Hero1-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Data-Control-Hero1-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Data-Control-Hero1-2048x1152.png 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Data-Control-Hero1-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Data-Control-Hero1-1280x720.png 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure></div>
+
+
+<p><a href="https://www.firefox.com/enterprise/">Firefox Enterprise</a> is built for organizations with strict security, governance, and compliance requirements. It pairs the Firefox browser, built on Mozilla’s independent <a href="https://blog.mozilla.org/netpolicy/2026/03/23/competition-innovation-and-the-future-of-the-web/">Gecko</a> engine, with a management console organizations can run on their own infrastructure. From that console, IT teams can centrally manage browser policy and access, govern how data moves through the browser and set controls around AI use.</p>
+
+
+
+<p>IT and security teams get more control over their data, IT infrastructure and browser environment — helping strengthen technological independence and operational resilience.</p>
+
+
+
+<p>“If all your options are built with the same technology underneath, ‘choice’ is a lie. So is control,” said Anthony Enzor-DeMeo, CEO of Mozilla. “We built Firefox differently. And we’re bringing its independent architecture to institutions that are ready to rethink their dependencies and risk.”</p>
+
+
+
+<h2 class="wp-block-heading">Bringing the browser under control</h2>
+
+
+
+<p></p>
+
+
+
+<figure class="wp-block-video"><video controls src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Product-Video.mp4"></video></figure>
+
+
+
+<p></p>
+
+
+
+<p>We’re starting with the browser because we see it as a key, but under-governed, layer. Firefox Enterprise gives institutions more control over the browser and the infrastructure managing it.</p>
+
+
+
+<p>And because Firefox runs on Gecko, the only major browser engine developed outside Google and Apple, institutions have another path towards reducing dependence on a single architecture.</p>
+
+
+
+<p>Finally, Firefox Enterprise is built to live alongside the systems that IT operations already use. Keep your identity provider. Keep your SIEM. Keep your MDM. Just add a browser whose management infrastructure you operate, so you decide where data lives and have greater visibility into how it moves.</p>
+
+
+
+<p>For us, supporting the goal of technological sovereignty comes down to four things: More control. More transparency. More choice. More resilience.</p>
+
+
+
+<p><a href="https://www.firefox.com/enterprise/firefox-enterprise/">Learn more</a> about Firefox Enterprise.</p>
+
+
+
+<h2 class="wp-block-heading">A big bet on familiar ground</h2>
+
+
+
+<p>We know this territory. Independence isn’t a new direction for Mozilla. We’ve spent more than 25 years building and securing browser technology that intentionally works outside of the dominant architecture of the day. Firefox is used by roughly 200 million people every month and is already deployed across thousands of organizations.<br><br>That independence has always mattered to the web. Now it has practical value for institutions looking to reduce technological concentration —&nbsp;and dependency —&nbsp;in their own environments.&nbsp;</p>
+
+
+
+<h2 class="wp-block-heading">This is the beginning</h2>
+
+
+
+<p>Our ambition is big but simple: make technology independence practical.</p>
+
+
+
+<p>That means putting institutions in real control of the infrastructure and data they depend on, without asking them to rebuild or start over. Closing blind spots. Defining where policies, access and data live. Keeping core management within the institution’s environment. And bringing an overlooked layer —&nbsp;the browser —&nbsp;under institutional control.&nbsp;</p>
+
+
+
+<p>Firefox Enterprise is unveiling across Europe with an initial sales focus on France, Germany, Austria and Switzerland, with more markets to follow. Thunderbird Enterprise is also in development, extending this customer-controlled approach to email and communications. We’ll have more to share as that work progresses.</p>
+
+
+
+<p>If your organization wants greater control over its browser infrastructure, we’d like to <a href="https://www.firefox.com/enterprise/contact/">work with you</a>.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/introducing-firefox-enterprise/">Mozilla introduces Firefox Enterprise</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+		<link href="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Enterprise-Product-Video.mp4" rel="enclosure" length="4124132" type="video/mp4" />
+	</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Firefox partners with Anschutz Entertainment Group at the Uber Arena and Uber Eats Music Hall in Berlin]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/firefox-aeg-uber-arena-partnership/" />
+
+		<id>https://blog.mozilla.org/?p=87764</id>
+		<updated>2026-10-08T06:45:45Z</updated>
+		<published>2026-10-08T07:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="News" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Firefox is teaming up with AEG and taking to the main stage at Berlin’s biggest and best indoor arenas. Starting this October, as the indoor music scene heats up and the basketball and ice hockey seasons are in full swing, fans flocking to the Uber Arena, Uber Eats Music Hall, and Uber Platz will see [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-aeg-uber-arena-partnership/">Firefox partners with Anschutz Entertainment Group at the Uber Arena and Uber Eats Music Hall in Berlin</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/firefox-aeg-uber-arena-partnership/"><![CDATA[
+<p>Firefox is teaming up with AEG and taking to the main stage at Berlin’s biggest and best indoor arenas. Starting this October, as the indoor music scene heats up and the basketball and ice hockey seasons are in full swing, fans flocking to the Uber Arena, Uber Eats Music Hall, and Uber Platz will see Firefox highly visible around the venue. They may even bump into <a href="https://blog.mozilla.org/en/firefox/meet-kit/">our very own mascot, Kit</a>, who will be on hand to help them skip the main queues courtesy of Firefox.&nbsp;</p>
+
+
+
+<p>We know that the experiences people care about often begin online. The internet is the gateway to how they discover, plan, and navigate their way to concerts, sports events, and nights out before they happen in real life.&nbsp;</p>
+
+
+
+<p>Firefox’s presence will help make every step of that journey simple and smoother, starting at the door. </p>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/2026-Firefox-InsGluck-Uber_T635353-highres_©-Holger-Talinski-1-1024x576.jpg" alt="" class="wp-image-88036" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/2026-Firefox-InsGluck-Uber_T635353-highres_©-Holger-Talinski-1-1024x576.jpg 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/2026-Firefox-InsGluck-Uber_T635353-highres_©-Holger-Talinski-1-300x169.jpg 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/2026-Firefox-InsGluck-Uber_T635353-highres_©-Holger-Talinski-1-768x432.jpg 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/2026-Firefox-InsGluck-Uber_T635353-highres_©-Holger-Talinski-1-1536x864.jpg 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/2026-Firefox-InsGluck-Uber_T635353-highres_©-Holger-Talinski-1-2048x1152.jpg 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/2026-Firefox-InsGluck-Uber_T635353-highres_©-Holger-Talinski-1-1000x563.jpg 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/2026-Firefox-InsGluck-Uber_T635353-highres_©-Holger-Talinski-1-1280x720.jpg 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>People with Firefox downloaded on their phone will have access to a dedicated Firefox Fast Lane that allows them to skip the main line at the Uber Arena. To ensure the smoothest possible entry, a QR code for downloading Firefox will also be available at the Fast Lane.</p>
+
+
+
+<p>“People who use Firefox tend to choose things deliberately, their browser, their music, their nights out. This partnership is for them. A first for Firefox. Most browsers want more of your time online. We want you at the show, faster. Berlin is where we are starting, right across the river from our office. See you there,&#8221; said John Solomon, Mozilla-Firefox Chief Marketing Officer.</p>
+
+
+
+<p>We are excited to bring what we stand for to Berlin’s premier entertainment venue — choice, control, and a better experience to the moments that people want to enjoy and truly care about.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-aeg-uber-arena-partnership/">Firefox partners with Anschutz Entertainment Group at the Uber Arena and Uber Eats Music Hall in Berlin</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Anthony Enzor-DeMeo</name>
+					</author>
+
+		<title type="html"><![CDATA[Jambu Palaniappan and David Parry-Jones join the Mozilla Corporation Board of Directors]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/mozilla/palaniappan-parry-jones/" />
+
+		<id>https://blog.mozilla.org/?p=88058</id>
+		<updated>2026-10-07T19:55:41Z</updated>
+		<published>2026-10-07T18:37:41Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="From the Team" /><category scheme="https://blog.mozilla.org/en/" term="Our Work" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Today, we are very pleased to announce two new additions to the Mozilla Corporation Board of Directors: Jambu Palaniappan and David Parry-Jones. As we build the next chapter of Mozilla, we&#8217;ve been focused on bringing people onto our Board who combine deep operating experience with a real commitment to the values Mozilla stands for. Jambu [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/mozilla/palaniappan-parry-jones/">Jambu Palaniappan and David Parry-Jones join the Mozilla Corporation Board of Directors</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/mozilla/palaniappan-parry-jones/"><![CDATA[
+<p>Today, we are very pleased to announce two new additions to the Mozilla Corporation Board of Directors: Jambu Palaniappan and David Parry-Jones.</p>
+
+
+
+<p>As we build the next chapter of Mozilla, we&#8217;ve been focused on bringing people onto our Board who combine deep operating experience with a real commitment to the values Mozilla stands for. Jambu and David bring deep experience building and leading technology businesses, and each brings a unique perspective to our Board.</p>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Jambu-thumnail-1024x576.png" alt="" class="wp-image-88171" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Jambu-thumnail-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Jambu-thumnail-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Jambu-thumnail-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Jambu-thumnail-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Jambu-thumnail-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Jambu-thumnail-1280x720.png 1280w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Jambu-thumnail.png 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p><strong>Jambu Palaniappan</strong> is the Chief Executive Officer of Checkatrade, where he drives the company&#8217;s mission of Powering Great Work. The home improvement platform connects consumers across the UK with quality tradespeople — every year, Checkatrade improves millions of homes and delivers billions of pounds of work to small and medium-sized businesses.</p>
+
+
+
+<p>Before joining Checkatrade, Jambu was Managing Partner and Head of Europe at OMERS Ventures, where he invested in and supported high-growth technology companies. Earlier in his career, he spent several years at Uber and Uber Eats, joining as one of the first 100 employees and leading expansion across Europe, the Middle East, and Africa. Jambu holds a degree in Public Policy and Economics from Vanderbilt University.</p>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/David-thumbnail-1-1024x576.png" alt="" class="wp-image-88204" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/David-thumbnail-1-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/David-thumbnail-1-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/David-thumbnail-1-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/David-thumbnail-1-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/David-thumbnail-1-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/David-thumbnail-1-1280x720.png 1280w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/David-thumbnail-1.png 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p><strong>David Parry-Jones</strong> is a board director and former Chief Revenue Officer (CRO) with more than 30 years of experience scaling technology businesses internationally. Most recently, he served as CRO at DeepL and previously held senior leadership roles at Microsoft, VMware, and Twilio. He has led large teams across diverse markets and cultures, working with both early-stage companies and global enterprises.&nbsp;</p>
+
+
+
+<p>As a board member and adviser, he brings a practical perspective on growth, international expansion, and building strong teams that turn strategy into results.</p>
+
+
+
+<p>Please join me in welcoming Jambu and David to the Mozilla Corporation Board of Directors.</p>
+<p>The post <a href="https://blog.mozilla.org/en/mozilla/palaniappan-parry-jones/">Jambu Palaniappan and David Parry-Jones join the Mozilla Corporation Board of Directors</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[100 days later: Microsoft still steers Windows and Copilot users to Edge, everywhere the law lets it]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/mozilla/over-the-edge-2-100-days-later/" />
+
+		<id>https://blog.mozilla.org/?p=87761</id>
+		<updated>2026-10-07T09:41:05Z</updated>
+		<published>2026-10-07T10:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Internet Policy" /><category scheme="https://blog.mozilla.org/en/" term="Our Work" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>One hundred days ago, Mozilla released Over The Edge 2.0, the second independent report from leading experts on deceptive design Dr. Harry Brignull and Cennydd Bowles, on how Windows, Edge, Bing, and Copilot are designed to steer people away from the browser they chose.&#160; We published the report, and the researchers published the evidence for [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/mozilla/over-the-edge-2-100-days-later/">100 days later: Microsoft still steers Windows and Copilot users to Edge, everywhere the law lets it</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/mozilla/over-the-edge-2-100-days-later/"><![CDATA[
+<p>One hundred days ago, Mozilla released Over The Edge 2.0, the second independent report from leading experts on deceptive design Dr. Harry Brignull and Cennydd Bowles, on how Windows, Edge, Bing, and Copilot are designed to steer people away from the browser they chose.&nbsp;</p>
+
+
+
+<p>We published the <a href="https://research.mozilla.org/browser-competition/over-the-edge-2/">report</a>, and the researchers published the <a href="https://edge.brignull.com/J01/">evidence</a> for anyone to analyze.&nbsp;</p>
+
+
+
+<p>Browsers are a powerful tool. So it’s no surprise that the history of the web <a href="http://www.justice.gov/atr/us-v-microsoft-courts-findings-fact">has</a> <a href="https://blog.mozilla.org/press/2015/07/safeguarding-choice-and-control-online/">many</a> <a href="https://arstechnica.com/tech-policy/2024/04/report-people-are-bailing-on-safari-after-dma-makes-changing-defaults-easier/#page-2:~:text=You%20can,not,-%2E">examples</a> of powerful platforms trying to deny people browser choice. Now, as AI reshapes our online experiences, the stakes couldn’t be higher. Browsers are a key distribution layer for AI tools and services, while still determining many of the privacy and security functionality people rely on every day. Steering people toward one browser can therefore shape which AI services reach users and the protections that come with it.&nbsp;</p>
+
+
+
+<p>We also shared the report with Microsoft and talked to them about the issues raised in the report. We knew that an immediate change was unlikely, but we hoped that, when faced with independent evidence of harmful design practices impacting Windows users, they would also want better for people.</p>
+
+
+
+<p>Instead, it became clear that Microsoft will respect user choice only when it is forced to. It is important to think about what that means for a company whose operating system runs on more than a billion machines. Microsoft&#8217;s standard for respecting people&#8217;s choices is legal compliance. Not what&#8217;s best for its users. Not its own published principles. Not what’s technically feasible. Not even what it already does for users in Europe. </p>
+
+
+
+<p>That’s the most shocking part. Not that Microsoft engages in such tactics – <a href="https://blog.mozilla.org/press/2015/07/safeguarding-choice-and-control-online">we’ve seen that before.</a> It’s the fact that a better version of Windows already exists, and it is already available today &#8211; but only if you live in the European Economic Area (EEA), where the Digital Markets Act (DMA) forced the issue. If you live in the United States, India, the United Kingdom, or most other locations around the world, your experience and your freedom to choose for yourself are worse.</p>
+
+
+
+<p>One hundred days later, here is what people outside of the EEA still get:&nbsp;</p>
+
+
+
+<ul>
+<li>The Windows 10 message &#8220;You&#8217;re almost done setting up your PC&#8221; uses tricky wording to pull people off the default they picked.&nbsp;</li>
+
+
+
+<li>Windows Search and Widgets open links in Edge instead of the browser set as default.&nbsp;</li>
+
+
+
+<li>Windows keeps Edge as the default for common browser file types like PDFs and SVG images, even after another browser has been set as default.<br></li>
+</ul>
+
+
+
+<p>And people in the EEA also deserve better: </p>
+
+
+
+<ul>
+<li>Edge remains pre-pinned to the taskbar; this seems to directly violate the &#8220;principled approach to app pinning and app defaults.&#8221;&nbsp;</li>
+
+
+
+<li>Copilot, Microsoft&#8217;s AI tool opens web links in a side-panel instead of the browser people chose, in every region tested, Europe included.</li>
+
+
+
+<li>Windows Backup, the tool Microsoft uses to guide people through the migration to Windows 11, silently tries to set Edge as the default when it restores a PC and fails to properly bring the user&#8217;s own browser along.&nbsp;</li>
+</ul>
+
+
+
+<p>Most of the 2024 patterns are still <a href="https://research.mozilla.org/files/2024/01/Over-the-Edge-Report-January-2024.pdf">there.</a> The 2026 patterns are worse. Microsoft is using new surfaces like Copilot and the migration to Windows 11 to further undermine user choice.</p>
+
+
+
+<p>Our ask has always been simple: First, give all Windows users the fairer designs that are live in the EEA – regardless of where they are located. Second, stop the remaining harmful design practices that persist in the EEA. That means:</p>
+
+
+
+<ul>
+<li>Stopping the remaining harmful design tactics in the EEA and ship that standard worldwide.</li>
+
+
+
+<li>Honoring people&#8217;s browser choice everywhere it is currently ignored, including Windows Search, Widgets, Copilot, and Windows Backup restoration.&nbsp;</li>
+
+
+
+<li>Applying Microsoft&#8217;s own <a href="https://blogs.windows.com/windowsexperience/2023/03/17/a-principled-approach-to-app-pinning-and-app-defaults-in-windows/">2023 app pinning principles</a> to Edge itself.&nbsp;</li>
+</ul>
+
+
+
+<p>The Mozilla-commissioned report has never been about intent. It’s about accountability and Microsoft’s responsibility to stop undermining people’s choices. The practices we documented need to change. Statements about intent are not a substitute for action.</p>
+
+
+
+<p>In the past 100 days, we’ve stopped waiting for Microsoft to act. Instead, we’ve stepped up public pressure on the company to respect people’s choices.</p>
+
+
+
+<p>We are also taking the report&#8217;s findings to regulators and policymakers. In Europe, the DMA is the only thing that has moved Microsoft. Everywhere else, the lesson is the same: Microsoft ships only when a regulator requires fairer design.&nbsp;</p>
+
+
+
+<p>We hope that regulators in the US, the UK, India, and Brazil are paying attention.&nbsp;</p>
+
+
+
+<p>Microsoft can do better. It already has, for people in the EEA.</p>
+
+
+
+<p>Until it does the same in all jurisdictions, we will keep pointing out the company’s choices and the impact they have on hundreds of millions of users who want something different.</p>
+<p>The post <a href="https://blog.mozilla.org/en/mozilla/over-the-edge-2-100-days-later/">100 days later: Microsoft still steers Windows and Copilot users to Edge, everywhere the law lets it</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Strengthen your online security for free with Firefox]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/free-firefox-cybersecurity-features/" />
+
+		<id>https://blog.mozilla.org/?p=87765</id>
+		<updated>2026-10-06T15:14:35Z</updated>
+		<published>2026-10-06T16:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox Features" /><category scheme="https://blog.mozilla.org/en/" term="Privacy &amp; Security" /><category scheme="https://blog.mozilla.org/en/" term="Tips and Tricks" /><category scheme="https://blog.mozilla.org/en/" term="cybersecurity" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Every October, Cybersecurity Awareness Month reminds us the importance of protecting our digital lives. The theme for 2026 is ‘Don’t Make It Easy for Them,’ with the National Cybersecurity Alliance (NCA) and the Cybersecurity and Infrastructure Security Agency (CISA) providing simple, actionable steps users can take to make it harder for cybercriminals to attack. Everyone [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/free-firefox-cybersecurity-features/">Strengthen your online security for free with Firefox</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/free-firefox-cybersecurity-features/"><![CDATA[
+<p>Every October, Cybersecurity Awareness Month reminds us the importance of protecting our digital lives.<br><br>The theme for 2026 is ‘<em>Don’t Make It Easy for Them,</em>’ with the <a href="https://www.staysafeonline.org/">National Cybersecurity Alliance</a> (NCA) and the <a href="https://www.cisa.gov/">Cybersecurity and Infrastructure Security Agency</a> (CISA) providing <a href="https://www.staysafeonline.org/cybersecurity-awareness-month">simple, actionable steps</a> users can take to make it harder for cybercriminals to attack.<br><br>Everyone <em>wants</em> to be safe online, but one of the most common excuses we hear is “I don’t have the time or the money to invest in it right now.” Well, we have good news: you can improve your online security easily, for the low price of $0.<br><br>Firefox provides several free features designed to make it easier to protect your online life and harder for cybercriminals to target you.&nbsp; </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Password manager: Use a unique password for every account</strong></h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Password-Manager-1024x576.png" alt="" class="wp-image-87777" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Password-Manager-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Password-Manager-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Password-Manager-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Password-Manager-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Password-Manager-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Password-Manager-1280x720.png 1280w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Password-Manager.png 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>Reused passwords are one of the easiest ways attackers break into multiple accounts. If one site is breached, your login details could be tested on many others.<br><br>Firefox’s <a href="https://www.firefox.com/en-US/features/password-manager/">free password manager</a> can generate and securely store a <a href="https://support.mozilla.org/en-US/kb/how-generate-secure-password-firefox?utm_source=www.firefox.com&amp;utm_medium=referral&amp;utm_campaign=password-manager">strong, unique password</a> per site, which is the single highest-leverage fix against password stuffing. For convenience, Firefox can automatically fill in your saved login information the next time you access a previously visited site. However, you still have the option to turn off password saving for specific websites, or completely if you’re using a shared device or simply prefer to enter it each time.<br><br>You can <a href="https://support.mozilla.org/en-US/kb/manage-your-logins-firefox-password-manager">manage</a> your stored logins on a singular device at any time. To get a head start, you also have the option to <a href="https://support.mozilla.org/en-US/kb/import-data-another-browser">import passwords</a> saved on several other popular browsers. In addition, you can create a <a href="https://www.mozilla.org/en-US/account/?utm_source=www.firefox.com&amp;utm_medium=referral&amp;utm_campaign=sync">free Mozilla account </a>to safely <a href="https://www.firefox.com/en-US/features/sync/">sync</a> them across your signed-in devices. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>VPN: Privacy built into the browser</strong></h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/VPN-1024x576.png" alt="" class="wp-image-87789" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/VPN-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/VPN-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/VPN-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/VPN-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/VPN-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/VPN-1280x720.png 1280w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/VPN.png 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>Imagine you’re settling into a corner table at a bustling airport cafe, checking some emails on your phone before you board your flight. Or perhaps you took your laptop to the campus library to finally start that research paper you’ve been putting off. Maybe you’re polishing off that last presentation slide between sessions at an out-of-state conference.<br><br>While these moments are routine, connecting to public Wi-Fi anywhere can open a small window of risk – as your IP address, approximate location, and browsing activity can be more exposed on networks you don’t control.<br><br>That’s where Firefox’s <a href="https://www.firefox.com/landing/vpn/">free built-in, browser-based VPN</a> steps in. While Firefox already encrypts your traffic with HTTPS, the built-in VPN feature routes your browsing traffic through a proxy network, hiding your IP address before it reaches a website. This means the sites you visit will see a proxy IP address instead of your own. It offers an industry-leading 50 gigabytes of free VPN-browsing each month, with no extension or extra app to install. Simply sign in, turn it on, and start browsing.<br><br>Firefox’s free built-in VPN first launched on desktop in March, later <a href="https://support.mozilla.org/en-US/kb/mobile-android-vpn">expanding to Android</a> in July. Unlike a standalone or full-service VPN, it’s designed specifically to protect your browsing traffic within Firefox, not your entire device. This means apps, downloads, and other system traffic are not routed through the browser-based VPN. For people who need broader, device-wide VPN protection, Mozilla also offers a separate <a href="https://www.mozilla.org/products/vpn/">paid VPN service</a>.<br><br>You can check the full list of regions where built-in VPN in Firefox is currently available <a href="https://support.mozilla.org/en-US/kb/unable-find-built-vpn-firefox">here</a>, and learn more about the differences between Firefox’s free built-in VPN and Mozilla VPN <a href="https://support.mozilla.org/en-US/kb/built-in-vpn">here</a>. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Relay: Contain the damage of any one breach</strong></h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Relay-1024x576.png" alt="" class="wp-image-87800" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Relay-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Relay-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Relay-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Relay-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Relay-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Relay-1280x720.png 1280w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/10/Relay.png 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>Think about how often you give out your personal email address – for an online purchase, RSVPing to an event, or signing up to a new app. Each time, you trust the site owner will protect your information, but, spam piles up and breaches can still happen – even when you think you’re being careful.<br><br><a href="https://relay.firefox.com/">Firefox Relay</a> gives you a smarter way to share. Instead of handing out your real email address, this feature provides secure, random <a href="http://support.mozilla.org/en-US/kb/create-email-mask-through-firefox-relay">email masks</a> to use any time a website, store, or app asks you for your information. It forwards messages to your real email, while keeping your identity hidden to senders. This means if one service gets compromised, your other accounts stay safe.<br><br>You can also use Relay in the U.S. and Canada to <a href="https://support.mozilla.org/en-US/kb/mask-your-phone-number-relay-phone-masking">shield your phone number</a>, so you can receive calls and texts through masks and reply without exposing your real number.<br><br>The best part? To make protecting your privacy even easier, Firefox increased its limit to 50 free email masks earlier this year, allowing you to shield dozens of logins at no cost. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Browse freely: Firefox protects you by default</strong></h2>
+
+
+
+<p>Even if you sometimes forget to use Firefox protection tools like password manager, VPN, and Relay, there are multiple always-on features operating within the browser to help keep your session secure and private. These include <a href="https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop">enhanced tracking protection</a> to block hidden scripts and known trackers that follow you across the web, <a href="https://www.firefox.com/en-US/features/block-fingerprinting/">browser fingerprinting protection</a> to prevent sites from building a unique profile of your device, and <a href="https://support.mozilla.org/en-US/kb/how-does-phishing-and-malware-protection-work">warnings</a> about deceptive or malicious websites.<br><br>Together, Firefox’s individual and always-on security features work to help keep your browsing safe and your data private. So, this Cybersecurity Awareness Month, take a moment to build new habits, try out our free cybersecurity tools, and make life more difficult for cybercriminals. Small steps add up, and we are here to help. Stay safe, stay smart, and keep exploring the web with confidence on Firefox.&nbsp;</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/free-firefox-cybersecurity-features/">Strengthen your online security for free with Firefox</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Bryan Johns</name>
+					</author>
+
+		<title type="html"><![CDATA[Under the Hood: Prompt tuning Shake to Summarize for recipes]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/firefox-ai/prompt-tuning-firefox-shake-to-summarize-recipes/" />
+
+		<id>https://blog.mozilla.org/?p=86415</id>
+		<updated>2026-10-01T15:29:34Z</updated>
+		<published>2026-10-01T16:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox AI" /><category scheme="https://blog.mozilla.org/en/" term="AI" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Following the rollout of Firefox’s Shake to Summarize feature to Android devices this May, we wanted to take a closer look at the modeling work behind the feature. In a previous blog post, we discussed our model selection process. Now that Shake to Summarize has been available on both iOS and Android for a few [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-ai/prompt-tuning-firefox-shake-to-summarize-recipes/">Under the Hood: Prompt tuning Shake to Summarize for recipes</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/firefox-ai/prompt-tuning-firefox-shake-to-summarize-recipes/"><![CDATA[
+<p>Following the rollout of Firefox’s <a href="https://blog.mozilla.org/en/firefox/shake-to-summarize-expansion/">Shake to Summarize feature to Android devices</a> this May, we wanted to take a closer look at the modeling work behind the feature. In a <a href="https://blog.mozilla.org/en/firefox/firefox-ai/ai-powering-firefox-shake-to-summarize/">previous blog post</a>, we discussed our model selection process. Now that Shake to Summarize has been available on both <a href="https://blog.mozilla.org/en/firefox/shake-to-summarize/">iOS</a> and <a href="https://support.mozilla.org/en-US/kb/summarize-pages-android">Android</a> for a few months, we wanted to take it a step further and outline our approach to prompt development.&nbsp;<br><br>This is the story of a Shake to Summarize use case that required a little extra prompt tuning: online recipes.   </p>
+
+
+
+<h3 class="wp-block-heading">Framing the Problem</h3>
+
+
+
+<p>The first step in developing a useful prompt is clearly describing what you want the LLM to do. LLMs thrive on specificity, so the more sharply you can define your task, the better your results are likely to be.&nbsp;</p>
+
+
+
+<p>This is especially important when using smaller LLMs (like we are here), since these little models are not as good at reading between the lines and intuiting unstated intentions as their more powerful cousins are.&nbsp;</p>
+
+
+
+<p>For this application, we were looking to create summaries. On the face of it, this seems pretty straightforward. However, as we iterated on prompts, we quickly discovered that what constitutes a “good” summary depends largely on what one is summarizing.&nbsp;</p>
+
+
+
+<p>For example, a useful summary of a novel should provide us with a quick overview of the plot without getting into too many specific details; we wouldn’t expect the summary to contain anything from the text verbatim.&nbsp;</p>
+
+
+
+<p>In contrast, a summary of a recipe website should include the recipe essentially as written. If the recipe says “cook lovingly” we might be OK with shortening it to “cook,” but if it calls for 4 cups of vegetable broth, a Tbsp of oregano and a tsp of thyme, we want these details relayed to us <em>exactly</em>. Merely stating, “this recipe calls for some broth and some spices” would not be adequate.&nbsp;</p>
+
+
+
+<h3 class="wp-block-heading">Forming the Prompt</h3>
+
+
+
+<p>From here, it became clear that we wanted not just one “summarize” instruction, but a whole set of instructions — one for each category of webpage that we wished to summarize. We worked with the product team to compile a list of article types that we were targeting for this feature. For each article type, we then gave a brief description of what a good summary would look like:&nbsp;</p>
+
+
+
+<p><strong>Recipe</strong> &#8211; Ingredients as written, along with the key steps, time required, and any tips given by the author or commenters</p>
+
+
+
+<p><strong>News</strong> &#8211; Only the important details: what happened, when, and what would be the likely consequences to the reader</p>
+
+
+
+<p><strong>How-to</strong> &#8211; Start with the required materials, skills, tools, etc.,&nbsp; along with the main steps and any specific warnings called out by the author</p>
+
+
+
+<p><strong>Review</strong> &#8211; Highlight the bottom line rating. If it is a product review, include the pros and cons, the price, and who the target audience is.</p>
+
+
+
+<p><strong>Research</strong> &#8211; Key finding and level of confidence the researchers have in their results as well as the projected real-world impact.</p>
+
+
+
+<p><strong>Opinion</strong> &#8211; The main argument, along with any key evidence cited in support</p>
+
+
+
+<p>We then wrapped this list in some general instructions to ground the model in the task and came up with our initial prompt (formatted for readability) [<a href="https://github.com/mozilla-mobile/firefox-ios/blob/248a423e5380f1cbe1fa8d467fe4d0c2b01180e4/BrowserKit/Sources/SummarizeKit/Backend/SummarizerInstructions.swift#L13-L25">source</a>]:  </p>
+
+
+
+<blockquote class="wp-block-quote is-style-plain">
+<div class="wp-block-group is-layout-constrained wp-block-group-is-layout-constrained"><div class="wp-block-group__inner-container">
+<p>You are a Content Summarizer. You create mobile-optimized summaries by first understanding what users actually need from each type of content.&nbsp;</p>
+
+
+
+<p>Process:&nbsp;</p>
+
+
+
+<p>&nbsp;&nbsp;&nbsp;Step 1: Identify and Adapt.</p>
+
+
+
+<p>&nbsp;&nbsp;&nbsp;Step 2: Based on content type, prioritize:&nbsp;</p>
+
+
+
+<p>Recipe &#8211; Servings, Total time, Ingredients list, Key steps, Tips.</p>
+
+
+
+<p>News &#8211; What happened, when, where.&nbsp;</p>
+
+
+
+<p>How-to &#8211; Total time, Materials, Key steps, Warnings.&nbsp;</p>
+
+
+
+<p>Review &#8211; Bottom line rating, price.</p>
+
+
+
+<p>Opinion &#8211; Main arguments, Key evidence.</p>
+
+
+
+<p>Personal Blog &#8211; Author, main points.&nbsp;</p>
+
+
+
+<p>Fiction &#8211; Author, summary of plot.</p>
+
+
+
+<p>All other content types &#8211; Provide a brief summary of no more than 6 sentences.</p>
+
+
+
+<p>&nbsp;&nbsp;&nbsp;Step 3: Format for mobile using concise language and paragraphs with 3 sentences maximum.</p>
+
+
+
+<p>Bold critical details (numbers, warnings, key terms).</p>
+</div></div>
+</blockquote>
+
+
+
+<p>We <a href="https://wiki.mozilla.org/Foxfooding">Foxfooded</a> the above prompt and found that it mostly worked pretty well. The summaries the model produced were concise, accurate, and informative.&nbsp;</p>
+
+
+
+<p>The only exception was recipes.&nbsp;</p>
+
+
+
+<p>We found that, when the prompt above was used for recipes, the model tended to summarize too much — often leaving out key ingredients, or in some cases, leaving out the recipe entirely.</p>
+
+
+
+<p>For example, when asked to summarize <a href="https://cookieandkate.com/best-lentil-soup-recipe/">a lentil soup recipe</a> the model returned:<br></p>
+
+
+
+<blockquote class="wp-block-quote">
+<p><em>The webpage provides a detailed recipe for a <strong>vegan lentil soup</strong>, which the author claims is the best they’ve ever made. The soup is made with pantry staples like lentils, diced tomatoes, vegetable broth, and spices (cumin, curry powder, thyme), along with fresh vegetables (onion, carrots, garlic) and greens (kale or collard greens). A key step is blending a portion of the soup to create a creamy texture without dairy.</em></p>
+</blockquote>
+
+
+
+<p>The summary is accurate, so far as it goes, but it isn’t exactly useful. If our goal is to have the summary be a quick way to access the recipe itself, without having to read through the narrative preamble, this wouldn’t cut it.&nbsp;&nbsp;</p>
+
+
+
+<h3 class="wp-block-heading">Focusing the Prompt</h3>
+
+
+
+<p>To address this problem, we needed to be more explicit with the instructions we gave the model when summarizing recipes: we needed to tell it which information we were interested in and which it could safely discard.&nbsp;</p>
+
+
+
+<p>Although we could have added this extra guidance directly to the prompt above, doing so risked causing the model to over-index on the recipe formatting and ignore the other article types. Instead, we developed a separate prompt which contained only the recipe instructions and directed recipe summarization requests to use it, rather than the general one [<a href="https://github.com/mozilla-mobile/firefox-ios/blob/248a423e5380f1cbe1fa8d467fe4d0c2b01180e4/BrowserKit/Sources/SummarizeKit/Backend/SummarizerInstructions.swift#L43-L84">source</a>].</p>
+
+
+
+<p>To perform this routing, we used the <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data">structured data</a> embedded in each webpage. While this categorization could have been handled by another model pass, metadata from the webpage itself allowed us to quickly and deterministically identify the page categories without additional inference overhead. To capture cases where this data is either missing or inaccurate, we also maintain some lightweight recipe guidance in the general prompt.&nbsp;</p>
+
+
+
+<p>After this change, the summary returned by the model for the above recipe became much more usable (shortened for brevity): </p>
+
+
+
+<p><strong>Servings:</strong>&nbsp;6</p>
+
+
+
+<p><strong>Total Time:</strong>&nbsp;50 minutes</p>
+
+
+
+<p><strong>Prep Time:</strong>&nbsp;10 minutes</p>
+
+
+
+<p><strong>Cook Time:</strong>&nbsp;40 minutes</p>
+
+
+
+<h4 class="wp-block-heading" id="-ingredients"><img src="https://s.w.org/images/core/emoji/14.0.0/72x72/1f955.png" alt="🥕" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Ingredients</h4>
+
+
+
+<ul>
+<li>¼ cup extra virgin olive oil</li>
+
+
+
+<li>1 medium yellow or white onion, chopped</li>
+
+
+
+<li>2 carrots, peeled and chopped</li>
+
+
+
+<li>…</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading" id="-instructions"><img src="https://s.w.org/images/core/emoji/14.0.0/72x72/1f4cb.png" alt="📋" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Instructions</h4>
+
+
+
+<ol>
+<li>Warm the olive oil in a large Dutch oven or pot over medium heat.</li>
+
+
+
+<li>Add the chopped onion and carrot, cooking until the onion softens and turns translucent, about 5 minutes.</li>
+
+
+
+<li>…</li>
+</ol>
+
+
+
+<h4 class="wp-block-heading" id="-tips"><img src="https://s.w.org/images/core/emoji/14.0.0/72x72/2b50.png" alt="⭐" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Tips</h4>
+
+
+
+<ul>
+<li>Use an immersion blender for easier blending without transferring soup.</li>
+
+
+
+<li>…</li>
+</ul>
+
+
+
+<h4 class="wp-block-heading" id="-nutrition"><img src="https://s.w.org/images/core/emoji/14.0.0/72x72/1f957.png" alt="🥗" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Nutrition</h4>
+
+
+
+<ul>
+<li>Calories: 320</li>
+
+
+
+<li>…</li>
+</ul>
+
+
+
+<p><br>With this change in place, we ran a quick test over a curated set of recipe sites and found that the new system was more than twice as likely to return a complete and accurate summary than our previous one. Success!</p>
+
+
+
+<p>The system was now working as expected: summaries were useful and recipes were complete.</p>
+
+
+
+<h3 class="wp-block-heading">Reflections</h3>
+
+
+
+<p>From this experience we learned that the model produced the best results when it was told explicitly what we wanted it to do. When the instructions were vague or left too much up to the model, performance suffered.&nbsp;</p>
+
+
+
+<p>To this end, we found that framing this problem as a routing problem — where the specific kinds of articles are routed to specific prompts — worked well. Since the task of summarization is not monolithic, our summarization pipeline should not be either.</p>
+
+
+
+<p>Even though our current approach has only a single category-specific prompt, we hypothesize that the system would see further gains by using dedicated prompts for other page types as well.&nbsp;</p>
+
+
+
+<p>More broadly, this experience reinforced an important lesson for us: improving AI systems is not solely about building larger or more capable models. Some of the biggest gains come from reducing ambiguity, narrowing the task, and designing systems that help the model succeed. Within the right harness, smaller, open source models can deliver great value.</p>
+
+
+
+<p>While building more capable models continues to advance the field, our experience shows that thoughtful system design and solid engineering still matter.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-ai/prompt-tuning-firefox-shake-to-summarize-recipes/">Under the Hood: Prompt tuning Shake to Summarize for recipes</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[More modern. More flexible. Still Firefox.]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/new-firefox-design-is-here/" />
+
+		<id>https://blog.mozilla.org/?p=87504</id>
+		<updated>2026-09-29T16:31:49Z</updated>
+		<published>2026-09-29T13:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>What comes to mind when you think of Firefox? Is it our best-in-class privacy features and ad blocking capabilities? Our partnerships with Wrexham, NVIDIA or Mistral? Or maybe our adorable mascot Kit? If you’ve been following Firefox this year, you’ve seen us add new ways to get things done while giving you more choice over [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/new-firefox-design-is-here/">More modern. More flexible. Still Firefox.</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/new-firefox-design-is-here/"><![CDATA[
+<p>What comes to mind when you think of Firefox? Is it our best-in-class <a href="https://blog.mozilla.org/firefox/firefox-now-available-with-enhanced-tracking-protection-by-default/">privacy features</a> and <a href="https://blog.mozilla.org/firefox/ad-blocker-on-ios/">ad blocking</a> capabilities? Our partnerships with <a href="https://blog.mozilla.org/firefox/wrexham-afc-firefox-partnership/">Wrexham</a>, <a href="https://blog.mozilla.org/firefox/firefox-nvidia-geforce-now-partnership/">NVIDIA</a> or <a href="https://blog.mozilla.org/firefox/mozilla-mistral-partnership/">Mistral</a>? Or maybe our adorable mascot <a href="https://blog.mozilla.org/firefox/meet-kit/">Kit</a>?</p>
+
+
+
+<p>If you’ve been following Firefox this year, you’ve seen us add new ways to get things done while giving you more choice over how you browse. That includes browsing two pages <a href="https://blog.mozilla.org/firefox/split-view/">side by side</a>, adding an extra layer of privacy with <a href="https://blog.mozilla.org/firefox/built-in-vpn/">built-in VPN</a>, blocking <a href="https://blog.mozilla.org/firefox/ad-blocker-on-ios/">trackers</a> for smoother scrolling and faster load times, and deciding how <a href="https://blog.mozilla.org/firefox/firefox-ai-on-your-terms/">AI</a> shows up in Firefox.&nbsp;</p>
+
+
+
+<p>For the past few months, many of you have also been <a href="https://blog.nightly.mozilla.org/2026/07/27/new-firefox-design/">trying out</a> our new Firefox design in Nightly and sharing your thoughts with us as we continued to refine the experience.</p>
+
+
+
+<p>Today, we’re rolling out that design with FX 157 to everyone using Firefox across desktop and mobile devices. Firefox has done a lot of growing over the last year; now it looks the part.&nbsp;</p>
+
+
+
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<iframe loading="lazy" title="This is why it’s time to give Firefox another look" width="640" height="360" src="https://www.youtube.com/embed/l7tQ1v4TCeY?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div></figure>
+
+
+
+<h2 class="wp-block-heading"><strong>A more modern Firefox</strong></h2>
+
+
+
+<p>When we first shared our plans to <a href="https://blog.mozilla.org/firefox/new-firefox-design/">design Firefox for the future</a>, we said we wanted Firefox to feel “current, but not generic. Warm, but still precise.”&nbsp;</p>
+
+
+
+<p>That design ethos now carries across all of Firefox. We&#8217;ve refreshed the colors, icons and themes throughout the browser, from the tabs and toolbars you use every day to your New Tab page, Private Browsing experience and more, with no cost to your browser performance. </p>
+
+
+
+<p>This shared design language across desktop and mobile gives Firefox a consistent foundation for new features and experiences, while keeping the personality that makes Firefox unique.&nbsp;</p>
+
+
+
+<h2 class="wp-block-heading"><strong>Make Firefox yours</strong></h2>
+
+
+
+<p>We’ve added more choices for how Firefox looks and works, including the return of a feature many of you asked for:</p>
+
+
+
+<p><strong>Compact Mode is back.</strong> As people started trying the new design, we heard from many of you who wanted to fit more into your browser window. Compact Mode reduces the size of your tabs and toolbar to give more of your screen to the web, with an auto-compact option for smaller screens.</p>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Nova-Compact-Mode-ENG-1024x576.png" alt="" class="wp-image-87517" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Nova-Compact-Mode-ENG-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Nova-Compact-Mode-ENG-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Nova-Compact-Mode-ENG-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Nova-Compact-Mode-ENG-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Nova-Compact-Mode-ENG-2048x1152.png 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Nova-Compact-Mode-ENG-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Nova-Compact-Mode-ENG-1280x720.png 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p><strong>Find your look.</strong> A new theme picker makes it easier to explore different looks for Firefox, with new themes and wallpapers to choose from.</p>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/In-Line-New-Style-1024x576.png" alt="" class="wp-image-87669" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/In-Line-New-Style-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/In-Line-New-Style-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/In-Line-New-Style-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/In-Line-New-Style-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/In-Line-New-Style-2048x1152.png 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/In-Line-New-Style-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/In-Line-New-Style-1280x720.png 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p><strong>Set up New Tab your way.</strong> Choose what you want to see on your homepage. Now, you have a dedicated space to pin and organize shortcuts so sites you use all the time stay put.</p>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="523" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_Distilled_Nova_PinnedShortcut_01-1024x523.png" alt="" class="wp-image-87687" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_Distilled_Nova_PinnedShortcut_01-1024x523.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_Distilled_Nova_PinnedShortcut_01-300x153.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_Distilled_Nova_PinnedShortcut_01-768x392.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_Distilled_Nova_PinnedShortcut_01-1536x785.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_Distilled_Nova_PinnedShortcut_01-2048x1046.png 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_Distilled_Nova_PinnedShortcut_01-1000x511.png 1000w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<h2 class="wp-block-heading"><strong>Refined, not reinvented</strong></h2>
+
+
+
+<p>Themes and wallpapers may change over time, but the things that made people choose Firefox in the first place are still the same. We’re still independent and open source, with privacy protections built into the browser and controls that put you in charge of how Firefox works for you.</p>
+
+
+
+<p>This carries through everything we build, from the height of your toolbars and what belongs on your New Tab page to which <a href="https://blog.mozilla.org/firefox/ai-controls/">AI features</a> show up in your browser, which <a href="https://support.mozilla.org/kb/smart-window-models">model</a> you choose and what <a href="https://support.mozilla.org/kb/smart-window-memories">context</a> you want it to have.</p>
+
+
+
+<p>Today’s Firefox is a renewal, grounded in the same principles that have shaped it from the beginning, with a new design built to carry Firefox forward.&nbsp;</p>
+
+
+
+<p>For those who have come with us on this journey, thank you for helping us shape the future of Firefox.&nbsp;</p>
+
+
+
+<p>If you’ve been away on hiatus, welcome back. Try the latest Firefox and let us know what you think.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/new-firefox-design-is-here/">More modern. More flexible. Still Firefox.</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Classic, Private, or Smart? Choose the right Firefox window for every task]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/firefox-window-types/" />
+
+		<id>https://blog.mozilla.org/?p=87109</id>
+		<updated>2026-09-25T14:37:13Z</updated>
+		<published>2026-09-24T17:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox AI" /><category scheme="https://blog.mozilla.org/en/" term="AI" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>We spend a lot of time browsing online. Whether you are researching for work, planning a trip, paying your bills, or scrolling through social media, your browser is there for it all. While all these tasks are very different in nature, a lot of people still tend to stick to the same window type for [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-window-types/">Classic, Private, or Smart? Choose the right Firefox window for every task</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/firefox-window-types/"><![CDATA[
+<p>We spend a lot of time browsing online. Whether you are researching for work, planning a trip, paying your bills, or scrolling through social media, your browser is there for it all.<br><br>While all these tasks are very different in nature, a lot of people still tend to stick to the same window type for all their use cases. But what if there was a different way to browse?<strong><br></strong><br>You may have noticed Firefox now has three window options for desktop. On top of the Classic and Private windows you’ve known for years, a third choice has been rolling out in beta: Smart Window. This optional AI-powered browsing experience is built to move your work forward and help finish what you started online.<br><br>Following the recent addition of <a href="http://blog.mozilla.org/en/firefox/firefox-smart-window/">several new Smart Window capabilities</a>, we thought now would be the perfect time for a breakdown of what each of our three window options actually does, and when to use them. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Classic: Timeless and tailored to you</strong> </h2>
+
+
+
+<p><strong>Classic Window </strong>is still the most customizable option of the three. While Private and Smart windows share many of the same features and capabilities as Classic, a Classic Window offers the widest range of Firefox’s standard personalization options. It gives you the broadest canvas for tailoring Firefox to the way you browse.<br><br><strong>What makes it <em>Classic</em>:</strong> </p>
+
+
+
+<ul>
+<li>Full oversight over <a href="https://support.mozilla.org/en-US/kb/customize-firefox-controls-buttons-and-toolbars">controls, buttons, and toolbars</a>.</li>
+
+
+
+<li>Access to the entire Firefox <a href="https://addons.mozilla.org/en-US/firefox/extensions/?_gl=1*1sltase*_ga*Nzk5Mzk1OTA0LjE3ODQ1NTM5OTA.*_ga_2VC139B3XV*czE3ODY3MTU0MzMkbzQ2JGcwJHQxNzg2NzE1NDMzJGo2MCRsMCRoMA..">add-ons library</a>.</li>
+
+
+
+<li>Advanced <a href="https://support.mozilla.org/en-US/kb/firefox-advanced-customization-and-configuration">customization and configuration options</a>.&nbsp;</li>
+
+
+
+<li>The ability to sync your <a href="https://support.mozilla.org/en-US/kb/how-do-i-set-sync-my-computer">history, bookmarks, and open tabs</a> across your signed-in devices. </li>
+</ul>
+
+
+
+<p><strong>When to use it:</strong><br><br>Classic is your home base. It’s the best place to start customizing around your browsing needs, whether that means an extension setup specifically tailored to your workflow, a special theme that matches your style, or just the familiar Firefox experience you created over years of tweaking to your personal taste. While many customizations are also available on Private and Smart window, Classic offers the most extensive line-up of optional browser features, extensions, and aesthetics to personalize your setup.<br><br>Classic is the right move for general browsing like scrolling through social media, conducting a quick Google search, or reading online articles. It’s also the best place to start if you are looking to build your browser around you.  </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Private Window: Browse with greater peace of mind</strong> </h2>
+
+
+
+<p><a href="https://support.mozilla.org/en-US/kb/private-browsing-use-firefox-without-history"><strong>Private Window</strong></a> stays true to its name and number one priority: it’s designed to limit the information associated with your browser session. When a Private Window is closed, Firefox doesn’t retain session information, such as what you searched for, the sites you visited, or the cookies they set.<br><strong><br>What makes it <em>Private</em>:</strong></p>
+
+
+
+<ul>
+<li>Pages visited from a Private Window will not be added to the list of sites in Firefox’s History menu, the Library window’s history list, nor the address bar drop-down list.</li>
+
+
+
+<li>Nothing entered into text boxes on web pages and Search bar will be saved for Form autocomplete.</li>
+
+
+
+<li>Cookies set in a Private Window are kept only temporarily in memory, separate from your regular cookies, and are discarded after your last Private Window is closed.</li>
+
+
+
+<li><a href="https://support.mozilla.org/en-US/kb/extensions-private-browsing">Extensions are off by default in a Private Window</a>, unless you explicitly grant them permission. </li>
+</ul>
+
+
+
+<p><strong>When to use it:<br><br></strong>A Private Window is recommended when you don’t want activity from a browsing session sitting in your history, such as shopping for a gift. It’s also helpful when browsing on a shared device, ensuring your history, logins, and cookies will not be saved for the next person.<br><br>You may not need a Private Window every time you open your browser, but it’s always there for you when you do. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Smart Window: Firefox’s privacy-first, AI-powered browsing experience to help get stuff done</strong> </h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_SmartWindow_Distilled_Header_022-1024x576.png" alt="" class="wp-image-87297" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_SmartWindow_Distilled_Header_022-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_SmartWindow_Distilled_Header_022-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_SmartWindow_Distilled_Header_022-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_SmartWindow_Distilled_Header_022-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_SmartWindow_Distilled_Header_022-2048x1152.png 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_SmartWindow_Distilled_Header_022-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Firefox_SmartWindow_Distilled_Header_022-1280x720.png 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p><a href="https://support.mozilla.org/en-US/kb/smart-window"><strong>Smart Window</strong></a><strong> </strong>is Firefox’s newest window type, currently rolling out in Beta to users in the U.S., Canada, and France. Think of it as a Classic Firefox window with a built-in AI assistant layered on top – one that you can choose to have utilize your open tabs, recent browsing, and the page in front of you, so it can help you do more without switching contexts – all with the privacy and security you expect from Firefox.<strong><br><br>What makes it <em>Smart</em>:</strong> </p>
+
+
+
+<ul>
+<li>A built-in assistant that can summarize pages, generate recommendations, compare information, and plan tasks using your open tabs.</li>
+
+
+
+<li>The ability to retrieve current web information and display the sources behind its response without taking you to a separate search results page, supported by <a href="https://blog.mozilla.org/en/firefox/firefox-exa-partnership/">Firefox’s new partnership with Exa</a>.</li>
+
+
+
+<li>Suggested groups for related tabs. </li>
+
+
+
+<li>Visual previews of pages from your browsing history, so you can surface the page you’re looking for more easily among similar results without opening each one.</li>
+
+
+
+<li>The choice of <a href="https://support.mozilla.org/en-US/kb/smart-window-models">three AI models</a> to power the assistant, as well as the option to bring your own model.</li>
+
+
+
+<li>Optional “<a href="https://support.mozilla.org/en-US/kb/smart-window-memories">memories</a>,” built from either your Smart Window chats or your browsing activity in both Smart and Classic windows, or both. Memories help the assistant give you more helpful, personalized answers over time. They are stored locally on your device and can be deleted at any time.  </li>
+</ul>
+
+
+
+<p><strong>When to use it:<br><br></strong>Smart Window shines when you need a little extra help finishing what you started. Its ability to work with the context you choose to share can help you make progress on ongoing tasks that may require more than one session, like trip or event planning, comparison price shopping, or conducting research for work or personal reasons.<br><br>And with Smart Window’s optional memories, which learn your patterns and preferences over time (with your permission), Smart Window gets more useful the more you use it, keeping you from having to spell everything out from scratch each time.&nbsp;&nbsp; </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Selecting the right window for the job</strong></h2>
+
+
+
+<p>None of these windows is “better” than the others, they’re built for different moments.<br><br>The good news is you are never locked into one. Firefox lets you move between all three depending on what you’re doing, so you can choose the window that fits each task.<br><br>You can access Classic and Private windows at any time from the Firefox menu. As for Smart Window, it remains in beta, with current availability to people in the U.S., Canada, and France.<br><br>To try Smart Window, visit <a href="https://www.firefox.com/smart-window">https://www.firefox.com/smart-window</a>. Or, if it’s not available in your region yet, you can <a href="https://www.firefox.com/smart-window">sign up</a> to be notified when it is.<br> </p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-window-types/">Classic, Private, or Smart? Choose the right Firefox window for every task</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Stay focused wherever you work with Firefox mobile browsers]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/stay-focused-wherever-you-work-with-firefox-mobile-browsers/" />
+
+		<id>https://blog.mozilla.org/?p=87122</id>
+		<updated>2026-09-21T17:27:53Z</updated>
+		<published>2026-09-21T17:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox Features" /><category scheme="https://blog.mozilla.org/en/" term="Firefox for mobile" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>When it’s Monday morning and you’re on the subway, in a coffee shop, or squeezing in a few email replies after your morning workout, your phone becomes your digital office. But every time you open your browser, you risk getting struck with any combination of distracting ads, auto-playing videos, and open tabs from the previous [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/stay-focused-wherever-you-work-with-firefox-mobile-browsers/">Stay focused wherever you work with Firefox mobile browsers</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/stay-focused-wherever-you-work-with-firefox-mobile-browsers/"><![CDATA[
+<p>When it’s Monday morning and you’re on the subway, in a coffee shop, or squeezing in a few email replies after your morning workout, your phone becomes your digital office. But every time you open your browser, you risk getting struck with any combination of distracting ads, auto-playing videos, and open tabs from the previous week competing for your attention.<br><br>For many remote and on-the-go workers, your mobile browser can become a minefield of interruptions and distractions, slowing you down when you need to focus most.<br><br>Luckily, there are multiple Firefox features that can help ensure your mobile browser is a focused, productive workspace. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Reduce distractions and clutter with Ad Blocker for Firefox on iOS</strong> </h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/iOS-AdBlocker-1024x576.jpg" alt="" class="wp-image-87039" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/iOS-AdBlocker-1024x576.jpg 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/iOS-AdBlocker-300x169.jpg 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/iOS-AdBlocker-768x432.jpg 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/iOS-AdBlocker-1536x864.jpg 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/iOS-AdBlocker-1000x563.jpg 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/iOS-AdBlocker-1280x720.jpg 1280w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/iOS-AdBlocker.jpg 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>Opening a link shared via text or email can save time and keep things moving when a client or coworker needs a fast response. However, once it’s actually opened, there is a lot of opportunity for various pop-ups, overlays, and ads to get in between you and what you came in to do.<br><br><a href="https://blog.mozilla.org/en/firefox/ad-blocker-on-ios/">Ad Blocker for Firefox on iOS</a> was built to reduce distractions and screen clutter while you browse, so you can stay focused on the task at hand. It’s a built-in, optional feature that blocks many <a href="https://support.mozilla.org/en-US/kb/block-ads-firefox-ios">intrusive ad formats, third-party ad networks, and ad-related trackers</a>. That means no separate extension required, and you decide if and when to use it.&nbsp;<br><br>Because Firefox’s <a href="https://addons.mozilla.org/en-US/firefox/">strong line-up of ad-blocking and privacy extensions</a> on desktop and Android are <a href="https://blog.mozilla.org/netpolicy/2026/09/01/browsers-compete-on-privacy-when-the-operating-system-allows/">not available in the same way on iOS</a>, we built Ad Blocker for Firefox directly into the browser. To decide what gets blocked, Ad Blocker uses the EasyList filter and Apple’s WebKit Content Blocker technology. It won’t impact every ad or sponsored content on a new tab, as those presented directly by host sites and displayed in search results will still be visible.<br><br>To try Ad Blocker on iOS, go to Settings &gt; Browsing &gt; Ad Blocker and turn it on to enjoy a cleaner browsing experience. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Get the gist faster with Shake to Summarize</strong> </h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="610" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2025/08/shake-to-summarize-summaries-1024x610.png" alt="Three smartphone screens showing Firefox article summarized with Apple Intelligence on translation updates for Chinese, Japanese, and Korean users." class="wp-image-81609" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2025/08/shake-to-summarize-summaries-1024x610.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2025/08/shake-to-summarize-summaries-300x179.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2025/08/shake-to-summarize-summaries-768x457.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2025/08/shake-to-summarize-summaries-1536x915.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2025/08/shake-to-summarize-summaries-1000x596.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2025/08/shake-to-summarize-summaries.png 1600w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>When you’re on a deadline, scanning through heavy text, ads, and filler content can turn a quick scan into an infinite scroll session.<br><br>Firefox’s Shake to Summarize feature helps people get the gist in seconds on both iOS and Android. To use it, simply shake your phone on any web page under 5,000 words, and a clean summary of the page’s content will instantly appear. It can also be activated by tapping the “Summarize Page” option under “More” in the three-dot menu.<br><br>Like all Firefox features, we built Shake to Summarize with your privacy and protection in mind. This means using device-specific technology to keep your data secure. You can learn more about the AI powering this feature <a href="https://blog.mozilla.org/en/firefox/firefox-ai/ai-powering-firefox-shake-to-summarize/">here</a>.&nbsp; &nbsp;<br><br>The feature launched on iOS last September, received a strong response from users, and earned a special mention in <a href="https://blog.mozilla.org/firefox/shake-to-summarize-time-best-inventions/">TIME’s Best Inventions of 2025</a>. It is now available on iOS and Android in English, German, French, Spanish, Portuguese, Italian, and Japanese. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Keep your tabs tidy with Tab Groups on Android</strong> </h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1024x576.jpg" alt="Illustration of Tab Groups in Firefox for Android, showing tabs being grouped, named and color-coded, then displayed together in a single organized group." class="wp-image-86457" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1024x576.jpg 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-300x169.jpg 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-768x432.jpg 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1536x864.jpg 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-2048x1152.jpg 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1000x563.jpg 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1280x720.jpg 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>Just like us, our smartphones tend to live multiple lives: work, personal, and everything in between. While it can be incredibly convenient to have everything you need for all parts of your life on one device, things can get cluttered fast.<br><br>One minute you are knee-deep in a client proposal and the next you’re flicking through the countless Google searches from over the weekend. “How old is Harry Styles?” and “Movie times near me” – while pertinent when you were off the clock 24 hours ago – have absolutely nothing to do with the work you are trying to get done now.<br><br>To help make sure your prep for Thursday’s client meeting doesn’t get lost in your pop music deep dive from the weekend, you can <a href="https://blog.mozilla.org/en/firefox/tab-groups-android/">group related tabs in Firefox for Android</a>. Each group can be labeled and assigned a color, appearing as a single, searchable card in the tab tray rather than separate tabs, so it&#8217;s easy to locate when needed. You can open, rename, recolor, and delete these cards whenever you want.<br><strong><br></strong>To use Tab Groups on Android, simply drag one tab onto another, or select a few and tap “Add to group.” Label the group, choose a color, and you’re all set. To try it out, download the latest version of <a href="https://www.firefox.com/en-US/download/android/">Firefox for Android</a>. iOS support for this feature is on the way. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Pick up where you left off across devices with Firefox Sync</strong></h2>
+
+
+
+<p>Sometimes we start a task on one device and finish it on another. Maybe you found an article on your computer that you want to read on the subway on your phone. Or, perhaps you want to pull out your laptop and finish filling out that lease application you started on your tablet.<br><br>Enable <a href="https://www.firefox.com/en-US/features/sync/">Firefox Sync</a> and you can resume tasks you paused in your browser when switching across your mobile phone, tablet, and laptop. The feature lets you access your open tabs, bookmarks, and passwords across all the devices you access Firefox on.<br><br>The best part? We put your <a href="https://www.mozilla.org/en-US/privacy/firefox/?utm_source=www.firefox.com&amp;utm_medium=referral&amp;utm_campaign=sync">data privacy</a> first. Firefox Sync uses end-to-end encryption so your synced data is encrypted before it reaches Mozilla’s servers.<br><br>To take your browsing experience with you wherever you go, connect your <a href="https://support.mozilla.org/en-US/kb/sync-bookmarks-logins-and-browsing-history-firefox">iOS</a> or <a href="https://support.mozilla.org/en-US/kb/how-set-firefox-sync-firefox-android">Android</a> phone to your <a href="https://www.mozilla.org/en-US/account/?utm_source=www.firefox.com&amp;utm_medium=referral&amp;utm_campaign=sync">Mozilla account </a>and start syncing with your other devices. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Take back control of your focus with Firefox</strong></h2>
+
+
+
+<p>For remote and on-the-go workers, focus is everything.<br><br>With Firefox features like built-in ad blocking on iOS, Shake to Summarize for instant insights, and Tab Groups on Android to keep your work and personal digital spaces organized, you can transform your phone from a distraction hub into a productive workspace.<br><br>Download the latest version of <a href="https://www.firefox.com/en-US/download/android/">Firefox for Android</a> or <a href="https://www.firefox.com/en-US/download/ios/">Firefox for iOS</a> today to test out any of the above features available on your device – and take back control of your attention.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/stay-focused-wherever-you-work-with-firefox-mobile-browsers/">Stay focused wherever you work with Firefox mobile browsers</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Mila and Mozilla announce new initiative to build trustworthy open source AI for everyone, with Canadian government support]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/mozilla/mila-canada-open-source-ai-initiative/" />
+
+		<id>https://blog.mozilla.org/?p=87378</id>
+		<updated>2026-09-17T19:27:30Z</updated>
+		<published>2026-09-17T19:30:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="AI" /><category scheme="https://blog.mozilla.org/en/" term="Our Work" />
+		<summary type="html"><![CDATA[<p>Today at ALL IN, Canada’s largest AI and technology event, Mozilla and Mila announced a new initiative and fresh investment to build an open source AI foundation layer that enables organizations and institutions to own and operate advanced AI systems locally, ensuring full control over their technology and data.&#160; Doubling down on its commitment to [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/mozilla/mila-canada-open-source-ai-initiative/">Mila and Mozilla announce new initiative to build trustworthy open source AI for everyone, with Canadian government support</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/mozilla/mila-canada-open-source-ai-initiative/"><![CDATA[
+<figure class="wp-block-image size-full"><img decoding="async" loading="lazy" width="936" height="667" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/06/Screenshot-2026-06-23-at-08-57-20-Illustration-Visual-Elements-Mozilla-Brand.png" alt="" class="wp-image-86275" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/06/Screenshot-2026-06-23-at-08-57-20-Illustration-Visual-Elements-Mozilla-Brand.png 936w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/06/Screenshot-2026-06-23-at-08-57-20-Illustration-Visual-Elements-Mozilla-Brand-300x214.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/06/Screenshot-2026-06-23-at-08-57-20-Illustration-Visual-Elements-Mozilla-Brand-768x547.png 768w" sizes="(max-width: 936px) 100vw, 936px" /></figure>
+
+
+
+<p>Today at ALL IN, Canada’s largest AI and technology event, <a href="http://www.mozilla.org">Mozilla</a> and <a href="http://www.mila.quebec">Mila</a> announced a new initiative and fresh investment to build an open source AI foundation layer that enables organizations and institutions to own and operate advanced AI systems locally, ensuring full control over their technology and data.&nbsp;</p>
+
+
+
+<p>Doubling down on its commitment to open source AI, the Government of Canada announced its support for the initiative. Mila will lead the technical delivery and coordination of the project, while Mozilla contributes technical expertise. It also provided the initial $5 million investment to kick off the project. <a href="http://www.hypertec.com">Hypertec</a> is committing an additional $1 million in first-year funding to accelerate initial Canadian deployments of the open source AI foundation layer on Hypertec hardware.&nbsp;</p>
+
+
+
+<p>“Canada has a choice: depend on technologies developed elsewhere, or build more of what we need here at home,” said The Honourable Evan Solomon, Minister of Artificial Intelligence and Digital Innovation and Minister responsible for the Federal Economic Development Agency for Southern Ontario. <em>“</em>Open source AI gives Canadian businesses and institutions greater control over their technology and data, while making powerful tools more affordable, accessible, and easier to adapt. By supporting this work, we are strengthening Canada’s capacity to build and adopt AI on our own terms.”&nbsp;</p>
+
+
+
+<p>Mila and Mozilla will lead the work together: Mila drawing on a world-class community of close to 2,000 researchers and professionals, Mozilla as technical partner from industry, bringing 25 years of experience stewarding open infrastructure others build on. Mila and Mozilla are actively engaging new partners, inviting companies, research institutions, funders, governments, and developers to join and support this work.<strong>&nbsp;</strong></p>
+
+
+
+<h2 class="wp-block-heading"><strong>What’s being built</strong></h2>
+
+
+
+<p>The goal is simple: make owning your AI as easy as renting it. Using open source models was never the hard part. Turning a raw open source model into something a small business, a hospital, a local charity, or a government can run in production — secure, reliable, plugged into everything else — takes an engineering team most organizations and institutions do not have and months they can’t spare.&nbsp;</p>
+
+
+
+<p>The goal is to offer businesses and organizations a ready-to-use AI package that they can run privately and keep under their own control, rather than having to build a complex system themselves or rely entirely on expensive, pay-per-use proprietary AI services.</p>
+
+
+
+<p>For example, a small manufacturer could use the system as a private AI assistant for its employees. It could search the company’s manuals, procedures, and past project files; help staff draft reports or answer technical questions; and help its software team write and improve code. Because the system is designed to be able to run locally, the company could do this while keeping its proprietary information and data within its own environment.</p>
+
+
+
+<p>That also means lower costs. For the vast majority of everyday business tasks, companies will be able to use open source AI running on open source tools instead of paying a commercial provider every time an employee makes a request. But this requires reducing the technical work and expense involved in putting open source AI into practice.</p>
+
+
+
+<p>This initiative was founded to solve that problem, building the free layer that makes owning open source AI easy — the same kind of layer the web was built on. It has two halves: An open standard, published as interface contracts, so any part of the stack can be swapped for a better one. And a working “reference implementation” any organization can install on its own machines or the ones it chooses, running the models and controls it chooses against its own data, with governance and access control built in from the start. The ambition is that with the standards and foundation in place, open source AI can be built anywhere, by anyone.&nbsp;</p>
+
+
+
+<p>“Six months ago, we announced our partnership with Mozilla to advance open source and sovereign AI. Today, we are bringing that work to a whole new level,” said Valérie Pisano, President and CEO of Mila. “By delivering an open, secure AI foundation layer, we empower organizations, from small businesses to non-profits to governments, to own their technological future so they can run, control, and maintain AI models themselves. At Mila, our research community has always believed that for AI to be trustworthy and accessible, it must be built on open standards that keep control in local hands.”</p>
+
+
+
+<h2 class="wp-block-heading"><strong>The work already underway</strong></h2>
+
+
+
+<p>Over the last six months, Mila and Mozilla have been designing the architecture, deciding which open source components belong at each layer, and testing that the whole system works end to end. This investment builds on that progress.&nbsp;</p>
+
+
+
+<p>Working alongside Mila and Mozilla, Hypertec will help move the initiative from research and reference implementation to real-world adoption by Canadian businesses and institutions, providing a practical, private, and cost-effective path to deploy AI while maintaining greater control over their data and technology.</p>
+
+
+
+<p>“AI is advancing at an extraordinary pace and has the potential to transform our economy and society for the better. Canada has an important role to play in ensuring that AI is developed and adopted responsibly, said Simon Ahdoot, CEO of Hypertec Group. “Hypertec is proud to help turn open source innovation into AI that Canadian organizations can deploy securely and under their own control. This is exactly the kind of partnership between government, research, and Canadian industry needed to realize the full potential of AI.”</p>
+
+
+
+<h2 class="wp-block-heading">Why now</h2>
+
+
+
+<p>Mozilla’s<a href="https://stateofopensource.ai/"> State of Open Source AI report</a> found that while 79% of developers adding AI functionality use open models, only 53% of teams ever reach production, stopped by cost, security, integration, and maintenance. This work aims to change that.</p>
+
+
+
+<p>“AI today is at a crossroads, where it could be closed and owned by a few, or open and available to every coder, developer, enterprise, and nation,” said Mark Surman, President of Mozilla. That’s what we’re building — an open source AI ecosystem that fits together as seamlessly as the web, and that anyone, anywhere can build on.&nbsp; We’re so grateful to Canada for scaling this work, and call on partners across sectors — from enterprises and governments to coders and startups — to join us in building this future.”&nbsp;</p>
+
+
+
+<p>Within six months, Mozilla and Mila expect to publish working reference implementations&nbsp;for enterprise, government and public-interest use cases. The two-year ambition is bigger: to have solved this problem outright, so that open source AI can be adopted fully and easily, anywhere, by anyone.</p>
+<p>The post <a href="https://blog.mozilla.org/en/mozilla/mila-canada-open-source-ai-initiative/">Mila and Mozilla announce new initiative to build trustworthy open source AI for everyone, with Canadian government support</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Mozilla and Mistral: Partnering to expand AI competition and preserve user choice]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/mozilla-mistral-partnership/" />
+
+		<id>https://blog.mozilla.org/?p=87204</id>
+		<updated>2026-09-16T08:40:59Z</updated>
+		<published>2026-09-16T08:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox AI" /><category scheme="https://blog.mozilla.org/en/" term="AI" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>The AI race is shifting. Again. Practically overnight, competition has expanded from “which AI model is best?” to a new high-stakes battle over which models people can access, through which products, and whether people have meaningful choice about AI at all. In response, Mozilla and Mistral today announced a partnership built on a shared idea: [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/mozilla-mistral-partnership/">Mozilla and Mistral: Partnering to expand AI competition and preserve user choice</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/mozilla-mistral-partnership/"><![CDATA[
+<p>The AI race is shifting. Again. Practically overnight, competition has expanded from “which AI model is best?” to a new high-stakes battle over which models people can access, through which products, and whether people have meaningful choice about AI at all.</p>
+
+
+
+<p>In response, Mozilla and Mistral today <a href="https://mistral.ai/news/mistral-x-mozilla/">announced a partnership</a> built on a shared idea: a new, open-source AI model alternative to Big Tech-default browser ecosystems. The intent: a model deliberately designed to keep the web open to technological diversity, competition, and choice.</p>
+
+
+
+<p>And we’re putting this idea into practice in Firefox.&nbsp;</p>
+
+
+
+<p>Mistral Small 4 is coming to Firefox Smart Window beta (learn more about Firefox Smart Window <a href="https://blog.mozilla.org/en/firefox/firefox-smart-window/">here</a>), becoming a new AI model for Smart Window users in the US and Canada, while expanding Smart Window beta access and French-language support to Firefox users in France. Across all markets where Smart Window beta is available, Firefox users can still choose from a multitude of other AI models.&nbsp;</p>
+
+
+
+<p>“AI is becoming part of how people experience the web every day. We want to make sure that doesn’t mean people are chained to one company’s self-serving pipeline. With the browser sitting at the heart of the web and online experience, it should be a place where different AI providers can compete and open source has a seat at the table.</p>
+
+
+
+<p>This isn&#8217;t just a product partnership. A browser shouldn’t be a one-way funnel. It should preserve what made the internet powerful to begin with: the freedom to explore, discover different ideas and tech, and decide for ourselves where to go next,” said Anthony Enzor-DeMeo, CEO of Mozilla Corporation.</p>
+
+
+
+<h2 class="wp-block-heading">Choice and competition are worth protecting</h2>
+
+
+
+<p>As AI integration becomes increasingly concentrated, we are in jeopardy of a handful of closed-model companies controlling the browser, the search engine, the AI model, and the surrounding services that connect them. Mozilla and Mistral are betting that independent and interoperable models can offer an alternative to global tech monopolies controlling the next digital era.&nbsp;</p>
+
+
+
+<p>“This partnership represents two open source advocates working together to bring Mistral’s scientific innovations to Mozilla’s consumers around the world. Together, we are bringing privacy, control, and choice to AI-powered web browsing,” said Arthur Mensch, Co-founder and CEO of Mistral.</p>
+
+
+
+<p>Meaningful choice isn’t confined to personal preference for one AI model over another. Web products need to be able to work with different AI providers, and people deserve the option of switching without being locked into a single company’s ecosystem. When a tech layer as far-reaching and influential as AI is controlled by a small handful of players, it risks creating closed systems and closed doors, making it harder for new ideas and better technologies to grow, reach users, and compete on merits.&nbsp;</p>
+
+
+
+<p>Mozilla and Mistral aim to keep that door open. The combination of an independent browser with a frontier European AI company gives people and institutions greater access to useful, responsible AI, the opposite of locking them into one company’s singular technology ecosystem.&nbsp;</p>
+
+
+
+<h2 class="wp-block-heading">Selecting Mistral, and expanding to France </h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="673" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Mistral-partnership-in-Firefox-UI-English1-1-1024x673.png" alt="" class="wp-image-87281" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Mistral-partnership-in-Firefox-UI-English1-1-1024x673.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Mistral-partnership-in-Firefox-UI-English1-1-300x197.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Mistral-partnership-in-Firefox-UI-English1-1-768x505.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Mistral-partnership-in-Firefox-UI-English1-1-1536x1010.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Mistral-partnership-in-Firefox-UI-English1-1-1000x658.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/09/Mistral-partnership-in-Firefox-UI-English1-1.png 1717w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>Mozilla selected Mistral Small 4 after evaluating its performance for Smart Window Beta, including multilingual performance, an important part of the fit. The companies approached multilingual and multicultural tuning as a core model feature, rather than simply adapting an English-first experience for a new market.&nbsp;</p>
+
+
+
+<p>For Firefox users, Mistral access starts with Smart Window Beta, a browsing experience designed to turn AI into a useful assistant for the things we do online: making sense of complex search trails, finding something valuable you clicked away from, presenting data sources, and generally picking up where day-to-day internet use got left off.&nbsp;</p>
+
+
+
+<p>France is the first new market for Smart Window with official French-language support. Mozilla is planning additional European expansion later this year.</p>
+
+
+
+<h2 class="wp-block-heading">A different kind of AI competition</h2>
+
+
+
+<p>Our Mistral partnership puts an ambitious new AI model approach into practice: a multilingual, globally competitive European AI company reaching people through an independent browser, leveraging openness to create more room for new technologies to compete and succeed. Mistral can reach Firefox users without owning the browser, and Mozilla can integrate and recommend Mistral without removing user choice.</p>
+
+
+
+<p>It is a natural extension of the principles that have shaped Firefox and the open web, and the kind of AI ecosystem we intend to continue building.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/mozilla-mistral-partnership/">Mozilla and Mistral: Partnering to expand AI competition and preserve user choice</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[AI on your terms: Firefox meets you where you are]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/firefox-ai-on-your-terms/" />
+
+		<id>https://blog.mozilla.org/?p=86867</id>
+		<updated>2026-09-02T12:52:41Z</updated>
+		<published>2026-09-02T13:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox AI" /><category scheme="https://blog.mozilla.org/en/" term="Firefox Features" /><category scheme="https://blog.mozilla.org/en/" term="AI" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>People feel differently about AI, and here at Firefox, we think that is completely reasonable. Something else that is completely reasonable: deciding for yourself how and when you engage with AI features. For some of you, AI is part of your everyday life, whether you are using it to summarize a large amount of information, [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-ai-on-your-terms/">AI on your terms: Firefox meets you where you are</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/firefox-ai-on-your-terms/"><![CDATA[
+<p>People feel differently about AI, and here at Firefox, we think that is completely reasonable. Something else that is completely reasonable: deciding for yourself how and when you engage with AI features.<br><br>For some of you, AI is part of your everyday life, whether you are using it to summarize a large amount of information, brainstorm ideas for work, or research trips and personal purchases. Some of you interact with AI as little as possible, and prefer to keep it that way. And a lot of you are somewhere in between: curious, but exploring on your own terms and at your own pace.<br><br>Your personal use of AI is just that, personal. Firefox offers various levels of AI integration into your browser, and the choice between them is entirely yours. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Block new and current AI features in a single switch</strong> </h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Block-AI-enhancements-1024x576.jpg" alt="" class="wp-image-86868" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Block-AI-enhancements-1024x576.jpg 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Block-AI-enhancements-300x169.jpg 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Block-AI-enhancements-768x432.jpg 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Block-AI-enhancements-1536x864.jpg 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Block-AI-enhancements-1000x563.jpg 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Block-AI-enhancements-1280x720.jpg 1280w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Block-AI-enhancements.jpg 2048w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>Opting out of upcoming and current AI features on your browser should not require endless navigation through multiple Settings pages. That’s why Firefox offers an <a href="https://blog.mozilla.org/en/firefox/ai-controls/">AI controls</a> section within its General Settings panel. A single, easily located place where you can block current and future AI features and related pop-ups with the swipe of a toggle.<br><br>Not only do we want people to have the choice to remove certain AI features from their Firefox browsing experience, we make sure doing so is as easy and accessible as possible. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Choose the features that work for you</strong> </h2>
+
+
+
+<p>For the many people who sit in the middle of the AI usage spectrum, we made sure you can opt in and out of specific features in line with your preferences. Capabilities like AI translations, image alt text in Firefox PDF viewer, tab group suggestions, and key points in link previews can all be individually switched on and off, ensuring you can enjoy such offerings on a case by case basis as it suits your needs.&nbsp;<br><br>In addition, if there is an <a href="https://support.mozilla.org/en-US/kb/ai-chatbot">AI chatbot</a> provider you already trust or pay for, you can use it directly inside Firefox’s built-in desktop sidebar. This means you can use your chatbot of choice and browse side by side without ping-ponging between tabs.<br><br>While some browsers integrate a singular AI model or chatbot into their system, this can restrict flexibility and concentrate data sharing. Firefox prioritizes transparency and user control by letting you select from multiple providers, allowing you to review each option&#8217;s policies before you engage with them.<br><br>You can turn on AI chatbot providers in the AI controls section of browser settings and select one of the following: Anthropic Claude, ChatGPT, Google Gemini, and Le Chat Mistral. Once this feature is turned on, you can switch between chatbots within the sidebar itself based on your preferences and task at hand. </p>
+
+
+
+<h2 class="wp-block-heading"><strong>Smart Window, for when you want help finishing what you started</strong></h2>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Header_03-1024x576.png" alt="" class="wp-image-86879" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Header_03-1024x576.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Header_03-300x169.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Header_03-768x432.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Header_03-1536x864.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Header_03-2048x1152.png 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Header_03-1000x563.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Header_03-1280x720.png 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p><a href="https://support.mozilla.org/en-US/kb/smart-window"><strong>Smart Window</strong></a> is Firefox’s most integrated AI experience, but that doesn’t mean it compromises our commitment to choice, privacy, and transparency. Our newest window type, which we’ve been polishing and testing in beta, uses only the context you share with it to help you move work forward and across the finish line.<br><br>When permitted by you, its built-in, AI-powered assistant can work directly with your open tabs and browsing history to connect the dots. This means comparing information, generating recommendations, summarizing pages, and planning projects without having to feed every crumb of context from your previous and current browsing activity each time you enter a new prompt.<br><br>As we’ve built out Smart Window, we’ve added a few <a href="https://blog.mozilla.org/en/firefox/firefox-smart-window/">additional features</a> to align its design with how people actually browse. These include the ability to group related tabs together – so you can make sense of what’s open without spending time organizing everything yourself – and visual history previews that help you spot a page you visited earlier when you can’t remember the exact URL or phrase searched. In addition, a new partnership with <a href="https://blog.mozilla.org/en/firefox/firefox-exa-partnership/">Exa</a> enables Smart Window to not only locate current web information to include in responses, but also display the sources behind these responses so you can verify what you’re seeing, without breaking your flow.<br><br>We understand people use different Firefox windows for different reasons, and often switch between options based on the task at hand. Smart Window is the window you reach for when your browsing turns into a project. When your quick search becomes inspo for the girls’ trip you’ve been meaning to plan, or finding the perfect gift for your partner becomes a dozen tabs comparing prices and reviews, turn the window you’re already using into a Smart Window. Your tabs and progress stay in place while Smart Window helps organize the task and move it forward. Use it for one complex project, use it all the time, or switch it back when you’re done. <s><br></s><br>Smart Window remains in beta as we continue to learn and improve from our community’s feedback. At present, it’s available in English to people in the U.S. and Canada.<br><br>To try Smart Window, visit: <a href="https://www.firefox.com/smart-window">https://www.firefox.com/smart-window</a></p>
+
+
+
+<h2 class="wp-block-heading">Always your call </h2>
+
+
+
+<p>Your opinions and preferences on AI usage are individual to you.<br><br>We don’t think there is one right answer for how and when to engage with AI, and we’re not going to pretend there is one. What we can do is make sure that whatever level of engagement is right for you, Firefox supports it well. Because the only person telling you how much AI you need should be you.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-ai-on-your-terms/">AI on your terms: Firefox meets you where you are</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Introducing Ad Blocker for Firefox on iOS: More control, fewer distractions]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/ad-blocker-on-ios/" />
+
+		<id>https://blog.mozilla.org/?p=86916</id>
+		<updated>2026-09-17T14:49:00Z</updated>
+		<published>2026-09-01T12:45:52Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox Features" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>There&#8217;s only so much room on your screen. Pop-ups, overlays, and ads can take over fast, getting between you and what you came to do. That’s where Ad Blocker for Firefox on iOS comes in: a built-in option that blocks many third-party ads and ad-related trackers before they load, helping reduce clutter and distractions while [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/ad-blocker-on-ios/">Introducing Ad Blocker for Firefox on iOS: More control, fewer distractions</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/ad-blocker-on-ios/"><![CDATA[
+<p>There&#8217;s only so much room on your screen. Pop-ups, overlays, and ads can take over fast, getting between you and what you came to do.</p>
+
+
+
+<p>That’s where Ad Blocker for Firefox on iOS comes in: a built-in option that blocks many third-party ads and ad-related trackers before they load, helping reduce clutter and distractions while you browse.&nbsp; </p>
+
+
+
+<figure class="wp-block-video"><video controls src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/ENG_Firefox_AdBlocker_16x9_Long.mp4"></video></figure>
+
+
+
+<h2 class="wp-block-heading"><br><strong>How it works</strong></h2>
+
+
+
+<p>Ad Blocker uses Apple&#8217;s WebKit Content Blocker technology and the EasyList filter list to determine what gets blocked. There’s no separate extension to install, and you can turn it on in Settings &gt; Browsing &gt; Ad Blocker. It’s off by default, so you decide whether to use it.</p>
+
+
+
+<p>Ad Blocker won’t block every ad. Ads served directly by the site you’re visiting and ads shown in search results will still appear. Sponsored shortcuts and other sponsored content shown by Firefox when you open a new tab are separate from ads on the web pages you visit, so Ad Blocker doesn’t affect them.</p>
+
+
+
+<p>Ad Blocker works alongside the privacy protections already built into Firefox, including <a href="https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-ios">Enhanced Tracking Protection</a>, which blocks many trackers and limits tracking across the web.&nbsp;</p>
+
+
+
+<h2 class="wp-block-heading"><strong>More control over how you experience the web</strong></h2>
+
+
+
+<p>On Desktop and Android, Firefox already supports a strong ecosystem of <a href="https://addons.mozilla.org/en-US/firefox/">ad-blocking and privacy extensions</a>, giving people the flexibility to choose the tools that work best for them. We value that ecosystem and will keep supporting it.</p>
+
+
+
+<p>iOS <a href="http://blog.mozilla.org/netpolicy/2026/09/01/browsers-compete-on-privacy-when-the-operating-system-allows">works differently</a>. Extensions aren’t available in the same way, and we know people want more options. Bringing ad blocking to Firefox on iOS meant building it directly into the browser.&nbsp;<br><br>Giving people choice in how they experience the web is important to us. Advertising helps fund much of the open web, supporting the publishers, creators and websites people rely on. We also know that ads can sometimes crowd the screen or interrupt what you’re trying to do.</p>
+
+
+
+<p>That’s why Ad Blocker is optional: you decide whether it’s part of how you browse. It’s part of a broader approach across Firefox to give you more control over your experience, from the <a href="https://www.firefox.com/en-GB/features/add-ons/">extensions</a> you use to <a href="https://blog.mozilla.org/en/firefox/how-to-use-ai-controls/">how AI shows up</a> in your browser.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>Try it</strong></h2>
+
+
+
+<p>To turn on Ad Blocker, go to Settings &gt; Browsing &gt; Ad Blocker.</p>
+
+
+
+<p>If you find an ad you expected to be blocked, a site that behaves strangely or something we should improve, let us know on <a href="https://connect.mozilla.org/t5/discussions/ios-ad-blocker-experiment/m-p/133902/highlight/true#M53829">Mozilla Connect</a>.&nbsp;</p>
+
+
+
+<p>Visit our <a href="https://support.mozilla.org/en-US/kb/block-ads-firefox-ios">Support page</a> for more details on Ad Blocker for Firefox on iOS. For more on Firefox’s built-in privacy protections, check out <a href="https://www.firefox.com/en-US/user-privacy/">How Firefox Protects Your Data</a>.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/ad-blocker-on-ios/">Introducing Ad Blocker for Firefox on iOS: More control, fewer distractions</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+		<link href="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/ENG_Firefox_AdBlocker_16x9_Long.mp4" rel="enclosure" length="7005889" type="video/mp4" />
+	</entry>
+		<entry>
+		<author>
+			<name>Mark Surman</name>
+					</author>
+
+		<title type="html"><![CDATA[A New Framework for Open Source AI]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/mozilla/ai/open-source-ai-framework/" />
+
+		<id>https://blog.mozilla.org/?p=86826</id>
+		<updated>2026-08-20T15:57:32Z</updated>
+		<published>2026-08-20T15:57:30Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="AI" /><category scheme="https://blog.mozilla.org/en/" term="From the Team" /><category scheme="https://blog.mozilla.org/en/" term="Internet Policy" /><category scheme="https://blog.mozilla.org/en/" term="News" /><category scheme="https://blog.mozilla.org/en/" term="Our Work" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Open or closed AI isn&#8217;t a fringe question anymore; it&#8217;s a live policy debate, with real consequences for who gets to build, audit, and compete in the AI ecosystem. But as that debate plays out in Washington, Brussels, and beyond, the harder questions are still very much up for discussion. What does meaningful openness actually [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/mozilla/ai/open-source-ai-framework/">A New Framework for Open Source AI</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/mozilla/ai/open-source-ai-framework/"><![CDATA[
+<p>Open or closed AI isn&#8217;t a fringe question anymore; it&#8217;s a live policy debate, with real consequences for who gets to build, audit, and compete in the AI ecosystem. But as that debate plays out in Washington, Brussels, and beyond, the harder questions are still very much up for discussion. What does meaningful openness actually require? Where should the guardrails sit? And who gets a say in setting them?</p>
+
+
+
+<p>That&#8217;s exactly the gap a group of us set out to close two years ago.</p>
+
+
+
+<p>Back in 2024, Mozilla and the Columbia Institute of Global Politics<a href="https://blog.mozilla.org/en/mozilla/ai/introducing-columbia-convening-openness-and-ai/"> brought together more than 40 researchers, builders, and policy experts</a> for the Columbia Convening on Openness and AI. The goal was simple to state, but hard to do: figure out what &#8220;open&#8221; actually means once you&#8217;re talking about foundational models rather than traditional software, and build a shared vocabulary that researchers, developers, policymakers, and civil society could all work from.</p>
+
+
+
+<p>The convening was the start of a years-long effort to turn a room full of perspectives on openness into something durable and useful for developers, builders, and policymakers alike. Recently, that effort reached a new milestone: Communications of the ACM published <a href="https://cacm.acm.org/research/unpacking-open-source-artificial-intelligence-toward-a-framework-for-openness-in-foundation-models/">&#8220;Unpacking Open Source AI: Toward a Framework for Openness in Foundation Models,&#8221;</a> which I co-authored alongside a host of other allies spanning academia, industry, and civil society.</p>
+
+
+
+<p>The paper outlines a framework that does something the open source AI debate badly needs. It stops treating &#8220;open&#8221; as a single switch you flip on or off. Instead, it breaks the AI stack down into its component parts – data, code, model weights, documentation, and more – and looks at how openness at each layer shapes who actually gets to inspect, use, and build on a system. That kind of specificity matters. A lot of the current policy debate treats open source AI as a monolith, when in reality the details of what gets shared (and how) are what determine whether openness delivers on its promise of safety, competition, and accountability.</p>
+
+
+
+<p>A few of the framework&#8217;s ideas are worth pulling out. First, it treats openness as a gradient rather than a binary. A system can be open on weights while remaining closed on training data, or open on code while offering little documentation on how it was evaluated. The framework offers language to describe that mix precisely, instead of lumping it under one vague label. Second, it argues that safety can&#8217;t be assessed at the model level alone: what matters just as much is the surrounding system – the deployment environment, the safeguards, the moderation layers, and governance structures. That’s because a model&#8217;s real-world risk profile is shaped by all of it together, not by the weights in isolation. Critically, the framework deliberately stops short of prescribing one &#8220;correct&#8221; level of openness for every system. Instead, it gives developers, researchers, and regulators a common vocabulary to make and evaluate those tradeoffs on a case-by-case basis.</p>
+
+
+
+<p>It&#8217;s worth pausing on who&#8217;s behind this work. Scroll through the author list, and you&#8217;ll find a genuine cross-section of the individuals and organizations contributing to moving the development of open systems forward. It’s a collection of people who&#8217;ve spent years arguing, in good faith and often across real disagreements, that open approaches can be a foundation for safer, more democratic, more accountable AI. That&#8217;s the same spirit that drove the original convening, and it&#8217;s what makes this paper a genuinely important milestone for our mission to make AI systems accessible to the many, rather than the few.</p>
+
+
+
+<p>You can read the full paper <a href="https://cacm.acm.org/research/unpacking-open-source-artificial-intelligence-toward-a-framework-for-openness-in-foundation-models/">here</a>.</p>
+<p>The post <a href="https://blog.mozilla.org/en/mozilla/ai/open-source-ai-framework/">A New Framework for Open Source AI</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[The wait is over. NVIDIA GeForce NOW adds Firefox to its supported browser lineup.]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/firefox-nvidia-geforce-now-partnership/" />
+
+		<id>https://blog.mozilla.org/?p=86554</id>
+		<updated>2026-08-18T16:45:17Z</updated>
+		<published>2026-08-18T14:58:48Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="News" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Gamers have asked for GeForce NOW support for years. Today, NVIDIA made it official, opening up GeForce RTX-powered play to Firefox on Windows. Firefox users can now stream more than 2,000 PC games from virtually anywhere, no downloads, installs, or hardware upgrades required, just a Windows PC and a browser. Gaming: one of the web’s [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-nvidia-geforce-now-partnership/">The wait is over. NVIDIA GeForce NOW adds Firefox to its supported browser lineup.</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/firefox-nvidia-geforce-now-partnership/"><![CDATA[
+<p>Gamers have asked for GeForce NOW support for years. Today, NVIDIA made it official, opening up GeForce RTX-powered play to Firefox on Windows.</p>
+
+
+
+<p>Firefox users can <a href="https://www.firefox.com/landing/geforce-now/?utm_source=distilled&amp;utm_medium=referral&amp;utm_campaign=firefox-geforce-now">now stream</a> more than 2,000 PC games from virtually anywhere, no downloads, installs, or hardware upgrades required, just a Windows PC and a browser.</p>
+
+
+
+<h3 class="wp-block-heading">Gaming: one of the web’s toughest tests</h3>
+
+
+
+<p>Cloud gaming pushes a browser in ways most websites never do. Every click and frame matters. Behind today’s announcement is months of collaboration and engineering between Mozilla and NVIDIA to deliver GeForce NOW on Firefox for Windows.</p>
+
+
+
+<p>Now, players can jump into high-performance PC gaming directly from Firefox, no waiting on lengthy game downloads, installs, or updates. The experience delivers GeForce RTX-powered performance at up to 1440p and up to 120 frames per second for GeForce NOW Ultimate members.</p>
+
+
+
+<p>“Firefox earned its place on our list of supported browsers by delivering the first-class experience GeForce NOW players expect. We set a high bar for browser support, and we’re excited to welcome Firefox — giving millions of Firefox fans a new way to stream the games they love,” said Andrew Fear, Director of NVIDIA GeForce NOW.</p>
+
+
+
+<figure class="wp-block-image size-full"><img decoding="async" loading="lazy" width="1920" height="1080" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Kit_Gamer_Purple-BG.gif" alt="" class="wp-image-86710"/></figure>
+
+
+
+<h3 class="wp-block-heading">Versatility and customization baked into your gaming rig</h3>
+
+
+
+<p>Gamers put real effort into making their rigs their own, and Firefox gets that. Users can choose themes, custom colors, and tab settings to customize their setup, instead of sitting there like just another window.</p>
+
+
+
+<p>We also know online gaming doesn’t happen in just one window. It’s social and sometimes spontaneous. With Firefox, you can have a Discord call running in Split View, a guide open in another tab, or Reddit pulled up between matches. Then go full screen when you’re ready to play, no need to switch browsers to stream games.</p>
+
+
+
+<p>“Teaming up with NVIDIA to bring GeForce NOW to Firefox is a milestone moment — one of the world’s leading cloud gaming services, now running on a browser built for privacy, control and flexibility. This is a big win for the Firefox community and for NVIDIA’s gaming community — and a sign of even bigger things ahead,”&nbsp;said Ajit Varma, Head of Firefox.<br><br>If Firefox is already your browser of choice, online gaming and your PC game library can join the party. Whether your library lives on Steam, Epic Games Store, GOG, Xbox PC Game Pass, or Ubisoft Connect, you can sign in, open your library, and start streaming the games you already own. For all the gamers returning to Night City in <em>Cyberpunk 2077</em>, jumping into <em>Halo: Campaign Evolved</em>, or dropping in for a quick round of <em>Fortnite</em>, Firefox users can now play where you want.</p>
+
+
+
+<h3 class="wp-block-heading">Try it today</h3>
+
+
+
+<p>Update to the latest version of Firefox, go to <a href="https://play.geforcenow.com">play.geforcenow.com</a>, and sign in with your GeForce NOW account.</p>
+
+
+
+<p>Join us August 25 as NVIDIA heads to Gamescom, where we’ll have more to share about what this partnership means for gamers.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-nvidia-geforce-now-partnership/">The wait is over. NVIDIA GeForce NOW adds Firefox to its supported browser lineup.</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[A billion searches a year, now built in: Startpage comes to Firefox]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/startpage-on-firefox/" />
+
+		<id>https://blog.mozilla.org/?p=86578</id>
+		<updated>2026-08-18T15:05:36Z</updated>
+		<published>2026-08-18T14:57:52Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Firefox users were choosing Startpage long before today — to the tune of more than a billion searches a year, every one of them required some assembly: an extension, a manual setting, a workaround.&#160; Today, starting with Firefox 154, that choice becomes as easy as head to the drop-down menu, hit ‘select,’ and start searching. [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/startpage-on-firefox/">A billion searches a year, now built in: Startpage comes to Firefox</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/startpage-on-firefox/"><![CDATA[
+<p>Firefox users were choosing Startpage long before today — to the tune of more than a billion searches a year, every one of them required some assembly: an extension, a manual setting, a workaround.&nbsp;</p>
+
+
+
+<p>Today, starting with Firefox 154, that choice becomes as easy as head to the drop-down menu, hit ‘select,’ and start searching. <a href="http://startpage.com/privacy-please/featured-article/firefox-integration">Startpage</a> is now a built-in search option for Firefox users on desktop in Germany, France, Austria, Switzerland, and the Netherlands. Android and iOS are coming soon. Whether you want to search with Startpage, or another preferred search engine, it’s as easy as opening your search settings, picking a default, and done.</p>
+
+
+
+<p>And if you&#8217;re happy with your current search engine, nothing about your setup changes. </p>
+
+
+
+<figure class="wp-block-video"><video controls src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/set-default_en-US_no-google.mp4"></video></figure>
+
+
+
+<p></p>
+
+
+
+<h2 class="wp-block-heading"><strong>Why Europe first</strong></h2>
+
+
+
+<p>This launch starts in Startpage&#8217;s home markets: a Netherlands-based search engine, now built into the browser for some of the most privacy-conscious users in the world. At a moment when so much of the web experience is decided by a handful of very large companies, a search option that&#8217;s private by design and European by origin isn&#8217;t a small thing.&nbsp;</p>
+
+
+
+<h2 class="wp-block-heading"><strong>What Startpage delivers</strong></h2>
+
+
+
+<p>Startpage delivers full, high-quality search results without the privacy trade off. Queries aren’t stored or linked to you, and there are no AI answers pushed above your search results. In fact, there’s no AI at all. Based in the Netherlands, Startpage built its product around a simple idea: great search and personal privacy can go hand in hand.</p>
+
+
+
+<p>“So much of your web experience is prescribed before you ever open a browser. We&#8217;d rather you decide how you want to search. Adding Startpage puts a genuinely private search engine option — real results, zero profiling, AI-free — one click away for millions of people in Europe,” said Ajit Varma, Head of Firefox.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>Users asked with one billion searches</strong></h2>
+
+
+
+<p>Startpage ranks among the most-requested search engines in the <a href="https://connect.mozilla.org/t5/discussions/try-startpage-search-in-firefox-150/m-p/123320">Firefox community</a>. When demand is this clear, our job is to remove the friction.&nbsp;</p>
+
+
+
+<p>“More and more of what people use online comes from a handful of very large companies, and search is where that concentration gets felt most directly. Firefox has always been the browser for people who want to make their own decisions about the web, which makes it a natural home for private search. Firefox users already run over a billion Startpage searches a year. Now Startpage is built in for everyone in these markets,” said Stewart Marlborough, President of Startpage.</p>
+
+
+
+<p>That&#8217;s the pattern we want: people who use Firefox every day tell us what they need, and we ship it.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>Search is a choice. Firefox treats it like one.&nbsp;</strong></h2>
+
+
+
+<p>Most browsers have already decided how you&#8217;re going to search. Firefox hasn&#8217;t. Pick your search engine, control what happens to your queries, decide who sees data about you, even turn AI on or off. It should always be your call. Not everyone wants the same thing from search, and a browser shouldn&#8217;t pretend they do.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>Try it out</strong></h2>
+
+
+
+<p>If you&#8217;re in Germany, France, Austria, Switzerland, or the Netherlands, update to <a href="https://www.firefox.com/">Firefox 154</a> and you&#8217;ll find Startpage in your search settings.  </p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/startpage-on-firefox/">A billion searches a year, now built in: Startpage comes to Firefox</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+		<link href="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/set-default_en-US_no-google.mp4" rel="enclosure" length="1451591" type="video/mp4" />
+	</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Smart Window: Finish what you start online]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/firefox-smart-window/" />
+
+		<id>https://blog.mozilla.org/?p=86592</id>
+		<updated>2026-09-16T09:01:06Z</updated>
+		<published>2026-08-18T13:06:06Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox AI" /><category scheme="https://blog.mozilla.org/en/" term="Firefox Features" /><category scheme="https://blog.mozilla.org/en/" term="Uncategorized" /><category scheme="https://blog.mozilla.org/en/" term="AI" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Update on September 16, 2026: Smart Window is now rolling out in France, marking its first expansion beyond North America. People in France will be able to download and try the Smart Window beta in French. Download Smart Window here and share your feedback with us on Mozilla Connect. Original post from August 2026: Browsers [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-smart-window/">Smart Window: Finish what you start online</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/firefox-smart-window/"><![CDATA[
+<p><strong><em>Update on September 16, 2026: </em></strong><em>Smart Window is now rolling out in France, marking its first expansion beyond North America. People in France will be able to download and try the Smart Window beta in French. Download Smart Window </em><a href="https://www.firefox.com/smart-window/"><em>here</em></a><em> and share your feedback with us on </em><a href="https://connect.mozilla.org/t5/discussions/smart-window-expands-to-france-with-mistral-as-a-new-model/m-p/138422/thread-id/56209"><em>Mozilla Connect</em></a><em>. <br><br></em><strong><em>Original post from August 2026:</em></strong><br><br>Browsers make it easy to start things, but picking them back up is another story.</p>
+
+
+
+<p>We start planning a trip or researching a purchase, and before long we&#8217;re comparing options and chasing ideas across dozens of tabs. That work rarely happens in one sitting. When we come back after an interruption, we have to figure out where we were, what we’d already found, and what we were trying to do in the first place.</p>
+
+
+
+<p><a href="https://www.firefox.com/smart-window/?view=enable">Smart Window</a> is Firefox&#8217;s privacy-first, AI-powered browsing experience designed to help people finish what they start online. It works with the context you choose to share, such as your open tabs and relevant browsing history, so you can get back to what you were doing without retracing your steps. </p>
+
+
+
+<p>We’ve spent the last several months building and testing Smart Window in beta with our community. Today, we&#8217;re adding new capabilities that help you check answers without losing your place, make sense of open tabs and get back to things you&#8217;ve seen before. Together, they help keep a task moving across tabs, searches, and time.</p>
+
+
+
+<p>“The browser already has much of the context around what you&#8217;re trying to do — the research in your tabs, the pages you&#8217;ve visited, the things you&#8217;ve found along the way,” said Ajit Varma, Head of Firefox. “With Smart Window, we&#8217;re exploring how to make more of that context useful while keeping you in control.”</p>
+
+
+
+<h2 class="wp-block-heading"><strong>What’s new in Smart Window</strong></h2>
+
+
+
+<h3 class="wp-block-heading"><strong>Check answers without losing your place</strong></h3>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline1-1024x576.jpg" alt="" class="wp-image-86755" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline1-1024x576.jpg 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline1-300x169.jpg 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline1-768x432.jpg 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline1-1536x864.jpg 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline1-2048x1152.jpg 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline1-1000x563.jpg 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline1-1280x720.jpg 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>When you have a question in the middle of a task, getting an answer shouldn’t take you out of your flow or require you to track down the sources separately.&nbsp;</p>
+
+
+
+<p>Through our new partnership with Exa, Smart Window can now retrieve current web information and show the sources behind its response without taking you to a separate search results page. Learn more about why we chose Exa and what the partnership means for Firefox in our <a href="https://blog.mozilla.org/en/firefox/firefox-exa-partnership/">companion post</a>.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>Group tabs that belong together</strong> </h3>
+
+
+
+<figure class="wp-block-image size-full"><img decoding="async" loading="lazy" width="1920" height="1080" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Inline2.gif" alt="" class="wp-image-86772"/></figure>
+
+
+
+<p>It doesn&#8217;t take long for a quick search to turn into a browser full of tabs. Once they pile up, keeping track of everything becomes even more work.&nbsp;</p>
+
+
+
+<p>Smart Window can now suggest groups for related tabs, making it easier to organize what you have open and return to it later. It can also spot duplicate tabs and close them with a click.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>Find your spot again</strong> </h3>
+
+
+
+<figure class="wp-block-image size-full"><img decoding="async" loading="lazy" width="1920" height="1080" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Inline.gif" alt="" class="wp-image-86784"/></figure>
+
+
+
+<p>Sometimes you remember what was on a page better than you remember what it was called or how you got there. Smart Window can now show visual previews of pages in your browsing history, making it easier to spot the page you’re looking for among similar results without opening each one to figure out which is which.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>Behind the evolution</strong></h2>
+
+
+
+<p>Last November, we <a href="https://blog.mozilla.org/en/firefox/ai-window/">shared</a> an early concept called “AI Window,” exploring what it could look like to give people a user-controlled space where they could chat with an AI assistant to get help while browsing. We shared it early because we wanted our community to help shape where it went next.</p>
+
+
+
+<p>Over the months that followed, we watched how people used the experience, listened to feedback, and tested new ideas. A consistent theme emerged: people were increasingly using it as part of their everyday browsing — searching, navigating, and working through the things they&#8217;d come online to do. The value of the AI assistant came through in how it helped them make progress on those tasks.</p>
+
+
+
+<p>We saw the same idea in feedback from beta users. One described using Smart Window to keep track of their “train of thought.” Another used it to find something they&#8217;d looked at before without remembering exactly where they&#8217;d seen it.</p>
+
+
+
+<p>Those learnings helped us shape Smart Window into a broader browsing experience that helps people make progress on what they came online to do.</p>
+
+
+
+<p>While the product is evolving, the principles we started with remain the same: choice, privacy, and transparency. Smart Window is optional. You choose when to use it, what browsing context it can use to help with a task, and which AI model you want to use. Firefox’s AI Controls gives you one place to manage Smart Window, including turning it off entirely, so you can easily choose the browsing experience you want.</p>
+
+
+
+<h2 class="wp-block-heading">What&#8217;s next</h2>
+
+
+
+<p>We&#8217;re continuing to explore ways Smart Window can help carry a task forward, especially when you leave it and come back later.&nbsp;</p>
+
+
+
+<p>Soon, Smart Window will be able to surface recent browsing journeys and pull together related tabs and history, giving you a starting point when you return to something you were working on. We&#8217;re also working on ways for Smart Window to use relevant information to help fill out online forms, so you don&#8217;t have to re-enter the same details again and again. You’ll stay in control of what Smart Window can access, including which tabs you choose to share with it.</p>
+
+
+
+<p>Smart Window remains in beta, and we&#8217;ll keep learning from our community as these experiences develop. It&#8217;s currently available in English to people in the U.S. and Canada. If it’s not available where you are yet, you can <a href="https://www.firefox.com/smart-window">sign up</a> to be notified when it is.</p>
+
+
+
+<p>To try Smart Window, visit <a href="https://www.firefox.com/smart-window">https://www.firefox.com/smart-window</a>.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-smart-window/">Smart Window: Finish what you start online</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>Mozilla</name>
+					</author>
+
+		<title type="html"><![CDATA[Firefox and Exa: Building AI search around people, not platforms]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/firefox-exa-partnership/" />
+
+		<id>https://blog.mozilla.org/?p=86528</id>
+		<updated>2026-08-18T16:28:07Z</updated>
+		<published>2026-08-18T13:05:34Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox AI" /><category scheme="https://blog.mozilla.org/en/" term="News" /><category scheme="https://blog.mozilla.org/en/" term="AI" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>AI has changed how we browse. Full stop. The real question is whether AI leads to one browser experience for everyone, or gives people more ways to make the browser work for them.&#160; Firefox was always built to give users an alternative to the status quo, and our approach with AI is no different. Much [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-exa-partnership/">Firefox and Exa: Building AI search around people, not platforms</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/firefox-exa-partnership/"><![CDATA[
+<p>AI has changed how we browse. Full stop. The real question is whether AI leads to one browser experience for everyone, or gives people more ways to make the browser work for them.&nbsp;</p>
+
+
+
+<p>Firefox was always built to give users an alternative to the status quo, and our approach with AI is no different. Much of the industry is going in another direction: Company A builds the browser → and the search engine → and the AI model → and all the surrounding services. The seduction lies in how effortless every layer feels, but it also means one company has total influence over what tech you can use and what AI delivers.</p>
+
+
+
+<p>We aim to deliver users a different model: one where AI makes your browser empowering and helpful, with visible citations and with a zero-data-retention commitment, all powered by an independent browser engine. To get there, we&#8217;re partnering with people who align with the same open, choice-first thinking that&#8217;s shaped Firefox from day one.</p>
+
+
+
+<p>Today, that starts with <a href="https://exa.ai/blog/exa-firefox">Exa.ai</a>, a search and retrieval company built for the AI era. </p>
+
+
+
+<p>Going forward, Exa will help power Smart Window on desktop and Quick Answers on iOS, giving people a way to get current, source-backed answers without leaving the page. More on our related Smart Window announcement <a href="https://blog.mozilla.org/en/firefox/firefox-smart-window/">here</a>.<strong> </strong></p>
+
+
+
+<p>But our Exa news isn’t about one feature or product. It’s about model choice and how people find things online.</p>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline-1024x576.jpg" alt="" class="wp-image-86529" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline-1024x576.jpg 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline-300x169.jpg 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline-768x432.jpg 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline-1536x864.jpg 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline-2048x1152.jpg 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline-1000x563.jpg 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/08/Firefox_SmartWindow_Distilled_Exa_Inline-1280x720.jpg 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<h2 class="wp-block-heading">An independent AI model</h2>
+
+
+
+<p>Mozilla has always believed the web is strongest when it encourages technology competition and variety, and we think the same principle should apply to AI. We want to create an AI ecosystem that is open, diverse, and grounded in the same values we champion for the web. So, instead of building our own closed AI stack, Firefox is investing in partnerships with companies like Exa.ai to bring deep expertise in specific areas while sharing our commitment to user choice, privacy, and transparency.&nbsp;</p>
+
+
+
+<p>As Ajit Varma, Head of Firefox, puts it, “Firefox’s philosophy is straightforward: the open internet is a critical resource and people should be able to shape it to their needs and preferences — even as new entry points like AI emerge. AI should be responsible. It should stay transparent and under your control. AI shouldn’t be an-all-or nothing offering, but rather built so users can pick and choose the model or system that works for them.”</p>
+
+
+
+<p>The idea is simple: Mozilla builds the browser people trust, and partners like Exa.ai bring the specialized pieces that make it better. That lets us move faster without asking people to give up what made Firefox different in the first place.</p>
+
+
+
+<p>Adds Will Bryk, Co-founder and CEO of Exa.ai, “Search built for the AI era doesn’t work if it’s locked inside one company’s stack. Firefox is one of the last browsers that isn’t trying to own the model, the search, and the browser all at once. That’s why this partnership makes sense to us. We’re building the information layer for an agentic web, where trust and transparency are paramount. We share those values with Firefox, making this partnership a very easy call.”&nbsp;</p>
+
+
+
+<h2 class="wp-block-heading"><strong>AI should make the web more useful, not replace it</strong></h2>
+
+
+
+<p>AI is only as useful as your ability to check its work.</p>
+
+
+
+<p>That&#8217;s the point of building Exa&#8217;s retrieval into Firefox: when you get an answer, you can see the source it came from. Nothing is buried in a ‘citations’ menu, but sitting right there so a two-second glance tells you whether to trust it or read more. We’re not forcing you ‘just trust us’ that it&#8217;s right.&nbsp;</p>
+
+
+
+<p>It&#8217;s a small design choice, but it matters. It&#8217;s the difference between an AI that tells you things and one that shows you where to look. It also means the people who actually wrote that content don&#8217;t disappear from the picture, the way they often do when AI summarizes and moves on.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>Looking ahead</strong></h2>
+
+
+
+<p>This won&#8217;t be the last partnership like it. We&#8217;re picking partners for the same reason each time: people who think AI in a browser should work for you, not the other way around.</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-exa-partnership/">Firefox and Exa: Building AI search around people, not platforms</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>talee</name>
+					</author>
+
+		<title type="html"><![CDATA[Your Android tabs just got a lot more organized with Firefox]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/tab-groups-android/" />
+
+		<id>https://blog.mozilla.org/?p=86419</id>
+		<updated>2026-07-21T06:14:38Z</updated>
+		<published>2026-07-21T16:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox Features" /><category scheme="https://blog.mozilla.org/en/" term="Firefox for Android" /><category scheme="https://blog.mozilla.org/en/" term="Firefox for mobile" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>Tabs pile up fast on mobile. Imagine you’re planning a summer barbecue, and you start by searching for the best rib recipe. Twenty minutes later, you&#8217;re 17 tabs deep: comparing marinades, debating side dishes, checking the weather, making a grocery list and adding songs to a playlist. None of those tabs are organized. They’re mixed [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/tab-groups-android/">Your Android tabs just got a lot more organized with Firefox</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/tab-groups-android/"><![CDATA[
+<p>Tabs pile up fast on mobile. Imagine you’re planning a summer barbecue, and you start by searching for the best rib recipe. Twenty minutes later, you&#8217;re 17 tabs deep: comparing marinades, debating side dishes, checking the weather, making a grocery list and adding songs to a playlist.</p>
+
+
+
+<p>None of those tabs are organized. They’re mixed in with everything else you’ve been browsing, making it hard to keep track of what you’re saving for later.</p>
+
+
+
+<p>Now you <strong>can group related tabs in Firefox for Android</strong>, keeping them together in labeled, colored groups so you can actually find what you need when you need it.</p>
+
+
+
+<figure class="wp-block-image size-full"><img decoding="async" loading="lazy" width="1920" height="1080" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline01.gif" alt="Animation showing related tabs being grouped together in Firefox for Android, then displayed as a single labeled tab group in the tab tray." class="wp-image-86444"/></figure>
+
+
+
+<h2 class="wp-block-heading"><strong>How it works</strong></h2>
+
+
+
+<p>Drag one tab onto another, or select a few and tap &#8220;Add to group.&#8221; Name it, pick a color, and you’re done.</p>
+
+
+
+<p>Each group appears as a single card in the tab tray rather than a dozen separate tabs. You can open it, rename it, recolor it, or delete it whenever you want. Search still finds tabs inside a group, too.</p>
+
+
+
+<figure class="wp-block-image size-large"><img decoding="async" loading="lazy" width="1024" height="576" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1024x576.jpg" alt="Illustration of Tab Groups in Firefox for Android, showing tabs being grouped, named and color-coded, then displayed together in a single organized group." class="wp-image-86457" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1024x576.jpg 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-300x169.jpg 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-768x432.jpg 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1536x864.jpg 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-2048x1152.jpg 2048w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1000x563.jpg 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/07/Distilled_TabGroupsAndroid_Inline02-1280x720.jpg 1280w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+
+
+
+<p>So when you&#8217;re standing in the produce aisle looking for that rib recipe, you won&#8217;t have to scroll past dozens of unrelated tabs just to find it. Everything for your barbecue is organized together in one place, ready when you need it.</p>
+
+
+
+<h2 class="wp-block-heading"><strong>Finally sorted, as it should be</strong></h2>
+
+
+
+<p>Tab grouping was the most requested feature from Firefox mobile users in 2025. And we get it: your tabs shouldn&#8217;t get harder to manage the more you use your browser. Download the latest version of <a href="https://www.firefox.com/en-US/download/android/">Firefox for Android</a> now to try Tab Groups, with iOS support on the way.&nbsp;</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/tab-groups-android/">Your Android tabs just got a lot more organized with Firefox</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+		<entry>
+		<author>
+			<name>talee</name>
+					</author>
+
+		<title type="html"><![CDATA[Quick Answers: For the questions in between]]></title>
+		<link rel="alternate" type="text/html" href="https://blog.mozilla.org/en/firefox/firefox-features/quick-answers-ios/" />
+
+		<id>https://blog.mozilla.org/?p=86420</id>
+		<updated>2026-07-21T06:17:47Z</updated>
+		<published>2026-07-21T16:00:00Z</published>
+		<category scheme="https://blog.mozilla.org/en/" term="Firefox" /><category scheme="https://blog.mozilla.org/en/" term="Firefox Features" /><category scheme="https://blog.mozilla.org/en/" term="Firefox for iOS" /><category scheme="https://blog.mozilla.org/en/" term="Firefox for mobile" /><category scheme="https://blog.mozilla.org/en/" term="homepage" />
+		<summary type="html"><![CDATA[<p>You&#8217;re planning a trip. Reading an article. Following a recipe. Then a question pops into your head. Sometimes it leads down a rabbit hole – with more searches, more tabs and plenty to explore. Other times, you just need a little context so you can get back to what you were doing. That&#8217;s why we&#8217;re [&#8230;]</p>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-features/quick-answers-ios/">Quick Answers: For the questions in between</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></summary>
+
+					<content type="html" xml:base="https://blog.mozilla.org/en/firefox/firefox-features/quick-answers-ios/"><![CDATA[
+<p>You&#8217;re planning a trip. Reading an article. Following a recipe.</p>
+
+
+
+<p>Then a question pops into your head. Sometimes it leads down a rabbit hole – with more searches, more tabs and plenty to explore. Other times, you just need a little context so you can get back to what you were doing.</p>
+
+
+
+<p>That&#8217;s why we&#8217;re introducing <strong>Quick Answers</strong> for Firefox on iOS.</p>
+
+
+
+<p>With Quick Answers, you can ask a question using your voice and get a concise answer. Just open a new tab, long-press the voice button and ask.</p>
+
+
+
+<p>For example:</p>
+
+
+
+<ul>
+<li>&#8220;What does <em>mellifluous</em> mean?&#8221;</li>
+
+
+
+<li>&#8220;What is 95 degrees Fahrenheit in Celsius?&#8221;</li>
+
+
+
+<li>&#8220;What&#8217;s the difference between suede and nubuck?&#8221;</li>
+</ul>
+
+
+
+<p>If a quick answer is all you need, you&#8217;re done.</p>
+
+
+
+<p>If you want to dig in deeper, the links to supporting sources are there for exploration.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>Built with transparency and privacy in mind</strong></h3>
+
+
+
+<p>We&#8217;ve built Quick Answers to be transparent about how it works and what data is shared.</p>
+
+
+
+<p>Voice is processed on your device using Apple&#8217;s speech recognition technology. No raw audio is stored or sent to the server, and Firefox doesn&#8217;t share your browsing history or personal context with the AI model. Only the transcribed text of your question is sent to generate an answer. You can turn the feature off at any time in Settings → AI Controls.</p>
+
+
+
+<p>Quick Answers is starting to roll out today to <a href="https://www.firefox.com/en-US/download/ios/">Firefox for iOS</a> users in the U.S. using English.</p>
+
+
+
+<p>Oh, and if you&#8217;re wondering&#8230;</p>
+
+
+
+<ul>
+<li><strong>Mellifluous</strong> means pleasant and musical to hear.</li>
+
+
+
+<li><strong>95 degrees Fahrenheit</strong> is 35 degrees Celsius.</li>
+
+
+
+<li><strong>Suede</strong> is made from the underside of the hide, while <strong>nubuck</strong> is made from the outer side and buffed to create a soft, velvety texture.</li>
+</ul>
+
+
+
+<a class="ft-c-inline-cta" href=" https://www.mozilla.org/firefox/new/?utm_source=blog.mozilla.org&#038;utm_medium=referral&#038;utm_campaign=blog-nav">
+  <div class="ft-c-inline-cta__media">
+  <img loading="lazy" width="800" height="800" src="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/03/Firefox_Logo_Symbol_Fullcolor_RGB-800x800.png" class="attachment-1x1 size-1x1" alt="The Firefox logo" decoding="async" srcset="https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/03/Firefox_Logo_Symbol_Fullcolor_RGB-800x800.png 800w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/03/Firefox_Logo_Symbol_Fullcolor_RGB-300x300.png 300w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/03/Firefox_Logo_Symbol_Fullcolor_RGB-1024x1024.png 1024w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/03/Firefox_Logo_Symbol_Fullcolor_RGB-150x150.png 150w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/03/Firefox_Logo_Symbol_Fullcolor_RGB-768x768.png 768w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/03/Firefox_Logo_Symbol_Fullcolor_RGB-1536x1536.png 1536w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/03/Firefox_Logo_Symbol_Fullcolor_RGB-1000x1000.png 1000w, https://blog.mozilla.org/wp-content/blogs.dir/278/files/2026/03/Firefox_Logo_Symbol_Fullcolor_RGB.png 2048w" sizes="(max-width: 800px) 100vw, 800px" />  </div>
+  <div class="ft-c-inline-cta__content">
+     <h3>Take control of your internet</h3>      <span>Download Firefox</span>   </div>
+</a>
+<p>The post <a href="https://blog.mozilla.org/en/firefox/firefox-features/quick-answers-ios/">Quick Answers: For the questions in between</a> appeared first on <a href="https://blog.mozilla.org/en/">The Mozilla Blog</a>.</p>
+]]></content>
+		
+			</entry>
+	</feed>

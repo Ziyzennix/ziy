@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziy menu</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="menu.css">
+</head>
+<body class="ziy-menu">
+  <a class="skip-link" href="#menu-main">Skip to the menu</a>
+
+  <main id="menu-main" class="menu" role="region" aria-labelledby="menu-title">
+    <header class="menu__header">
+      <h1 class="menu__title" id="menu-title">Ziy</h1>
+      <button id="open-settings" class="menu__link" type="button">Settings</button>
+    </header>
+
+    <p class="sr-only" id="menu-live" role="status" aria-live="polite"></p>
+
+    <!-- ================= WINDOWS AND TABS ================= -->
+    <section class="menu__section" aria-labelledby="menu-section-windows">
+      <h2 class="menu__section-title" id="menu-section-windows">Windows and tabs</h2>
+      <ul class="menu__rows" role="list">
+        <li class="menu-row">
+          <button id="new-tab" class="menu-row__button" type="button">
+            <span class="menu-row__label">New tab</span>
+            <kbd class="menu-row__key">Ctrl&#8203;T</kbd>
+          </button>
+        </li>
+        <li class="menu-row">
+          <button id="new-window" class="menu-row__button" type="button">
+            <span class="menu-row__label">New window</span>
+            <kbd class="menu-row__key">Ctrl&#8203;N</kbd>
+          </button>
+        </li>
+        <li class="menu-row" id="private-window-row">
+          <p class="menu-row__static">
+            <span class="menu-row__label">New private window</span>
+            <kbd class="menu-row__key">Ctrl&#8203;Shift&#8203;P</kbd>
+          </p>
+          <p class="menu-row__note">Opened with the engine's own shortcut. An extension cannot create a private window on this engine: <code>windows.create</code> has no private flag.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ================= ZOOM ================= -->
+    <section class="menu__section" aria-labelledby="menu-section-zoom">
+      <h2 class="menu__section-title" id="menu-section-zoom">Zoom</h2>
+      <ul class="menu__rows" role="list">
+        <li class="menu-row menu-row--inline" id="zoom-row">
+          <button id="zoom-out" class="menu__icon-button" type="button" aria-label="Zoom out">&#8722;</button>
+          <output id="zoom-value" class="menu__zoom-value" for="zoom-in zoom-out">100%</output>
+          <button id="zoom-in" class="menu__icon-button" type="button" aria-label="Zoom in">+</button>
+          <button id="zoom-reset" class="menu-row__button menu-row__button--quiet" type="button">Reset</button>
+        </li>
+        <li class="menu-note" id="note-zoom" hidden></li>
+      </ul>
+    </section>
+
+    <!-- ================= FIND ================= -->
+    <section class="menu__section" aria-labelledby="menu-section-find">
+      <h2 class="menu__section-title" id="menu-section-find">Find in this page</h2>
+      <div class="menu__find">
+        <label class="menu__find-label" for="find-query">Search for</label>
+        <input id="find-query" class="menu__input" type="search" autocomplete="off"
+               aria-describedby="find-hint">
+        <button id="find-open" class="menu-row__button" type="button">Find</button>
+      </div>
+      <p class="menu__hint" id="find-hint">Uses the engine's find API. The full find bar is Ctrl&#8203;F.</p>
+      <ul class="menu__notes" id="engine-notes" role="list" hidden></ul>
+      <li class="menu-note" id="note-find" hidden></li>
+    </section>
+
+    <!-- ================= THE ENGINE'S OWN PAGES ================= -->
+    <section class="menu__section" aria-labelledby="menu-section-pages">
+      <h2 class="menu__section-title" id="menu-section-pages">Library</h2>
+      <ul class="menu__rows" role="list">
+        <li class="menu-row"><button id="open-history" class="menu-row__button" type="button"><span class="menu-row__label">History</span></button></li>
+        <li class="menu-row"><button id="open-downloads" class="menu-row__button" type="button"><span class="menu-row__label">Downloads</span></button></li>
+        <li class="menu-row"><button id="open-bookmarks" class="menu-row__button" type="button"><span class="menu-row__label">Bookmarks</span></button></li>
+      </ul>
+    </section>
+
+    <!-- ================= IMPORT AND EXPORT (F23) ================= -->
+    <section class="menu__section" aria-labelledby="menu-section-data">
+      <h2 class="menu__section-title" id="menu-section-data">Your data</h2>
+      <ul class="menu__rows" role="list">
+        <li class="menu-row">
+          <button id="import-start" class="menu-row__button" type="button">
+            <span class="menu-row__label">Import bookmarks</span>
+          </button>
+          <p class="menu-row__note">Pick a bookmarks file from another browser. HTML from any browser, or the JSON bookmarks file from a Chromium profile. Read-only on the source.</p>
+        </li>
+        <li class="menu-row">
+          <button id="export-bookmarks" class="menu-row__button" type="button">
+            <span class="menu-row__label">Export bookmarks</span>
+          </button>
+          <p class="menu-row__note">Writes your live bookmark tree as an HTML file.</p>
+        </li>
+        <li class="menu-row">
+          <button id="export-snapshot" class="menu-row__button" type="button">
+            <span class="menu-row__label">Save a settings snapshot</span>
+          </button>
+          <p class="menu-row__note">Settings only — the choices you made in Ziy's own surfaces. No history, no passwords.</p>
+        </li>
+        <li class="menu-row">
+          <button id="restore-snapshot" class="menu-row__button" type="button">
+            <span class="menu-row__label">Restore a snapshot</span>
+          </button>
+          <p class="menu-row__note">Reads a snapshot and hands each module its own settings through its own API.</p>
+        </li>
+        <li class="menu-note" id="note-export" hidden></li>
+      </ul>
+    </section>
+
+    <!-- ================= DEFAULT BROWSER (F01) ================= -->
+    <section class="menu__section" aria-labelledby="menu-section-default">
+      <h2 class="menu__section-title" id="menu-section-default">Default browser</h2>
+      <ul class="menu__rows" role="list">
+        <li class="menu-row" id="default-browser-row">
+          <p class="menu-row__static">
+            <span class="menu-row__label">Default</span>
+            <span class="menu-row__detail" id="default-browser-detail">Checking…</span>
+          </p>
+          <button id="copy-default-command" class="menu-row__button menu-row__button--quiet" type="button">Copy the command</button>
+          <p class="menu-row__note">A WebExtension has no default-browser API on this engine. Ziy reads the state from a helper and shows the command for the rest — it never claims a state it did not read.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ================= PROFILES (S26) ================= -->
+    <section class="menu__section" aria-labelledby="menu-section-profiles">
+      <h2 class="menu__section-title" id="menu-section-profiles">Profiles</h2>
+      <ul class="menu__rows" role="list">
+        <li class="menu-row" id="profiles-row">
+          <p class="menu-row__static">
+            <span class="menu-row__label">Current</span>
+            <span class="menu-row__detail" id="profiles-detail">default</span>
+          </p>
+          <div class="menu__profiles">
+            <label class="sr-only" for="profiles-select">Profile</label>
+            <select id="profiles-select" class="menu__select"></select>
+            <button id="profiles-switch" class="menu-row__button menu-row__button--quiet" type="button">Copy the command</button>
+          </div>
+          <p class="menu-row__note">Switching profile restarts the browser with <code>--profile</code>, which only the launcher does. This copies the command that starts the profile you pick.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ================= SETTINGS AND ABOUT ================= -->
+    <section class="menu__section" aria-labelledby="menu-section-about">
+      <h2 class="menu__section-title" id="menu-section-about">Ziy</h2>
+      <ul class="menu__rows" role="list">
+        <li class="menu-row"><a id="open-options" class="menu-row__button" href="options.html">Keyboard shortcuts and settings</a></li>
+      </ul>
+    </section>
+
+    <p class="menu__status" id="menu-status" data-kind="info" role="status" aria-live="polite"></p>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

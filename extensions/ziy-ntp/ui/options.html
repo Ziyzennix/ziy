@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziy New Tab — settings</title>
+
+<!-- The design tokens, the same copy the NTP page ships: an extension page has
+     no build step, so the custom properties are inlined. -->
+<style>
+:root {
+  color-scheme: light;
+
+  --bg: #ffffff;
+  --surface: #fafafb;
+  --surface-raised: #fafafb;
+  --surface-sunken: #f0f0f0;
+  --border: #e4e4e5;
+  --border-strong: #c9c9ca;
+  --border-input: #767b82;
+  --focus: #0b6e6e;
+
+  --text: #202124;
+  --text-muted: #5c5f66;
+  --text-inverse: #ffffff;
+
+  --accent: #0b6e6e;
+  --accent-hover: #095a5a;
+  --accent-active: #08504f;
+  --accent-bg: #e6f2f2;
+  --on-accent: #ffffff;
+
+  --danger: #b3261e;
+  --danger-hover: #9c2119;
+  --danger-bg: #fdecea;
+  --on-danger: #ffffff;
+  --success: #1a7a4d;
+  --success-bg: #e7f4ee;
+  --warning: #8a5a00;
+  --warning-bg: #fdf3e0;
+
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, .06), 0 1px 3px rgba(16, 24, 40, .10);
+
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, "Cascadia Mono", monospace;
+  --text-xs: 12px; --leading-xs: 16px; --weight-xs: 500;
+  --text-sm: 14px; --leading-sm: 20px; --weight-sm: 400;
+  --text-base: 16px; --leading-base: 24px; --weight-base: 400;
+  --text-lg: 20px; --leading-lg: 28px; --weight-lg: 600;
+  --text-xl: 28px; --leading-xl: 34px; --weight-xl: 700;
+
+  --space-0: 0; --space-1: 4px; --space-2: 8px; --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-pill: 999px;
+
+  --motion-fast: 120ms; --motion-ease: cubic-bezier(.2, .8, .2, 1);
+
+  --content-max: 1128px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --bg: #17181a;
+    --surface: #1f2124;
+    --surface-raised: #26282b;
+    --surface-sunken: #101113;
+    --border: #3a3d41;
+    --border-strong: #6b6f76;
+    --border-input: #868e98;
+    --focus: #2dd4bf;
+
+    --text: #f4f5f6;
+    --text-muted: #a1a6ad;
+    --text-inverse: #17181a;
+
+    --accent: #2dd4bf;
+    --accent-hover: #5ee0d0;
+    --accent-active: #7ae7da;
+    --accent-bg: #14302e;
+    --on-accent: #04211c;
+
+    --danger: #f87171;
+    --danger-hover: #fca5a5;
+    --danger-bg: #3a1714;
+    --on-danger: #3b0a07;
+    --success: #4ade80;
+    --success-bg: #122b1f;
+    --warning: #fbbf24;
+    --warning-bg: #33260c;
+
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .6);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #17181a;
+  --surface: #1f2124;
+  --surface-raised: #26282b;
+  --surface-sunken: #101113;
+  --border: #3a3d41;
+  --border-strong: #6b6f76;
+  --border-input: #868e98;
+  --focus: #2dd4bf;
+
+  --text: #f4f5f6;
+  --text-muted: #a1a6ad;
+  --text-inverse: #17181a;
+
+  --accent: #2dd4bf;
+  --accent-hover: #5ee0d0;
+  --accent-active: #7ae7da;
+  --accent-bg: #14302e;
+  --on-accent: #04211c;
+
+  --danger: #f87171;
+  --danger-hover: #fca5a5;
+  --danger-bg: #3a1714;
+  --on-danger: #3b0a07;
+  --success: #4ade80;
+  --success-bg: #122b1f;
+  --warning: #fbbf24;
+  --warning-bg: #33260c;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .6);
+}
+
+:where(button, a, input, select, textarea, [tabindex], [role="radio"], [role="option"]):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+
+<link rel="stylesheet" href="ntp.css">
+</head>
+<body class="options">
+
+<main class="options-inner">
+
+  <h1>New tab</h1>
+  <p class="lede">Everything on this page applies to the new tab page in this browser
+     profile only. Ziy saves it as you change it.</p>
+
+  <!-- ---------------------------------------------------------------- widgets -->
+  <section aria-labelledby="widgets-h">
+    <h2 id="widgets-h">Widgets</h2>
+    <div id="widget-toggles"></div>
+  </section>
+
+  <!-- ----------------------------------------------------------------- search -->
+  <section aria-labelledby="search-h">
+    <h2 id="search-h">Search</h2>
+    <p class="lede" style="margin-bottom: var(--space-4)">
+      The engines below are what the search box on the new tab page offers. Tick the
+      ones you want in its list; the left icon on the new tab page swaps between
+      them. Unchecked engines stay in your settings and can be turned back on.
+    </p>
+    <div id="engine-list"></div>
+    <p class="options-status" id="engine-status" role="status"></p>
+  </section>
+
+  <!-- ------------------------------------------------------------------ clock -->
+  <section aria-labelledby="clock-h">
+    <h2 id="clock-h">Clock</h2>
+    <div class="segmented" role="radiogroup" aria-label="Clock format" id="clock-choice"></div>
+  </section>
+
+  <!-- ------------------------------------------------------------- background -->
+  <section aria-labelledby="background-h">
+    <h2 id="background-h">Backdrop</h2>
+    <p class="lede" style="margin-bottom: var(--space-4)">
+      Ziy carries no photo library of its own: the backdrop is either one of its own
+      gradients, a flat colour from the design tokens, or a picture you pick. Nothing
+      is fetched from anywhere to fill this in.
+    </p>
+    <div class="segmented" role="radiogroup" aria-label="Backdrop source"
+         id="background-choice" style="margin-bottom: var(--space-4)"></div>
+    <div class="swatches" id="gradient-swatches" role="group"
+         aria-label="Gradient backdrops"></div>
+    <div class="file-row" id="custom-file-row" hidden>
+      <label class="btn btn-secondary btn-sm" for="custom-file">
+        Choose a picture
+        <input type="file" id="custom-file" accept="image/*">
+      </label>
+      <span class="file-name" id="custom-file-name"></span>
+      <button class="btn btn-danger btn-sm" type="button" id="custom-remove">Remove</button>
+    </div>
+    <div class="toggle-row" style="margin-top: var(--space-4)">
+      <input type="checkbox" role="switch" id="bg-refresh" aria-describedby="bg-refresh-desc">
+      <span class="text">
+        <label for="bg-refresh">Use a new backdrop with each new tab</label>
+        <p class="desc" id="bg-refresh-desc">Off by default. With it on, each new tab asks
+           the background page to reload the open new tab so the picker's choice is
+           picked up straight away.</p>
+      </span>
+    </div>
+    <p class="options-status" id="background-status" role="status"></p>
+  </section>
+
+  <!-- --------------------------------------------------------------- topsites -->
+  <section aria-labelledby="topsites-h">
+    <h2 id="topsites-h">Top sites</h2>
+    <div class="segmented" role="radiogroup" aria-label="Top sites mode"
+         id="mode-choice" style="margin-bottom: var(--space-3)"></div>
+    <p class="lede" id="mode-hint"></p>
+  </section>
+
+  <!-- ------------------------------------------------------------------ cards -->
+  <section aria-labelledby="cards-h">
+    <h2 id="cards-h">Cards</h2>
+    <div class="toggle-row">
+      <input type="checkbox" role="switch" id="cards-toggle" aria-describedby="cards-desc">
+      <span class="text">
+        <label for="cards-toggle">Show the cards section on the new tab page</label>
+        <p class="desc" id="cards-desc">Off by default. Ziy ships no advertising network,
+           so this region has nothing that would fill it — it exists so the new tab
+           page's shape matches the whole design system rather than a cut-down one.</p>
+      </span>
+    </div>
+  </section>
+
+  <p class="options-status" id="page-status" role="status"></p>
+
+</main>
+
+<script src="../lib/model.js"></script>
+<script src="../lib/storage.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

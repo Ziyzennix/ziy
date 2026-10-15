@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "Ziy Talk",
+  "version": "1.0.0",
+  "description": "Ziy's call surface: start a call, share the room link, and hand the meeting to a Jitsi server you control.",
+  "author": "Ziy",
+  "homepage_url": "https://ziy.app/talk",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ziy-talk@ziy.app",
+      "strict_min_version": "128.0"
+    }
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "optional_permissions": [],
+  "host_permissions": [],
+  "background": {
+    "scripts": [
+      "lib/room.js",
+      "lib/settings.js",
+      "lib/chips.js",
+      "background/background.js"
+    ],
+    "type": "classic"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["content/bridge.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "sidebar_action": {
+    "default_title": "Ziy Talk",
+    "default_panel": "ui/panel.html",
+    "open_at_install": false
+  },
+  "options_page": "ui/options.html",
+  "options_ui": {
+    "page": "ui/options.html",
+    "open_in_tab": true
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; connect-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["ui/panel.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "icons/talk-16.png",
+    "32": "icons/talk-32.png",
+    "48": "icons/talk-48.png",
+    "96": "icons/talk-96.png"
+  }
+}

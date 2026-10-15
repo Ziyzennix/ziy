@@ -1,0 +1,17 @@
+# Strip Firefox's own new tab page (deep-fork deliverable 3a).
+#
+# Why manifest_version, and not deletion: omni.ja members are fixed-position, so
+# removing or resizing a member relocates every later member and the container
+# is dead (proofs-shell.md §1.3). A same-length manifest bump makes the add-on
+# INSTALLER reject the built-in at runtime — loud, reversible, and it does not
+# touch a single offset.
+#
+# Applied by build-shell.sh to browser/omni.ja via tools/lib/omni-ja.py.
+# Verify: ./tools/verify.sh --newtab proves a new tab lands on our page.
+
+[[member]]
+path = "chrome/browser/builtin-addons/newtab/manifest.json"
+
+[[member.replace]]
+pattern = '"manifest_version": 2,'
+replacement = '"manifest_version": 3,'

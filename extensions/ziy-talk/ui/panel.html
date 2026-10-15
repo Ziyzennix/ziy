@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziy Talk</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="panel.css">
+</head>
+<body class="ziy-talk">
+  <a class="skip-link" href="#talk-main">Skip to main content</a>
+
+  <!-- The panel is the sidebar_action page: role=region with a heading, per
+       replica/design/components.md §15. -->
+  <main id="talk-main" class="panel" role="region" aria-labelledby="talk-title">
+    <header class="panel__header">
+      <h1 class="panel__title" id="talk-title">Talk</h1>
+      <p class="panel__sub" id="talk-sub">Start a call, share the link, hand the meeting to your server.</p>
+    </header>
+
+    <!-- One live region for every state change in the panel. Screen readers hear
+         the state rather than having to hunt for it. -->
+    <p class="sr-only" id="talk-live" role="status" aria-live="polite"></p>
+
+    <!-- ================= 0. NOT AVAILABLE =================
+         Brave's own contract: the call surface is unavailable in private windows
+         with Tor (braveTalk.isSupported() returns false in a Tor profile). Ziy
+         mirrors that. This state is rendered whenever the background reports
+         unsupported, which covers both the shell pref ziy.talk.supported being
+         false and the panel running in a private browsing process. -->
+    <section id="view-unsupported" class="state state--blocked" aria-labelledby="unsupported-h" hidden>
+      <h2 class="state__title" id="unsupported-h">Not available here</h2>
+      <p class="state__body" id="unsupported-body">
+        Talk is not available in private windows with Tor. Open a regular window to start a call.
+      </p>
+    </section>
+
+    <!-- ================= 1. LOBBY ================= -->
+    <section id="view-lobby" class="view" aria-labelledby="lobby-h" hidden>
+      <h2 class="view__title" id="lobby-h">Start a call</h2>
+
+      <!-- Name, per recon S40's "display name + gravatar" row. Ziy has no
+           avatar service: the name is the whole identity in the meeting. -->
+      <div class="field">
+        <label class="field__label" for="lobby-name">Your name in the meeting</label>
+        <input class="field__input" id="lobby-name" type="text" autocomplete="off"
+               spellcheck="false" maxlength="200" aria-describedby="lobby-name-hint">
+        <p class="field__hint" id="lobby-name-hint">Blank is allowed. You can change this later in settings.</p>
+      </div>
+
+      <!-- Camera preview. Only appears when the user has granted permission; a
+           denied permission is a state, not an error to hide. -->
+      <div id="lobby-preview" class="preview" aria-labelledby="preview-h" hidden>
+        <h3 class="preview__title" id="preview-h">Camera preview</h3>
+        <video class="preview__video" id="lobby-video" playsinline muted></video>
+        <p class="preview__note" id="preview-note" hidden></p>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn--primary" id="btn-start" type="button">
+          Start a call
+        </button>
+        <button class="btn" id="btn-join-open" type="button" aria-expanded="false" aria-controls="join-form">
+          Join with a code
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= 1b. JOIN ================= -->
+    <section id="view-join" class="view" aria-labelledby="join-h" hidden>
+      <h2 class="view__title" id="join-h">Join a call</h2>
+      <form id="join-form" class="form" novalidate>
+        <div class="field">
+          <label class="field__label" for="join-input">Room code or link</label>
+          <input class="field__input" id="join-input" type="text" autocomplete="off"
+                 spellcheck="false" autocapitalize="off" inputmode="latin"
+                 aria-describedby="join-error" aria-invalid="false">
+          <p class="field__error" id="join-error" role="alert" hidden></p>
+          <p class="field__hint">
+            Paste the link someone sent you, or just the code: 15 characters, letters and digits.
+          </p>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary" id="btn-join" type="submit">Join this call</button>
+          <button class="btn" id="btn-join-cancel" type="button">Back</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ================= 2. ROOM READY (pre-call, link in hand) =================
+         The state the recon's F11 happy path ends in: the link, copied, ready to
+         share. -->
+    <section id="view-room" class="view" aria-labelledby="room-h" hidden>
+      <h2 class="view__title" id="room-h">Your call is ready</h2>
+
+      <p class="room__url-label" id="room-url-label">Share this link</p>
+      <div class="room__url">
+        <output class="room__code" id="room-id" aria-labelledby="room-url-label"></output>
+        <button class="btn btn--icon" id="btn-copy" type="button"
+                aria-label="Copy the call link">Copy</button>
+      </div>
+      <p class="field__hint" id="room-server-hint"></p>
+
+      <!-- The QR code, drawn as SVG so it stays crisp at any panel width and is
+           not a bitmap to scale. It carries the room link, not the scheme URL:
+           a phone camera must reach a real server. -->
+      <figure class="qr" id="room-qr-figure">
+        <div class="qr__canvas" id="room-qr" role="img" aria-labelledby="qr-caption"></div>
+        <figcaption class="qr__caption" id="qr-caption">
+          Scan to join from a phone. The code holds the same link as above.
+        </figcaption>
+      </figure>
+
+      <div class="actions">
+        <button class="btn btn--primary" id="btn-enter" type="button">Enter the call</button>
+        <button class="btn" id="btn-room-done" type="button">Done</button>
+      </div>
+    </section>
+
+    <!-- ================= 3. THIRD-PARTY GATE =================
+         The honest part. A call on somebody else's server hands them the call
+         metadata, the participant IPs and the room name. That is a real trust
+         tradeoff, so it is named as one before the call starts, not buried. -->
+    <section id="view-warning" class="state state--warning" role="alertdialog"
+             aria-modal="false" aria-labelledby="warning-h" aria-describedby="warning-body" hidden>
+      <h2 class="state__title" id="warning-h">This call runs on someone else's server</h2>
+      <p class="state__body" id="warning-body"></p>
+      <ul class="warning__list" id="warning-list"></ul>
+      <div class="actions">
+        <button class="btn btn--primary" id="btn-warning-accept" type="button">
+          I understand, continue
+        </button>
+        <button class="btn" id="btn-warning-cancel" type="button">Cancel</button>
+      </div>
+      <label class="check">
+        <input type="checkbox" id="warning-remember">
+        <span>Do not warn me again about this server</span>
+      </label>
+    </section>
+
+    <!-- ================= 4. IN CALL (tab mode) =================
+         The real in-call surface. In mode "tab" the meeting is a browser tab at
+         the configured server's room URL, where the Jitsi external_api.js runs
+         as a first-class script in that page's own origin — the only context the
+         MV3 extension CSP allows (see manifest.json's CSP note). The chips below
+         are therefore live: each one posts the documented command to the
+         meeting page and reflects the events it posts back.
+    -->
+    <section id="view-call" class="view view--call" aria-labelledby="call-h" hidden>
+      <h2 class="view__title" id="call-h">In the call</h2>
+      <p class="call__link">
+        <span class="sr-only">Call link</span>
+        <a class="call__url" id="call-url" href="#" target="_blank" rel="noopener"></a>
+      </p>
+
+      <!-- Control bar: the seven controls recon S39 names, plus leave. -->
+      <div class="chips" id="chip-bar" role="toolbar" aria-label="Call controls"
+           aria-controls="call-live"></div>
+      <p class="chips__live" id="call-live" role="status" aria-live="polite"></p>
+
+      <div class="actions">
+        <button class="btn btn--danger" id="btn-leave" type="button">Leave the call</button>
+      </div>
+    </section>
+
+    <!-- ================= 5. IN CALL (sidebar mode / degraded) =================
+         The honest degraded surface. In sidebar mode the meeting is an iframe
+         inside a moz-extension page, and the MV3 CSP forbids loading the Jitsi
+         external_api.js into that page — so the postMessage bridge the External
+         API needs cannot be created from here. The iframe still works for
+         everything the meeting itself offers. The chips therefore become what
+         they truthfully are: annotations naming where the control lives in the
+         meeting window, plus a link to open the same room in a tab where the
+         controls are live. No chip pretends to be a toggle it cannot drive.
+    -->
+    <section id="view-call-sidebar" class="view view--call" aria-labelledby="call-s-h" hidden>
+      <h2 class="view__title" id="call-s-h">Meeting</h2>
+      <div class="meeting" id="meeting-frame"></div>
+      <p class="call__note" id="call-note"></p>
+      <div class="chips chips--degraded" id="chip-bar-degraded" role="toolbar" aria-label="Meeting controls"></div>
+      <p class="chips__live" id="call-live-degraded" role="status" aria-live="polite"></p>
+      <div class="actions">
+        <button class="btn" id="btn-open-tab" type="button">Open this call in a tab</button>
+        <button class="btn btn--danger" id="btn-leave-sidebar" type="button">Leave the call</button>
+      </div>
+    </section>
+
+    <!-- ================= 6. DISCONNECTED ================= -->
+    <section id="view-disconnected" class="state state--error" aria-labelledby="disc-h" hidden>
+      <h2 class="state__title" id="disc-h">The call ended</h2>
+      <p class="state__body" id="disc-body">You are no longer in this meeting.</p>
+      <div class="actions">
+        <button class="btn btn--primary" id="btn-rejoin" type="button">Rejoin</button>
+        <button class="btn" id="btn-disc-done" type="button">Back to Talk</button>
+      </div>
+    </section>
+
+    <!-- ================= 7. ERROR =================
+         Rendered for: the server is unreachable (the shipped default is a
+         reserved-invalid origin, so this is the default state's honest
+         description), the server is a known public one without opt-in, or Ziy's
+         own scheme was opened with no server configured. -->
+    <section id="view-error" class="state state--error" role="alert" aria-labelledby="error-h" hidden>
+      <h2 class="state__title" id="error-h" id="error-title">Cannot reach the meeting server</h2>
+      <p class="state__body" id="error-body"></p>
+      <div class="actions">
+        <button class="btn btn--primary" id="btn-error-settings" type="button">Open Talk settings</button>
+        <button class="btn" id="btn-error-retry" type="button">Try again</button>
+        <button class="btn" id="btn-error-done" type="button">Back</button>
+      </div>
+    </section>
+
+    <!-- ================= 8. RECENT ROOMS ================= -->
+    <section id="view-recent" class="view" aria-labelledby="recent-h" hidden>
+      <h2 class="view__title" id="recent-h">Recent calls</h2>
+      <ul class="recent" id="recent-list"></ul>
+      <p class="recent__empty" id="recent-empty" hidden>
+        You have not started a call yet. Rooms you use show up here, newest first.
+      </p>
+    </section>
+
+    <!-- ================= 9. SETTINGS SUMMARY ================= -->
+    <section id="view-settings" class="view" aria-labelledby="settings-h" hidden>
+      <h2 class="view__title" id="settings-h">Talk settings</h2>
+      <dl class="summary" id="settings-summary"></dl>
+      <div class="actions">
+        <button class="btn btn--primary" id="btn-open-settings" type="button">Open Talk settings</button>
+      </div>
+    </section>
+  </main>
+  <script src="../lib/room.js"></script>
+  <script src="../lib/settings.js"></script>
+  <script src="../lib/chips.js"></script>
+  <script src="../lib/qrcode.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>

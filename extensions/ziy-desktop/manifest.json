@@ -1,0 +1,91 @@
+{
+  "manifest_version": 3,
+  "name": "Ziy Desktop",
+  "version": "1.0.0",
+  "description": "Ziy's desktop glue: the app menu (new tab, window, private window, zoom, find, downloads, settings), first-run data import and export from other browsers, and default-browser status. Everything here is real or honestly absent.",
+  "author": "Ziy",
+  "homepage_url": "https://ziy.app",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ziy-desktop@ziy.app",
+      "strict_min_version": "142.0"
+    }
+  },
+  "background": {
+    "scripts": ["lib/desktop.js", "background/background.js"],
+    "type": "classic"
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "bookmarks",
+    "downloads",
+    "find",
+    "theme"
+  ],
+  "optional_permissions": [],
+  "host_permissions": [],
+  "action": {
+    "default_title": "Ziy menu",
+    "default_popup": "ui/popup.html",
+    "default_icon": {
+      "16": "icons/menu-16.png",
+      "32": "icons/menu-32.png",
+      "48": "icons/menu-48.png"
+    }
+  },
+  "options_ui": {
+    "page": "ui/options.html",
+    "open_in_tab": true
+  },
+  "commands": {
+    "ziy-new-tab": {
+      "suggested_key": {
+        "default": "Ctrl+T"
+      },
+      "description": "Open a new tab"
+    },
+    "ziy-new-window": {
+      "suggested_key": {
+        "default": "Ctrl+N"
+      },
+      "description": "Open a new window"
+    },
+    "ziy-new-private-window": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+P"
+      },
+      "description": "Open a new private window"
+    },
+    "ziy-zoom-in": {
+      "description": "Zoom in"
+    },
+    "ziy-zoom-out": {
+      "description": "Zoom out"
+    },
+    "ziy-zoom-reset": {
+      "description": "Reset zoom"
+    },
+    "ziy-find": {
+      "description": "Find in this page"
+    },
+    "ziy-import": {
+      "description": "Import bookmarks and settings"
+    },
+    "ziy-menu": {
+      "suggested_key": {
+        "default": "Alt+F"
+      },
+      "description": "Open the Ziy menu"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; connect-src 'self'"
+  },
+  "icons": {
+    "16": "icons/menu-16.png",
+    "32": "icons/menu-32.png",
+    "48": "icons/menu-48.png",
+    "96": "icons/menu-96.png"
+  }
+}

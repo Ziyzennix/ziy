@@ -1,0 +1,86 @@
+<!doctype html>
+<!--
+  Ziy Shields — the panel/options debug page.
+
+  A real extension page (the popup or the options page), served from inside the
+  package, so a screenshot of it shows the actual Shields UI rather than a
+  blank tab. The panel's own script runs inside a restricted popup context with
+  no tabs.query access on some Gecko builds, so this page re-uses the same
+  shared module and the same components but in a tab context where it can also
+  dump the extension's own state.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ziy Shields</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="shields.css">
+</head>
+<body class="ziy-panel" data-theme="light">
+  <main class="ziy-panel__inner" role="dialog" aria-modal="false" aria-labelledby="ziy-domain">
+    <h2 id="ziy-domain" class="ziy-panel__title">
+      <span id="ziy-domain-text" class="ziy-panel__domain">example.com</span>
+      <span id="ziy-state" class="ziy-panel__state ziy-state ziy-state--up" role="status">Shields are up</span>
+    </h2>
+
+    <div class="ziy-panel__summary">
+      <button id="ziy-count" class="ziy-count" type="button" aria-expanded="false" aria-controls="ziy-items">
+        <span id="ziy-count__n">42</span>
+        <span id="ziy-count__label">requests stopped this visit</span>
+      </button>
+    </div>
+
+    <section id="ziy-simple" class="ziy-simple" aria-labelledby="ziy-simple-title">
+      <h3 id="ziy-simple-title" class="ziy-simple__title">Protection for this site</h3>
+      <p class="ziy-simple__hint">Switch to detailed controls to change these.</p>
+      <div class="ziy-row">
+        <label class="ziy-row__label" for="ziy-row-adsTrackers">Trackers and ads</label>
+        <div class="ziy-segmented" role="radiogroup" aria-labelledby="ziy-row-adsTrackers">
+          <input id="seg-std" type="radio" name="ads" value="standard" checked>
+          <label class="ziy-segmented__opt" for="seg-std">Standard</label>
+          <input id="seg-agg" type="radio" name="ads" value="aggressive">
+          <label class="ziy-segmented__opt" for="seg-agg">Aggressive</label>
+          <input id="seg-off" type="radio" name="ads" value="off">
+          <label class="ziy-segmented__opt" for="seg-off">Off</label>
+        </div>
+      </div>
+      <div class="ziy-row">
+        <label class="ziy-row__label" for="ziy-row-httpsUpgrade">Upgrade to HTTPS</label>
+        <div class="ziy-segmented" role="radiogroup" aria-labelledby="ziy-row-httpsUpgrade">
+          <input id="https-auto" type="radio" name="https" value="auto" checked>
+          <label class="ziy-segmented__opt" for="https-auto">Automatic</label>
+          <input id="https-strict" type="radio" name="https" value="strict">
+          <label class="ziy-segmented__opt" for="https-strict">Strict</label>
+          <input id="https-off" type="radio" name="https" value="off">
+          <label class="ziy-segmented__opt" for="https-off">Off</label>
+        </div>
+      </div>
+      <div class="ziy-row">
+        <label class="ziy-row__label" for="ziy-row-scripts">Scripts</label>
+        <input class="ziy-switch" id="ziy-row-scripts" type="checkbox" role="switch" checked
+               aria-checked="true">
+      </div>
+      <div class="ziy-row">
+        <label class="ziy-row__label" for="ziy-select-cookies">Cookie control</label>
+        <select class="ziy-select" id="ziy-select-cookies">
+          <option value="block_3p" selected>Block third-party cookies</option>
+          <option value="block_all">Block all cookies</option>
+          <option value="allow_all">Allow all cookies</option>
+        </select>
+      </div>
+      <div class="ziy-row">
+        <label class="ziy-row__label" for="ziy-row-fingerprinting">Block fingerprinting</label>
+        <input class="ziy-switch" id="ziy-row-fingerprinting" type="checkbox" role="switch" checked
+               aria-checked="true">
+      </div>
+      <div class="ziy-row">
+        <label class="ziy-row__label" for="ziy-row-forgetMeOnClose">Forget me when I close this site</label>
+        <input class="ziy-switch" id="ziy-row-forgetMeOnClose" type="checkbox" role="switch">
+      </div>
+    </section>
+  </main>
+  <script src="shields-shared.js"></script>
+  <script src="debug.js"></script>
+</body>
+</html>

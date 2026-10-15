@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziy design system — mock</title>
+<link rel="icon" href="brand/icon-16.svg">
+<style>
+/* Inline copy of replica/design/tokens.css so this file renders standalone
+   from a file:// URL with no build step. Source of truth is tokens.css. */
+:root {
+  color-scheme: light;
+  --bg: #ffffff; --surface: #fafafb; --surface-sunken: #f0f0f0;
+  --border: #e4e4e5; --border-strong: #c9c9ca; --border-input: #767b82; --focus: #0b6e6e;
+  --text: #202124; --text-muted: #5c5f66; --text-inverse: #ffffff;
+  --accent: #0b6e6e; --accent-hover: #095a5a; --accent-active: #08504f; --accent-bg: #e6f2f2;
+  --on-accent: #ffffff; --danger: #b3261e; --danger-hover: #9c2119; --danger-bg: #fdecea; --on-danger: #ffffff;
+  --success: #1a7a4d; --success-bg: #e7f4ee; --warning: #8a5a00; --warning-bg: #fdf3e0;
+  --shadow-card: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.10);
+  --shadow-pop: 0 12px 32px rgba(16,24,40,.16);
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, "Cascadia Mono", monospace;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-pill: 999px;
+  --motion-fast: 120ms; --motion-base: 200ms; --motion-ease: cubic-bezier(.2,.8,.2,1);
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #17181a; --surface: #1f2124; --surface-sunken: #101113;
+  --border: #3a3d41; --border-strong: #6b6f76; --border-input: #868e98; --focus: #2dd4bf;
+  --text: #f4f5f6; --text-muted: #a1a6ad; --text-inverse: #17181a;
+  --accent: #2dd4bf; --accent-hover: #5ee0d0; --accent-active: #7ae7da; --accent-bg: #14302e; --on-accent: #04211c;
+  --danger: #f87171; --danger-hover: #fca5a5; --danger-bg: #3a1714; --on-danger: #3b0a07;
+  --success: #4ade80; --success-bg: #122b1f; --warning: #fbbf24; --warning-bg: #33260c;
+  --shadow-card: 0 1px 2px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.6);
+  --shadow-pop: 0 12px 32px rgba(0,0,0,.7);
+}
+:where(button, a, input, select, textarea, [tabindex], summary, [role="button"], [role="tab"], [role="option"]):focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 2px; border-radius: var(--radius-sm);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--surface); color: var(--text);
+  font-family: var(--font-sans); font-size: 14px; line-height: 20px;
+}
+h1, h2, h3 { margin: 0; font-weight: 600; }
+.page { max-width: 1280px; margin: 0 auto; padding: var(--space-6) var(--space-5) var(--space-8); }
+.masthead { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-5); }
+.masthead img, .masthead svg { display: block; }
+.masthead .grow { flex: 1; }
+.masthead p { margin: 2px 0 0; color: var(--text-muted); }
+section.panel { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card); margin-bottom: var(--space-5); overflow: hidden; }
+.panel-h { display: flex; align-items: baseline; gap: var(--space-3); padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border); }
+.panel-h h2 { font-size: 16px; }
+.panel-h .route { color: var(--text-muted); font-size: 12px; }
+.panel-b { padding: var(--space-5); }
+.grid { display: grid; gap: var(--space-5); }
+.cols-2 { grid-template-columns: 1fr 1fr; }
+.cols-3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 960px) { .cols-2, .cols-3 { grid-template-columns: 1fr; } }
+
+/* ---------- NTP mock ---------- */
+.ntp { position: relative; border-radius: var(--radius-lg); overflow: hidden; min-height: 420px;
+  background:
+    linear-gradient(180deg, rgba(120,140,160,.55), rgba(60,70,90,.65)),
+    radial-gradient(120% 80% at 20% 10%, #cfd6e2, #6f7787 60%, #4a5163); }
+.ntp-top { display: flex; justify-content: flex-end; padding: var(--space-3); }
+.ntp-gear { width: 32px; height: 32px; border-radius: var(--radius-pill); border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.28); color: #fff; font-size: 16px; cursor: pointer; }
+.ntp-search { position: absolute; top: 76px; left: 50%; transform: translateX(-50%); width: min(620px, 78%); }
+.ntp-search input { width: 100%; height: 48px; border: 1px solid var(--border-input); border-radius: var(--radius-pill);
+  background: var(--bg); color: var(--text); font: inherit; padding: 0 var(--space-5); box-shadow: var(--shadow-card); }
+.ntp-credit { position: absolute; left: var(--space-3); bottom: var(--space-3); font-size: 12px; color: #fff;
+  background: rgba(23,24,26,.55); border-radius: var(--radius-pill); padding: 3px 10px; }
+.ntp-stats { position: absolute; right: var(--space-3); bottom: var(--space-3); display: flex; gap: var(--space-5);
+  background: rgba(255,255,255,.72); backdrop-filter: blur(12px) saturate(140%); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4); }
+[data-theme="dark"] .ntp-stats { background: rgba(23,24,26,.72); }
+.ntp-stats .lbl { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.ntp-stats dt { font-size: 20px; font-weight: 600; margin: 2px 0 0; }
+.ntp-stats dl { margin: 0; }
+.ntp-stats .v-accent { color: var(--accent); }
+
+/* ---------- tiles ---------- */
+.tiles { display: grid; grid-template-columns: repeat(6, 96px); gap: var(--space-4); }
+@media (max-width: 960px) { .tiles { grid-template-columns: repeat(3, 96px); } }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+  height: 96px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2);
+  cursor: pointer; font: inherit; color: var(--text); text-align: center; }
+.tile:hover { border-color: var(--accent); }
+.tile .gl { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); color: var(--on-accent);
+  display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+.tile .nm { font-size: 12px; line-height: 16px; padding: 0 6px; }
+.tile .more { font-size: 11px; color: var(--text-muted); }
+
+/* ---------- browser chrome mock ---------- */
+.chrome { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--bg); }
+.chrome-bar { height: 2px; background: var(--accent); }
+.tabstrip { display: flex; align-items: flex-end; gap: 2px; background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 6px 8px 0; }
+.tab { appearance: none; border: 1px solid transparent; border-bottom: none; background: transparent; color: var(--text-muted);
+  font: inherit; font-size: 12px; min-width: 120px; max-width: 200px; height: 34px; border-radius: 8px 8px 0 0;
+  padding: 0 12px; display: flex; align-items: center; gap: 8px; cursor: pointer; position: relative; }
+.tab[aria-selected="true"] { background: var(--bg); color: var(--text); border-color: var(--border); }
+.tab[aria-selected="true"]::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px; height: 3px;
+  background: var(--accent); border-radius: 3px 3px 0 0; }
+.tab .x { margin-left: auto; color: var(--text-muted); }
+.toolbar { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3);
+  background: var(--bg); border-bottom: 1px solid var(--border); }
+.iconbtn { width: 32px; height: 32px; border-radius: var(--radius-md); border: 1px solid transparent; background: transparent;
+  color: var(--text); display: grid; place-items: center; cursor: pointer; font-size: 15px; }
+.iconbtn:hover { background: var(--surface-sunken); }
+.urlbar { flex: 1; height: 36px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-sunken);
+  display: flex; align-items: center; gap: var(--space-2); padding: 0 var(--space-3); color: var(--text-muted); }
+.urlbar:focus-within { background: var(--bg); border-color: var(--focus); box-shadow: 0 0 0 2px var(--focus); }
+.urlbar input { flex: 1; border: 0; background: transparent; color: var(--text); font: inherit; outline: none; min-width: 0; }
+.shieldbtn { position: relative; }
+.shieldbtn[data-up="false"] { color: var(--text-muted); }
+.badge { position: absolute; top: -2px; right: -2px; min-width: 16px; height: 16px; border-radius: var(--radius-pill);
+  background: var(--accent-bg); color: var(--accent); font-size: 11px; font-weight: 600; display: grid; place-items: center;
+  padding: 0 4px; border: 1px solid var(--bg); }
+
+/* ---------- shields panel mock ---------- */
+.shieldspop { width: 360px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface);
+  box-shadow: var(--shadow-pop); overflow: hidden; }
+.sp-h { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border); }
+.sp-h .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.sp-b { padding: var(--space-3) var(--space-4); }
+.sp-b h3 { font-size: 13px; }
+.sp-b p { margin: 0 0 var(--space-3); color: var(--text-muted); font-size: 12px; line-height: 16px; }
+.row { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) 0; border-top: 1px solid var(--border); }
+.row:first-of-type { border-top: 0; }
+.row .lab { flex: 1; font-size: 13px; }
+.row .lab small { display: block; color: var(--text-muted); font-size: 11px; }
+.row .ovr { color: var(--text-muted); font-size: 11px; border: 1px solid var(--border-strong); border-radius: var(--radius-pill);
+  padding: 1px 8px; }
+.countlink { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent); border-radius: var(--radius-pill);
+  font: inherit; font-size: 12px; font-weight: 600; padding: 2px 10px; cursor: pointer; }
+.countlink:hover { background: var(--accent); color: var(--on-accent); }
+
+/* ---------- switch ---------- */
+.sw { position: relative; width: 36px; height: 20px; border-radius: var(--radius-pill); border: 1px solid var(--border-strong);
+  background: var(--surface-sunken); cursor: pointer; padding: 0; }
+.sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--text-inverse); transition: transform var(--motion-fast) var(--motion-ease); }
+.sw[aria-checked="true"] { background: var(--accent); border-color: var(--accent); }
+.sw[aria-checked="true"]::after { transform: translateX(16px); background: var(--on-accent); }
+.sw[aria-checked="mixed"] { background: var(--border-strong); }
+.sw:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ---------- segmented ---------- */
+.seg { display: inline-flex; background: var(--surface-sunken); border: 1px solid var(--border); border-radius: var(--radius-pill);
+  padding: 2px; gap: 2px; }
+.seg button { border: 0; background: transparent; color: var(--text-muted); font: inherit; font-size: 12px; font-weight: 600;
+  height: 28px; padding: 0 14px; border-radius: var(--radius-pill); cursor: pointer; }
+.seg button[aria-checked="true"] { background: var(--accent); color: var(--on-accent); }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); height: 40px; padding: 0 var(--space-4);
+  border-radius: var(--radius-md); border: 1px solid transparent; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; }
+.btn-sm { height: 32px; padding: 0 var(--space-3); font-size: 13px; }
+.btn-lg { height: 48px; padding: 0 var(--space-5); font-size: 15px; }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary:active { background: var(--accent-active); }
+.btn-secondary { background: var(--bg); color: var(--text); border-color: var(--border-strong); }
+.btn-secondary:hover { background: var(--surface-sunken); }
+.btn-ghost { background: transparent; color: var(--accent); }
+.btn-ghost:hover { background: var(--accent-bg); }
+.btn-danger { background: var(--danger); color: var(--on-danger); }
+.btn-danger:hover { background: var(--danger-hover); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .6; cursor: not-allowed; }
+.btn .spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-top-color: transparent;
+  animation: spin 700ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- inputs ---------- */
+.field { display: flex; flex-direction: column; gap: 6px; max-width: 360px; }
+.field label { font-size: 13px; font-weight: 600; }
+.field input, .field select, .field textarea { height: 36px; border: 1px solid var(--border-input); border-radius: var(--radius-md);
+  background: var(--bg); color: var(--text); font: inherit; padding: 0 var(--space-3); }
+.field .hint { font-size: 12px; color: var(--text-muted); }
+.field .err { font-size: 12px; color: var(--danger); }
+.field[data-invalid="true"] input { border-color: var(--danger); border-width: 2px; }
+.dropdown { position: relative; width: 220px; }
+.dropdown > summary { list-style: none; height: 36px; border: 1px solid var(--border-input); border-radius: var(--radius-md);
+  background: var(--bg); display: flex; align-items: center; padding: 0 var(--space-3); cursor: pointer; }
+.dropdown > summary::-webkit-details-marker { display: none; }
+.dropdown .menu { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-pop); padding: var(--space-1); z-index: 5; }
+.dropdown .menu li { list-style: none; padding: 8px var(--space-3); border-radius: var(--radius-sm); font-size: 13px; }
+.dropdown .menu li[aria-selected="true"] { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+
+/* ---------- chat ---------- */
+.chat { width: 340px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface);
+  box-shadow: var(--shadow-card); display: flex; flex-direction: column; }
+.chat-h { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border); }
+.chat-b { padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-3); min-height: 180px; }
+.bubble { max-width: 78%; padding: var(--space-3); border-radius: var(--radius-lg); font-size: 13px; line-height: 18px; }
+.bubble.user { align-self: flex-end; background: var(--accent); color: var(--on-accent); border-radius: var(--radius-md); }
+.bubble.ai { align-self: flex-start; background: var(--accent-bg); color: var(--text); }
+.bubble.err { align-self: flex-start; background: var(--danger-bg); color: var(--danger); }
+.chip { align-self: flex-start; font-size: 11px; color: var(--text-muted); border: 1px solid var(--border); border-radius: var(--radius-pill);
+  padding: 2px 8px; }
+.chat-f { border-top: 1px solid var(--border); padding: var(--space-3); display: flex; gap: var(--space-2); }
+.chat-f textarea { flex: 1; height: 36px; resize: none; border: 1px solid var(--border-input); border-radius: var(--radius-md);
+  background: var(--bg); color: var(--text); font: inherit; padding: 8px var(--space-3); }
+
+/* ---------- settings shell ---------- */
+.set-shell { display: grid; grid-template-columns: 240px 1fr; border: 1px solid var(--border); border-radius: var(--radius-md);
+  overflow: hidden; background: var(--bg); min-height: 320px; }
+.set-nav { background: var(--bg); border-right: 1px solid var(--border); padding: var(--space-3); }
+.set-nav .search { display: flex; align-items: center; gap: var(--space-2); height: 32px; border: 1px solid var(--border-input);
+  border-radius: var(--radius-md); padding: 0 var(--space-3); margin-bottom: var(--space-3); color: var(--text-muted); }
+.set-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.set-nav a { display: flex; align-items: center; gap: var(--space-3); height: 32px; padding: 0 var(--space-3); border-radius: var(--radius-md);
+  color: var(--text); text-decoration: none; font-size: 13px; }
+.set-nav a:hover { background: var(--surface-sunken); }
+.set-nav a[aria-current="page"] { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+.set-body { background: var(--surface); padding: var(--space-5); }
+.set-body h3 { font-size: 15px; margin-bottom: var(--space-3); }
+.card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0 var(--space-4); }
+.card .row { padding: var(--space-3) 0; }
+
+/* ---------- dialog ---------- */
+dialog { border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-pop); background: var(--bg);
+  color: var(--text); padding: var(--space-5); width: 420px; font: inherit; }
+dialog::backdrop { background: rgba(16,24,40,.45); }
+dialog h3 { font-size: 16px; margin-bottom: var(--space-2); }
+dialog p { margin: 0 0 var(--space-4); color: var(--text-muted); font-size: 13px; }
+.dlg-actions { display: flex; justify-content: flex-end; gap: var(--space-2); }
+.toast { position: fixed; right: var(--space-5); bottom: var(--space-5); background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-pop); padding: var(--space-3) var(--space-4); font-size: 13px;
+  display: flex; gap: var(--space-3); align-items: center; z-index: 20; }
+.toast .ok { color: var(--success); font-weight: 700; }
+table.spec { border-collapse: collapse; width: 100%; font-size: 12px; }
+table.spec th, table.spec td { text-align: left; border-bottom: 1px solid var(--border); padding: 6px 8px; vertical-align: top; }
+table.spec th { color: var(--text-muted); font-weight: 600; }
+.swatch { display: inline-flex; align-items: center; gap: 8px; }
+.swatch i { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--border); display: inline-block; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <img src="brand/logo.svg" width="40" height="40" alt="">
+    <div class="grow">
+      <h1>Ziy — design system mock</h1>
+      <p>Self-contained preview of the tokens in <code>replica/design/tokens.css</code>. Reference layouts only; no shipped assets.</p>
+    </div>
+    <button class="btn btn-secondary btn-sm" id="themeBtn" type="button">Switch to dark</button>
+  </header>
+
+  <!-- ============ NTP ============ -->
+  <section class="panel">
+    <div class="panel-h"><h2>New Tab Page</h2><span class="route">S02 · S03 · S51 — chrome_url_overrides.newtab</span></div>
+    <div class="panel-b">
+      <div class="ntp" role="region" aria-label="New tab page">
+        <div class="ntp-top">
+          <button class="ntp-gear" type="button" aria-label="Customise this page">&#9881;</button>
+        </div>
+        <div class="ntp-search">
+          <label class="vh" for="ntpq">Search or type a web address</label>
+          <input id="ntpq" type="search" placeholder="Search or type a web address">
+        </div>
+        <div class="ntp-credit">Photo credit: sample backdrop</div>
+        <div class="ntp-stats">
+          <dl><dt class="v-accent">1,284</dt><dd class="lbl">Trackers &amp; ads stopped</dd></dl>
+          <dl><dt>412&nbsp;KB</dt><dd class="lbl">Data never sent</dd></dl>
+          <dl><dt>6&nbsp;min</dt><dd class="lbl">Time kept</dd></dl>
+        </div>
+      </div>
+      <h3 style="margin:24px 0 12px;font-size:14px">Top sites — expanded, page 1 of 2</h3>
+      <div class="tiles" role="region" aria-label="Top sites">
+        <button class="tile" type="button"><span class="gl">Z</span><span class="nm">Ziy</span></button>
+        <button class="tile" type="button"><span class="gl">A</span><span class="nm">Ars Technica</span></button>
+        <button class="tile" type="button"><span class="gl">M</span><span class="nm">Mozilla</span></button>
+        <button class="tile" type="button"><span class="gl">L</span><span class="nm">Linux Weekly</span></button>
+        <button class="tile" type="button"><span class="gl">E</span><span class="nm">Eff</span></button>
+        <button class="tile" type="button"><span class="more" aria-hidden="true">+ Add</span><span class="nm">Add a site</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Browser chrome + Shields ============ -->
+  <section class="panel">
+    <div class="panel-h"><h2>Browser chrome &amp; Shields</h2><span class="route">S06 · S07 · S08 · S09</span></div>
+    <div class="panel-b grid cols-2">
+      <div>
+        <div class="chrome" role="region" aria-label="Browser window mock">
+          <div class="chrome-bar" aria-hidden="true"></div>
+          <div class="tabstrip" role="tablist" aria-label="Tabs">
+            <button class="tab" role="tab" aria-selected="true" id="t1"><span aria-hidden="true">&#128196;</span>Getting started</button>
+            <button class="tab" role="tab" aria-selected="false" id="t2" tabindex="-1"><span aria-hidden="true">&#128196;</span>Ziy release notes<span class="x" aria-hidden="true">&#10005;</span></button>
+            <button class="tab" role="tab" aria-selected="false" id="t3" tabindex="-1"><span aria-hidden="true">&#9729;</span>Local docs<span class="x" aria-hidden="true">&#10005;</span></button>
+          </div>
+          <div class="toolbar">
+            <button class="iconbtn" type="button" aria-label="Back">&#8592;</button>
+            <button class="iconbtn" type="button" aria-label="Forward">&#8594;</button>
+            <button class="iconbtn" type="button" aria-label="Reload this page">&#10227;</button>
+            <div class="urlbar">
+              <button class="iconbtn shieldbtn" id="shieldBtn" type="button" data-up="true" aria-pressed="true"
+                      aria-label="Shields are up for example.com, 42 requests stopped">
+                <span aria-hidden="true">&#128737;</span>
+                <span class="badge" aria-hidden="true">42</span>
+              </button>
+              <label class="vh" for="url">Address</label>
+              <input id="url" value="https://example.com/privacy-report" readonly>
+              <button class="iconbtn" type="button" aria-label="Bookmark this page">&#9734;</button>
+            </div>
+            <button class="iconbtn" type="button" aria-label="Ziy panel">&#9776;</button>
+          </div>
+          <div class="set-body" style="min-height:120px">
+            <p style="color:var(--text-muted);font-size:13px;margin:0">Content area — the page renders behind this mock.</p>
+          </div>
+        </div>
+        <h3 style="margin:24px 0 12px;font-size:14px">Sidebar rail (left) — 48px</h3>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:48px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg);padding:6px;display:flex;flex-direction:column;gap:4px" role="tablist" aria-label="Ziy panels">
+            <button class="iconbtn" role="tab" aria-selected="true" type="button" style="background:var(--accent);color:var(--on-accent)" aria-label="Talk (open)">&#127909;</button>
+            <button class="iconbtn" role="tab" aria-selected="false" type="button" tabindex="-1" aria-label="Bookmarks">&#128278;</button>
+            <button class="iconbtn" role="tab" aria-selected="false" type="button" tabindex="-1" aria-label="Add a panel">+</button>
+          </div>
+          <div class="shieldspop" role="region" aria-labelledby="spTitle">
+            <div class="sp-h"><span class="dot" aria-hidden="true"></span><h3 id="spTitle" style="font-size:13px">example.com</h3>
+              <span style="margin-left:auto;color:var(--text-muted);font-size:11px">Shields are up</span></div>
+            <div class="sp-b">
+              <p>Blocking is on for this site. 42 requests were stopped during this visit.</p>
+              <div class="row">
+                <span class="lab">Requests stopped<small>Trackers and ads</small></span>
+                <button class="countlink" type="button">Show the 42 items</button>
+              </div>
+              <div class="row">
+                <span class="lab">Connections upgraded<small>Forced to HTTPS where possible</small></span>
+                <span style="color:var(--text-muted);font-size:12px">7</span>
+              </div>
+              <div class="row">
+                <span class="lab">Fingerprinting blocked</span>
+                <button class="sw" role="switch" aria-checked="true" aria-label="Block fingerprinting"></button>
+              </div>
+              <div class="row">
+                <span class="lab">Block scripts<span class="ovr">overridden for this site</span></span>
+                <button class="sw" role="switch" aria-checked="false" aria-label="Block scripts, overridden for this site"></button>
+              </div>
+              <div class="row">
+                <span class="lab">Forget me when I close this site</span>
+                <button class="sw" role="switch" aria-checked="false" aria-label="Forget me when I close this site"></button>
+              </div>
+              <div class="row" style="gap:8px">
+                <div class="seg" role="radiogroup" aria-label="Trackers and ads blocking">
+                  <button type="button" role="radio" aria-checked="true">Standard</button>
+                  <button type="button" role="radio" aria-checked="false">Aggressive</button>
+                  <button type="button" role="radio" aria-checked="false">Off</button>
+                </div>
+                <button class="btn btn-ghost btn-sm" type="button" style="margin-left:auto">Advanced controls</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-size:14px;margin:24px 0 12px">Find bar (chrome-owned)</h3>
+        <div style="display:flex;align-items:center;gap:8px;height:40px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);padding:0 12px">
+          <label class="vh" for="find">Find in page</label>
+          <input id="find" placeholder="Find in page" style="flex:1;height:28px;border:1px solid var(--border-input);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font:inherit;padding:0 8px">
+          <span role="status" style="font-size:12px;color:var(--text-muted)">3 of 14 matches</span>
+          <button class="btn btn-secondary btn-sm" type="button">Previous</button>
+          <button class="btn btn-secondary btn-sm" type="button">Next</button>
+          <button class="iconbtn" type="button" aria-pressed="false" aria-label="Match capitalisation">Aa</button>
+        </div>
+
+        <h3 style="font-size:14px;margin:24px 0 12px">Downloads row + toast</h3>
+        <div class="card">
+          <div class="row">
+            <span class="lab">ziy-1.0-linux-x86_64.tar.zst<small>Downloading · 18.4 MB of 92 MB</small></span>
+            <progress value="0.2" style="width:120px"></progress>
+            <button class="btn btn-ghost btn-sm" type="button">Pause</button>
+          </div>
+          <div class="row">
+            <span class="lab">report.pdf<small style="color:var(--danger)">Blocked: flagged as unsafe</small></span>
+            <button class="btn btn-ghost btn-sm" type="button">Why was this blocked?</button>
+          </div>
+        </div>
+        <div class="toast" role="status" style="position:static;margin-top:16px">
+          <span class="ok" aria-hidden="true">&#10003;</span>
+          <span>Sync chain connected on this device.</span>
+          <button class="btn btn-ghost btn-sm" type="button">Open sync</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Component states ============ -->
+  <section class="panel">
+    <div class="panel-h"><h2>Components in every state</h2><span class="route">buttons, toggles, dialogs, inputs</span></div>
+    <div class="panel-b grid cols-3">
+      <div>
+        <h3 style="font-size:13px;margin-bottom:12px">Buttons</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+          <button class="btn btn-primary" type="button">Primary</button>
+          <button class="btn btn-secondary" type="button">Secondary</button>
+          <button class="btn btn-ghost" type="button">Ghost</button>
+          <button class="btn btn-danger" type="button">Delete data</button>
+          <button class="btn btn-primary" type="button" disabled>Disabled</button>
+          <button class="btn btn-primary" type="button" aria-busy="true"><span class="spin" aria-hidden="true"></span>Connecting</button>
+          <button class="btn btn-primary btn-sm" type="button">Small</button>
+          <button class="btn btn-primary btn-lg" type="button">Large</button>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:13px;margin-bottom:12px">Toggles &amp; switches</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px"><button class="sw" role="switch" aria-checked="true" aria-label="On example"></button><span>On</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><button class="sw" role="switch" aria-checked="false" aria-label="Off example"></button><span>Off</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><button class="sw" role="switch" aria-checked="mixed" aria-label="Mixed example"></button><span>Mixed (aria-checked=mixed)</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><button class="sw" role="switch" aria-checked="false" aria-label="Disabled example" disabled></button><span>Disabled</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><button class="countlink" type="button">0</button><span style="font-size:12px;color:var(--text-muted)">Zero count stays enabled</span></div>
+        </div>
+        <h3 style="font-size:13px;margin:20px 0 12px">Segmented</h3>
+        <div class="seg" role="radiogroup" aria-label="Theme">
+          <button type="button" role="radio" aria-checked="true">Light</button>
+          <button type="button" role="radio" aria-checked="false">Dark</button>
+          <button type="button" role="radio" aria-checked="false">System</button>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:13px;margin-bottom:12px">Inputs, dropdown, dialog</h3>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="field">
+            <label for="site">Site name</label>
+            <input id="site" type="text" value="Mozilla">
+            <span class="hint">The label people will see on the tile.</span>
+          </div>
+          <div class="field" data-invalid="true">
+            <label for="site2">Web address</label>
+            <input id="site2" type="url" value="not-a-url" aria-invalid="true" aria-describedby="e2">
+            <span class="err" id="e2" role="alert">That address needs a scheme, for example https://example.com.</span>
+          </div>
+          <details class="dropdown">
+            <summary id="ddSum">Block third-party cookies</summary>
+            <ul class="menu" role="listbox" aria-labelledby="ddSum">
+              <li role="option" aria-selected="true">Block third-party cookies</li>
+              <li role="option" aria-selected="false">Block all cookies</li>
+              <li role="option" aria-selected="false">Allow all cookies</li>
+            </ul>
+          </details>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-danger btn-sm" type="button" id="openDlg">Clear browsing data…</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Settings shell ============ -->
+  <section class="panel">
+    <div class="panel-h"><h2>Settings shell</h2><span class="route">S21 · S10 (global Shields)</span></div>
+    <div class="panel-b">
+      <div class="set-shell">
+        <nav class="set-nav" aria-label="Settings sections">
+          <div class="search"><span aria-hidden="true">&#128269;</span><label class="vh" for="setsearch">Search settings</label>
+            <input id="setsearch" type="search" placeholder="Search settings" style="border:0;background:transparent;color:inherit;font:inherit;outline:none;min-width:0">
+          </div>
+          <ul>
+            <li><a href="#" aria-current="page">Shields</a></li>
+            <li><a href="#">Privacy and security</a></li>
+            <li><a href="#">Sync</a></li>
+            <li><a href="#">Appearance</a></li>
+            <li><a href="#">Extensions</a></li>
+            <li><a href="#">System</a></li>
+          </ul>
+        </nav>
+        <div class="set-body">
+          <h3>Shields</h3>
+          <div class="card">
+            <div class="row"><span class="lab">Trackers &amp; ads blocking<small>Applies to every site you visit</small></span>
+              <div class="seg" role="radiogroup" aria-label="Global trackers and ads blocking">
+                <button type="button" role="radio" aria-checked="true">Standard</button>
+                <button type="button" role="radio" aria-checked="false">Aggressive</button>
+              </div></div>
+            <div class="row"><span class="lab">Upgrade connections to HTTPS</span>
+              <button class="sw" role="switch" aria-checked="true" aria-label="Upgrade connections to HTTPS"></button></div>
+            <div class="row"><span class="lab">Block cookies</span>
+              <details class="dropdown" style="width:220px"><summary id="dd2">Block third-party cookies</summary>
+                <ul class="menu" role="listbox" aria-labelledby="dd2">
+                  <li role="option" aria-selected="true">Block third-party cookies</li>
+                  <li role="option" aria-selected="false">Block all cookies</li>
+                  <li role="option" aria-selected="false">Allow all cookies</li>
+                </ul></details></div>
+            <div class="row"><span class="lab">Content filtering<small>Block regional and language-specific trackers</small></span>
+              <span style="color:var(--text-muted)" aria-hidden="true">&#8250;</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Token table ============ -->
+  <section class="panel">
+    <div class="panel-h"><h2>Token table</h2><span class="route">from replica/design/tokens.json · contrast.py: 113 pairs, 0 AA failures</span></div>
+    <div class="panel-b">
+      <table class="spec">
+        <thead><tr><th>role</th><th>light</th><th>dark</th><th>verified contrast</th></tr></thead>
+        <tbody id="tokenRows"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<dialog id="dlg">
+  <h3>Clear browsing data</h3>
+  <p>This deletes the selected data for this profile. It cannot be undone. Type <strong>clear</strong> to confirm.</p>
+  <div class="field" style="margin-bottom:16px">
+    <label for="confirm">Type clear to confirm</label>
+    <input id="confirm" type="text" autocomplete="off">
+  </div>
+  <div class="dlg-actions">
+    <button class="btn btn-secondary" type="button" id="dlgCancel">Cancel</button>
+    <button class="btn btn-danger" type="button" id="dlgOk" disabled>Clear browsing data</button>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  "use strict";
+  // Theme toggle — the shell's [data-theme="dark"] contract.
+  var btn = document.getElementById("themeBtn");
+  btn.addEventListener("click", function () {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+    btn.textContent = dark ? "Switch to dark" : "Switch to light";
+  });
+
+  // Switches: a real button with role="switch" so Space works and the state is announced.
+  document.querySelectorAll('[role="switch"]').forEach(function (el) {
+    el.addEventListener("click", function () {
+      var next = el.getAttribute("aria-checked") === "true";
+      el.setAttribute("aria-checked", next ? "false" : "true");
+    });
+  });
+
+  // Segmented control: arrow keys move selection (radiogroup pattern).
+  document.querySelectorAll('[role="radiogroup"]').forEach(function (group) {
+    var items = Array.prototype.slice.call(group.querySelectorAll('[role="radio"]'));
+    items.forEach(function (item, i) {
+      item.addEventListener("keydown", function (e) {
+        var j = i;
+        if (e.key === "ArrowRight") j = (i + 1) % items.length;
+        else if (e.key === "ArrowLeft") j = (i - 1 + items.length) % items.length;
+        else if (e.key === "Home") j = 0;
+        else if (e.key === "End") j = items.length - 1;
+        else return;
+        e.preventDefault();
+        items.forEach(function (o) { o.setAttribute("aria-checked", "false"); });
+        items[j].setAttribute("aria-checked", "true");
+        items[j].focus();
+      });
+      item.addEventListener("click", function () {
+        items.forEach(function (o) { o.setAttribute("aria-checked", "false"); });
+        item.setAttribute("aria-checked", "true");
+      });
+    });
+  });
+
+  // Tab strip: roving tabindex + arrow keys.
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab[role="tab"]'));
+  tabs.forEach(function (t, i) {
+    t.addEventListener("keydown", function (e) {
+      var j = i;
+      if (e.key === "ArrowRight") j = (i + 1) % tabs.length;
+      else if (e.key === "ArrowLeft") j = (i - 1 + tabs.length) % tabs.length;
+      else return;
+      e.preventDefault();
+      tabs.forEach(function (o) { o.setAttribute("aria-selected", "false"); o.tabIndex = -1; });
+      tabs[j].setAttribute("aria-selected", "true"); tabs[j].tabIndex = 0; tabs[j].focus();
+    });
+  });
+
+  // Shields button toggles up/down and keeps the count in its name.
+  var shield = document.getElementById("shieldBtn");
+  shield.addEventListener("click", function () {
+    var up = shield.getAttribute("data-up") === "true";
+    shield.setAttribute("data-up", up ? "false" : "true");
+    shield.setAttribute("aria-pressed", up ? "false" : "true");
+    shield.setAttribute("aria-label", up
+      ? "Shields are down for example.com, press to turn back on"
+      : "Shields are up for example.com, 42 requests stopped");
+    shield.querySelector(".badge").style.display = up ? "none" : "grid";
+  });
+
+  // Dialog: initial focus on Cancel, Esc closes, confirm gate.
+  var dlg = document.getElementById("dlg"), ok = document.getElementById("dlgOk"),
+      cancel = document.getElementById("dlgCancel"), conf = document.getElementById("confirm");
+  document.getElementById("openDlg").addEventListener("click", function () {
+    conf.value = ""; ok.disabled = true;
+    dlg.showModal(); cancel.focus();
+  });
+  cancel.addEventListener("click", function () { dlg.close(); });
+  conf.addEventListener("input", function () { ok.disabled = conf.value.trim() !== "clear"; });
+  ok.addEventListener("click", function () { dlg.close(); });
+
+  // Token table, read straight from tokens.css values shown here for the check.
+  var rows = [
+    ["bg", "#ffffff", "#17181a", "text 16.10:1"],
+    ["surface", "#fafafb", "#1f2124", "text 15.43:1"],
+    ["surface-sunken", "#f0f0f0", "#101113", "text 14.13:1"],
+    ["border", "#e4e4e5", "#3a3d41", "separation only"],
+    ["border-input", "#767b82", "#868e98", "4.26:1 / 5.36:1 (ui 3:1)"],
+    ["focus", "#0b6e6e", "#2dd4bf", "6.05:1 / 9.54:1 ( rings)"],
+    ["text", "#202124", "#f4f5f6", "16.10:1 / 16.28:1"],
+    ["text-muted", "#5c5f66", "#a1a6ad", "6.40:1 / 7.25:1"],
+    ["accent", "#0b6e6e", "#2dd4bf", "6.05:1 / 9.54:1"],
+    ["accent-bg", "#e6f2f2", "#14302e", "text 14.07:1 / 12.89:1"],
+    ["on-accent", "#ffffff", "#04211c", "6.05:1 / 9.10:1"],
+    ["danger", "#b3261e", "#f87171", "6.54:1 / 6.42:1"],
+    ["success", "#1a7a4d", "#4ade80", "5.34:1 / 10.20:1"],
+    ["warning", "#8a5a00", "#fbbf24", "5.93:1 / 10.64:1"]
+  ];
+  var tb = document.getElementById("tokenRows");
+  rows.forEach(function (r) {
+    var tr = document.createElement("tr");
+    r.forEach(function (c, i) {
+      var td = document.createElement("td");
+      td.textContent = c;
+      if (i === 1 || i === 2) {
+        var s = document.createElement("span"); s.className = "swatch";
+        var chip = document.createElement("i"); chip.style.background = c;
+        s.appendChild(chip); s.appendChild(document.createTextNode(c));
+        td.textContent = ""; td.appendChild(s);
+      }
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>

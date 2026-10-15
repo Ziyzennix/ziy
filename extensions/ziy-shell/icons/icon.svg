@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Ziy mark: a sealed shield with a closed eye">
+  <title>Ziy mark — sealed shield</title>
+  <!-- Original Ziy design. A shield whose face is a closed, sealed eye: the
+       'shut' of the original's identity is redesigned as a guard eye inside a
+       shield outline. No other product's mark, silhouette or palette is traced. -->
+  <defs>
+    <linearGradient id="ziy-shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b6e6e"/>
+      <stop offset="1" stop-color="#08504f"/>
+    </linearGradient>
+  </defs>
+  <!-- shield body: pointed base, flat top, drawn from straight chords -->
+  <path d="M32 3 57 11v20c0 14.5-11.2 24.6-25 30C19.2 55.6 8 45.5 8 31V11L32 3Z"
+        fill="url(#ziy-shield)"/>
+  <!-- inner keyline -->
+  <path d="M32 8.5 52 15v16c0 11.6-8.9 20-20 24.7C21.9 51 13 42.6 13 31V15L32 8.5Z"
+        fill="none" stroke="#ffffff" stroke-opacity=".34" stroke-width="1.6"/>
+  <!-- sealed eye: a closed lid (three swallow-tail strokes) = "watching nothing leaks" -->
+  <g fill="none" stroke="#f4f5f6" stroke-width="3.4" stroke-linecap="round">
+    <path d="M18.5 30.5c4.6-4.8 9.2-4.8 13.5 0 4.3-4.8 8.9-4.8 13.5 0"/>
+    <path d="M23.5 38.5c2.8 2.4 5.6 2.4 8.5 0 2.9 2.4 5.7 2.4 8.5 0"/>
+  </g>
+  <circle cx="32" cy="25.5" r="3.1" fill="#f4f5f6"/>
+</svg>

@@ -1,0 +1,167 @@
+From: Ziy engine fork <ziy@ziy.app>
+Date: 2026-10-15
+Subject: [PATCH 2/2] configure: declare --enable-ziy-fingerprinting, include it,
+ and fail loudly if the gate and the shell disagree
+
+Patch 1/2 gates a C++ delta on MOZ_ZIY_FINGERPRINTING. This patch declares the
+option that defines it, makes the file reachable from the configure graph, and
+adds a sanity check so a mismatch between the gate and the shipped prefs can
+never build silently.
+
+Three parts:
+
+1. toolkit/ziy-fingerprinting.configure (new file) declares
+   --enable-ziy-fingerprinting and set_define()s MOZ_ZIY_FINGERPRINTING from
+   it. The value reaches every C++ TU through mozilla-config.h, the
+   -include'd header built/moz.configure/toolchain.configure: defines_cpp_flags
+   adds to OS_COMPILE_CFLAGS/OS_COMPILE_CXXFLAGS.
+
+2. toolkit/moz.configure gains one include() line. This is the fix for the
+   dead gate: configure.py:171 loads exactly ONE entry point, the root
+   moz.configure, and every other .configure file must be pulled in by an
+   include() -- there is no directory scan. Root moz.configure:519 does
+   include(include_project_configure), init.configure:990 resolves that to
+   browser/moz.configure, browser/moz.configure:54 includes
+   ../toolkit/moz.configure, and toolkit/moz.configure included exactly five
+   files (../js/moz.configure:480, ../build/moz.configure/node.configure:485,
+   keyfiles.configure:1162, nss.configure:3175,
+   update-programs.configure:4053) -- not this one. So the file landed on disk
+   and was never executed: ac_add_options --enable-ziy-fingerprinting aborted
+   at python/mozbuild/mozbuild/configure/__init__.py:564 ("Unknown option:
+   %s"), and had that been suppressed the set_define would never have run and
+   patch 1's #ifdef would have been false, i.e. a GREEN BUILD OF STOCK GECKO.
+   The line is appended at the end of the file, in the same comment-banner
+   style as the five includes it joins, so the reverse apply is an exact
+   restoration.
+
+3. The gate check. Ziy's shell ships
+   privacy.fingerprintingProtection.overrides="+AllTargets,-CSSPrefersColorScheme"
+   (shell/mozilla.cfg:42, shell/browser/defaults/preferences/ziy.js:145). A
+   build without the define would silently ship stock Gecko that ignores that
+   carve-out -- the exact bug patch 1 fixes. configure is the only place that
+   sees both the shell's prefs and the option value, so the check belongs
+   there, and it fails at configure time rather than after hours of compile.
+   Mechanism: configure_error() from build/moz.configure/util.configure:14
+   ("Primarily for use in moz.configure templates to sanity check their inputs
+   from moz.configure usage"), the same helper the engine uses for exactly this
+   shape of check at toolkit/moz.configure:4497-4498. No C++ #error guard is
+   added: a compile-time guard could only ever fire in a configuration where
+   the code is already dead, whereas this one catches the disagreement itself.
+
+The option defaults off, so a build with --disable-ziy-fingerprinting (or with
+the override removed from the shell) is stock Gecko, unchanged.
+
+
+diff --git a/toolkit/moz.configure b/toolkit/moz.configure
+index 2a0b994..d57b7d5 100644
+--- a/toolkit/moz.configure
++++ b/toolkit/moz.configure
+@@ -4640,3 +4640,8 @@ def libmegazord_artifacts(value):
+ 
+ 
+ set_config("MOZ_LIBMEGAZORD_ARTIFACTS", libmegazord_artifacts)
++
++
++# Ziy engine fork: the configure gate for the C++ patch set
++# ==============================================================
++include("ziy-fingerprinting.configure")
+diff --git a/toolkit/ziy-fingerprinting.configure b/toolkit/ziy-fingerprinting.configure
+new file mode 100644
+index 0000000..1f5f378
+--- /dev/null
++++ b/toolkit/ziy-fingerprinting.configure
+@@ -0,0 +1,94 @@
++# Ziy engine fork: the C++ patch gate.
++#
++# Declares the ONE configure option the C++ patch set is gated on:
++# --enable-ziy-fingerprinting. Its value lands in mozilla-config.h as the
++# MOZ_ZIY_FINGERPRINTING define, which is what the #ifdefs in
++# patches/0001-*.patch test.
++#
++# WHY AN OPTION AND NOT A BARE -D: ./mach configure hard-fails on any option it
++# does not know ("Unknown option: %s", python/mozbuild/mozbuild/configure/
++# __init__.py:564). An undeclared -DMOZ_ZIY_FINGERPRINTING in .mozconfig would
++# abort configure before the build starts. Declaring the option here is what
++# makes .mozconfig's `ac_add_options --enable-ziy-fingerprinting` legal, and
++# what makes `--disable-ziy-fingerprinting` produce a stock-Gecko build.
++#
++# WHY THIS SHIPS AS A PATCH: the file lands on the pristine source tree at
++# patch-apply time, and it is the only reason the gate is switchable without
++# hand-editing a generated header.
++#
++# HOW IT IS REACHED: this file is NOT discovered by a directory scan — Gecko's
++# configure loads exactly one entry point (configure.py:171 -> root
++# moz.configure) and every other .configure file must be pulled in by an
++# `include()`. toolkit/moz.configure includes exactly five files and none of
++# them was this one, which is why the gate was dead before the second hunk of
++# this patch added the include line there.
++
++# Declared as a real option so ac_add_options can pass it.
++option(
++    "--enable-ziy-fingerprinting",
++    help="Compile Ziy's C++ fingerprinting delta into the engine "
++         "(disabling this yields a stock-Gecko build)",
++)
++
++# The value flows into mozilla-config.h — the -include'd header every C++ TU
++# receives (build/moz.configure/toolchain.configure: defines_cpp_flags) — as
++# MOZ_ZIY_FINGERPRINTING, the macro the patch's #ifdefs test.
++@depends("--enable-ziy-fingerprinting")
++def ziy_fingerprinting(value):
++    if value:
++        return True
++
++
++set_define("MOZ_ZIY_FINGERPRINTING", ziy_fingerprinting)
++
++
++# WHY A GUARD AND NOTHING MORE: the failure this patch set MUST NOT be able to
++# have silently. Ziy's shell ships
++# privacy.fingerprintingProtection.overrides="+AllTargets,-CSSPrefersColorScheme"
++# (shell/mozilla.cfg:42 lockPref, shell/browser/defaults/preferences/ziy.js:145
++# pref). If a build were produced WITHOUT the define, the engine would ignore
++# the shipped -CSSPrefersColorScheme carve-out — exactly the bug
++# patches/0001-*.patch exists to fix — and the build would still look green.
++# Checking it here is the only place that can fail loudly before hours of
++# compile, because it is the only place that sees both the shell's prefs and
++# the configure value. The precedent is the engine's own configure_error
++# (build/moz.configure/util.configure:14, "Primarily for use in moz.configure
++# templates to sanity check their inputs from moz.configure usage"), used at
++# toolkit/moz.configure:4497-4498 for exactly this shape of sanity check, and
++# built on the same @depends(...)+function pattern as the `set_define` above
++# (update-programs.configure:50-51 is the same shape: @depends over an option,
++# then a plain function).
++@depends(
++    "--enable-ziy-fingerprinting",
++    build_environment,
++)
++@checking("that the Ziy gate is consistent with the shipped prefs")
++@imports(_from="__builtin__", _import="open")
++@imports("os")
++def ziy_fingerprinting_gate_check(ziy_fingerprinting, build_environment):
++    topsrcdir = os.path.realpath(
++        os.path.join(os.path.dirname(__file__), "..", "..")
++    )
++    for rel in (
++        "shell/mozilla.cfg",
++        "shell/browser/defaults/preferences/ziy.js",
++    ):
++        path = os.path.join(topsrcdir, rel)
++        if not os.path.exists(path):
++            continue
++        with open(path, "r") as f:
++            for line in f:
++                if "-CSSPrefersColorScheme" in line:
++                    break
++            else:
++                continue
++            if ziy_fingerprinting is not True:
++                configure_error(
++                    f"{rel} ships the -CSSPrefersColorScheme override, which "
++                    "needs patches/0001-*.patch compiled in, but "
++                    "--enable-ziy-fingerprinting is not set: the build would "
++                    "silently ship stock Gecko that ignores the carve-out. "
++                    "Pass `ac_add_options --enable-ziy-fingerprinting`, or "
++                    "drop the override from the shell."
++                )
++            break

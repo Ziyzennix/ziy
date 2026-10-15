@@ -1,0 +1,863 @@
+# .github/workflows/build-gecko.yml — build Ziy's engine fork (Gecko 156.0.1) with patches.
+#
+# BUILD POLICY (co-owner decision, replica/deep-fork.md §0): local compilation is
+# prohibited on the co-owner's box — no ./mach build, no ./mach configure, no
+# autoconf, no rustc/cargo Gecko builds, no ccache-heavy jobs; this workflow is
+# the compile path (or a future self-hosted runner), by CI only.
+#
+# WHY THIS IS NOT ON EVERY PUSH (and why `push:` is tag-gated, not branch-gated):
+# this job is 12-28 hours of compute on a private-repo 2-core runner (8-16h was
+# the 4-core local box's figure). On `push:` to a branch, a single force-push
+# sprint could queue a dozen runs at 180 runner-minutes each, and the queue would
+# eat the free tier for the repo's other workflows. The trigger is therefore:
+#   * workflow_dispatch  — manual, costs minutes only when a human decides.
+#   * push, on a TAGGED ref — a cut is an explicit, reviewable event.
+# This mirrors architecture.md §0.5's documented "Mitigation when minutes
+# matter: run the heavy workflows on release tags and manual dispatch, not on
+# every PR of every branch."
+#
+# RUNNER SPEC — CORRECTED FOR THE REPO THIS RUNS ON, WHICH IS PRIVATE BY DESIGN.
+# `ubuntu-latest` is NOT one machine: its size depends on repo visibility.
+# (Verified 2026-10-15, docs.github.com/en/actions/reference/runners/
+# github-hosted-runners, the two "Standard ... runners" tables:)
+#
+#   PUBLIC repo:  ubuntu-latest = 4 CPU / 16 GB RAM / 14 GB SSD, free+unlimited.
+#   PRIVATE repo: ubuntu-latest = 2 CPU /  8 GB RAM / 14 GB SSD, and minutes are
+#                 METERED — "These runners use your account's allotment of free
+#                 minutes, and are then charged at the per minute rates."
+#
+# THIS REPO IS PRIVATE (the co-owner requirement, compile-readiness.md top block),
+# so every number below is the 2 CPU / 8 GB column. The 4/16 numbers describe a
+# hypothetical public mirror, not the machine that will run this job.
+#
+# WHAT THAT MEANS FOR THIS JOB, stated plainly up front:
+#   * MOZ_PARALLEL_BUILD is 2, because 2 is this runner's core count. -j4 on a
+#     2-core box oversubscribes and makes the build slower, not faster.
+#   * 8 GB RAM is a real risk, not headroom: the workflow's own notes record the
+#     libxul link as a single ~5 GB process (proofs-deep-fork.md §7). On 8 GB
+#     with the OS and toolchain resident, that link has little margin.
+#   * METERED MINUTES: GitHub Free = 2,000 min/month for PRIVATE repos, and
+#     "If your account does not have a valid payment method on file, usage is
+#     blocked once you use up your quota" (docs.github.com/en/billing/concepts/
+#     product-billing/github-actions). One cold run of this job is estimated
+#     12-28h wall = ~720-1,680 min, i.e. the ENTIRE monthly allowance in one run.
+#   * THE JOB CAP IS 720 MIN (12h) = GITHUB'S MAXIMUM job timeout, and the
+#     estimate above exceeds it. So the FIRST hosted run may not be a build
+#     failure at all — it may be a plain cap timeout after 12h. Budget minutes
+#     accordingly; see the job-level comment for the split point and the
+#     mitigations (self-hosted runner on the co-owner's box = free, and the box
+#     already has the toolchain + the checksum-verified source extracted).
+#   * Linux 2-core past the quota = $0.006/min (actions_linux), from the
+#     "Baseline minute costs" table on the same billing page.
+#
+# WHY THIS IS STILL NOT ON EVERY PUSH (and why `push:` is tag-gated, not
+
+name: build-gecko
+
+on:
+  # Manual only by default: this job is 12-28h of compute at 2 cores (see the
+  # header's cost block), so it costs
+  # minutes only when a human decides to spend them. The input is a free-text
+  # note, not a build knob — the build configuration lives in the .mozconfig
+  # that step e2 writes, which is the file under version control. If a build
+  # knob is ever wanted, it must be added here AND threaded into e2, so that
+  # a manually-dispatched build and a tag-pushed build stay identical.
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "Why this build is being run (recorded in the summary)"
+        required: false
+        default: ""
+        type: string
+  # A tag is an explicit, reviewable event. NOT a branch push: a single
+  # force-push sprint would queue a dozen multi-hour jobs, and the queue
+  # would eat the free tier the repo's other workflows depend on.
+  push:
+    tags: ["v*", "gecko-*"]
+
+permissions:
+  contents: read
+
+env:
+  # The engine revision we build. Bump here and in the patch set together.
+  GECKO_VERSION: "156.0.1"
+  GECKO_TARBALL: "firefox-156.0.1.source.tar.xz"
+  GECKO_RELEASE_URL: "https://ftp.mozilla.org/pub/firefox/releases/156.0.1/source"
+  # Ubuntu 24.04 noble is what the local box runs; the apt package names and
+  # versions in this workflow are the ones that actually satisfied
+  # `./mach configure` there (proofs-deep-fork.md §3, §6).
+  UBUNTU_CODENAME: "noble"
+  DEBIAN_FRONTEND: "noninteractive"
+  # ccache sizing: 10 GB is the documented budget that survives the Rust
+  # toolchain rebuild and most of libxul on the same cache.
+  CCACHE_MAXSIZE: "10G"
+  # The objdir name, matching the local proof (deep-fork.md §6.3).
+  MOZ_OBJDIR: "obj-ziy"
+
+jobs:
+  build-gecko:
+    # PRIVATE REPO -> 2 CPU / 8 GB (docs.github.com/en/actions/reference/runners/
+    # github-hosted-runners, "Standard GitHub-hosted runners for private
+    # repositories" table). Minutes are metered: GitHub Free = 2,000/min on
+    # private repos, and usage BLOCKS once the quota is up with no payment
+    # method on file.
+    runs-on: ubuntu-latest
+    # --- THE FREE PATH: uncomment this and comment the line above -----------
+    # SELF-HOSTED RUNNER on the co-owner's Ziy box. It is the free path for a
+    # private repo: "GitHub Actions usage is free for self-hosted runners"
+    # (docs.github.com/en/billing/concepts/product-billing/github-actions), so
+    # the 2,000 min allowance is never touched.
+    # THIS BOX IS ALREADY ALMOST READY (compile-readiness.md §5b): clang/llvm
+    # 19.1.1, rustc+cargo 1.90.0, cbindgen 0.29.4, nasm, yasm, ccache 4.9.1,
+    # mercurial, the full apt dep list, AND the checksum-verified
+    # firefox-156.0.1 source already extracted at /tmp/firefox-src.
+    # nproc=4 (better than CI's 2); ~5.4 GB available RAM, which is the named
+    # libxul link-OOM risk (deep-fork.md §6.6) — add swap/zram to convert a
+    # hard OOM into a thrash. Keep this runner PRIVATE: never register it
+    # against a public fork.
+    # runs-on: self-hosted
+    # --------------------------------------------------------------------------
+    # timeout-minutes GUIDANCE — keep 720. It is GitHub's maximum job timeout,
+    # and the honest estimate now EXCEEDS it, so a smaller cap would guarantee
+    # failure. One full Gecko build at 2 cores is estimated 12-28h wall against
+    # this 720-min (12h) cap, so the FIRST hosted run's job-level outcome may
+    # be a plain cap timeout — not a compile error. That is the documented
+    # expectation, not a bug, and the ccache save step below (if: always()) is
+    # what makes a capped run resumable rather than wasted.
+    # MITIGATIONS, in preference order:
+    #   (a) run it self-hosted (the commented-out runs-on above) — free, and
+    #       the box already has the toolchain and the extracted source;
+    #   (b) pay for a larger hosted runner or past-quota minutes
+    #       ($0.006/min for Linux 2-core past the quota);
+    #   (c) split at the configure/build boundary (see step j) so a capped run
+    #       is not the whole build.
+    # The local estimate is 6-14h on the 4-core local box (deep-fork.md §6.5);
+    # a private-repo runner has HALF the cores and is slower per core, which is
+    # where the 12-28h figure comes from.
+    # SPLIT POINT once this is exceeded: make it two jobs —
+    #   (1) `toolchain-and-source`: install deps, fetch+verify+extract the
+    #       tarball, configure — cache the extracted tree and the objdir as
+    #       artifacts;
+    #   (2) `build-and-package`: restore that cache and run only `mach build`
+    #       + `mach package` + upload.
+    # The 12h split is the configure/build boundary because configure is
+    # minutes and build is hours, and the ccache cache makes the split cheap
+    # to iterate on (a rebuild only recompiles what changed).
+    timeout-minutes: 720
+    steps:
+      # ------------------------------------------------------------------
+      # a. checkout
+      # ------------------------------------------------------------------
+      - name: "a. checkout (the Ziy repo: tools/, shell/, patches/)"
+        uses: actions/checkout@v4
+        with:
+          # Full history: the patch application step records the base
+          # revision and `git apply` needs the tree the patches were made
+          # against.
+          fetch-depth: 0
+
+      # ------------------------------------------------------------------
+      # b. toolchain — every package below is a REAL configure failure on the
+      #    local box. Each comment names the failure. The list is the local
+      #    box's apt command from proofs-deep-fork.md §3 verbatim.
+      # ------------------------------------------------------------------
+      - name: "b. install the toolchain (verified list, proofs-deep-fork.md §3/§6)"
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential \
+            clang-19 llvm-19 llvm-19-tools \
+            cbindgen \
+            nasm yasm \
+            ccache \
+            mercurial \
+            autoconf2.13 python3-dev libssl-dev pkg-config zlib1g-dev \
+            libgtk-3-dev libdbus-glib-1-dev \
+            libpulse-dev libasound2-dev \
+            libxt-dev \
+            libudev-dev libxtst-dev libsecret-1-dev \
+            libdrm-dev libxkbcommon-dev \
+            libx11-xcb-dev libxcb1-dev \
+            libxcb-shm0-dev libxcb-keysyms1-dev libxcb-glx0-dev \
+            libclang-19-dev
+          # clang/llvm are the COMPILER; cbindgen is what the mach build calls
+          # to generate the C++ Rust bindings; mercurial is required because
+          # mozilla's build system shells out to `hg` for the vcs info.
+          clang-19 --version
+          llvm-config-19 --version
+          # Ubuntu puts the llvm tools in a versioned directory; the local
+          # box needed /usr/lib/llvm-19/bin on PATH for `mach configure` to
+          # find llvm-objdump (proofs-deep-fork.md §6 attempt 5).
+          echo "/usr/lib/llvm-19/bin" >> "$GITHUB_PATH"
+
+      # ------------------------------------------------------------------
+      # c. rustup — the source's own Cargo.toml pins the version. We do NOT
+      #    hardcode it: rustup reads the tree's rust-toolchain/Cargo.toml
+      #    rust-version and installs the matching toolchain automatically
+      #    when `rustup` runs inside the source directory.
+      #    VERIFIED FACTS on this box (proofs-deep-fork.md §3):
+      #      - python/mozboot/mozboot/util.py:18 MINIMUM_RUST_VERSION = "1.90.0"
+      #      - Cargo.toml:157 rust-version = "1.90.0"
+      #      - the box's rustc 1.90.0 (1159e78c4 2025-09-14) satisfied it.
+      #    So the floor is 1.90.0; the pin decides on CI. If the source ever
+      #    raises its rust-version, this step follows without editing.
+      # ------------------------------------------------------------------
+      - name: "c. rustup (toolchain resolved by the source's own rust-version)"
+        run: |
+          set -euxo pipefail
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain none --profile minimal
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          # Print the pin the tree requires so the log carries the trace.
+          grep -n "MINIMUM_RUST_VERSION" "$GITHUB_WORKSPACE"/_src/python/mozboot/mozboot/util.py || true
+          grep -n "^rust-version" "$GITHUB_WORKSPACE"/_src/Cargo.toml || true
+
+      - name: "c2. resolve the pinned toolchain and install cbindgen"
+        run: |
+          set -euxo pipefail
+          # Runs inside the source dir so rustup reads the tree's pin
+          # (rust-toolchain* if present, else Cargo.toml's rust-version).
+          cd "$GITHUB_WORKSPACE/_src"
+          rustup toolchain install
+          rustup default "$(rustup toolchain list | head -1 | awk '{print $1}')" 2>/dev/null || rustup default stable
+          rustc --version; cargo --version
+          # Local box: cbindgen 0.29.4 (proofs-deep-fork.md §3).
+          cargo install cbindgen --locked
+          cbindgen --version
+
+      # ------------------------------------------------------------------
+      # d. fetch + verify + extract the source IN FULL.
+      #    The tarball-repair problem, and why full extraction is the fix:
+      #    the release tarball ships ~3 GB but omits ~35 top-level subtrees,
+      #    and `mach configure` discovers the gaps one layer at a time
+      #    (13 attempts on the local box, deep-fork.md §6.3). On the runner
+      #    we have ~14 GB of disk, so we extract everything and ASSERT the
+      #    subtrees the local box had to dig out on demand are present —
+      #    a loud failure at minute ~5 instead of a failure at hour 5.
+      # ------------------------------------------------------------------
+      - name: "d1. download the release source tarball"
+        run: |
+          set -euxo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/_src"
+          cd "$GITHUB_WORKSPACE/_src"
+          # -C - keeps the fetch resumable, the property that mattered on the
+          # 1 MB/s local link (proofs-deep-fork.md §5).
+          curl -C - --retry 20 --retry-delay 5 --retry-all-errors \
+            -o "$GECKO_TARBALL" \
+            "$GECKO_RELEASE_URL/$GECKO_TARBALL"
+          ls -la "$GECKO_TARBALL"
+
+      - name: "d2. checksum-verify against the published SHA512SUMS"
+        run: |
+          set -euxo pipefail
+          cd "$GITHUB_WORKSPACE/_src"
+          # The checksum is read from Mozilla's own published file AT WORKFLOW
+          # TIME — never hardcoded — so a re-cut release can't silently build
+          # something other than what we think we're building.
+          curl -sSfLO "$GECKO_RELEASE_URL/SHA512SUMS"
+          expected="$(grep 'source/'"$GECKO_TARBALL"'$' SHA512SUMS | awk '{print $1}')"
+          if [ -z "$expected" ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::SHA512SUMS has no line for 'source/$GECKO_TARBALL' — cannot verify, aborting"
+            exit 1
+          fi
+          actual="$(sha512sum "$GECKO_TARBALL" | awk '{print $1}')"
+          echo "expected: $expected"
+          echo "actual:   $actual"
+          if [ "$expected" != "$actual" ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::SHA512 MISMATCH for $GECKO_TARBALL"
+            exit 1
+          fi
+          echo "SHA512 MATCH"
+          # Cross-check against the value recorded from the local box
+          # (proofs-deep-fork.md §5): 80a32a79268b672206f5477ca6bfde620...
+          if [ "$actual" != "80a32a79268b672206f5477ca6bfde620cb7419b27aac090e01f06df06990ee0bbd81bb5c4aa78ac1d0edb26b133b1c6fa11cb6522445eccd70c82e719a24d5b" ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::checksum matches the PUBLISHED file but not the local proof (proofs-deep-fork.md §5) — Mozilla re-cut the release; review before building"
+            exit 1
+          fi
+          echo "SHA512 matches the local proof"
+          # Record the exact source revision for the build record.
+          cat firefox-"$GECKO_VERSION"/sourcestamp.txt 2>/dev/null || \
+            echo "(sourcestamp.txt read after extraction)"
+
+      - name: "d3. extract IN FULL and assert the known-missing subtrees"
+        run: |
+          set -euxo pipefail
+          cd "$GITHUB_WORKSPACE/_src"
+          # The whole fix for the tarball-repair problem: one full extraction,
+          # then assert the subtrees the local box had to re-extract on demand.
+          # ~3 GB extracted, ~10 GB with the objdir later; the runner's disk
+          # holds it. A local box at 110 GB free could do the same, but on a
+          # 1 MB/s link the 25 min of repeated on-demand extraction was the
+          # cheaper local strategy.
+          tar -xf "$GECKO_TARBALL"
+          cd firefox-"$GECKO_VERSION"
+          # The stale nested duplicate the local box had to remove
+          # (deep-fork.md §6.3).
+          if [ -d firefox-"$GECKO_VERSION" ]; then
+            echo "::warning::nested firefox-$GECKO_VERSION/firefox-$GECKO_VERSION present; removing the stale duplicate"
+            rm -rf firefox-"$GECKO_VERSION"
+          fi
+          # Every subtree the local box dug out on demand during the 13
+          # configure attempts. Any missing one aborts NOW.
+          for d in browser toolkit modules config python mach dom security \
+                   build intl testing; do
+            if [ ! -d "$d" ]; then
+              echo "::error file=.github/workflows/build-gecko.yml::extracted tree is missing '$d' — the release tarball is incomplete"
+              exit 1
+            fi
+          done
+          for f in configure.py GNUmakefile; do
+            if [ ! -f "$f" ]; then
+              echo "::error file=.github/workflows/build-gecko.yml::extracted tree is missing the root file '$f'"
+              exit 1
+            fi
+          done
+          # The specific files configure actually failed on, so a failure
+          # names the file, not a directory.
+          for f in \
+            testing/mozbase/mozfile/mozfile/__init__.py \
+            testing/condprofile/condprof/tests/python.toml \
+            testing/marionette/harness/marionette_harness/tests/harness_unit/python.toml
+          do
+            if [ ! -f "$f" ]; then
+              echo "::warning file=.github/workflows/build-gecko.yml::$f absent (the local box extracted it on demand)"
+            fi
+          done
+          du -sh . 
+          cat sourcestamp.txt
+
+      # ------------------------------------------------------------------
+      # e. ccache + .mozconfig
+      # ------------------------------------------------------------------
+      - name: "e1. restore the ccache (keyed on the source revision)"
+        uses: actions/cache@v4
+        with:
+          # Keyed on the tarball checksum, so a re-cut release does not
+          # resurrect stale objects, and on the patch-set hash so a patch
+          # change invalidates the whole cache (patches can touch anything).
+          # NOTE: run_id is deliberately NOT in the restore key — a key that
+          # changes every run can never hit. The save step below writes the
+          # stable keys PLUS a run-specific one, so a timed-out run's cache is
+          # still reachable. (docs.github.com/en/actions/reference/
+          # workflows-and-actions/dependency-caching: exact-key match, then
+          # prefix matches, then restore-keys sequentially.)
+          path: |
+            ~/.cache/ccache
+          key: ccache-gecko-${{ env.GECKO_VERSION }}-${{ hashFiles('patches/*.patch', 'patches/*.toml') }}
+          restore-keys: |
+            ccache-gecko-${{ env.GECKO_VERSION }}-${{ hashFiles('patches/*.patch', 'patches/*.toml') }}-
+            ccache-gecko-${{ env.GECKO_VERSION }}-
+            ccache-gecko-
+
+      - name: "e2. write the ccache config and the .mozconfig"
+        run: |
+          set -euxo pipefail
+          mkdir -p ~/.cache/ccache
+          cat > ~/.ccache/config <<'EOF'
+          # ccache budget: the Rust toolchain plus most of libxul.
+          max_size = 10G
+          # The objdir is the only place ccache is consulted.
+          cache_dir = /home/runner/.cache/ccache
+          # Keep the preprocessor output (needed for this mode) and compress
+          # the cache, which is what makes a 10G cache hold ~4x more objects.
+          compression = true
+          compiler_check = clang-19
+          EOF
+
+          cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          # .mozconfig — the options that matter, each with its provenance.
+          #
+          # SOURCE OF EACH OPTION (every line below is cited):
+          #  * MOZ_OBJDIR, MOZ_PARALLEL_BUILD, --disable-optimize,
+          #    --disable-debug-symbols, --without-wasm-sandboxed-libraries:
+          #    the local configure experiment — deep-fork.md §6.3 is the
+          #    exact mozconfig this box reached configure attempt 13 with.
+          #  * --enable-application=browser: the tree's own default
+          #    (build/moz.configure/init.configure: default_project), made
+          #    explicit so the log carries it.
+          #  * --disable-tests: Mozilla's documented .mozconfig reference
+          #    (firefox-source-docs "Configuring Build Options", the Tests
+          #    section) AND moz.configure:92 in this tree. Fetched
+          #    2026-10-15.
+          #  * --disable-artifact-builds: moz.configure:418. Explaining why
+          #    artifact mode is wrong for us: deep-fork.md §6.6, from
+          #    Mozilla's artifact-builds documentation — artifact builds
+          #    download prebuilt C++ and "if it's compiled to machine code,
+          #    it can't be changed."
+          #  * --with-ccache: build/moz.configure/toolchain.configure:864.
+          #    Mozilla's reference documents --with-ccache=sccache; we use
+          #    plain ccache because step b installs it and it needs no
+          #    cache server.
+          #  * MOZ_TELEMETRY_REPORTING: toolkit/moz.configure:1139.
+          #
+          # EVERY OPTION IS DECLARED. Nothing undeclared can be passed:
+          # `./mach configure` hard-fails on an unknown option
+          # (python/mozbuild/mozbuild/configure/__init__.py:564, "Unknown
+          # option: %s"), which is why the C++ gate is a REAL option
+          # declared by patch 0002, not a bare -D. patch 0002 also adds the
+          # `include("ziy-fingerprinting.configure")` line to
+          # toolkit/moz.configure that makes that declaration reachable at all
+          # — configure loads only the root moz.configure and includes every
+          # other .configure file explicitly, so a file that merely exists is
+          # never executed (compile-readiness.md §3c for the full trace).
+          cat > .mozconfig <<'EOF'
+          # --- Ziy engine build: Gecko 156.0.1, relinkable, patched ---------
+          # A real C++ build. NOT an artifact build: artifact mode downloads
+          # prebuilt C++ and explicitly cannot change C, C++ or Rust source
+          # (deep-fork.md §6.6, from Mozilla's artifact-builds docs), so it
+          # cannot produce the relinkable engine this job exists to make.
+          # Firefox is this tree's default project
+          # (build/moz.configure/init.configure: default_project returns
+          # "browser"). --enable-application is the alias that explicitly
+          # sets the same value (init.configure:387, "Same as
+          # --enable-project").
+          ac_add_options --enable-application=browser
+
+          # The objdir name from the local proof (deep-fork.md §6.3).
+          mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-ziy
+
+          # PARALLELISM = 2, the private-repo runner's core count.
+          # `ubuntu-latest` on a PRIVATE repo is 2 CPU / 8 GB (GitHub-hosted
+          # runners reference, "Standard GitHub-hosted runners for private
+          # repositories"); the 4 CPU / 16 GB figure is the PUBLIC repo table.
+          # The local box's nproc=4 is irrelevant to the runner this job gets.
+          # Oversubscribing (j4 on 2 cores) does not speed the build up — it
+          # adds scheduler thrash on top of ~5 GB link processes competing for
+          # 8 GB. A SELF-HOSTED runner has nproc=4; if you switch runs-on to
+          # self-hosted, raise this to 4.
+          mk_add_options MOZ_PARALLEL_BUILD=2
+
+          # A real (non-artifact) C++ build, stated explicitly so the log
+          # records the decision that makes C++ patches possible at all.
+          ac_add_options --disable-artifact-builds
+
+          # Test-suite switch from Mozilla's documented .mozconfig reference
+          # ("Configuring Build Options", the Tests section:
+          # ac_add_options --disable-tests) AND declared in this tree at
+          # moz.configure:92. Fetched 2026-10-15.
+          ac_add_options --disable-tests
+
+          # The fast-config pair from the local experiment (deep-fork.md
+          # §6.3): no optimization, no debug symbols. --disable-optimize
+          # also appears in Mozilla's reference; --disable-debug-symbols
+          # is declared in this tree at
+          # build/moz.configure/toolchain.configure:2258.
+          # NOTE: --disable-debug is deliberate NOT set. Mozilla's reference
+          # explicitly recommends --enable-debug for C++ patch work
+          # ("invaluable when writing patches"), but the local proof's
+          # config disabled it for speed and this job is about producing a
+          # relinkable artifact, not debugging one. Patch debugging happens
+          # on the local box, which is §6.4's recorded path.
+          ac_add_options --disable-optimize
+          ac_add_options --disable-debug-symbols
+
+          # Telemetry: the tree declares NO --disable-telemetry option.
+          # The only telemetry switch is the ENV VAR MOZ_TELEMETRY_REPORTING
+          # (toolkit/moz.configure:1139), so the mozconfig env form is the
+          # only correct spelling. An empty value disables it.
+          MOZ_TELEMETRY_REPORTING=
+
+          # The wasi headers are absent on the runner (the local box hit
+          # "wasi headers missing", attempt 11) and nothing we build needs
+          # them.
+          ac_add_options --without-wasm-sandboxed-libraries
+
+          # ccache: the compiler wrapper. Mozilla's .mozconfig reference
+          # documents CC/CXX wrappers for sccache; we point at ccache
+          # because step b installs it and it needs no cache server.
+          export CC="clang-19"
+          export CXX="clang++-19"
+          export CCACHE_DIR="$HOME/.cache/ccache"
+          ac_add_options --with-ccache
+
+          # --- Ziy's patch gate ---------------------------------------------
+          # ON by default, because a patch set that never runs is a patch set
+          # nobody notices is broken. Set to false to build stock Gecko —
+          # the C++ diff is then a comment marker and the build is stock.
+          # SAFETY NET: the Ziy shell ships the -CSSPrefersColorScheme override
+          # (shell/mozilla.cfg:42, ziy.js:145), which patch 0001 is what makes
+          # work. patch 0002's configure file also CHECKS that the gate is on
+          # when that override is shipped, and configure_error()s if it is not —
+          # so a gate-off build is an explicit decision you have to make in two
+          # places (here AND by removing the override), not a silent
+          # stock-Gecko build. If you really want stock Gecko, be ready for
+          # configure to fail and then drop the override from the shell.
+          ac_add_options --enable-ziy-fingerprinting
+          EOF
+          echo "--- .mozconfig ---"
+          cat .mozconfig
+
+      # ------------------------------------------------------------------
+      # f. apply Ziy's patches.
+      #    An EMPTY patch set is a clean no-op (fail loudly only when an
+      #    apply actually FAILS). Omni/JS-level patches are .toml consumed
+      #    by tools/lib/omni-ja.py; the newtab strip already lives there as
+      #    tools/patches/newtab-strip.toml and is referenced, not re-applied
+      #    (that is build-shell.sh's job on the packaged app dir).
+      # ------------------------------------------------------------------
+      - name: "f. apply Ziy's C++ patch set (empty set = no-op)"
+        run: |
+          set -uo pipefail
+          cd "$GITHUB_WORKSPACE"
+          SRC="$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          # `set -e` is deliberately off inside the loop: we want to inspect
+          # each patch's status and report every failure, not abort on the
+          # first one. FAILED>0 exits 1 at the end.
+          set +e
+          PATCH_COUNT=0
+          APPLIED=0
+          FAILED=0
+          for p in patches/*.patch; do
+            [ -e "$p" ] || continue   # empty set: glob did not expand, skip
+            PATCH_COUNT=$((PATCH_COUNT+1))
+            echo "::group::applying $p"
+            # Dry-run FIRST, so a rejected patch writes nothing. The source
+            # tree is a git repo after extraction? No — the release tarball
+            # is not a checkout. `git apply` works fine against a plain
+            # directory (it just needs no .git for --check/--stat; adding
+            # -p1 default path stripping matches the a/ b/ prefixes).
+            #
+            # Note: we cd into the SOURCE tree and pass the repo-relative
+            # patch path, so no $OLDPWD trickery is needed and the a/ b/
+            # prefixes resolve against the tree root as intended.
+            (
+              cd "$SRC" || exit 3
+              git apply --check --verbose "$GITHUB_WORKSPACE/$p" || exit 4
+              git apply --stat "$GITHUB_WORKSPACE/$p" || true
+              git apply "$GITHUB_WORKSPACE/$p"
+            )
+            rc=$?
+            echo "::endgroup::"
+            if [ $rc -ne 0 ]; then
+              echo "::error file=$p::patch FAILED to apply (exit $rc) — re-derive it against Gecko $GECKO_VERSION (deep-fork.md §7 / patches/README.md)"
+              FAILED=$((FAILED+1))
+            else
+              APPLIED=$((APPLIED+1))
+              echo "applied: $p"
+            fi
+          done
+          echo "patch summary: found=$PATCH_COUNT applied=$APPLIED failed=$FAILED"
+          # POST-APPLY GATE ASSERTION. patch 0002 exists to make the
+          # MOZ_ZIY_FINGERPRINTING gate reachable, and a missing include line
+          # is exactly the failure that looks like success (compile-readiness.md
+          # §3c: the file landed on disk but configure never read it, so
+          # ac_add_options died with "Unknown option" — or, worse, was
+          # suppressed and the build silently shipped stock Gecko). Assert
+          # the wire-up is physically present on the tree, so a regression in
+          # the patch set cannot reproduce that failure at hour 5.
+          if [ "$PATCH_COUNT" -gt 0 ]; then
+            for want in \
+              "$SRC/toolkit/ziy-fingerprinting.configure" \
+              "$SRC/toolkit/components/resistfingerprinting/nsRFPService.cpp"; do
+              if [ ! -f "$want" ]; then
+                echo "::error file=.github/workflows/build-gecko.yml::expected patched file missing: $want — the patch set is incomplete"
+                exit 1
+              fi
+            done
+            if ! grep -q 'include("ziy-fingerprinting.configure")' "$SRC/toolkit/moz.configure"; then
+              echo "::error file=.github/workflows/build-gecko.yml::toolkit/moz.configure does not include ziy-fingerprinting.configure — patch 0002 must add that include line or the C++ gate can never compile in"
+              exit 1
+            fi
+            grep -q 'MOZ_ZIY_FINGERPRINTING' "$SRC/toolkit/components/resistfingerprinting/nsRFPService.cpp" || {
+              echo "::error file=.github/workflows/build-gecko.yml::nsRFPService.cpp carries no MOZ_ZIY_FINGERPRINTING gate — patch 0001 did not land"
+              exit 1
+            }
+            echo "gate wiring verified: toolkit/moz.configure includes ziy-fingerprinting.configure"
+          fi
+          if [ "$PATCH_COUNT" -eq 0 ]; then
+            # An empty set is a CLEAN NO-OP, not a failure. Building stock
+            # Gecko is a legitimate thing to ask this workflow for.
+            echo "::notice::no C++ patches in patches/ — building stock Gecko $GECKO_VERSION"
+          fi
+          if [ "$FAILED" -gt 0 ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::$FAILED patch(es) failed to apply — aborting BEFORE configure"
+            exit 1
+          fi
+          # TOML patches are NOT applied here. They are byte-level omni.ja
+          # rewrites on the PACKAGED app dir and belong to
+          # tools/build-shell.sh step 7b. Listing them keeps the record
+          # honest without pretending this step owns them.
+          for t in patches/*.toml tools/patches/*.toml; do
+            if [ -e "$t" ]; then echo "TOML patch present (applied at packaging by build-shell.sh 7b): $t"; fi
+          done
+
+      # ------------------------------------------------------------------
+      # g. configure → build → package, with the real numbers recorded.
+      # ------------------------------------------------------------------
+      - name: "g1. mach configure"
+        run: |
+          set -euxo pipefail
+          cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          export PATH="$HOME/.cargo/bin:/usr/lib/llvm-19/bin:$PATH"
+          # Exact PATH shape from the local proof (deep-fork.md §6.4).
+          # The tarball was extracted IN FULL (step d3), so this should not
+          # need the on-demand re-extraction loop the local box needed.
+          ./mach configure
+
+      - name: "g2. mach build (real C++ compile, /usr/bin/time -v)"
+        run: |
+          set -euxo pipefail
+          cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          export PATH="$HOME/.cargo/bin:/usr/lib/llvm-19/bin:$PATH"
+          # /usr/bin/time -v records wall clock, peak RSS (the number that
+          # tells us how close the 8 GB private-repo ceiling we are cutting)
+          # and CPU.
+          /usr/bin/time -v ./mach build 2>&1 | tee "$GITHUB_WORKSPACE/build-time.log"
+          # `set -e` does not see a failure through a pipe; the exit status
+          # is in PIPESTATUS.
+          test "${PIPESTATUS[0]}" -eq 0
+
+      - name: "g3. ccache statistics"
+        run: |
+          set -euxo pipefail
+          ccache --show-stats || true
+
+      - name: "g4. mach package"
+        run: |
+          set -euxo pipefail
+          cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          export PATH="$HOME/.cargo/bin:/usr/lib/llvm-19/bin:$PATH"
+          # Produces the dist tarball AND leaves the relinkable objdir.
+          # The objdir is the point of the job: with it, a C++ patch becomes
+          # a recompile of the changed files plus a relink of libxul, not a
+          # fresh 12-28h build.
+          ./mach package
+          ls -la dist/
+          # mach prints "Created package: <path>" from dist/package_name.txt
+          # (python/mozbuild/mozbuild/mach_commands.py: _print_package_name).
+          # We read that file rather than guessing a tarball name, because
+          # the name is derived from the packaging format.
+          if [ -f dist/package_name.txt ]; then
+            PKG="dist/$(cat dist/package_name.txt)"
+            echo "package_name.txt says: $PKG"
+            ls -la "$PKG"
+            if [ ! -f "$PKG" ]; then
+              echo "::error file=.github/workflows/build-gecko.yml::package_name.txt names '$PKG' but it does not exist"
+              exit 1
+            fi
+          else
+            echo "::warning::dist/package_name.txt absent — mch package produced no tarball name (expected on some formats); the app dir under dist/ is still the deliverable"
+          fi
+          # The relinkable app dir: what build-shell.sh later consumes. It is
+          # what makes the artifact an engine rather than a binary blob.
+          APP_DIR="$(find dist -maxdepth 2 -type d -name firefox | head -1)"
+          if [ -n "$APP_DIR" ]; then
+            du -sh "$APP_DIR"
+            ls "$APP_DIR" | head -20
+          fi
+          # The objdir is what makes "relinkable" true.
+          echo "objdir size: $(du -sh obj-ziy 2>/dev/null | cut -f1)"
+          LX="$(find obj-ziy -name libxul.so -maxdepth 4 2>/dev/null | head -1)"
+          if [ -n "$LX" ]; then
+            echo "RELINKABLE=$LX ($(du -h "$LX" | cut -f1))"
+          else
+            echo "::warning::no libxul.so found under obj-ziy — check the objdir name in .mozconfig"
+          fi
+
+      - name: "g5. save the ccache (also on a timeout, so a capped run resumes)"
+        # `always()` is the whole point of this step: it runs after success,
+        # failure, AND the 720-min timeout. Without it the timeout path would
+        # throw away up to 12h of compilation.
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          # Three keys on purpose:
+          #  1. the STABLE key (no run_id) — so the next run gets an EXACT-key
+          #     hit instead of a prefix match, which is the fast restore path;
+          #  2. a restore key on the version+patch-hash prefix — matches any
+          #     cache from this patch set and lets a later run pick the most
+          #     recent one;
+          #  3. the run-scoped entry as the original key. actions/cache/save
+          #     takes a single `key`, so saving three entries means three
+          #     steps; each additional save overwrites nothing and costs only
+          #     a cache upload (10 GB free cache storage, "GitHub will remove
+          #     any cache entries that have not been accessed in over 7
+          #     days" — dependency-caching doc). Keeping the stable key FIRST
+          #     means it is the entry the next run actually hits.
+          # NOTE: cache/save cannot use restore-keys, so the run-scoped key
+          # exists only as the versioned history of the stable one.
+          key: ccache-gecko-${{ env.GECKO_VERSION }}-${{ hashFiles('patches/*.patch', 'patches/*.toml') }}
+      - name: "g5b. save the ccache under the patch-set prefix (history)"
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cache/ccache
+          key: ccache-gecko-${{ env.GECKO_VERSION }}-${{ hashFiles('patches/*.patch', 'patches/*.toml') }}-${{ github.run_id }}
+
+      # ------------------------------------------------------------------
+      # h. upload the artifact.
+      # ------------------------------------------------------------------
+      - name: "h. upload the packaged build + the build record"
+        uses: actions/upload-artifact@v4
+        with:
+          name: ziy-gecko-${{ env.GECKO_VERSION }}
+          # The tarball named by dist/package_name.txt and the build log with
+          # the /usr/bin/time -v numbers (wall clock, peak RSS).
+          # The objdir is NOT uploaded: ~10 GB, and actions/upload-artifact is
+          # the wrong tool for it. The objdir makes this build RELINKABLE on
+          # the box that built it; the artifact is what you hand to another
+          # runner or to build-shell.sh.
+          path: |
+            _src/firefox-${{ env.GECKO_VERSION }}/dist/*.tar.*
+            _src/firefox-${{ env.GECKO_VERSION }}/dist/*.tar.bz2
+            _src/firefox-${{ env.GECKO_VERSION }}/dist/*.tar.xz
+            build-time.log
+          # 7 days: long enough to hand a build to another job or a
+          # self-hosted follow-up, short enough not to bill storage.
+          retention-days: 7
+          if-no-files-found: error
+
+      # ------------------------------------------------------------------
+      # i. smoke test: boot the built Firefox headless, screenshot, assert
+      #    non-blank AND assert our identity.
+      #    The technique is the one the local workers proved (tools/verify.sh
+      #    and the proofs' headless boots): --headless=new --profile
+      #    <throwaway> --screenshot, then a non-blank pixel check with PIL.
+      #    A THROWAWAY profile only: mktemp -d, removed at the end.
+      # ------------------------------------------------------------------
+      - name: "i. smoke test: headless boot, screenshot, non-blank + identity"
+        run: |
+          set -euxo pipefail
+          cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          export PATH="$HOME/.cargo/bin:/usr/lib/llvm-19/bin:$PATH"
+          # The built engine links GTK directly; ubuntu-latest's image has
+          # gtk-3 but not necessarily -dev (we installed that in step b).
+          # No extra runtime install is attempted — if a shared lib is
+          # missing, the boot fails loudly and that is the correct signal.
+          APP_DIR="$(find dist -maxdepth 2 -type d -name firefox | head -1)"
+          if [ -z "$APP_DIR" ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::no firefox app dir under dist/ — ./mach package did not produce one"
+            exit 1
+          fi
+          test -x "$APP_DIR/firefox" || chmod +x "$APP_DIR/firefox"
+          # Absolute path — the screenshot step runs from the source dir, so
+          # a relative $APP_DIR would resolve correctly but an absolute one
+          # is unambiguous.
+          APP_DIR_ABS="$PWD/$APP_DIR"
+          # A THROWAWAY profile, per the local harness. Never the checkout.
+          PROFILE="$(mktemp -d /tmp/ziy-smoke-XXXXXX)"
+          SCREENSHOT="$PROFILE/shot.png"
+          cleanup() { rm -rf "$PROFILE"; }
+          trap cleanup EXIT
+          # home is redirected too so the engine does not read the runner's
+          # real HOME (it would find the runner's own Firefox-ish state).
+          export HOME="$PROFILE"
+          # --headless=new is the modern headless mode; --screenshot is what
+          # the local workers used (proofs-deep-fork.md and tools/verify.sh),
+          # and --profile keeps this run isolated. Firefox returns 0 on a
+          # successful screenshot, but some builds exit non-zero after
+          # closing; we assert on the OUTPUT, not the exit code.
+          timeout 180 "$APP_DIR_ABS/firefox" \
+            --headless=new --profile "$PROFILE" \
+            --screenshot "$SCREENSHOT" --window-size=1280,720 \
+            about:blank > "$PROFILE/boot.log" 2>&1
+          # Capture the status explicitly: `set -e` would abort here, but a
+          # non-zero exit with a good screenshot is a real Gecko behaviour
+          # (the headless shell can exit non-zero after writing the file).
+          BOOT_RC=$?
+          echo "firefox boot exit=$BOOT_RC"
+          if [ "$BOOT_RC" -ne 0 ] && [ ! -s "$SCREENSHOT" ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::smoke test: firefox exited $BOOT_RC AND produced no screenshot"
+            exit 1
+          fi
+          echo "--- boot log ---"
+          sed -e 's/^/    /' "$PROFILE/boot.log" || true
+          if [ ! -s "$SCREENSHOT" ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::smoke test: no screenshot produced — the built Firefox did not boot"
+            exit 1
+          fi
+          # Non-blank: the PNG must decode and hold more than one colour.
+          # The local workers' PIL technique (tools/verify.sh) ported here.
+          # Pillow is preinstalled on ubuntu-latest's python3; assert rather
+          # than pip-install, because a silent install would hide a Weaker
+          # runner than the one we depend on.
+          python3 - "$SCREENSHOT" <<'PY'
+          import sys
+          try:
+              from PIL import Image
+          except ImportError:
+              print("Pillow is not available on this runner")
+              sys.exit(3)
+          img = Image.open(sys.argv[1]).convert("RGB")
+          colors = img.getcolors(maxcolors=1000000)
+          assert colors is not None, (
+              "screenshot has >1e6 distinct colours — not a raster render")
+          total = img.width * img.height
+          dominant = max(c for c, _ in colors)
+          assert dominant < total, (
+              "smoke screenshot is blank (a single colour fills it)")
+          print("non-blank: %dx%d, %d colours, dominant share %.3f"
+                % (img.width, img.height, len(colors), dominant / total))
+          PY
+          echo "smoke test OK"
+
+      - name: "i2. assert the engine identity in the built product"
+        run: |
+          set -euxo pipefail
+          cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          APP_DIR="$(find dist -maxdepth 2 -type d -name firefox | head -1)"
+          if [ -z "$APP_DIR" ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::no firefox app dir under dist/"
+            exit 1
+          fi
+          # Identity check: our build IS Gecko, so the engine's own version
+          # must be $GECKO_VERSION. The Ziy application identity
+          # (application.ini, mozilla.cfg, omni.ja patches, suite XPIs) is
+          # applied by tools/build-shell.sh on the app dir at packaging time
+          # (deep-fork.md §1-3), so this step asserts the ENGINE half and
+          # the packaging step asserts the Ziy half.
+          VERSION_OUT="$("$APP_DIR/firefox" --version 2>&1)"
+          echo "firefox --version: $VERSION_OUT"
+          echo "$VERSION_OUT" | grep -q "$GECKO_VERSION" || {
+            echo "::error file=.github/workflows/build-gecko.yml::built Firefox reports '$VERSION_OUT', expected $GECKO_VERSION"
+            exit 1
+          }
+          echo "engine identity OK: $VERSION_OUT"
+          echo "NOTE: the Ziy application identity is applied by tools/build-shell.sh"
+          echo "on this artifact in the follow-up packaging job. This job produces the"
+          echo "relinkable ENGINE; the packaging job produces the Ziy app."
+
+      # ------------------------------------------------------------------
+      # j. record the cost reality, the cap outcome and the split point.
+      # ------------------------------------------------------------------
+      - name: "j. record the split point and the metered-minutes reality in the job summary"
+        if: always()
+        run: |
+          {
+            echo "### Gecko $GECKO_VERSION build record"
+            echo ""
+            echo "- runner: ubuntu-latest on a PRIVATE repo = **2 CPU / 8 GB**"
+            echo "  (the 4 CPU / 16 GB figure is the public-repo table)"
+            echo "- parallelism: MOZ_PARALLEL_BUILD=2 (this runner's core count)"
+            echo "- timeout-minutes: 720 = GitHub's MAXIMUM job timeout. It is"
+            echo "  kept at the maximum on purpose: one full Gecko build at 2"
+            echo "  cores is estimated **12-28h** wall, which EXCEEDS the cap, so"
+            echo "  a smaller cap would guarantee failure. The first hosted run"
+            echo "  may therefore end in a plain cap timeout rather than a"
+            echo "  compile error."
+            echo "- metered minutes (GitHub Free, private repo): **2,000/min**;"
+            echo "  this run is estimated 720-1,680 min, i.e. the whole monthly"
+            echo "  allowance. With no payment method on file, usage BLOCKS once"
+            echo "  the quota is used up; past the quota it is \$0.006/min"
+            echo "  (Linux 2-core)."
+            echo "- the free path: the commented-out \`runs-on: self-hosted\`"
+            echo "  block in this workflow. Self-hosted runners are free, and"
+            echo "  the co-owner's box already has the toolchain and the"
+            echo "  checksum-verified 156.0.1 source extracted."
+            if [ -n "${{ github.event.inputs.note }}" ]; then
+              echo "- dispatch note: ${{ github.event.inputs.note }}"
+            fi
+            echo ""
+            echo "**If this job exceeds the cap, split at the configure/build boundary:**"
+            echo ""
+            echo "1. job \`toolchain-and-source\`: steps a-e + g1, caching the"
+            echo "   extracted source tree (minus objdir) and the ccache."
+            echo "2. job \`build-and-package\`: g2-g4 + h + i, restoring that cache."
+            echo ""
+            echo "The ccache cache is what makes the split cheap: only changed"
+            echo "files recompile. It is saved with if: always(), so a TIMED-OUT"
+            echo "run's compilation is not wasted — the next run resumes from it."
+            echo "Linux runners see no artifact upload cost, and the source cache"
+            echo "is a single ~3 GB artifact."
+          } >> "$GITHUB_STEP_SUMMARY"

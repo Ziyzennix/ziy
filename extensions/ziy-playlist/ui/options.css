@@ -1,0 +1,237 @@
+/* Ziy Playlist — the options page's stylesheet. Tokens only; the notes, the
+   setting rows and the reset dialog all consume roles that already exist. */
+
+.playlist-options {
+  margin: 0;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  color-scheme: light dark;
+}
+
+.options__main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.options__header {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.options__title {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-xl);
+  line-height: var(--leading-xl);
+}
+
+.options__subtitle {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.options__note {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  border-left: var(--chrome-accent-bar) solid var(--accent);
+}
+
+.options__note-title {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-xs);
+}
+
+.options__note-body {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-sm);
+}
+
+.options__section {
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.options__section-title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-lg);
+  line-height: var(--leading-lg);
+}
+
+.setting-row {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.setting-row__label {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-xs);
+  line-height: var(--leading-xs);
+}
+
+.setting-row__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+}
+
+.pl-select {
+  appearance: none;
+  width: 100%;
+  max-width: 360px;
+  padding: var(--space-2);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--text-xs);
+}
+
+.pl-btn {
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) var(--space-3);
+  font-family: inherit;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-xs);
+  cursor: pointer;
+}
+
+.pl-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pl-btn--quiet {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+.pl-btn--danger {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.pl-btn--danger:hover:not(:disabled) {
+  background: var(--danger);
+  color: var(--on-danger);
+}
+
+.pl-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.site-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.site-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.site-row__label {
+  font-size: var(--text-xs);
+  word-break: break-all;
+}
+
+.site-empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+.reset-dialog {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  color: var(--text);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-pop);
+  max-width: 480px;
+}
+
+.reset-dialog__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-lg);
+}
+
+.reset-dialog__body {
+  margin: 0 0 var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-sm);
+}
+
+.reset-dialog__label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-xs);
+  margin-bottom: var(--space-1);
+}
+
+.reset-dialog__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-2);
+}
+
+.reset-dialog__hint {
+  margin: 0 0 var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+.reset-dialog__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.options__status {
+  margin: 0;
+  min-height: var(--leading-xs);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}

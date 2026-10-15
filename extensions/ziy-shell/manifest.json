@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Ziy",
+  "version": "156.0.1",
+  "description": "Ziy's own shell layer: the product theme, the window chrome branding and the first-run welcome page. Ziy is a privacy-first browser on the Gecko engine.",
+  "author": "Ziy",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ziy-shell@ziy.app",
+      "strict_min_version": "115.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "background": {
+    "scripts": ["background/theme.js", "background/background.js"],
+    "type": "classic"
+  },
+  "permissions": ["storage", "tabs", "theme"],
+  "optional_permissions": [],
+  "host_permissions": []
+}

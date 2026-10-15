@@ -1,0 +1,1699 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+    <title>heise online News</title>
+    <link>https://www.heise.de/</link>
+    <description>Nachrichten nicht nur aus der Welt der Computer</description>
+    <lastBuildDate>Wed, 14 Oct 2026 10:03:00 +0200</lastBuildDate>
+    <language>de</language>
+
+
+    <item>
+            <title>Gemini 4 Argon: Google öffnet Spitzenmodell für zahlende Nutzer</title>
+            <link>https://www.heise.de/news/Gemini-4-Argon-Google-oeffnet-Spitzenmodell-fuer-zahlende-Nutzer-11487463.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Google macht Gemini 4 Argon weltweit verfügbar. Das KI-Spitzenmodell ist jetzt für zahlende Nutzer in der Gemini-App, der Google-Suche und per API zugänglich.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487463</guid>
+        <pubDate>Wed, 14 Oct 2026 10:03:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Gemini-4-Argon-Google-oeffnet-Spitzenmodell-fuer-zahlende-Nutzer-11487463.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/4/3/2/Gemini-4-Argon-509434d4a2e97077.jpeg" class="webfeedsFeaturedVisual" alt="Offizielle Grafik zu Googles KI-Modell Gemini 4 Argon." /></a></p><p>Google macht Gemini 4 Argon weltweit verfügbar. Das KI-Spitzenmodell ist jetzt für zahlende Nutzer in der Gemini-App, der Google-Suche und per API zugänglich.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: c’t-Workshop: Sicherheit von Anfang an – Threat Modeling für Entwicklungsteams</title>
+            <link>https://www.heise.de/news/c-t-Workshop-Sicherheit-von-Anfang-an-Threat-Modeling-fuer-Entwicklungsteams-11483897.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Welche Risiken stecken in einer geplanten Architektur? Im Workshop lernen Sie, die wichtigen Fragen zu formulieren, bevor Änderungen später teuer werden.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483897</guid>
+        <pubDate>Wed, 14 Oct 2026 10:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/c-t-Workshop-Sicherheit-von-Anfang-an-Threat-Modeling-fuer-Entwicklungsteams-11483897.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/6/4/0/Threat-Modelling_ticker_1920x1080-1b26e074f7d1d766.png" class="webfeedsFeaturedVisual" alt="Eine stilisierte orangefarbene Figur hält eine Lupe vor ein orangefarbenes Rechteck mit Balkendiagramm und vergrößertem Ausrufezeichen" /></a></p><p>Welche Risiken stecken in einer geplanten Architektur? Im Workshop lernen Sie, die wichtigen Fragen zu formulieren, bevor Änderungen später teuer werden.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Xbox Labs: Microsoft gründet Team für Experimente mit dekompilierten Spielen</title>
+            <link>https://www.heise.de/news/Xbox-Labs-Microsoft-gruendet-Team-fuer-Experimente-mit-dekompilierten-Spielen-11487431.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Xbox-Chefin Asha Sharma gründet ein Team für KI-Experimente. Anlass sind dekompilierte Spiele, die zuletzt im Browser und auf Apple Silicon liefen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487431</guid>
+        <pubDate>Wed, 14 Oct 2026 09:55:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Xbox-Labs-Microsoft-gruendet-Team-fuer-Experimente-mit-dekompilierten-Spielen-11487431.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/4/1/6/aufmacher-1791964024461-9f42c8f892463b48.png" class="webfeedsFeaturedVisual" alt="Das Logo von Xbox Labs mit dem Slogan Let&#39;s play with what&#39;s next." /></a></p><p>Xbox-Chefin Asha Sharma gründet ein Team für KI-Experimente. Anlass sind dekompilierte Spiele, die zuletzt im Browser und auf Apple Silicon liefen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Neue curl-Version entfernt SMB-Unterstützung und behebt 24 Sicherheitslücken</title>
+            <link>https://www.heise.de/news/Neue-curl-Version-entfernt-SMB-Unterstuetzung-und-behebt-24-Sicherheitsluecken-11487340.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Die schwerste behobene Lücke erlaubt Codeausführung über HTTP/2, gefunden hat sie Anthropic. ]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487340</guid>
+        <pubDate>Wed, 14 Oct 2026 09:47:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Neue-curl-Version-entfernt-SMB-Unterstuetzung-und-behebt-24-Sicherheitsluecken-11487340.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/3/7/0/2016-01-15-cURL-Logo-Aufmacher-3bb29f0fc3465c0e.png" class="webfeedsFeaturedVisual" alt="cURL-Logo auf blauem Hintergrund" /></a></p><p>Die schwerste behobene Lücke erlaubt Codeausführung über HTTP/2, gefunden hat sie Anthropic. </p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Nvidia steigt bei Ärzteplattform Doctolib ein</title>
+            <link>https://www.heise.de/news/Nvidia-steigt-bei-Aerzteplattform-Doctolib-ein-11487423.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Der Chipgigant Nvidia wird Minderheitsaktionär bei der Ärzteplattform Doctolib. Das französische Unternehmen will damit seine KI-Technik weiterentwickeln.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487423</guid>
+        <pubDate>Wed, 14 Oct 2026 09:27:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Nvidia-steigt-bei-Aerzteplattform-Doctolib-ein-11487423.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/4/1/2/shutterstock_1933716812-742d4a7778065d0b.jpeg" class="webfeedsFeaturedVisual" alt="Leeres Sprechzimmer beim Arzt." /></a></p><p>Der Chipgigant Nvidia wird Minderheitsaktionär bei der Ärzteplattform Doctolib. Das französische Unternehmen will damit seine KI-Technik weiterentwickeln.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Schatten-KI in der Personalabteilung: Wie KI heimlich Bewerbungen aussortiert</title>
+            <link>https://www.heise.de/news/Schatten-KI-in-der-Personalabteilung-Wie-KI-heimlich-Bewerbungen-aussortiert-11487362.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Personaler werden von einer Menge von KI-generierten Bewerbungen überrumpelt. Im Alltag greifen sie dabei oftmals auf unerlaubte KI-Tools zur Bewertung zurück.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487362</guid>
+        <pubDate>Wed, 14 Oct 2026 09:17:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Schatten-KI-in-der-Personalabteilung-Wie-KI-heimlich-Bewerbungen-aussortiert-11487362.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/3/8/1/shutterstock_127502609-759f2a5bfc54a132.jpeg" class="webfeedsFeaturedVisual" alt="Hand auf Maus, die andere auf einer Tastatur" /></a></p><p>Personaler werden von einer Menge von KI-generierten Bewerbungen überrumpelt. Im Alltag greifen sie dabei oftmals auf unerlaubte KI-Tools zur Bewertung zurück.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Cloudflare stoppt Deno-Runtime – Open-Source-Community soll übernehmen</title>
+            <link>https://www.heise.de/news/Cloudflare-stoppt-Deno-Runtime-Open-Source-Community-soll-uebernehmen-11487276.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Mit der Übernahme von Deno durch Cloudflare soll die Weiterentwicklung der Runtime enden. Cloudflare interessiert sich für ein anderes Deno-Projekt.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487276</guid>
+        <pubDate>Wed, 14 Oct 2026 09:11:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Cloudflare-stoppt-Deno-Runtime-Open-Source-Community-soll-uebernehmen-11487276.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/3/3/7/AufmacherDenoCloud-eb01d5bbf695e0fe.png" class="webfeedsFeaturedVisual" alt="Illustration: Dino auf Wolke" /></a></p><p>Mit der Übernahme von Deno durch Cloudflare soll die Weiterentwicklung der Runtime enden. Cloudflare interessiert sich für ein anderes Deno-Projekt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Bald nur noch für Sammler: Analysten vergleichen Konsolen mit Plattenspielern</title>
+            <link>https://www.heise.de/news/Cloud-Gaming-Analysten-sehen-Spielkonsolen-langfristig-vom-Aussterben-bedroht-11487296.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Cloud-Gaming soll bis 2035 zum 38-Milliarden-Dollar-Markt wachsen, prognostiziert Bloomberg Intelligence. Konsolen würden zum Nischenprodukt.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487296</guid>
+        <pubDate>Wed, 14 Oct 2026 09:06:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Cloud-Gaming-Analysten-sehen-Spielkonsolen-langfristig-vom-Aussterben-bedroht-11487296.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/3/4/7/shutterstock_1860770941-5989e760072f5734.jpeg" class="webfeedsFeaturedVisual" alt="Eine Spielekonsole und ein Gamepad auf einem Tisch" /></a></p><p>Cloud-Gaming soll bis 2035 zum 38-Milliarden-Dollar-Markt wachsen, prognostiziert Bloomberg Intelligence. Konsolen würden zum Nischenprodukt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>„Passwort“ Folge 68: Alte Exploits in neuen Appliances</title>
+            <link>https://www.heise.de/news/Passwort-Folge-68-Alte-Exploits-in-neuen-Appliances-11482528.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Die Hosts fragen sich ob vieler altbekannter Bugs, ob sie versehentlich in die Neunziger zurückgereist sind. Immerhin gibt's echte PKI-Neuigkeiten.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11482528</guid>
+        <pubDate>Wed, 14 Oct 2026 09:02:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Passwort-Folge-68-Alte-Exploits-in-neuen-Appliances-11482528.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/9/9/4/9/heise_Podcast_Security_16_9V2-46fdb742c4037431-996721c14f44bd35.jpeg" class="webfeedsFeaturedVisual" alt="Logo Passwort - der heise security Podcast" /></a></p><p>Die Hosts fragen sich ob vieler altbekannter Bugs, ob sie versehentlich in die Neunziger zurückgereist sind. Immerhin gibt's echte PKI-Neuigkeiten.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise+ | Fitbit Air vs. Whoop 5 am iPhone im Test: Messen, deuten, coachen</title>
+            <link>https://www.heise.de/tests/Fitbit-Air-vs-Whoop-5-am-iPhone-im-Test-Messen-deuten-coachen-11475053.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus</link>
+            <description><![CDATA[Whoop prägt das Segment der displaylosen Fitnessbänder. Nun schickt Google mit Fitbit ein Urgestein des Fitness-Trackings ins Rennen. Wir prüfen die Geräte.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11475053</guid>
+        <pubDate>Wed, 14 Oct 2026 09:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/tests/Fitbit-Air-vs-Whoop-5-am-iPhone-im-Test-Messen-deuten-coachen-11475053.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/6/1/6/4/mi_0526_ims_aufmacher_googlr_fitbit_air_vs-a80ccc3dfea67b4b.png" class="webfeedsFeaturedVisual" alt="Fitbit Air und Whoop 5 am iPhone" /></a></p><p>Whoop prägt das Segment der displaylosen Fitnessbänder. Nun schickt Google mit Fitbit ein Urgestein des Fitness-Trackings ins Rennen. Wir prüfen die Geräte.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Patchday: Angreifer nutzen Windows-Shell-Lücke aus</title>
+            <link>https://www.heise.de/news/Patchday-Attacken-auf-verschiedene-Windows-Versionen-beobachtet-11487264.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Microsoft hat mehr als 1400 Sicherheitslücken in Windows, Office & Co. geschlossen. Es laufen bereits Attacken.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487264</guid>
+        <pubDate>Wed, 14 Oct 2026 08:59:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Patchday-Attacken-auf-verschiedene-Windows-Versionen-beobachtet-11487264.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/3/3/1/2025-05-14-Collage-Windows-Update-cc39a925b52fd0ec.png" class="webfeedsFeaturedVisual" alt="Zittriges Windows-11-Logo vor Matrix-artigem Code" /></a></p><p>Microsoft hat mehr als 1400 Sicherheitslücken in Windows, Office & Co. geschlossen. Es laufen bereits Attacken.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Bericht: „GTA 6“ kommt schon Anfang 2027 auf den PC</title>
+            <link>https://www.heise.de/news/GTA-6-PC-Version-soll-angeblich-im-ersten-Quartal-2027-erscheinen-11487208.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Rockstar will „GTA 6“ einem Bericht zufolge schon im ersten Quartal 2027 auf den PC bringen. Beim Xbox-Streaming bleibt der PC dagegen außen vor.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487208</guid>
+        <pubDate>Wed, 14 Oct 2026 08:13:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/GTA-6-PC-Version-soll-angeblich-im-ersten-Quartal-2027-erscheinen-11487208.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/3/0/3/aufmacher-1791956968380-44dc585507cd90cd.png" class="webfeedsFeaturedVisual" alt="Werbebild aus GTA 6: Eine Collage aus verschiedenen Szenen und Personen." /></a></p><p>Rockstar will „GTA 6“ einem Bericht zufolge schon im ersten Quartal 2027 auf den PC bringen. Beim Xbox-Streaming bleibt der PC dagegen außen vor.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Digitalministerium stellt klar: Kein Rückzug bei KI-Projekt mit SAP und Mistral</title>
+            <link>https://www.heise.de/news/Digitalministerium-stellt-klar-Kein-Rueckzug-bei-KI-Projekt-mit-SAP-und-Mistral-11487212.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Das Digitalressort widerspricht Berichten über einen Projekt-Stopp mit Mistral: Die Zusammenarbeit laufe unverändert, der Bund setze weiter auf europäische KI.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487212</guid>
+        <pubDate>Wed, 14 Oct 2026 08:09:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Digitalministerium-stellt-klar-Kein-Rueckzug-bei-KI-Projekt-mit-SAP-und-Mistral-11487212.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/3/0/5/shutterstock_2450169659-4c845452952e9785.jpeg" class="webfeedsFeaturedVisual" alt="Smartphone mit Mistral-AI-Logo." /></a></p><p>Das Digitalressort widerspricht Berichten über einen Projekt-Stopp mit Mistral: Die Zusammenarbeit laufe unverändert, der Bund setze weiter auf europäische KI.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Satellitennetz: EU-Telecomriesen schmieden Allianz gegen Elon Musks Starlink</title>
+            <link>https://www.heise.de/news/Satellitennetz-EU-Telecomriesen-schmieden-Allianz-gegen-Elon-Musks-Starlink-11487200.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Mit Hilfe aus Paris und Brüssel wollen europäische Mobilfunker wie die Deutsche Telekom den Starlink-Vormarsch bei Satelliten-Direktverbindungen ausbremsen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487200</guid>
+        <pubDate>Wed, 14 Oct 2026 08:03:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Satellitennetz-EU-Telecomriesen-schmieden-Allianz-gegen-Elon-Musks-Starlink-11487200.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/2/9/9/shutterstock_1645089145-16ef1b52116f2ce0.jpeg" class="webfeedsFeaturedVisual" alt="Viele Satelliten" /></a></p><p>Mit Hilfe aus Paris und Brüssel wollen europäische Mobilfunker wie die Deutsche Telekom den Starlink-Vormarsch bei Satelliten-Direktverbindungen ausbremsen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: iX-Workshop: Active Directory hacken und schützen</title>
+            <link>https://www.heise.de/news/iX-Workshop-Active-Directory-hacken-und-schuetzen-11472837.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Werden Sie selbst zum Hacker und lernen, wie Angreifer gezielt Schwachstellen in Active Directory ausnutzen, um Server und Domänencontroller zu kompromittieren.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11472837</guid>
+        <pubDate>Wed, 14 Oct 2026 08:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/iX-Workshop-Active-Directory-hacken-und-schuetzen-11472837.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/5/0/5/1/Active-Directory-aus-Angreifersicht-ticker_26_6667x15-2f6ed6321bd10d49.png" class="webfeedsFeaturedVisual" alt="iX-Workshop: Active Directory aus Angreifersicht: Schwachstellen mit NetExec finden und ausnutzen" /></a></p><p>Werden Sie selbst zum Hacker und lernen, wie Angreifer gezielt Schwachstellen in Active Directory ausnutzen, um Server und Domänencontroller zu kompromittieren.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Remote-Angestellte aus Nordkorea: Laptop-Farmen in Texas ausgehoben</title>
+            <link>https://www.heise.de/news/Remote-Angestellte-aus-Nordkorea-Laptop-Farmen-in-Texas-ausgehoben-11487184.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Seit Jahren versuchen Nordkoreaner, im Ausland als Remote-Angestellte Geld für das Regime zu verdienen. In Texas wurde jetzt Infrastruktur dafür ausgehoben.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487184</guid>
+        <pubDate>Wed, 14 Oct 2026 07:59:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Remote-Angestellte-aus-Nordkorea-Laptop-Farmen-in-Texas-ausgehoben-11487184.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/2/9/1/shutterstock_39552700-6bf7ef1739c53f48.jpeg" class="webfeedsFeaturedVisual" alt="Die nordkoreanische Flagge weht im Wind" /></a></p><p>Seit Jahren versuchen Nordkoreaner, im Ausland als Remote-Angestellte Geld für das Regime zu verdienen. In Texas wurde jetzt Infrastruktur dafür ausgehoben.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise+ | Wiederkehrende Aufgaben mit selbstgebauten Werkzeugen vereinfachen</title>
+            <link>https://www.heise.de/ratgeber/Wiederkehrende-Aufgaben-mit-selbstgebauten-Werkzeugen-vereinfachen-11481068.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus</link>
+            <description><![CDATA[Wer kreativ mit recyceltem Material arbeitet und an die Grenzen gängiger Werkzeuge stößt, braucht eigene Lösungen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11481068</guid>
+        <pubDate>Wed, 14 Oct 2026 07:30:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/ratgeber/Wiederkehrende-Aufgaben-mit-selbstgebauten-Werkzeugen-vereinfachen-11481068.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/9/2/1/5/diywerkzeuge_00_aufmacher_niwe-3953ab1aabcb7f54.jpeg" class="webfeedsFeaturedVisual" alt=", " /></a></p><p>Wer kreativ mit recyceltem Material arbeitet und an die Grenzen gängiger Werkzeuge stößt, braucht eigene Lösungen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Wanze in Konferenzraum versteckt: OpenAI-Angestellter festgenommen</title>
+            <link>https://www.heise.de/news/Meetings-heimlich-aufgenommen-OpenAI-Angestellter-festgenommen-und-gefeuert-11487158.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[In einem Konferenzraum von OpenAI wurde ein verstecktes Aufzeichnungsgerät entdeckt. Der Mann, der es angebracht haben soll, wurde festgenommen – und gefeuert.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487158</guid>
+        <pubDate>Wed, 14 Oct 2026 06:58:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Meetings-heimlich-aufgenommen-OpenAI-Angestellter-festgenommen-und-gefeuert-11487158.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/2/7/8/picture1credit-fa99d099f3b8fdac.png" class="webfeedsFeaturedVisual" alt="Zwei Bilder: Ein kleines Gerät an einem Fernseher und eine Antenne mit Kabel" /></a></p><p>In einem Konferenzraum von OpenAI wurde ein verstecktes Aufzeichnungsgerät entdeckt. Der Mann, der es angebracht haben soll, wurde festgenommen – und gefeuert.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Mittwoch: KI-Insolvenz nach Suizid-Klagen, KI-Vereinfachung der App-Entwicklung</title>
+            <link>https://www.heise.de/news/Mittwoch-KI-Insolvenz-nach-Suizid-Klagen-KI-Vereinfachung-der-App-Entwicklung-11487148.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Character.ai vor dem Aus + Android-Apps per Google-KI + Ablösung der GeForce RTX 5090 + Sicherheitswarnung für vernetzte Anlagen + DNA-Allianz der Netzbetreiber]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487148</guid>
+        <pubDate>Wed, 14 Oct 2026 06:15:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Mittwoch-KI-Insolvenz-nach-Suizid-Klagen-KI-Vereinfachung-der-App-Entwicklung-11487148.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/2/7/3/mittwoch-dc6a9fdff534ed25.jpeg" class="webfeedsFeaturedVisual" alt="Junger Mensch mit Kopfhörern hält Laptop mit KI-Aufschrift; Mittwoch: KI-Überschuldung, Google-Vibe-Coding, RTX-5090-Ablösung, IoT-Warnung &amp; Netzbetreiber-Allianz" /></a></p><p>Character.ai vor dem Aus + Android-Apps per Google-KI + Ablösung der GeForce RTX 5090 + Sicherheitswarnung für vernetzte Anlagen + DNA-Allianz der Netzbetreiber</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Google erleichtert das kostenlose Erstellen eigener Android-Apps per KI</title>
+            <link>https://www.heise.de/news/Google-erleichtert-das-kostenlose-Erstellen-eigener-Android-Apps-per-KI-11487130.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Google vereinfacht Vibe-Coding: Eigene Apps lassen sich jetzt per KI-Prompt gratis und ohne den Play Store erstellen. Dafür genügt ein Google-Konto.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487130</guid>
+        <pubDate>Wed, 14 Oct 2026 05:07:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Google-erleichtert-das-kostenlose-Erstellen-eigener-Android-Apps-per-KI-11487130.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/2/6/4/shutterstock_434396323-f04bdd0ad967b8d5.jpeg" class="webfeedsFeaturedVisual" alt="Google Drive auf einem Smartphone, links daneben ein Laptop und ein Stift" /></a></p><p>Google vereinfacht Vibe-Coding: Eigene Apps lassen sich jetzt per KI-Prompt gratis und ohne den Play Store erstellen. Dafür genügt ein Google-Konto.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>KI-Firma Character.ai ist insolvent</title>
+            <link>https://www.heise.de/news/KI-Firma-Character-ai-ist-insolvent-11487116.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Character.ai steht vor dem Aus. Damit müssen auch Eltern verstorbener Kinder um ihren Schadenersatz zittern.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487116</guid>
+        <pubDate>Wed, 14 Oct 2026 02:11:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/KI-Firma-Character-ai-ist-insolvent-11487116.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/2/5/7/shutterstock_2270870965-caa143972c4d75e7.jpeg" class="webfeedsFeaturedVisual" alt="Character.AI-Logo auf einem Smartphone vor einem Laptop mit geöffneter Chatbot-Plattform" /></a></p><p>Character.ai steht vor dem Aus. Damit müssen auch Eltern verstorbener Kinder um ihren Schadenersatz zittern.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>BSI gemahnt auch Betreiber kleiner vernetzter Anlagen</title>
+            <link>https://www.heise.de/news/BSI-gemahnt-auch-Betreiber-kleiner-vernetzter-Anlagen-11487069.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nach dem Angriff auf die Kühlsystemsteuerung französischer Supermärkte warnt Deutschlands IT-Sicherheitsbehörde vor vergleichbaren Attacken.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11487069</guid>
+        <pubDate>Tue, 13 Oct 2026 22:23:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/BSI-gemahnt-auch-Betreiber-kleiner-vernetzter-Anlagen-11487069.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/2/3/3/shutterstock_2275649179-5055cc0a619f2bac.jpeg" class="webfeedsFeaturedVisual" alt="Zwei Männer installieren Solarpanele auf einem Dach" /></a></p><p>Nach dem Angriff auf die Kühlsystemsteuerung französischer Supermärkte warnt Deutschlands IT-Sicherheitsbehörde vor vergleichbaren Attacken.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Grafikkarte GeForce RTX 5090 klettert über 6.000 Euro und soll bald verschwinden</title>
+            <link>https://www.heise.de/news/Nvidia-Geruechte-GeForce-RTX-5090-verschwindet-RTX-5080-24-GByte-soll-kommen-11486799.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Eine GeForce RTX 5090 kostet jetzt mindestens 6.500 Euro. Vermutlich verschwindet die Grafikkarte demnächst komplett vom Markt.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486799</guid>
+        <pubDate>Tue, 13 Oct 2026 21:50:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Nvidia-Geruechte-GeForce-RTX-5090-verschwindet-RTX-5080-24-GByte-soll-kommen-11486799.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/0/9/8/82e7ae22173937ed5c533dbc45ac6a20b8d70063746d04c79b344ce98595c52a-02e35d5b3cbd357d-3e1dcf1c1b6477fa-58a3b0175293fa74.jpeg" class="webfeedsFeaturedVisual" alt="Zwei Zotac Gaming Grafikkarten nebeneinander auf grünem Untergrund" /></a></p><p>Eine GeForce RTX 5090 kostet jetzt mindestens 6.500 Euro. Vermutlich verschwindet die Grafikkarte demnächst komplett vom Markt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>DNA Europe: Netzbetreiber gründen Allianz</title>
+            <link>https://www.heise.de/news/DNA-Europe-Netzbetreiber-gruenden-Allianz-11485773.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Europäische Verbände, darunter die deutschen Anga, Breko und VATM, schließen sich zur Allianz „DNA Europe” zusammen. Ihr Ziel: Beeinflussung des DNA.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485773</guid>
+        <pubDate>Tue, 13 Oct 2026 21:20:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/DNA-Europe-Netzbetreiber-gruenden-Allianz-11485773.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/5/7/2/shutterstock_2393086171-3e4869bdfd4c9094.jpeg" class="webfeedsFeaturedVisual" alt="Große Rollen mit orangefarbenem Glasfaserkabel zur Verlegung im Boden an einer Baustelle in Beber, Niedersachsen." /></a></p><p>Europäische Verbände, darunter die deutschen Anga, Breko und VATM, schließen sich zur Allianz „DNA Europe” zusammen. Ihr Ziel: Beeinflussung des DNA.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Mondlandefahrzeug Griffin-1 ist bereit für den Flug zum Mond</title>
+            <link>https://www.heise.de/news/Mondlandefahrzeug-Griffin-1-ist-bereit-fuer-den-Flug-zum-Mond-11486917.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[In Kürze soll der Lander Griffin-1 mit Material für die Mondstation zum Mond fliegen. Laut NASA ist er startbereit.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486917</guid>
+        <pubDate>Tue, 13 Oct 2026 20:56:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Mondlandefahrzeug-Griffin-1-ist-bereit-fuer-den-Flug-zum-Mond-11486917.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/1/5/7/e2a-pia26708-fig-c-griffin-spin-crop_009-5677846a21196200.jpeg" class="webfeedsFeaturedVisual" alt="Lander Griffin-1 auf dem Rütteltisch" /></a></p><p>In Kürze soll der Lander Griffin-1 mit Material für die Mondstation zum Mond fliegen. Laut NASA ist er startbereit.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Apple zeigt Smart-Home-Hardware – vorerst ohne EU</title>
+            <link>https://www.heise.de/news/Neues-Apple-Home-Zubehoer-von-LG-und-Schneider-aber-nicht-in-der-EU-11486775.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Apple bringt erstmals eigenes HomeKit-Zubehör heraus – indirekt in Zusammenarbeit mit zwei Herstellern. Wann die Hardware nach Europa kommt, bleibt im Dunkeln.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486775</guid>
+        <pubDate>Tue, 13 Oct 2026 20:34:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Neues-Apple-Home-Zubehoer-von-LG-und-Schneider-aber-nicht-in-der-EU-11486775.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/0/8/6/lgzubehoer-c420278bc52baa68.png" class="webfeedsFeaturedVisual" alt="Verschiedene vernetze Geräte: Türschloss, Kamera, Thermostat und Türklingel mit Kamera" /></a></p><p>Apple bringt erstmals eigenes HomeKit-Zubehör heraus – indirekt in Zusammenarbeit mit zwei Herstellern. Wann die Hardware nach Europa kommt, bleibt im Dunkeln.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Baden-Württemberg: Grün-Schwarz will Datenschutzbehörde verkleinern</title>
+            <link>https://www.heise.de/news/Baden-Wuerttemberg-Gruen-Schwarz-will-Datenschutzbehoerde-verkleinern-11486963.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Die grün-schwarze Landesregierung in Baden-Württemberg will dem Datenschutzbeauftragten des Landes im nächsten Haushalt 40 Prozent der Stellen streichen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486963</guid>
+        <pubDate>Tue, 13 Oct 2026 20:11:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Baden-Wuerttemberg-Gruen-Schwarz-will-Datenschutzbehoerde-verkleinern-11486963.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/1/8/0/260519_MP_Kabinett_KAT_007-e0534d202e140729.jpeg" class="webfeedsFeaturedVisual" alt="" /></a></p><p>Die grün-schwarze Landesregierung in Baden-Württemberg will dem Datenschutzbeauftragten des Landes im nächsten Haushalt 40 Prozent der Stellen streichen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Top 10: Das beste Bluetooth-Headset fürs Büro – Poly vor Jabra &amp; Logitech</title>
+            <link>https://www.heise.de/bestenlisten/testsieger/top-10-das-beste-bluetooth-headset-fuers-buero-poly-vor-jabra-und-logitech/y1dd1xt?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Im Büro oder Homeoffice sollen Bluetooth-Headsets die Arbeit durch guten Sound und praktische Funktionen unterstützen. Wir zeigen die zehn besten Exemplare.]]></description>
+        
+            <guid isPermaLink="false">http://heise.de/-11486653</guid>
+        <pubDate>Tue, 13 Oct 2026 20:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p>Im Büro oder Homeoffice sollen Bluetooth-Headsets die Arbeit durch guten Sound und praktische Funktionen unterstützen. Wir zeigen die zehn besten Exemplare.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Security-Appliance: Angreifer nutzen Sicherheitslücke in Ivanti Connect Secure </title>
+            <link>https://www.heise.de/news/Security-Appliance-Angreifer-nutzen-Sicherheitsluecke-in-Ivanti-Connect-Secure-11486827.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Ivanti warnt vor einer Sicherheitslücke und bietet seit Anfang Oktober Updates an. Netzwerkadmins sollten diese schnell aufspielen, Angriffe laufen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486827</guid>
+        <pubDate>Tue, 13 Oct 2026 19:38:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Security-Appliance-Angreifer-nutzen-Sicherheitsluecke-in-Ivanti-Connect-Secure-11486827.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/1/1/2/shutterstock_2602293623-faec070b7a2b1197.jpeg" class="webfeedsFeaturedVisual" alt="Eine männliche Hand zeigt auf ein rotes Warndreieck auf einem Touchscreen; im Hintergrund steht ein aufgeklappter Laptop" /></a></p><p>Ivanti warnt vor einer Sicherheitslücke und bietet seit Anfang Oktober Updates an. Netzwerkadmins sollten diese schnell aufspielen, Angriffe laufen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Deutsch-dänisches Projekt entwickelt modularen Roboter für Klinik</title>
+            <link>https://www.heise.de/news/Deutsch-daenisches-Projekt-entwickelt-modularen-Roboter-fuer-Klinik-11486264.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Die Arbeit im Krankenhaus ist anstrengend und stressig. Ein modulares Robotersystem soll das Personal bei der Arbeit entlasten oder es schulen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486264</guid>
+        <pubDate>Tue, 13 Oct 2026 19:15:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Deutsch-daenisches-Projekt-entwickelt-modularen-Roboter-fuer-Klinik-11486264.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/8/2/4/hp-285020aede8bf3ed.jpeg" class="webfeedsFeaturedVisual" alt="Vier verschiedene Serviceroboter und ein Displayständer stehen in einer Empfangshalle nebeneinander." /></a></p><p>Die Arbeit im Krankenhaus ist anstrengend und stressig. Ein modulares Robotersystem soll das Personal bei der Arbeit entlasten oder es schulen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Firefox 158 mit JPEG XL-Unterstützung</title>
+            <link>https://www.heise.de/news/Firefox-158-JPEG-XL-und-bessere-PDFs-11486725.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Mozilla hat Firefox 158 veröffentlicht. Der Browser kann jetzt Bilder im Format JPEG XL anzeigen und erzeugt besser zugängliche PDFs.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486725</guid>
+        <pubDate>Tue, 13 Oct 2026 18:13:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Firefox-158-JPEG-XL-und-bessere-PDFs-11486725.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/2/0/6/1/mozilla_firefox-28049fa131457ffa.png" class="webfeedsFeaturedVisual" alt="Das Firefox-Logo mit einem Fuchs und einer Weltkugel vor einem blauen Hintergrund." /></a></p><p>Mozilla hat Firefox 158 veröffentlicht. Der Browser kann jetzt Bilder im Format JPEG XL anzeigen und erzeugt besser zugängliche PDFs.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise+ | Vermeintliche Adobe-Alternativen im Test: Was die „Crafting Apps“ leisten</title>
+            <link>https://www.heise.de/hintergrund/Vermeintliche-Adobe-Alternativen-im-Test-Was-die-Crafting-Apps-leisten-11485961.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus</link>
+            <description><![CDATA[ArtCraft ahmt bekannte Kreativprogramme per Vibe-Coding nach. Der Test zeigt, ob eine vertraute Oberfläche tatsächlich ein Ersatz für die Originale sein kann.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485961</guid>
+        <pubDate>Tue, 13 Oct 2026 18:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/hintergrund/Vermeintliche-Adobe-Alternativen-im-Test-Was-die-Crafting-Apps-leisten-11485961.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/6/6/8/PS-LightCraft-b99c3a5d8d41ffdf.png" class="webfeedsFeaturedVisual" alt="" /></a></p><p>ArtCraft ahmt bekannte Kreativprogramme per Vibe-Coding nach. Der Test zeigt, ob eine vertraute Oberfläche tatsächlich ein Ersatz für die Originale sein kann.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Fit für echten Surround-Sound: Apple stellt HomePod mini 2 vor</title>
+            <link>https://www.heise.de/news/HomePod-mini-2-wird-zum-Surround-Lautsprecher-11486437.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Apples kleine Lautsprecherkugel bekommt in Version 2 neue Fähigkeiten – mit einem kleinen Haken.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486437</guid>
+        <pubDate>Tue, 13 Oct 2026 17:36:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/HomePod-mini-2-wird-zum-Surround-Lautsprecher-11486437.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/9/1/1/homepod-mini-2-farben-555a8e8f47db2e7c.jpeg" class="webfeedsFeaturedVisual" alt="Fünf HomePod mini nebeneinander" /></a></p><p>Apples kleine Lautsprecherkugel bekommt in Version 2 neue Fähigkeiten – mit einem kleinen Haken.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise+ | Bastel-Projekt: Musik-Controller als Spielbrett</title>
+            <link>https://www.heise.de/ratgeber/Bastel-Projekt-Musik-Controller-als-Spielbrett-11450261.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus</link>
+            <description><![CDATA[DAW-Controller sind günstige Geräte mit vielen Tasten und RGB-LEDs. Werden sie nicht mehr genutzt, müssen sie nicht einstauben: Wir bauen ein Spielbrett daraus.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11450261</guid>
+        <pubDate>Tue, 13 Oct 2026 17:30:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/ratgeber/Bastel-Projekt-Musik-Controller-als-Spielbrett-11450261.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/6/3/5/7/2/online_aufmacher_setup_7_flach_niwe-c01edec4bfba2e02.jpeg" class="webfeedsFeaturedVisual" alt=", " /></a></p><p>DAW-Controller sind günstige Geräte mit vielen Tasten und RGB-LEDs. Werden sie nicht mehr genutzt, müssen sie nicht einstauben: Wir bauen ein Spielbrett daraus.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Apple stellt neues Apple TV 4K vor – mit Siri AI</title>
+            <link>https://www.heise.de/news/Apple-stellt-neues-Apple-TV-4K-vor-mit-SIri-AI-11485171.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Apple hat am Dienstag eine neue Multimediabox vorgestellt. Die Hardware sieht aus wie zuvor, wurde aber grunderneuert – und verteuert.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485171</guid>
+        <pubDate>Tue, 13 Oct 2026 17:22:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Apple-stellt-neues-Apple-TV-4K-vor-mit-SIri-AI-11485171.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/6/6/appletv4k2026-b5f2b78afa90a359.png" class="webfeedsFeaturedVisual" alt="Apple TV 4K mit Fernbedienung vor einem Bildschirm" /></a></p><p>Apple hat am Dienstag eine neue Multimediabox vorgestellt. Die Hardware sieht aus wie zuvor, wurde aber grunderneuert – und verteuert.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Anthropic warnt: KI-Replikation auf IoT-Geräten rückt näher</title>
+            <link>https://www.heise.de/news/Anthropic-KI-koennte-sich-bald-auf-Haushaltsgeraeten-selbst-replizieren-11485683.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Anthropic warnt: Kleinere KI-Modelle könnten sich bald zum Beispiel auf Haushaltsgeräten selbst vervielfältigen. Kontrolle wäre dann kaum noch möglich.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485683</guid>
+        <pubDate>Tue, 13 Oct 2026 17:10:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Anthropic-KI-koennte-sich-bald-auf-Haushaltsgeraeten-selbst-replizieren-11485683.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/5/2/7/shutterstock_2345459263-46fe03bd04404194.jpeg" class="webfeedsFeaturedVisual" alt="Darstellung eines Roboterkopfs mit menschlichem Gesicht" /></a></p><p>Anthropic warnt: Kleinere KI-Modelle könnten sich bald zum Beispiel auf Haushaltsgeräten selbst vervielfältigen. Kontrolle wäre dann kaum noch möglich.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Metas erste Smart Glasses mit Display kommen nach Deutschland</title>
+            <link>https://www.heise.de/news/Metas-erste-Smart-Glasses-mit-Display-kommen-nach-Deutschland-11486219.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Meta verkauft ab sofort zwei neue Smart Glasses in Deutschland: die Meta Ray-Ban Display mit integrierter Mini-Anzeige und die kameralose Ray-Ban Meta Audio.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486219</guid>
+        <pubDate>Tue, 13 Oct 2026 16:30:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Metas-erste-Smart-Glasses-mit-Display-kommen-nach-Deutschland-11486219.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/8/0/1/Meta-Ray-Ban-Display-Original-5aa4c57931e0e4b3.jpeg" class="webfeedsFeaturedVisual" alt="Innenansicht der Meta Ray-Ban Display mit schwarzem Brillengestell und eingeblendeten Informationen auf dem Display im rechten Brillenglas." /></a></p><p>Meta verkauft ab sofort zwei neue Smart Glasses in Deutschland: die Meta Ray-Ban Display mit integrierter Mini-Anzeige und die kameralose Ray-Ban Meta Audio.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Messerundgang Mondial de l’Auto: Kleinwagen stehlen den Stars die Show</title>
+            <link>https://www.heise.de/news/Messerundgang-Mondial-de-l-Auto-Kleinwagen-stehlen-den-Stars-die-Show-11486173.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Normalerweise ziehen auf Messen große, sportliche und teure Autos die Aufmerksamkeit auf sich. 2026 sind vor allem Smart #2 und Citroën 2CV dicht umlagert.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486173</guid>
+        <pubDate>Tue, 13 Oct 2026 16:11:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Messerundgang-Mondial-de-l-Auto-Kleinwagen-stehlen-den-Stars-die-Show-11486173.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/7/7/7/fiat_multiplay-7137dec4dde53a21.jpeg" class="webfeedsFeaturedVisual" alt="Studie Fiat Multiplay" /></a></p><p>Normalerweise ziehen auf Messen große, sportliche und teure Autos die Aufmerksamkeit auf sich. 2026 sind vor allem Smart #2 und Citroën 2CV dicht umlagert.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Darknet Diaries Deutsch: Der Spion im Wohnzimmer – Teil 1</title>
+            <link>https://www.heise.de/news/Darknet-Diaries-Deutsch-Der-Spion-im-Wohnzimmer-Teil-1-11473668.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Eine Streaming-Box verspricht kostenloses Fernsehen – doch als Sicherheitsforscherin D3ADA55 den Datenverkehr untersucht, entdeckt sie verdächtige Aktivitäten.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11473668</guid>
+        <pubDate>Tue, 13 Oct 2026 16:02:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Darknet-Diaries-Deutsch-Der-Spion-im-Wohnzimmer-Teil-1-11473668.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/5/4/6/5/Darknet-Diaries-16-9_1-a63be1091591d907.jpeg" class="webfeedsFeaturedVisual" alt="Aufmacherbild Darknet Diaries Deutsch" /></a></p><p>Eine Streaming-Box verspricht kostenloses Fernsehen – doch als Sicherheitsforscherin D3ADA55 den Datenverkehr untersucht, entdeckt sie verdächtige Aktivitäten.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Gartenhäcksler im Test: weniger Grünabfall</title>
+            <link>https://www.heise.de/bestenlisten/ratgeber/gartenhaecksler-ab-89-euro-als-elektro-oder-benziner-im-test-weniger-gruenabfall/2jp02lm?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Ein Gartenhäcksler zerkleinert Grünabfälle und spart Platz auf dem Kompost und in der Biotonne. Wir zeigen, worauf es ankommt.]]></description>
+        
+            <guid isPermaLink="false">http://heise.de/-11486471</guid>
+        <pubDate>Tue, 13 Oct 2026 16:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p>Ein Gartenhäcksler zerkleinert Grünabfälle und spart Platz auf dem Kompost und in der Biotonne. Wir zeigen, worauf es ankommt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>„Hogwarts Legacy“ bekommt DLSS-5-Support</title>
+            <link>https://www.heise.de/news/DLSS-5-Hogwarts-Legacy-bekommt-KI-Rendering-im-November-11486481.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nvidias KI-Rendering DLSS 5 kommt am 5. November in „Hogwarts Legacy“. Vorher soll ein neues Modell die Rechenlast halbieren.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486481</guid>
+        <pubDate>Tue, 13 Oct 2026 15:59:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/DLSS-5-Hogwarts-Legacy-bekommt-KI-Rendering-im-November-11486481.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/9/3/3/aufmacher-1791895964362-f0e269534476ccdd.png" class="webfeedsFeaturedVisual" alt="Szene aus Hogwarts Legacy mit DLSS 5" /></a></p><p>Nvidias KI-Rendering DLSS 5 kommt am 5. November in „Hogwarts Legacy“. Vorher soll ein neues Modell die Rechenlast halbieren.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>12,8 Tbit/s: Nvidia und Cisco mit neuen USFP-Modulen</title>
+            <link>https://www.heise.de/news/Nvidia-und-Cisco-USFP-Module-fuer-KI-Fabrics-mit-12-8-Tbit-s-11486457.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nvidia und Cisco stellen auf dem OCP Global Summit neue USFP-Module (Ultra-Dense Small Form-Factor Pluggable) für KI-Fabrics vor.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486457</guid>
+        <pubDate>Tue, 13 Oct 2026 15:54:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Nvidia-und-Cisco-USFP-Module-fuer-KI-Fabrics-mit-12-8-Tbit-s-11486457.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/9/2/1/ultra-dense-small-form-factor-pluggable-625becc5a9b37c6c.jpeg" class="webfeedsFeaturedVisual" alt="Ein silbernes und kupferfarbenes Computermodul mit NVIDIA-Logo auf schwarzem Hintergrund." /></a></p><p>Nvidia und Cisco stellen auf dem OCP Global Summit neue USFP-Module (Ultra-Dense Small Form-Factor Pluggable) für KI-Fabrics vor.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>HomeView: Apples neue Heimzentrale in zweifacher Ausführung</title>
+            <link>https://www.heise.de/news/HomeView-Apples-neue-Heimzentrale-in-zweifacher-Ausfuehrung-11484991.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nach langer Wartezeit hat Apple sein neues Heimgerät fertig. Damit kommt nach der Apple Watch eine neue Modellreihe hinzu. EU-Bürger brauchen allerdings Geduld.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484991</guid>
+        <pubDate>Tue, 13 Oct 2026 15:42:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/HomeView-Apples-neue-Heimzentrale-in-zweifacher-Ausfuehrung-11484991.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/1/7/6/homeviewapple-fb2aea84f385ace6.png" class="webfeedsFeaturedVisual" alt="Apple HomeView in mehreren Farben" /></a></p><p>Nach langer Wartezeit hat Apple sein neues Heimgerät fertig. Damit kommt nach der Apple Watch eine neue Modellreihe hinzu. EU-Bürger brauchen allerdings Geduld.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>„Indie Game Week“: Apple feiert unabhängige Games im App Store</title>
+            <link>https://www.heise.de/news/Woche-der-Indiespiele-im-App-Store-gestartet-11484878.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Der iPhone-Hersteller will in seinem App-Laden das Augenmerk verstärkt auf die unabhängige Szene legen. Es gibt gleich sieben neue Titel.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484878</guid>
+        <pubDate>Tue, 13 Oct 2026 15:16:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Woche-der-Indiespiele-im-App-Store-gestartet-11484878.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/1/1/8/Screenshot_2026-10-12_at_23-94d724198a60215c.png" class="webfeedsFeaturedVisual" alt="Der Titel „Sifu“ von Sloclap und Kepler Interactive" /></a></p><p>Der iPhone-Hersteller will in seinem App-Laden das Augenmerk verstärkt auf die unabhängige Szene legen. Es gibt gleich sieben neue Titel.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Elgato Wave Go: Kompakte Mikrofon-Funkstrecke mit Akkugriff und App</title>
+            <link>https://www.heise.de/news/Elgato-Wave-Go-Kompakte-Mikrofon-Funkstrecke-mit-Akkugriff-und-App-11485113.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Elgatos erstes Funkmikrofon soll sich mit kleiner Form und einem Akkugriff von der Konkurrenz absetzen. ]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485113</guid>
+        <pubDate>Tue, 13 Oct 2026 15:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Elgato-Wave-Go-Kompakte-Mikrofon-Funkstrecke-mit-Akkugriff-und-App-11485113.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/3/7/Wave_Go_Lifestyle_Shot_03_bre08x-73cd51210a7ea434.jpeg" class="webfeedsFeaturedVisual" alt="" /></a></p><p>Elgatos erstes Funkmikrofon soll sich mit kleiner Form und einem Akkugriff von der Konkurrenz absetzen. </p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>programmier.bar: Deno Desktop – Mit einem Befehl zur Desktop-App</title>
+            <link>https://www.heise.de/blog/programmier-bar-Deno-Desktop-Mit-einem-Befehl-zur-Desktop-App-11485875.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Leo Kettmeir von Deno zeigt, wie Deno Desktop Webseiten ohne Codeänderung in Desktop-Apps verwandelt und was es von Electron und Tauri unterscheidet.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485875</guid>
+        <pubDate>Tue, 13 Oct 2026 14:44:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/blog/programmier-bar-Deno-Desktop-Mit-einem-Befehl-zur-Desktop-App-11485875.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/6/2/4/218_Heise_Kettmeir-ccb58b8fba8894f4.png" class="webfeedsFeaturedVisual" alt="Ein Mann neben Schriftzügen" /></a></p><p>Leo Kettmeir von Deno zeigt, wie Deno Desktop Webseiten ohne Codeänderung in Desktop-Apps verwandelt und was es von Electron und Tauri unterscheidet.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Patchday SAP: Angreifer können Systeme übernehmen</title>
+            <link>https://www.heise.de/news/Patchday-SAP-Angreifer-koennen-Systeme-uebernehmen-11486228.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Es sind wichtige Sicherheitsupdates unter anderem für SAP Cloud SDK for Python erschienen. Admins sollten zeitnah handeln.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486228</guid>
+        <pubDate>Tue, 13 Oct 2026 14:39:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Patchday-SAP-Angreifer-koennen-Systeme-uebernehmen-11486228.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/8/0/6/sap_patchday-85ee106c486e98a4.jpeg" class="webfeedsFeaturedVisual" alt="SAP-Logo mit dem Schriftzug Patchday und einem Pflaster" /></a></p><p>Es sind wichtige Sicherheitsupdates unter anderem für SAP Cloud SDK for Python erschienen. Admins sollten zeitnah handeln.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>„No Man’s Sky“ kommt jetzt auch noch aufs iPhone und iPad</title>
+            <link>https://www.heise.de/news/No-Man-s-Sky-kommt-jetzt-auch-noch-aufs-iPhone-und-iPad-11486122.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Seit zehn Jahren gibt es „No Man’s Sky“, trotzdem wird das Weltraumspiel immer weiterentwickelt. Bald kann man es auch auf dem iPhone oder iPad ausprobieren.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486122</guid>
+        <pubDate>Tue, 13 Oct 2026 14:18:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/No-Man-s-Sky-kommt-jetzt-auch-noch-aufs-iPhone-und-iPad-11486122.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/7/5/1/Screenshot_2026-10-13_140224-fcb928c78113bfde.png" class="webfeedsFeaturedVisual" alt="Ein Smartphone wird quer mit beiden Händen gehalten, auf dem Bildschirm läuft No Man’’s Sky." /></a></p><p>Seit zehn Jahren gibt es „No Man’s Sky“, trotzdem wird das Weltraumspiel immer weiterentwickelt. Bald kann man es auch auf dem iPhone oder iPad ausprobieren.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: KI-Agents für komplexe Aufgaben im Unternehmen in fünf Sessions entwickeln</title>
+            <link>https://www.heise.de/news/KI-Agents-fuer-komplexe-Aufgaben-im-Unternehmen-in-fuenf-Sessions-entwickeln-11433868.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Lernen Sie KI-Agents selbst zu entwickeln, optimal auf Ihre Bedürfnisse anzupassen und produktiv einzusetzen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11433868</guid>
+        <pubDate>Tue, 13 Oct 2026 14:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/KI-Agents-fuer-komplexe-Aufgaben-im-Unternehmen-in-fuenf-Sessions-entwickeln-11433868.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/5/5/2/7/5/ki-agents-classroom-banner-ticker-1920x1080px-a52327ce91149b61.png" class="webfeedsFeaturedVisual" alt="" /></a></p><p>Lernen Sie KI-Agents selbst zu entwickeln, optimal auf Ihre Bedürfnisse anzupassen und produktiv einzusetzen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Antimaterie könnte aus der Milchstraße in den intergalaktischen Raum entweichen</title>
+            <link>https://www.heise.de/news/Astronomen-finden-moegliche-Antimaterie-Signatur-ausserhalb-der-Milchstrasse-11486084.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Im Zentrum der Milchstraße entsteht möglicherweise mehr Antimaterie als angenommen. Zwei Forscher haben mögliche Hinweise im intergalaktischen Raum gefunden.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486084</guid>
+        <pubDate>Tue, 13 Oct 2026 13:54:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Astronomen-finden-moegliche-Antimaterie-Signatur-ausserhalb-der-Milchstrasse-11486084.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/7/3/0/hp-8bc4f75803eb3289.jpeg" class="webfeedsFeaturedVisual" alt="Die Milchstraße" /></a></p><p>Im Zentrum der Milchstraße entsteht möglicherweise mehr Antimaterie als angenommen. Zwei Forscher haben mögliche Hinweise im intergalaktischen Raum gefunden.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Rotes Herz aus Turin: Alfa Romeo zeigt in Paris seine künftige Designsprache</title>
+            <link>https://www.heise.de/news/Alfa-Romeo-Cuorerosso-Coupe-Konzept-mit-V6-Vollhybrid-Option-in-Paris-11485937.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Mit dem 2+2-Coupé Cuorerosso zeigt Alfa Romeo in Paris seine künftige Designsprache. Bei der Technik bleibt vieles offen – das erste Serienmodell wird ein SUV.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485937</guid>
+        <pubDate>Tue, 13 Oct 2026 13:51:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Alfa-Romeo-Cuorerosso-Coupe-Konzept-mit-V6-Vollhybrid-Option-in-Paris-11485937.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/6/5/6/alfa-romeo-cuorerosso4-2019dcde756323b6.jpeg" class="webfeedsFeaturedVisual" alt="Alfa Romeo Cuorerosso" /></a></p><p>Mit dem 2+2-Coupé Cuorerosso zeigt Alfa Romeo in Paris seine künftige Designsprache. Bei der Technik bleibt vieles offen – das erste Serienmodell wird ein SUV.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Zahlen, bitte! Fliegen in 3529,6 km/h: Die SR-71 Blackbird</title>
+            <link>https://www.heise.de/hintergrund/Zahlen-bitte-Fliegen-in-3529-6-km-h-Die-SR-71-Blackbird-11485583.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Die SR-71 Blackbird hält als Aufklärungs- und Forschungsflugzeug bis heute mehrere Flugrekorde. Ihr Vorgänger war lange ein Staatsgeheimnis.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485583</guid>
+        <pubDate>Tue, 13 Oct 2026 13:37:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/hintergrund/Zahlen-bitte-Fliegen-in-3529-6-km-h-Die-SR-71-Blackbird-11485583.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/4/7/6/Overlay_Zahlenbitte_1_134_-e6ef1fb2bd498d2c.png" class="webfeedsFeaturedVisual" alt="Zahlenkolonnen in dunkelblauer und hellblauer Farbe, eingerahmt von einer weißen Linie." /></a></p><p>Die SR-71 Blackbird hält als Aufklärungs- und Forschungsflugzeug bis heute mehrere Flugrekorde. Ihr Vorgänger war lange ein Staatsgeheimnis.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Physiker finden Formel: Wann lokale KI-Modelle plötzlich gefährlich werden</title>
+            <link>https://www.heise.de/news/Physiker-finden-Formel-Wann-lokale-KI-Modelle-ploetzlich-gefaehrlich-werden-11486049.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[KI-Modelle können unvermittelt von sicheren zu gefährlichen Ausgaben wechseln. Eine neue mathematische Formel soll helfen, diesen Kipppunkt früh zu erkennen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11486049</guid>
+        <pubDate>Tue, 13 Oct 2026 13:05:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Physiker-finden-Formel-Wann-lokale-KI-Modelle-ploetzlich-gefaehrlich-werden-11486049.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/7/1/2/shutterstock_2603902713-1589cc8276b2a580.jpeg" class="webfeedsFeaturedVisual" alt="Eine weiße Person hat beide Hände an der Tastatur eines aufgeklappten Laptops; im Raum schwebt eine Grafik, in dere Mitte &quot;AI&quot; steht; runderhum schweben Hakerl, aber auch ein paar Gefahr symbolisierende rote Rufzeichen" /></a></p><p>KI-Modelle können unvermittelt von sicheren zu gefährlichen Ausgaben wechseln. Eine neue mathematische Formel soll helfen, diesen Kipppunkt früh zu erkennen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Ballongestütztes militärisches Radar soll Luftraumüberwachung ergänzen</title>
+            <link>https://www.heise.de/news/Ballongestuetztes-militaerisches-Radar-soll-Luftraumueberwachung-ergaenzen-11485781.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Ein schwebendes Radarsystem bietet bessere "Sicht" auf mögliche Angreifer. Point@Air nutzt einen Fesselballon, um das Radar in der Luft zu halten.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485781</guid>
+        <pubDate>Tue, 13 Oct 2026 12:30:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Ballongestuetztes-militaerisches-Radar-soll-Luftraumueberwachung-ergaenzen-11485781.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/5/7/6/omni-f791c351-00db-41c1-b39c-8f826c2e1e9a-1536x760-00adcaf61bafc307.jpeg" class="webfeedsFeaturedVisual" alt="Radarsystem hängt unter einem Fesselballon, der aber nicht sichtbar ist." /></a></p><p>Ein schwebendes Radarsystem bietet bessere "Sicht" auf mögliche Angreifer. Point@Air nutzt einen Fesselballon, um das Radar in der Luft zu halten.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>iPhone-Mirroring: Noch nützlicher unter iOS 27, aber nicht in der EU</title>
+            <link>https://www.heise.de/news/Nuetzliche-neue-Funktionen-fuer-das-iPhone-Mirroring-EU-bleibt-weiter-draussen-11484882.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Seit iOS 18 kann man iPhones vom Mac aus bequem fernsteuern. In iOS 27 und macOS 27 wird das noch nützlicher. Aus Regulierungsgründen aber weiter nicht bei uns.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484882</guid>
+        <pubDate>Tue, 13 Oct 2026 12:07:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Nuetzliche-neue-Funktionen-fuer-das-iPhone-Mirroring-EU-bleibt-weiter-draussen-11484882.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/1/2/0/iphonemir-a30b3f82944dc6e6.png" class="webfeedsFeaturedVisual" alt="Apples iPhone-Mirroring auf dem Mac" /></a></p><p>Seit iOS 18 kann man iPhones vom Mac aus bequem fernsteuern. In iOS 27 und macOS 27 wird das noch nützlicher. Aus Regulierungsgründen aber weiter nicht bei uns.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: Jetzt im Shop: Adventskalender für Maker</title>
+            <link>https://www.heise.de/news/Jetzt-im-Shop-Adventskalender-fuer-Maker-11484373.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Vermisstenmeldung im Advent: Makey ist verschwunden und nur findige Jung-Maker können ihn retten. ]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484373</guid>
+        <pubDate>Tue, 13 Oct 2026 12:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Jetzt-im-Shop-Adventskalender-fuer-Maker-11484373.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/8/8/0/Makey-Advent-f9d76fbdec1e48a9.png" class="webfeedsFeaturedVisual" alt="Produktfoto des Make: Maker Escape Adventskalenders „Der verschwundene Makey“ von Franzis mit schwarzer Verpackung und passendem Handbuch. Davor liegen die enthaltenen Elektronikbauteile, darunter eine rote Roboter-Platine, Sensoren, Kabel, eine Steckplatine und weiteres Zubehör. Im Hintergrund ist ein weihnachtlich beleuchtetes Wohnzimmer zu sehen." /></a></p><p>Vermisstenmeldung im Advent: Makey ist verschwunden und nur findige Jung-Maker können ihn retten. </p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>„Castlevania: Belmont’s Curse“ ist ein schaurig schöner Tanz auf tausend Klingen</title>
+            <link>https://www.heise.de/tests/Castlevania-Belmont-s-Curse-ist-ein-schaurig-schoener-Tanz-auf-tausend-Klingen-11485707.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Knackige Rätsel, fordernde Bosse und eine packende Gruselatmosphäre: „Castlevania“ ist zurück und besser denn je.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485707</guid>
+        <pubDate>Tue, 13 Oct 2026 11:57:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/tests/Castlevania-Belmont-s-Curse-ist-ein-schaurig-schoener-Tanz-auf-tausend-Klingen-11485707.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/5/3/9/Castlevania_Belmonts_Curse-00-Header3-5305eb2c002adfb5.jpeg" class="webfeedsFeaturedVisual" alt="Rose Belmont steht inmitten von Rauchschwaden und Blitzen." /></a></p><p>Knackige Rätsel, fordernde Bosse und eine packende Gruselatmosphäre: „Castlevania“ ist zurück und besser denn je.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Bericht: Apple kooperiert mit US-Sicherheitsfirma für Smart-Home-Geräte</title>
+            <link>https://www.heise.de/news/Bericht-Apple-kooperiert-mit-US-Sicherheitsfirma-fuer-Smart-Home-Geraete-11483659.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Jobangebote und weitere Hinweise deuten darauf hin, dass sich Apple im Heimsicherheitsmarkt umtut. Dafür gibt es auch einen passenden Partner.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483659</guid>
+        <pubDate>Tue, 13 Oct 2026 11:41:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Bericht-Apple-kooperiert-mit-US-Sicherheitsfirma-fuer-Smart-Home-Geraete-11483659.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/2/0/shutterstock_2466124763-9c51b32c28ed2e2b.jpeg" class="webfeedsFeaturedVisual" alt="Ein Kleinbus mit Aufdruck des Sicherheitsanbieters ADT parkt auf einer Straße." /></a></p><p>Jobangebote und weitere Hinweise deuten darauf hin, dass sich Apple im Heimsicherheitsmarkt umtut. Dafür gibt es auch einen passenden Partner.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Sicherheitslücke: DoS-Attacken auf IBM SPSS Modeler möglich</title>
+            <link>https://www.heise.de/news/Sicherheitsluecke-DoS-Attacken-auf-IBM-SPSS-Modeler-moeglich-11485855.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Zwei Schwachstellen in Apache OpenNLP bedrohen die Data-Mining-Software IBM SPSS Modeler.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485855</guid>
+        <pubDate>Tue, 13 Oct 2026 11:40:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Sicherheitsluecke-DoS-Attacken-auf-IBM-SPSS-Modeler-moeglich-11485855.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/6/1/3/shutterstock_1861629355-8fcbf7c5218cd6dd.jpeg" class="webfeedsFeaturedVisual" alt="Eine Frau drückt einen symbolsichen Updateknopf. " /></a></p><p>Zwei Schwachstellen in Apache OpenNLP bedrohen die Data-Mining-Software IBM SPSS Modeler.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Nachfolger von lernen:digital: Initiative will es nun in die Schulen schaffen</title>
+            <link>https://www.heise.de/news/Transferstelle-nimmt-Arbeit-auf-Forschung-soll-es-nun-in-die-Schulen-schaffen-11485517.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nach dem „Kompetenzverbund lernen:digital“ kommt die Initiative „Digitales Lehren und Lernen“ und will erneut Forschung in die Praxis bringen. ]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485517</guid>
+        <pubDate>Tue, 13 Oct 2026 11:19:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Transferstelle-nimmt-Arbeit-auf-Forschung-soll-es-nun-in-die-Schulen-schaffen-11485517.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/4/4/1/shutterstock_1742852729-f608b8a13bce4d61.jpeg" class="webfeedsFeaturedVisual" alt="Ein Tablet lehnt an einem Stapel Bücher mit einem Apfel obenauf, davor liegen Stifte auf einem Tisch vor einer grünen Tafel." /></a></p><p>Nach dem „Kompetenzverbund lernen:digital“ kommt die Initiative „Digitales Lehren und Lernen“ und will erneut Forschung in die Praxis bringen. </p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Sicherheitslücke mit maximalem Schweregrad bedroht GitLab</title>
+            <link>https://www.heise.de/news/24-Sicherheitsluecken-in-GitLab-geschlossen-11485669.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Angreifer können an mehreren Schwachstellen in GitLab Community Edition und Enterprise Edition ansetzen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485669</guid>
+        <pubDate>Tue, 13 Oct 2026 11:03:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/24-Sicherheitsluecken-in-GitLab-geschlossen-11485669.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/5/2/0/shutterstock_1864224370-2ff4a35cb772de7c.jpeg" class="webfeedsFeaturedVisual" alt="Ein symbolischer Updateknopf auf einer Tastatur." /></a></p><p>Angreifer können an mehreren Schwachstellen in GitLab Community Edition und Enterprise Edition ansetzen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Mac-Vorstellung: Apple plant zweitägigen Showcase in Los Angeles</title>
+            <link>https://www.heise.de/news/Mac-Vorstellung-Apple-plant-zweitaegigen-Showcase-in-Los-Angeles-11485175.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Ende Oktober bringt Apple mehrere neue Macs heraus. Dabei sollen Kreative nach Kalifornien eingeladen werden.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485175</guid>
+        <pubDate>Tue, 13 Oct 2026 10:59:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Mac-Vorstellung-Apple-plant-zweitaegigen-Showcase-in-Los-Angeles-11485175.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/6/8/Screenshot_2025-10-06_at_14-5ecea933bf5ab025.png" class="webfeedsFeaturedVisual" alt="John Ternus steht vor einem beleuchteten Apple-Logo in einer Eingangshalle." /></a></p><p>Ende Oktober bringt Apple mehrere neue Macs heraus. Dabei sollen Kreative nach Kalifornien eingeladen werden.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Dutzende Browser-Ports: KI-Modelle dekompilieren Spiele</title>
+            <link>https://www.heise.de/news/Halo-Vice-City-Black-Ops-KI-Ports-von-Spielen-laufen-im-Browser-11485595.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[„Halo“ oder „Black Ops“ laufen als inoffizielle Ports im Browser, offenbar mit KI-Hilfe dekompiliert. Publisher reagieren mit Takedowns.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485595</guid>
+        <pubDate>Tue, 13 Oct 2026 10:51:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Halo-Vice-City-Black-Ops-KI-Ports-von-Spielen-laufen-im-Browser-11485595.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/4/8/3/ss_1df66dab41f25a49786f7e4c4555ee5f42dce35e-91d1229b75b044cb.jpeg" class="webfeedsFeaturedVisual" alt="Screenshot aus Halo Combat Evolved" /></a></p><p>„Halo“ oder „Black Ops“ laufen als inoffizielle Ports im Browser, offenbar mit KI-Hilfe dekompiliert. Publisher reagieren mit Takedowns.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Störung bei Kaspersky: Auffallende Nähe zu Attacken auf russische Rechenzentren</title>
+            <link>https://www.heise.de/news/Stoerung-bei-Kaspersky-Auffallende-Naehe-zu-Attacken-auf-russische-Rechenzentren-11485507.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Seit dem Wochenende funktioniert Software von Kaspersky gar nicht oder nur noch eingeschränkt. Auffallend ist die zeitliche Nähe zu Ausfällen bei Yandex.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485507</guid>
+        <pubDate>Tue, 13 Oct 2026 10:41:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Stoerung-bei-Kaspersky-Auffallende-Naehe-zu-Attacken-auf-russische-Rechenzentren-11485507.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/4/3/6/Kaspersky_Headquarter_2-b3d6578e01e98d64.jpeg" class="webfeedsFeaturedVisual" alt="Kaspersky-Firmenlogo auf Firmenzentrale" /></a></p><p>Seit dem Wochenende funktioniert Software von Kaspersky gar nicht oder nur noch eingeschränkt. Auffallend ist die zeitliche Nähe zu Ausfällen bei Yandex.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Schluss mit SUV: DS besinnt sich beim nächsten Kleinwagen auf alte Stärken</title>
+            <link>https://www.heise.de/news/DS-F3VER-Studie-kuendigt-Rueckkehr-zum-Schraegheck-an-11485427.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[„Wir wollen keine SUVs mehr“. Mit der Studie F3VER gibt DS auf dem Pariser Autosalon einen Ausblick auf einen Schrägheck-Kleinwagen auf STLA-One-Basis.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485427</guid>
+        <pubDate>Tue, 13 Oct 2026 10:39:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/DS-F3VER-Studie-kuendigt-Rueckkehr-zum-Schraegheck-an-11485427.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/3/9/6/konzeptfahrzeug-ds-f3ver4-ef50843704e1dee4.jpeg" class="webfeedsFeaturedVisual" alt="Konzept DS-F3VEVER" /></a></p><p>„Wir wollen keine SUVs mehr“. Mit der Studie F3VER gibt DS auf dem Pariser Autosalon einen Ausblick auf einen Schrägheck-Kleinwagen auf STLA-One-Basis.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Microsoft-Decision-1: KI-Modell für schnelle Entscheidungen</title>
+            <link>https://www.heise.de/news/Microsoft-Decision-1-KI-fuer-Entscheidungsaufgaben-11484750.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Microsoft stellt Decision-1 vor, ein KI-Modell, das für schnelle Entscheidungen optimiert ist. Es liefert numerische Werte statt Freitext als Ausgabe.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484750</guid>
+        <pubDate>Tue, 13 Oct 2026 10:14:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Microsoft-Decision-1-KI-fuer-Entscheidungsaufgaben-11484750.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/0/5/4/shutterstock_2271536861-d647d697d80f0527.jpeg" class="webfeedsFeaturedVisual" alt="Roboter mit der Hand am Mund, um ihn herum ganz viele digitale Schriftzüge mit dem Wort &quot;Data&quot;" /></a></p><p>Microsoft stellt Decision-1 vor, ein KI-Modell, das für schnelle Entscheidungen optimiert ist. Es liefert numerische Werte statt Freitext als Ausgabe.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: iX-Workshop MS Intune: Mobile Endgeräte und Apps sicher in der Cloud verwalten</title>
+            <link>https://www.heise.de/news/iX-Workshop-MS-Intune-Mobile-Endgeraete-und-Apps-sicher-in-der-Cloud-verwalten-11472809.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Mobile Endgeräte sicher und effektiv verwalten, Sicherheitsrichtlinien festlegen und Unternehmensanwendungen verteilen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11472809</guid>
+        <pubDate>Tue, 13 Oct 2026 10:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/iX-Workshop-MS-Intune-Mobile-Endgeraete-und-Apps-sicher-in-der-Cloud-verwalten-11472809.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/5/0/3/7/Mobile-Device-Management-Ticker-Header-16-9-9bae10414bf4093c.jpeg" class="webfeedsFeaturedVisual" alt="Workshop Mobile Device Management mit Intune" /></a></p><p>Mobile Endgeräte sicher und effektiv verwalten, Sicherheitsrichtlinien festlegen und Unternehmensanwendungen verteilen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Software Testing: Ein Lasttest ohne Risikofrage ist verschwendete Lebenszeit</title>
+            <link>https://www.heise.de/blog/Software-Testing-Ein-Lasttest-ohne-Risikofrage-ist-verschwendete-Lebenszeit-11485475.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Richard Seidl spricht mit Stephan Schwarz über Lasttests in Kubernetes und warum alles mit sauberen Requests und Limits für Container beginnt.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485475</guid>
+        <pubDate>Tue, 13 Oct 2026 09:58:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/blog/Software-Testing-Ein-Lasttest-ohne-Risikofrage-ist-verschwendete-Lebenszeit-11485475.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/4/2/0/lasttests-kubernetes-umgebungen-2560x1440-0ff3902c751528e8.jpeg" class="webfeedsFeaturedVisual" alt="Ein Mann blickt lächelnd in die Kamera neben dem Text „Zahlen ohne Entscheidung“" /></a></p><p>Richard Seidl spricht mit Stephan Schwarz über Lasttests in Kubernetes und warum alles mit sauberen Requests und Limits für Container beginnt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Mozilla startet Firefox Enterprise</title>
+            <link>https://www.heise.de/news/Firefox-Enterprise-Mozilla-startet-Business-Browser-11485341.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Mozilla führt Firefox Enterprise ein. Der Business-Browser kann etwa unterbinden, dass Beschäftigte sensible Daten in nicht freigegebene KI-Dienste kopieren.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485341</guid>
+        <pubDate>Tue, 13 Oct 2026 09:52:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Firefox-Enterprise-Mozilla-startet-Business-Browser-11485341.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/3/5/2/firefox_enterprise-7eb3532dc825e87c.png" class="webfeedsFeaturedVisual" alt="Das Firefox Enterprise Logo mit einem Fuchs-Symbol und dem Schriftzug &quot;Firefox Enterprise&quot;." /></a></p><p>Mozilla führt Firefox Enterprise ein. Der Business-Browser kann etwa unterbinden, dass Beschäftigte sensible Daten in nicht freigegebene KI-Dienste kopieren.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Skoda Epiq Sportline: Optisch nachgeschärft</title>
+            <link>https://www.heise.de/news/Skoda-Epiq-Sportline-Optisch-nachgeschaerft-11485301.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Das kleine E-SUV Epiq bekommt eine optisch etwas flotter anmutende Ausstattungsvariante an die Seite gestellt. Die könnte für viele interessant sein.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485301</guid>
+        <pubDate>Tue, 13 Oct 2026 09:29:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Skoda-Epiq-Sportline-Optisch-nachgeschaerft-11485301.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/3/3/1/002_skoda_epiq_sportline_220dfa84-e83956748b82f39a.jpeg" class="webfeedsFeaturedVisual" alt="Skoda Epiq Sportline in Rot-Schwarz" /></a></p><p>Das kleine E-SUV Epiq bekommt eine optisch etwas flotter anmutende Ausstattungsvariante an die Seite gestellt. Die könnte für viele interessant sein.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Jetzt patchen! SonicWall SMA1000 im Fokus von Angreifern</title>
+            <link>https://www.heise.de/news/Jetzt-patchen-SonicWall-SMA1000-im-Fokus-von-Angreifern-11485407.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Derzeit nutzen Angreifer eine kritische Lücke in der Fernzugriffslösung SonicWall SMA1000 aus. Sicherheitsupdates sind verfügbar.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485407</guid>
+        <pubDate>Tue, 13 Oct 2026 09:09:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Jetzt-patchen-SonicWall-SMA1000-im-Fokus-von-Angreifern-11485407.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/3/8/6/shutterstock_1378498490-65e3a04582fa4edf.jpeg" class="webfeedsFeaturedVisual" alt="Ein Warnzeichen für Malware wird angezeigt" /></a></p><p>Derzeit nutzen Angreifer eine kritische Lücke in der Fernzugriffslösung SonicWall SMA1000 aus. Sicherheitsupdates sind verfügbar.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Kontext bei Architekturentscheidungen: „It Depends reicht nicht“</title>
+            <link>https://www.heise.de/hintergrund/Kontext-bei-Architekturentscheidungen-It-Depends-reicht-nicht-11484586.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Im Interview erläutert Neal Ford, warum Architekten mehr überprüfen und weniger diskutieren sollten. Außerdem spricht er über KI in der Softwarearchitektur.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484586</guid>
+        <pubDate>Tue, 13 Oct 2026 09:05:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/hintergrund/Kontext-bei-Architekturentscheidungen-It-Depends-reicht-nicht-11484586.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/9/7/6/overlay-mixer-20261012-155558-670ce228839a2f14.png" class="webfeedsFeaturedVisual" alt="Drei Personen sitzen an einem Tisch vor einem Whiteboard mit Diagrammen und Texten." /></a></p><p>Im Interview erläutert Neal Ford, warum Architekten mehr überprüfen und weniger diskutieren sollten. Außerdem spricht er über KI in der Softwarearchitektur.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>„Squadron 42“: Einzelspieler-Ableger von „Star Citizen“ hat eine Steam-Seite</title>
+            <link>https://www.heise.de/news/Squadron-42-Einzelspieler-Ableger-von-Star-Citizen-hat-eine-Steam-Seite-11485333.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nach über zehn Jahren Entwicklung lässt sich „Squadron 42“ auf Steam vormerken. Das Hauptspiel „Star Citizen“ steckt derweil weiter in technischen Problemen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485333</guid>
+        <pubDate>Tue, 13 Oct 2026 08:37:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Squadron-42-Einzelspieler-Ableger-von-Star-Citizen-hat-eine-Steam-Seite-11485333.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/3/4/8/ss_96abf36217ef38bea8d97c7a5d0e2ff9581f7c82-c5267707dc48c02c.jpeg" class="webfeedsFeaturedVisual" alt="Screenshot aus Squdron 42: Raumschiff fliegt neben einer Raumstation im Weltall" /></a></p><p>Nach über zehn Jahren Entwicklung lässt sich „Squadron 42“ auf Steam vormerken. Das Hauptspiel „Star Citizen“ steckt derweil weiter in technischen Problemen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Metas KI-Aufholjagd: Muse Wonder erreicht Spitzenniveau</title>
+            <link>https://www.heise.de/news/Metas-neue-KI-Spitzenmodelle-Muse-Wonder-macht-Claude-Konkurrenz-11485317.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Meta hat mit Muse Wonder und Muse Wonder Full zwei neue KI-Modelle der Frontier-Klasse vorgestellt. Der Leistungssprung hat seinen Preis.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485317</guid>
+        <pubDate>Tue, 13 Oct 2026 08:37:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Metas-neue-KI-Spitzenmodelle-Muse-Wonder-macht-Claude-Konkurrenz-11485317.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/3/3/9/shutterstock_2752856107-372e68548ac2239a.jpeg" class="webfeedsFeaturedVisual" alt="Meta-Logo an der Fassade eines Firmengebäudes vor blauem Himmel." /></a></p><p>Meta hat mit Muse Wonder und Muse Wonder Full zwei neue KI-Modelle der Frontier-Klasse vorgestellt. Der Leistungssprung hat seinen Preis.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Epic Games verschiebt Disney-Shooter und stellt Entwicklung auf KI um</title>
+            <link>https://www.heise.de/news/Epic-Games-verschiebt-Disney-Shooter-und-stellt-Entwicklung-auf-KI-um-11485273.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Epic Games verschiebt seinen Shooter mit Marvel- und „Star Wars“-Figuren. Laut Bloomberg sollen die Entwickler ihn nun vorrangig mit KI fertigstellen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485273</guid>
+        <pubDate>Tue, 13 Oct 2026 08:22:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Epic-Games-verschiebt-Disney-Shooter-und-stellt-Entwicklung-auf-KI-um-11485273.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/3/1/7/shutterstock_1188568903-60cd16e90f3c7828.jpeg" class="webfeedsFeaturedVisual" alt="Eine Person sitzt vor einem Computerbildschirm und einer Tastatur" /></a></p><p>Epic Games verschiebt seinen Shooter mit Marvel- und „Star Wars“-Figuren. Laut Bloomberg sollen die Entwickler ihn nun vorrangig mit KI fertigstellen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Digitalminister plant Steuer auf KI-Umsätze</title>
+            <link>https://www.heise.de/news/Digitalminister-Wildberger-will-KI-Umsaetze-in-Deutschland-besteuern-11485305.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Microsoft-Gründer Bill Gates fordert schon länger, Roboter und KI zu besteuern. Der deutsche Digitalminister hat ähnliche Vorstellungen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485305</guid>
+        <pubDate>Tue, 13 Oct 2026 08:11:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Digitalminister-Wildberger-will-KI-Umsaetze-in-Deutschland-besteuern-11485305.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/3/3/3/shutterstock_2632059907-5c3da156111366d7.jpeg" class="webfeedsFeaturedVisual" alt="KI-Apps auf einem Smartphone" /></a></p><p>Microsoft-Gründer Bill Gates fordert schon länger, Roboter und KI zu besteuern. Der deutsche Digitalminister hat ähnliche Vorstellungen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Sicherheitslücke in Reisebuchungssystem: Passagierdaten waren betroffen</title>
+            <link>https://www.heise.de/news/Sicherheitsluecke-in-Reisebuchungssystem-Passagierdaten-waren-betroffen-11479912.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Ein Datenleck bei Amadeus legte Passagierdaten offen. Über einen ungeschützten Heap-Dump waren Zugangsdaten im Klartext einsehbar.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11479912</guid>
+        <pubDate>Tue, 13 Oct 2026 08:08:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Sicherheitsluecke-in-Reisebuchungssystem-Passagierdaten-waren-betroffen-11479912.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/8/6/3/0/shutterstock_2780746685-c73ae1c931b56154.jpeg" class="webfeedsFeaturedVisual" alt="Blick auf Flugzeugflügel und blauer Himmel mit weißen Wolken." /></a></p><p>Ein Datenleck bei Amadeus legte Passagierdaten offen. Über einen ungeschützten Heap-Dump waren Zugangsdaten im Klartext einsehbar.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: KI jenseits des Hypes: OOP Focus Day nimmt die Praxis in den Blick</title>
+            <link>https://www.heise.de/news/KI-jenseits-des-Hypes-OOP-Focus-Day-nimmt-die-Praxis-in-den-Blick-11481078.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[KI verändert die Softwareentwicklung. Doch was funktioniert wirklich? Der OOP Focus Day am 11. November beleuchtet Trends, Erfahrungen und Kontroversen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11481078</guid>
+        <pubDate>Tue, 13 Oct 2026 08:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/KI-jenseits-des-Hypes-OOP-Focus-Day-nimmt-die-Praxis-in-den-Blick-11481078.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/9/2/2/0/OOP_Ticker_FocusDay_1920x1080-08e35a5bc581a9d7.jpeg" class="webfeedsFeaturedVisual" alt="OOP by heise Focus Day 2026" /></a></p><p>KI verändert die Softwareentwicklung. Doch was funktioniert wirklich? Der OOP Focus Day am 11. November beleuchtet Trends, Erfahrungen und Kontroversen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Distanzrekord auf einem anderen Himmelskörper: Perseverance überholt Opportunity</title>
+            <link>https://www.heise.de/news/NASA-Rover-Perseverance-erreicht-neuen-Distanzrekord-auf-anderem-Himmelskoerper-11485227.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Seit Sonntag ist der NASA-Rover Perseverance auf dem Mars weiter gefahren als je ein Rover auf einem anderen Himmelskörper. Übertroffen hat er Opportunity.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485227</guid>
+        <pubDate>Tue, 13 Oct 2026 07:52:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/NASA-Rover-Perseverance-erreicht-neuen-Distanzrekord-auf-anderem-Himmelskoerper-11485227.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/9/4/e1_-_PIA26812_-_NAVCAM_record-70bec2b519325c9b.png" class="webfeedsFeaturedVisual" alt="Marslandschaft mit zwei Reifenspuren" /></a></p><p>Seit Sonntag ist der NASA-Rover Perseverance auf dem Mars weiter gefahren als je ein Rover auf einem anderen Himmelskörper. Übertroffen hat er Opportunity.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>DNSSEC-Schlüsseltausch: Secunet- und RISE-Konnektoren verlieren TI-Verbindung</title>
+            <link>https://www.heise.de/news/DNSSEC-Schluesseltausch-Secunet-und-RISE-Konnektoren-verlieren-TI-Verbindung-11477109.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Secunet- und RISE-Konnektoren verlieren nach einem DNSSEC-Schlüsselwechsel die Verbindung zur Telematikinfrastruktur. Viele Praxen sind betroffen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11477109</guid>
+        <pubDate>Tue, 13 Oct 2026 07:23:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/DNSSEC-Schluesseltausch-Secunet-und-RISE-Konnektoren-verlieren-TI-Verbindung-11477109.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/7/2/0/3/konnektor-90d06f7fb3eb88a9.jpeg" class="webfeedsFeaturedVisual" alt="Konnektor in der Hand" /></a></p><p>Secunet- und RISE-Konnektoren verlieren nach einem DNSSEC-Schlüsselwechsel die Verbindung zur Telematikinfrastruktur. Viele Praxen sind betroffen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Zweiarmiger Baseball-Roboter wirft, fängt und schlägt Bälle menschenähnlich</title>
+            <link>https://www.heise.de/news/Zweiarmiger-Baseball-Roboter-wirft-faengt-und-schlaegt-Baelle-menschenaehnlich-11485215.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Forschern ist es gelungen, Roboterarme mit nachgiebigen Gelenken agiler zu entwerfen, sodass sie menschenähnlicher agieren. Dann klappt es auch mit Baseball. ]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485215</guid>
+        <pubDate>Tue, 13 Oct 2026 07:19:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Zweiarmiger-Baseball-Roboter-wirft-faengt-und-schlaegt-Baelle-menschenaehnlich-11485215.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/8/8/Baseball-258f1dffbac2ed1d.jpeg" class="webfeedsFeaturedVisual" alt="Zweiarmiges Robotersystem mit einem Baseballschäger in der Hand." /></a></p><p>Forschern ist es gelungen, Roboterarme mit nachgiebigen Gelenken agiler zu entwerfen, sodass sie menschenähnlicher agieren. Dann klappt es auch mit Baseball. </p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Speicherkrise: Weltweite Lieferzahlen von Smartphones sinken auf Wert von 2012</title>
+            <link>https://www.heise.de/news/Speicherkrise-Weltweit-jetzt-so-wenig-Smartphones-ausgeliefert-wie-zuletzt-2012-11485211.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Im dritten Quartal wurden weltweit so wenige Smartphones ausgeliefert wie zuletzt vor 14 Jahren. Vor allem im günstigeren Segment steigen die Preise rasant. ]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485211</guid>
+        <pubDate>Tue, 13 Oct 2026 06:51:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Speicherkrise-Weltweit-jetzt-so-wenig-Smartphones-ausgeliefert-wie-zuletzt-2012-11485211.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/8/6/shutterstock_2653665669-bc83cc9b4913ff91.jpeg" class="webfeedsFeaturedVisual" alt="Ein Mann betrachtet und vergleicht Smartphones in einem Geschäft." /></a></p><p>Im dritten Quartal wurden weltweit so wenige Smartphones ausgeliefert wie zuletzt vor 14 Jahren. Vor allem im günstigeren Segment steigen die Preise rasant. </p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Dienstag: Supermarkt-Kühlsysteme angegriffen, OpenAI-Modell auf Zerstörungstrip</title>
+            <link>https://www.heise.de/news/Dienstag-Supermarkt-Kuehlsysteme-angegriffen-OpenAI-Modell-auf-Zerstoerungstrip-11485167.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Cyberangriff auf Kühl- und Gefriersysteme + OpenAI-Modell zerstört Testumgebung + Vorschlag von Satya Nadella + BYD mit neuem Modell + Starlink in Venezuela]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485167</guid>
+        <pubDate>Tue, 13 Oct 2026 06:15:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Dienstag-Supermarkt-Kuehlsysteme-angegriffen-OpenAI-Modell-auf-Zerstoerungstrip-11485167.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/6/4/Wochentage-source-sans-55cdcf5c8b6ea6d7.png" class="webfeedsFeaturedVisual" alt="Einkaufswagen eines Supermarkts, dazu Text: DIENSTAG Supermarkt-Kühlschränke, OpenAI, Satya Nadella-Vorschlag, BYD Atto 8 &amp; Starlink" /></a></p><p>Cyberangriff auf Kühl- und Gefriersysteme + OpenAI-Modell zerstört Testumgebung + Vorschlag von Satya Nadella + BYD mit neuem Modell + Starlink in Venezuela</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Die Paketsteuer in Österreich wankt</title>
+            <link>https://www.heise.de/news/Die-Paketsteuer-in-Oesterreich-wankt-11485193.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Regierungspartei NEOS und der ÖVP-Wirtschaftsminister sind gegen die Paketsteuer. Der Handelsverband ruft die EU-Kommission auf den Plan.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485193</guid>
+        <pubDate>Tue, 13 Oct 2026 05:45:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Die-Paketsteuer-in-Oesterreich-wankt-11485193.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/7/7/Pakete-6dd1a93c16a44bf8.jpeg" class="webfeedsFeaturedVisual" alt="Schachteln auf einem Förderband" /></a></p><p>Regierungspartei NEOS und der ÖVP-Wirtschaftsminister sind gegen die Paketsteuer. Der Handelsverband ruft die EU-Kommission auf den Plan.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Kryptodiebe verkaufen Hardware-Wallets mit heimlicher eSIM</title>
+            <link>https://www.heise.de/news/Kryptodiebe-verkaufen-Hardware-Wallets-mit-heimlicher-eSIM-11485183.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[An die 100 Millionen US-Dollar in Kryptowährung sind Nutzern bestimmter Hardware-Wallets gestohlen worden. Denn wer den Bildschirm auslesen kann, gewinnt.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485183</guid>
+        <pubDate>Tue, 13 Oct 2026 05:05:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Kryptodiebe-verkaufen-Hardware-Wallets-mit-heimlicher-eSIM-11485183.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/7/2/shutterstock_1024243558-4dcca6da12754900.jpeg" class="webfeedsFeaturedVisual" alt="Ein Ledger Stick liegt auf einer PC-Tastatur" /></a></p><p>An die 100 Millionen US-Dollar in Kryptowährung sind Nutzern bestimmter Hardware-Wallets gestohlen worden. Denn wer den Bildschirm auslesen kann, gewinnt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Venezuela genehmigt den kommerziellen Betrieb von Starlink im Land</title>
+            <link>https://www.heise.de/news/Venezuela-genehmigt-den-kommerziellen-Betrieb-von-Starlink-im-Land-11485139.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nach erfolgreichen Testläufen mit D2D-Technologie erhält der Satelliteninternetdienst von SpaceX die behördliche Genehmigung für den Betrieb in Venezuela.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485139</guid>
+        <pubDate>Mon, 12 Oct 2026 21:45:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Venezuela-genehmigt-den-kommerziellen-Betrieb-von-Starlink-im-Land-11485139.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/5/0/shutterstock_1645089145-16ef1b52116f2ce0.jpeg" class="webfeedsFeaturedVisual" alt="Viele Satelliten" /></a></p><p>Nach erfolgreichen Testläufen mit D2D-Technologie erhält der Satelliteninternetdienst von SpaceX die behördliche Genehmigung für den Betrieb in Venezuela.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Cyberangriff auf französische Supermarkt-Kühlschränke: Hunderte Waren verdorben</title>
+            <link>https://www.heise.de/news/Cyberangriff-auf-franzoesische-Supermarkt-Kuehlschraenke-Hunderte-Waren-verdorben-11485129.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Unbekannte Angreifer haben die Kühl- und Gefriersysteme französischer Supermärkte außer Betrieb gesetzt. Auch ein niederländischer Betreiber meldet Probleme.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11485129</guid>
+        <pubDate>Mon, 12 Oct 2026 20:53:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Cyberangriff-auf-franzoesische-Supermarkt-Kuehlschraenke-Hunderte-Waren-verdorben-11485129.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/2/4/5/shutterstock_1688252332-0a1ac2fd372f083b.jpeg" class="webfeedsFeaturedVisual" alt="Supermarket,Aisle,With,Empty,Red,Shopping,Cart." /></a></p><p>Unbekannte Angreifer haben die Kühl- und Gefriersysteme französischer Supermärkte außer Betrieb gesetzt. Auch ein niederländischer Betreiber meldet Probleme.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Top 10: Mähroboter für kleine Flächen</title>
+            <link>https://www.heise.de/bestenlisten/testsieger/top-10-der-beste-maehroboter-fuer-kleine-flaechen-testsieger-fuer-550-euro/dtx14fd?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Für kleine Gärten braucht es keinen teuren Mähroboter. Wir zeigen günstige Modelle bis 500 m² ohne Begrenzungskabel.]]></description>
+        
+            <guid isPermaLink="false">http://heise.de/-11484734</guid>
+        <pubDate>Mon, 12 Oct 2026 20:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p>Für kleine Gärten braucht es keinen teuren Mähroboter. Wir zeigen günstige Modelle bis 500 m² ohne Begrenzungskabel.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Bitkom: Mehrheit der Lehrkräfte will Pflichtfortbildungen zu digitalen Themen</title>
+            <link>https://www.heise.de/news/Bitkom-Mehrheit-der-Lehrkraefte-will-Pflichtfortbildungen-zu-digitalen-Themen-11484716.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Es gibt mehr Lehrkräfte, die ihre Fähigkeiten für digitalen Unterricht als „gut“ oder „sehr gut“ einstufen. Darauf wollen sie sich aber offenbar nicht ausruhen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484716</guid>
+        <pubDate>Mon, 12 Oct 2026 18:29:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Bitkom-Mehrheit-der-Lehrkraefte-will-Pflichtfortbildungen-zu-digitalen-Themen-11484716.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/0/3/7/shutterstock_1795173919-1a45a9d2f9d7f826.jpeg" class="webfeedsFeaturedVisual" alt="Eine Lehrperson steht vor einem Bildschirm in einem Klassenzimmer." /></a></p><p>Es gibt mehr Lehrkräfte, die ihre Fähigkeiten für digitalen Unterricht als „gut“ oder „sehr gut“ einstufen. Darauf wollen sie sich aber offenbar nicht ausruhen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>BYD Atto 8: Was hinter dem Megawatt-Laden steckt – und was noch offen ist</title>
+            <link>https://www.heise.de/news/Schnellstlade-Elektroauto-fuer-Early-Adopter-SUV-BYD-Atto-8-11484622.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[BYD zeigt in Paris den Atto 8, das erste Europa-Modell mit Flash Charging, macht aber noch keine Angaben zu Preis und Ladeinfrastruktur.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484622</guid>
+        <pubDate>Mon, 12 Oct 2026 18:16:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Schnellstlade-Elektroauto-fuer-Early-Adopter-SUV-BYD-Atto-8-11484622.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/9/9/2/Atto-8_7-a59362886ec24955.jpeg" class="webfeedsFeaturedVisual" alt="BYD Atto 8" /></a></p><p>BYD zeigt in Paris den Atto 8, das erste Europa-Modell mit Flash Charging, macht aber noch keine Angaben zu Preis und Ladeinfrastruktur.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Airbus testet Kampfdrohne U740 Valkyrie</title>
+            <link>https://www.heise.de/news/Airbus-testet-Kampfdrohne-U740-Valkyrie-11484973.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Airbus hat die US-Kampfdrohne U740 Valkyrie getestet. Für den Einsatz in der Bundeswehr soll sie eine von Airbus entwickelte, KI-gestützte Software bekommen.
+]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484973</guid>
+        <pubDate>Mon, 12 Oct 2026 18:07:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Airbus-testet-Kampfdrohne-U740-Valkyrie-11484973.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/1/6/6/Airbus_U740_Valkyrie_First_Flight_photo_02_Valkyrie_HeroShots_0010_8033-9437552ae253dfb8.jpeg" class="webfeedsFeaturedVisual" alt="Europäischer Erstflug der Kampfdrohne U740 Valkyrie" /></a></p><p>Airbus hat die US-Kampfdrohne U740 Valkyrie getestet. Für den Einsatz in der Bundeswehr soll sie eine von Airbus entwickelte, KI-gestützte Software bekommen.
+</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Smart #2 vorgestellt: Der Zweisitzer für die Stadt ist zurück</title>
+            <link>https://www.heise.de/news/Smart-2-vorgestellt-Der-Zweisitzer-fuer-die-Stadt-ist-zurueck-11484609.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nach rund zweieinhalb Jahren Pause hat Smart mit dem #2 wieder einen Zweisitzer im Programm. Optik und Antriebskonzept erinnern an den Vorgänger.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484609</guid>
+        <pubDate>Mon, 12 Oct 2026 17:16:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Smart-2-vorgestellt-Der-Zweisitzer-fuer-die-Stadt-ist-zurueck-11484609.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/9/8/7/707725-smart_hashtag2_premium_laser_red_cmyk_3-11a980-original-1791270808-a050ad4569656632.jpeg" class="webfeedsFeaturedVisual" alt="Ein rotes Kleinstauto steht in einer Ausstellungshalle." /></a></p><p>Nach rund zweieinhalb Jahren Pause hat Smart mit dem #2 wieder einen Zweisitzer im Programm. Optik und Antriebskonzept erinnern an den Vorgänger.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>c't-Podcast: &quot;Die ziehen einen digital aus&quot;</title>
+            <link>https://www.heise.de/news/c-t-Podcast-Die-ziehen-einen-digital-aus-11484798.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Anneke Buffone erforschte bei Meta, wie viele Menschen die Kontrolle über ihre Nutzungszeit verlieren. Dann wurde sie entlassen – und sagte vor Gericht aus.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484798</guid>
+        <pubDate>Mon, 12 Oct 2026 17:11:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/c-t-Podcast-Die-ziehen-einen-digital-aus-11484798.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/0/7/8/Podcast_TTT_16_9_V2-cbd21e3e42e9b641-05ec3a9bab54f5ad.jpeg" class="webfeedsFeaturedVisual" alt="Das Podcast-Cover von They Talk Tech mit Eckert und Wolfangel." /></a></p><p>Anneke Buffone erforschte bei Meta, wie viele Menschen die Kontrolle über ihre Nutzungszeit verlieren. Dann wurde sie entlassen – und sagte vor Gericht aus.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Schulausschluss wegen Datenbrille in Österreich gekippt</title>
+            <link>https://www.heise.de/news/Schulausschluss-wegen-Datenbrille-in-Oesterreich-gekippt-11484838.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Das Bundesverwaltungsgericht in Wien hat den Rauswurf eines Schülers wegen einer Datenbrille gekippt. Bloßes Unbehagen von anderen reiche für eine Sperre nicht.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484838</guid>
+        <pubDate>Mon, 12 Oct 2026 16:26:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Schulausschluss-wegen-Datenbrille-in-Oesterreich-gekippt-11484838.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/1/0/9/8/shutterstock_2698386937-0bd744f5c4a35a6d.jpeg" class="webfeedsFeaturedVisual" alt="Werbedisplay für Ray-Ban Meta Smart Glasses in einem Geschäft mit Produktmustern, Tablet und Werbeplakat im Hintergrund." /></a></p><p>Das Bundesverwaltungsgericht in Wien hat den Rauswurf eines Schülers wegen einer Datenbrille gekippt. Bloßes Unbehagen von anderen reiche für eine Sperre nicht.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Aufpreis möglich: Das plant Apple beim neuen iPad mini</title>
+            <link>https://www.heise.de/news/Neues-iPad-mini-koennte-deutlich-teurer-werden-11483675.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Apples Kompakt-Tablet bekommt eine zentrale neue Funktion. Das nutzt Apple offenbar, um an der Preisschraube zu drehen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483675</guid>
+        <pubDate>Mon, 12 Oct 2026 16:10:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Neues-iPad-mini-koennte-deutlich-teurer-werden-11483675.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/2/8/shutterstock_1973343692-73a06d156c954f87.jpeg" class="webfeedsFeaturedVisual" alt="Ein Tablet, eine Smartwatch, ein Smartphone, Kopfhörer und ein Laptop auf einer Oberfläche." /></a></p><p>Apples Kompakt-Tablet bekommt eine zentrale neue Funktion. Das nutzt Apple offenbar, um an der Preisschraube zu drehen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Mobiler Monitor Lenovo Thinkvision M16 im Test: mattes Display, 16 Zoll, 220 €</title>
+            <link>https://www.heise.de/bestenlisten/testbericht/mobiler-monitor-lenovo-thinkvision-m16-im-test-mattes-display-16-zoll-220-euro/hes98w8?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Der Lenovo Thinkvision M16 bündelt die Anschlüsse im Standfuß und leitet bis zu 65 W an den Laptop weiter. Was der matte 16-Zöller sonst bietet, zeigt der Test.]]></description>
+        
+            <guid isPermaLink="false">http://heise.de/-11484772</guid>
+        <pubDate>Mon, 12 Oct 2026 16:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p>Der Lenovo Thinkvision M16 bündelt die Anschlüsse im Standfuß und leitet bis zu 65 W an den Laptop weiter. Was der matte 16-Zöller sonst bietet, zeigt der Test.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Satya Nadella will „Notbremse“, um KI abschalten zu können</title>
+            <link>https://www.heise.de/news/Microsoft-Chef-will-Notbremse-fuer-kuenstliche-Intelligenz-11483617.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nach Hacking-Attacken durch KI schlägt Satya Nadella Regeln für die Technologie vor. Die Maßnahmen offenbaren, wie besorgt der Microsoft-Chef ist.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483617</guid>
+        <pubDate>Mon, 12 Oct 2026 15:58:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Microsoft-Chef-will-Notbremse-fuer-kuenstliche-Intelligenz-11483617.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/4/9/9/nadella-msft-berlin-01-241024-3dfb4006468be509.jpeg" class="webfeedsFeaturedVisual" alt="CEO Satya Nadella bei Microsofts &quot;AI Tour&quot; auf der Bühne des CityCube in Berlin. " /></a></p><p>Nach Hacking-Attacken durch KI schlägt Satya Nadella Regeln für die Technologie vor. Die Maßnahmen offenbaren, wie besorgt der Microsoft-Chef ist.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>OpenAI-Modell zerstört absichtlich eigene Testumgebung</title>
+            <link>https://www.heise.de/news/OpenAI-Modell-zerstoert-absichtlich-eigene-Testumgebung-11482632.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Ein OpenAI-Modell zerstörte seine Testumgebung, um fehlende Input-Dateien zu erhalten. Es versuchte zuvor, Ergebnisse zu fälschen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11482632</guid>
+        <pubDate>Mon, 12 Oct 2026 15:40:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/OpenAI-Modell-zerstoert-absichtlich-eigene-Testumgebung-11482632.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/0/0/2/shutterstock_2253487389-d447dffde1291cdd.jpeg" class="webfeedsFeaturedVisual" alt="Logo und Name von OpenAI auf einem Smartphone, im Hintergrund enorm vergrößtere rote Pixel" /></a></p><p>Ein OpenAI-Modell zerstörte seine Testumgebung, um fehlende Input-Dateien zu erhalten. Es versuchte zuvor, Ergebnisse zu fälschen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Apple TV 4K kriegt deutlich bessere Hardware, HomePod mini 2 kommt mit</title>
+            <link>https://www.heise.de/news/Apple-TV-4K-kriegt-deutlich-bessere-Hardware-HomePod-mini-2-kommt-mit-11483655.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Apples Multimediabox soll deutlich leistungsfähiger werden. Ein Release-Termin steht offenbar fest – ebenso für den neuen HomePod mini 2.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483655</guid>
+        <pubDate>Mon, 12 Oct 2026 15:34:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Apple-TV-4K-kriegt-deutlich-bessere-Hardware-HomePod-mini-2-kommt-mit-11483655.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/1/8/appletv_homepod-52965c62dca4da38.png" class="webfeedsFeaturedVisual" alt="Apple TV 4K mit HomePod mini." /></a></p><p>Apples Multimediabox soll deutlich leistungsfähiger werden. Ein Release-Termin steht offenbar fest – ebenso für den neuen HomePod mini 2.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Bitkom: Analoge Ämter bremsen Wirtschaft aus</title>
+            <link>https://www.heise.de/news/Bitkom-Analoge-Aemter-bremsen-Wirtschaft-aus-11484571.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Drei Viertel der Unternehmen sehen die mangelnde Digitalisierung der Behörden als Standortnachteil. Nur 2 Prozent kommunizieren rein digital.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484571</guid>
+        <pubDate>Mon, 12 Oct 2026 15:32:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Bitkom-Analoge-Aemter-bremsen-Wirtschaft-aus-11484571.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/9/6/9/shutterstock_1499238521-af50a7464d89b452.jpeg" class="webfeedsFeaturedVisual" alt="Eine Hand fuegt ein Blatt Papier in einen Faxgeraet ein." /></a></p><p>Drei Viertel der Unternehmen sehen die mangelnde Digitalisierung der Behörden als Standortnachteil. Nur 2 Prozent kommunizieren rein digital.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Datenbanken mit Java, KI und MCP steuern: Googles MCP Toolbox</title>
+            <link>https://www.heise.de/news/Datenbanken-mit-Java-KI-und-MCP-steuern-Googles-MCP-Toolbox-11483877.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Java-Entwickler können mit der Google-Toolbox ihre Datenbanken per KI über MCP ansprechen – derzeit noch mit Einschränkungen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483877</guid>
+        <pubDate>Mon, 12 Oct 2026 15:15:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Datenbanken-mit-Java-KI-und-MCP-steuern-Googles-MCP-Toolbox-11483877.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/6/2/9/AufmacherKIJava-70e6c31aa0212462.png" class="webfeedsFeaturedVisual" alt="Illustration Roboter mit Tasse Kaffee" /></a></p><p>Java-Entwickler können mit der Google-Toolbox ihre Datenbanken per KI über MCP ansprechen – derzeit noch mit Einschränkungen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Münchens Open-Source-Comeback</title>
+            <link>https://www.heise.de/news/Muenchen-Open-Source-ist-wieder-da-11484321.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Nach dem Ende von LiMux setzt München heute erneut auf Open Source. Neue Projekte und ein OSPO zeigen den Wandel der Stadt.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484321</guid>
+        <pubDate>Mon, 12 Oct 2026 15:04:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Muenchen-Open-Source-ist-wieder-da-11484321.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/8/5/4/neues-rathaus-2019-08_02-b0176e30535b93e7.jpeg" class="webfeedsFeaturedVisual" alt="Neues Rathaus und Frauenkirche am Marienplatz in München" /></a></p><p>Nach dem Ende von LiMux setzt München heute erneut auf Open Source. Neue Projekte und ein OSPO zeigen den Wandel der Stadt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Microsoft: KI-Inferenz für eigene Produkte soll auf Maia-Beschleunigern laufen</title>
+            <link>https://www.heise.de/news/Microsoft-KI-Inferenz-fuer-eigene-Produkte-soll-auf-Maia-Beschleunigern-laufen-11480988.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Microsoft kündigt die dritte Generation der hauseigenen KI-Beschleuniger Maia an, die in „Multi-Gigawatt“-Dimensionen zum Einsatz kommen sollen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11480988</guid>
+        <pubDate>Mon, 12 Oct 2026 15:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Microsoft-KI-Inferenz-fuer-eigene-Produkte-soll-auf-Maia-Beschleunigern-laufen-11480988.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/9/1/7/4/Maia-300-Prototyp-16-9-8f0bf1625ba37fc4.jpeg" class="webfeedsFeaturedVisual" alt="Ein Mann hält einen riesigen Chip über einem Serverboard" /></a></p><p>Microsoft kündigt die dritte Generation der hauseigenen KI-Beschleuniger Maia an, die in „Multi-Gigawatt“-Dimensionen zum Einsatz kommen sollen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>KI-Update: SI statt AI, Wer zahlt?, Apples Privacy, SynthID, Closed Source-Ende </title>
+            <link>https://www.heise.de/news/KI-Update-SI-statt-AI-Wer-zahlt-Apples-Privacy-SynthID-Closed-Source-Ende-11482254.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Das „KI-Update“ liefert drei mal pro Woche eine Zusammenfassung der wichtigsten KI-Entwicklungen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11482254</guid>
+        <pubDate>Mon, 12 Oct 2026 15:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/KI-Update-SI-statt-AI-Wer-zahlt-Apples-Privacy-SynthID-Closed-Source-Ende-11482254.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/9/8/1/1/KIupdate_Titel_122023-0953f976150f021c.jpeg" class="webfeedsFeaturedVisual" alt="Das Logo der Podcast-Reihe KI Update mit dem Schriftzug KI Update und dem Heise-Logo" /></a></p><p>Das „KI-Update“ liefert drei mal pro Woche eine Zusammenfassung der wichtigsten KI-Entwicklungen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>„Verfehlt ihr Ziel“: vzbv kritisiert Empfängerüberprüfung beim Online-Banking</title>
+            <link>https://www.heise.de/news/Empfaengerueberpruefung-beim-Online-Banking-vzbv-kritisiert-Masse-an-Warnhinweisen-11484343.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Seit einem Jahr wird bei SEPA-Überweisungen geprüft, ob der Empfängername passt. Andernfalls gibt es Warnungen. Die kämen zu häufig, kritisiert der vzbv.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484343</guid>
+        <pubDate>Mon, 12 Oct 2026 15:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Empfaengerueberpruefung-beim-Online-Banking-vzbv-kritisiert-Masse-an-Warnhinweisen-11484343.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/8/6/5/shutterstock_2814533301-e27af7cc5e2b04f0.jpeg" class="webfeedsFeaturedVisual" alt="Hände halten eine Kreditkarte vor einem Laptop." /></a></p><p>Seit einem Jahr wird bei SEPA-Überweisungen geprüft, ob der Empfängername passt. Andernfalls gibt es Warnungen. Die kämen zu häufig, kritisiert der vzbv.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Datenschutzverstoß: Hohe Strafe für Microsoft-Tochter Xandr</title>
+            <link>https://www.heise.de/news/Datenschutz-Microsoft-Tochter-muss-8-6-Millionen-Euro-Strafe-zahlen-11484293.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Xandr hat nach Auffassung der norwegischen Datenschutzaufsichtsbehörde bis 2020 unzulässig Grindr-Daten verarbeitet.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484293</guid>
+        <pubDate>Mon, 12 Oct 2026 14:36:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Datenschutz-Microsoft-Tochter-muss-8-6-Millionen-Euro-Strafe-zahlen-11484293.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/8/4/0/shutterstock_2509892575-f33b6ef52ceb55bb.jpeg" class="webfeedsFeaturedVisual" alt="Die zerknitterte norwegische Flagge mit dem blauen Kreuz" /></a></p><p>Xandr hat nach Auffassung der norwegischen Datenschutzaufsichtsbehörde bis 2020 unzulässig Grindr-Daten verarbeitet.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Robert Hall und Michael Woodford erhalten den Nobel-Gedenkpreis für Wirtschaft</title>
+            <link>https://www.heise.de/news/Robert-Hall-und-Michael-Woodford-erhalten-den-Nobel-Gedenkpreis-fuer-Wirtschaft-11484367.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[In den 1970er Jahren schwand das Vertrauen in die Stabilisierungspolitik. Die beiden Preisträger haben neue Modelle entwickelt, die heute eingesetzt werden.
+]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484367</guid>
+        <pubDate>Mon, 12 Oct 2026 14:30:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Robert-Hall-und-Michael-Woodford-erhalten-den-Nobel-Gedenkpreis-fuer-Wirtschaft-11484367.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/8/7/7/000-28c30dfda2a53b3e.jpeg" class="webfeedsFeaturedVisual" alt="Wirtschaftspreisträger Robert E. Hall (links) und Michael Woodford" /></a></p><p>In den 1970er Jahren schwand das Vertrauen in die Stabilisierungspolitik. Die beiden Preisträger haben neue Modelle entwickelt, die heute eingesetzt werden.
+</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Cyberkriminelle behaupten Datenleck bei Confluent, Deloitte, KFC und MoneyGram</title>
+            <link>https://www.heise.de/news/Cyberkriminelle-behaupten-Datenleck-bei-Confluent-Deloitte-KFC-und-MoneyGram-11484301.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Eine Cybergang behauptet, bei Confluent, Deloitte, KFC und MoneyGram Daten kopiert zu haben. Daten von Air Canada und FTAPI hat sie veröffentlicht.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484301</guid>
+        <pubDate>Mon, 12 Oct 2026 14:24:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Cyberkriminelle-behaupten-Datenleck-bei-Confluent-Deloitte-KFC-und-MoneyGram-11484301.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/8/4/4/2025-05-16-0101-Dataleak-247e339c0147d7bc.jpeg" class="webfeedsFeaturedVisual" alt="Nullen und Einsen, darunter versteckt sich die Zeichenkette DATALEAK" /></a></p><p>Eine Cybergang behauptet, bei Confluent, Deloitte, KFC und MoneyGram Daten kopiert zu haben. Daten von Air Canada und FTAPI hat sie veröffentlicht.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Opel STX Concept: Der Astra-Kombi von morgen</title>
+            <link>https://www.heise.de/news/Opel-STX-Concept-Der-Astra-Kombi-von-morgen-11484353.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Opel zeigt in Paris die Studie Sports Tourer eXperimental Concept. Ein Kombi der Zukunft, der an alte Erfolge anknüpfen soll.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484353</guid>
+        <pubDate>Mon, 12 Oct 2026 14:07:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Opel-STX-Concept-Der-Astra-Kombi-von-morgen-11484353.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/8/7/0/opel-stx-concept_3_-164414ac34493278.jpeg" class="webfeedsFeaturedVisual" alt="Ein konzeptionelles Elektroauto steht auf einer Plattform vor einer gelben Wand" /></a></p><p>Opel zeigt in Paris die Studie Sports Tourer eXperimental Concept. Ein Kombi der Zukunft, der an alte Erfolge anknüpfen soll.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: iX-Workshop: Claude Code in der Praxis – effizienter entwickeln mit KI-Agenten</title>
+            <link>https://www.heise.de/news/iX-Workshop-Claude-Code-in-der-Praxis-effizienter-entwickeln-mit-KI-Agenten-11467949.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Erfahren Sie, wie Sie Ihre Entwicklungsaufgaben mit Claude Code autonom bearbeiten lassen und Ihre Workflows mit KI-Agenten spürbar beschleunigen können.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11467949</guid>
+        <pubDate>Mon, 12 Oct 2026 14:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/iX-Workshop-Claude-Code-in-der-Praxis-effizienter-entwickeln-mit-KI-Agenten-11467949.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/2/5/6/3/Hands-on-Claude-Code_ticker_1920x1080-4a76c38b001ca18e.png" class="webfeedsFeaturedVisual" alt="Stilisierte Oberfläche einer Leiterplatte mit blau leuchtenden Rechtecken, darüber orange leuchtende, eine stilisierte 3D-Variante des Logos von Anthropic Claude" /></a></p><p>Erfahren Sie, wie Sie Ihre Entwicklungsaufgaben mit Claude Code autonom bearbeiten lassen und Ihre Workflows mit KI-Agenten spürbar beschleunigen können.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Konkurrenz für Steam Frame: Pimax kündigt kabellose PC-VR-Brille Crystal Pro an</title>
+            <link>https://www.heise.de/news/Konkurrenz-fuer-Steam-Frame-Pimax-kuendigt-kabellose-PC-VR-Brille-Crystal-Pro-an-11484213.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Pimax‘ neue Highend-VR-Brille soll das Bild vom Rechner kabellos und ohne Videokomprimierung übertragen. Der Akku wandert zudem vom Headset in die Hosentasche. ]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484213</guid>
+        <pubDate>Mon, 12 Oct 2026 13:45:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Konkurrenz-fuer-Steam-Frame-Pimax-kuendigt-kabellose-PC-VR-Brille-Crystal-Pro-an-11484213.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/8/0/0/Crystal_Pro_1-0a0e2fa49c8decd2.jpeg" class="webfeedsFeaturedVisual" alt="Pimax Crystal Pro VR-Headset mit schwarzer Front, blauem Leuchtlogo und breitem Kopfband in einer schrägen Vorderansicht." /></a></p><p>Pimax‘ neue Highend-VR-Brille soll das Bild vom Rechner kabellos und ohne Videokomprimierung übertragen. Der Akku wandert zudem vom Headset in die Hosentasche. </p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Python 3.15 erschienen: Faule Importe, UTF-8 und neue Datentypen</title>
+            <link>https://www.heise.de/news/Python-3-15-erschienen-Faule-Importe-UTF-8-und-neue-Datentypen-11483795.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Python 3.15 soll manche Programme schneller starten lassen und vereinfacht den Umgang mit unveränderlichen Daten. UTF-8 als Standard erfordert Tests.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483795</guid>
+        <pubDate>Mon, 12 Oct 2026 13:27:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Python-3-15-erschienen-Faule-Importe-UTF-8-und-neue-Datentypen-11483795.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/8/8/python-c500b98b8e4980cc.jpeg" class="webfeedsFeaturedVisual" alt="Schriftzug Python mit Hand" /></a></p><p>Python 3.15 soll manche Programme schneller starten lassen und vereinfacht den Umgang mit unveränderlichen Daten. UTF-8 als Standard erfordert Tests.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Citroën 2CV Concept: Elektrische Ente soll 2028 für rund 15.000 Euro kommen</title>
+            <link>https://www.heise.de/news/Citroen-2CV-Concept-Elektrische-Ente-soll-2028-fuer-rund-15-000-Euro-kommen-11484057.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Citroën zeigt in Paris eine elektrische Neuauflage des 2CV. Das Serienmodell soll bis 2028 kommen und rund 15.000 Euro kosten. Antriebsdaten fehlen noch.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484057</guid>
+        <pubDate>Mon, 12 Oct 2026 13:13:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Citroen-2CV-Concept-Elektrische-Ente-soll-2028-fuer-rund-15-000-Euro-kommen-11484057.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/7/2/2/2cv-concept4-7b6bf9969131dd74.jpeg" class="webfeedsFeaturedVisual" alt="Heckansicht eines roten Konzeptautos." /></a></p><p>Citroën zeigt in Paris eine elektrische Neuauflage des 2CV. Das Serienmodell soll bis 2028 kommen und rund 15.000 Euro kosten. Antriebsdaten fehlen noch.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>iOS-26-User bekommen iOS 27 auf dem Silbertablett serviert</title>
+            <link>https://www.heise.de/news/iOS-27-Apple-versucht-iOS-26-Nutzer-zum-Upgrade-zu-bewegen-11482712.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Wer noch das alte iPhone-Betriebssystem verwendet, findet Apples Upgrade in der Softwareaktualisierung künftig ganz oben.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11482712</guid>
+        <pubDate>Mon, 12 Oct 2026 13:12:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/iOS-27-Apple-versucht-iOS-26-Nutzer-zum-Upgrade-zu-bewegen-11482712.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/0/4/2/CleanShot_2026-10-09_at_14-ed5e9c14e42b817f.png" class="webfeedsFeaturedVisual" alt="Update-Bildschirm unter iOS 26" /></a></p><p>Wer noch das alte iPhone-Betriebssystem verwendet, findet Apples Upgrade in der Softwareaktualisierung künftig ganz oben.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Im Kampf gegen KI-Scam: Wie Bots Betrügern ihre wertvolle Zeit stehlen</title>
+            <link>https://www.heise.de/news/Im-Kampf-gegen-KI-Scam-Wie-Bots-Betruegern-ihre-wertvolle-Zeit-stehlen-11484115.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Am besten kämpft man gegen die steigende Anzahl von KI-Betrugsfällen laut  Sicherheitsexperten ebenfalls mit KI. Wie KI-Bots Betrüger in Schach halten.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484115</guid>
+        <pubDate>Mon, 12 Oct 2026 13:08:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Im-Kampf-gegen-KI-Scam-Wie-Bots-Betruegern-ihre-wertvolle-Zeit-stehlen-11484115.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/7/5/1/shutterstock_2552483369-f8024e9654bfe36c.jpeg" class="webfeedsFeaturedVisual" alt="Eine Person berührt ein leuchtendes Verbotssymbol mit dem Text Scam." /></a></p><p>Am besten kämpft man gegen die steigende Anzahl von KI-Betrugsfällen laut  Sicherheitsexperten ebenfalls mit KI. Wie KI-Bots Betrüger in Schach halten.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Model-Schau: Decision-Modelle, N-Gramme, schlanke Modelle und lokale LLMs</title>
+            <link>https://www.heise.de/hintergrund/Model-Schau-Decision-Modelle-N-Gramme-schlanke-Modelle-und-lokale-LLMs-11483777.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Das Decision-Modell Jev hat einen neuen Trend begründet, und die altbekannten Techniken sorgen bei LLMs für schlankere Modelle.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483777</guid>
+        <pubDate>Mon, 12 Oct 2026 12:55:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/hintergrund/Model-Schau-Decision-Modelle-N-Gramme-schlanke-Modelle-und-lokale-LLMs-11483777.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/7/9/llm-a51194b803c72acb.png" class="webfeedsFeaturedVisual" alt="Chatbot und Menschen" /></a></p><p>Das Decision-Modell Jev hat einen neuen Trend begründet, und die altbekannten Techniken sorgen bei LLMs für schlankere Modelle.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Let’s Encrypt: Umstellung auf 64-Tage-Zertifikate im Februar 2027</title>
+            <link>https://www.heise.de/news/Let-s-Encrypt-Umstellung-auf-64-Tage-Zertifikate-im-Februar-2027-11484047.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Let’s Encrypt will die Lebensspanne von Zertifikaten deutlich reduzieren. Ab Februar erfolgt die Umstellung auf 64 Tage Laufzeit.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484047</guid>
+        <pubDate>Mon, 12 Oct 2026 12:54:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Let-s-Encrypt-Umstellung-auf-64-Tage-Zertifikate-im-Februar-2027-11484047.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/7/1/7/shutterstock_2267597197-f08fa9da37507025.jpeg" class="webfeedsFeaturedVisual" alt="Schlüsselsymbol aus Leitern vor blauem Hintergrund" /></a></p><p>Let’s Encrypt will die Lebensspanne von Zertifikaten deutlich reduzieren. Ab Februar erfolgt die Umstellung auf 64 Tage Laufzeit.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>SAP zwischen KI-Vision und ERP-Alltag: DSAG fordert Wahlfreiheit</title>
+            <link>https://www.heise.de/news/SAP-zwischen-KI-Vision-und-ERP-Alltag-DSAG-fordert-Wahlfreiheit-11484019.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[SAP will mit KI-Agenten die Unternehmenssoftware neu gestalten. Die SAP-Anwendergruppe DSAG fordert aber Innovationen auch für bestehende ERP-Systeme.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11484019</guid>
+        <pubDate>Mon, 12 Oct 2026 12:46:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/SAP-zwischen-KI-Vision-und-ERP-Alltag-DSAG-fordert-Wahlfreiheit-11484019.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/7/0/1/shutterstock_1333226120-adcdb23d441fd443.jpeg" class="webfeedsFeaturedVisual" alt="SAP-Logo an einem Bürogebäude" /></a></p><p>SAP will mit KI-Agenten die Unternehmenssoftware neu gestalten. Die SAP-Anwendergruppe DSAG fordert aber Innovationen auch für bestehende ERP-Systeme.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Parallel erhält 100 Millionen US-Dollar für batterieelektrische Güterwagen</title>
+            <link>https://www.heise.de/news/Parallel-erhaelt-100-Millionen-US-Dollar-fuer-batterieelektrische-Gueterwagen-11483989.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Die autonomen batterieelektrischen Güterwaggons von Parallel sollen dank einer kräftigen Finanzspritze in größerem Stil produziert und vermarktet werden.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483989</guid>
+        <pubDate>Mon, 12 Oct 2026 12:26:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Parallel-erhaelt-100-Millionen-US-Dollar-fuer-batterieelektrische-Gueterwagen-11483989.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/6/8/6/Parallel-Systems-on-track-bb0bff21e2be3a38.jpeg" class="webfeedsFeaturedVisual" alt="Zwei batterieelektrische Güterwaggons auf einer Teststrecke." /></a></p><p>Die autonomen batterieelektrischen Güterwaggons von Parallel sollen dank einer kräftigen Finanzspritze in größerem Stil produziert und vermarktet werden.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Q8botOne: Mini-Roboterhund kommt ohne ein einziges Kabel aus</title>
+            <link>https://www.heise.de/news/Q8botOne-Mini-Roboterhund-kommt-ohne-ein-einziges-Kabel-aus-11483869.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Beim Laufroboter Q8botOne werden Servos, Akku und Mikrocontroller ganz ohne Kabel auf einer Platine zusammengesteckt, per Crowdfunding soll er in Serie gehen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483869</guid>
+        <pubDate>Mon, 12 Oct 2026 12:18:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Q8botOne-Mini-Roboterhund-kommt-ohne-ein-einziges-Kabel-aus-11483869.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/6/2/5/Screenshot_2026-10-12_084014-2331dadaee6c83e2.png" class="webfeedsFeaturedVisual" alt="Laufroboter Q8botOne" /></a></p><p>Beim Laufroboter Q8botOne werden Servos, Akku und Mikrocontroller ganz ohne Kabel auf einer Platine zusammengesteckt, per Crowdfunding soll er in Serie gehen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: S2N Agentic Ops: Programm der Online-Konferenz zu KI im IT-Betrieb steht</title>
+            <link>https://www.heise.de/news/S2N-Agentic-Ops-Programm-der-Online-Konferenz-zu-KI-im-IT-Betrieb-steht-11481912.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Wie verändern KI-Agenten den IT-Betrieb? Die iX-Online-Konferenz stellt am 9. Dezember Praxisprojekte und Technik vor. Tickets gibt es zum Frühbucher-Preis.  ]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11481912</guid>
+        <pubDate>Mon, 12 Oct 2026 12:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/S2N-Agentic-Ops-Programm-der-Online-Konferenz-zu-KI-im-IT-Betrieb-steht-11481912.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/9/6/3/9/Futuristic_robot_in_glowing_server_room-04fbc0bbabd710e8-723ffaa5a1d5910b.jpeg" class="webfeedsFeaturedVisual" alt="Ein Roboter interagiert mit einem Touchscreen vor Serverracks." /></a></p><p>Wie verändern KI-Agenten den IT-Betrieb? Die iX-Online-Konferenz stellt am 9. Dezember Praxisprojekte und Technik vor. Tickets gibt es zum Frühbucher-Preis.  </p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Van, SUV und Pick-up in einem: Fiat zeigt die Studie Multiplay in Paris</title>
+            <link>https://www.heise.de/news/Van-SUV-und-Pick-up-in-einem-Fiat-zeigt-die-Studie-Multiplay-in-Paris-11483873.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Fiat nimmt auf dem Pariser Autosalon mit der Studie Multiplay Bezug auf zwei Multipla-Generationen. Der 6+1-Sitzer wandelt sich dank Heckmodul zum Pick-up.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483873</guid>
+        <pubDate>Mon, 12 Oct 2026 11:59:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Van-SUV-und-Pick-up-in-einem-Fiat-zeigt-die-Studie-Multiplay-in-Paris-11483873.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/6/2/7/Fiat_Multiplay_Exterior_HERO-12dc8fa47e4e1e4a.jpeg" class="webfeedsFeaturedVisual" alt="Fiat Multiplay" /></a></p><p>Fiat nimmt auf dem Pariser Autosalon mit der Studie Multiplay Bezug auf zwei Multipla-Generationen. Der 6+1-Sitzer wandelt sich dank Heckmodul zum Pick-up.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Apples Smart-Home-Hub hat einen Namen – plus neue technische Details</title>
+            <link>https://www.heise.de/news/Apples-Smart-Home-Hub-hat-einen-Namen-plus-neue-technische-Details-11483493.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Neben „homeOS“ hat Apple offenbar einen zweiten Begriff im Zusammenhang mit seinem kommenden Home-Gerät schützen lassen. Neues gibt es auch zur Hardware.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483493</guid>
+        <pubDate>Mon, 12 Oct 2026 11:56:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Apples-Smart-Home-Hub-hat-einen-Namen-plus-neue-technische-Details-11483493.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/4/3/7/apllehomekit-34a010771831215f.png" class="webfeedsFeaturedVisual" alt="Teile von Apples HomeKit-Ökosystem" /></a></p><p>Neben „homeOS“ hat Apple offenbar einen zweiten Begriff im Zusammenhang mit seinem kommenden Home-Gerät schützen lassen. Neues gibt es auch zur Hardware.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Mysteriöse Radioblitze: Am weitesten entfernter FRB wirft neue Fragen auf</title>
+            <link>https://www.heise.de/news/Mysterioese-Radioblitze-Am-weitesten-entfernter-FRB-wirft-neue-Fragen-auf-11483955.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Seit Jahren wird in der Astronomie gerätselt, was hinter den Fast Radio Bursts steckt. Zwei Theorien konkurrieren und ein neuer Fund passt wieder nur zu einer.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483955</guid>
+        <pubDate>Mon, 12 Oct 2026 11:40:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Mysterioese-Radioblitze-Am-weitesten-entfernter-FRB-wirft-neue-Fragen-auf-11483955.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/6/6/9/weic2621a_ausschnitt-331f51e142c0c6aa.jpeg" class="webfeedsFeaturedVisual" alt="Deep-Field-Aufnahme des Weltraums mit Sternen und Galaxien, inklusive Ausschnittsvergrößerung" /></a></p><p>Seit Jahren wird in der Astronomie gerätselt, was hinter den Fast Radio Bursts steckt. Zwei Theorien konkurrieren und ein neuer Fund passt wieder nur zu einer.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Der Atari 800XL kehrt zurück: Retro-Heimcomputer erscheint mit 25 Spielen</title>
+            <link>https://www.heise.de/news/Der-Atari-800-kehrt-zurueck-Retro-Heimcomputer-erscheint-mit-25-Spielen-11483927.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Der 8-Bit-Rechner von 1983 bekommt eine modernisierte Neuauflage mit mechanischer Tastatur, Modulschacht und zeitgemäßen Anschlüssen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483927</guid>
+        <pubDate>Mon, 12 Oct 2026 10:57:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Der-Atari-800-kehrt-zurueck-Retro-Heimcomputer-erscheint-mit-25-Spielen-11483927.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/6/5/5/Atari_The800XL-b04ac8e53396757a.jpeg" class="webfeedsFeaturedVisual" alt="Atari THE400 Mini im Retro-Design mit schwarzer Tastatur, beige-braunem Gehäuse und klassischem Joystick vor grauem Hintergrund." /></a></p><p>Der 8-Bit-Rechner von 1983 bekommt eine modernisierte Neuauflage mit mechanischer Tastatur, Modulschacht und zeitgemäßen Anschlüssen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: Webinar-Zweiteiler: Maßgeschneiderte Verteidigung mit Wazuh</title>
+            <link>https://www.heise.de/news/Webinar-Zweiteiler-Massgeschneiderte-Verteidigung-mit-Wazuh-11481854.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Wazuh ist ein beliebtes Opensource-SIEM und -XDR. Im zweiteiligen Webinar lernen Sie alles über Installation, Anpassung und Eigenbetrieb der Software.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11481854</guid>
+        <pubDate>Mon, 12 Oct 2026 10:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Webinar-Zweiteiler-Massgeschneiderte-Verteidigung-mit-Wazuh-11481854.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/9/6/1/0/Bild__1_-0db595290297fbdb.jpeg" class="webfeedsFeaturedVisual" alt="Wazuh bekämpft Schwachstellen und Malware" /></a></p><p>Wazuh ist ein beliebtes Opensource-SIEM und -XDR. Im zweiteiligen Webinar lernen Sie alles über Installation, Anpassung und Eigenbetrieb der Software.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Microsoft vor nächstem Zertifikatswechsel – Windows Update betroffen</title>
+            <link>https://www.heise.de/news/Microsoft-vor-naechstem-Zertifikatswechsel-Windows-Update-betroffen-11483863.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Ab kommendem Mai laufen die alten Windows-Update-Zertifikate ab, neue liefert Microsoft per Update. Admins sollten prüfen, ob Maßnahmen nötig sind.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483863</guid>
+        <pubDate>Mon, 12 Oct 2026 09:41:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Microsoft-vor-naechstem-Zertifikatswechsel-Windows-Update-betroffen-11483863.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/6/2/2/2025-05-14-Collage-Windows-Update-cc39a925b52fd0ec.png" class="webfeedsFeaturedVisual" alt="Zittriges Windows-11-Logo vor Matrix-artigem Code" /></a></p><p>Ab kommendem Mai laufen die alten Windows-Update-Zertifikate ab, neue liefert Microsoft per Update. Admins sollten prüfen, ob Maßnahmen nötig sind.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Renault E-Space vorgestellt: Der Van ist tot, es lebe der Van</title>
+            <link>https://www.heise.de/news/Renault-E-Space-vorgestellt-Der-Van-ist-tot-es-lebe-der-Van-11483815.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[In Paris stellt Renault die Studie eines Vans vor, die mehr sein dürfte als eine vage Aussicht auf die nahende Zukunft. Der E-Space geht optisch eigene Wege.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483815</guid>
+        <pubDate>Mon, 12 Oct 2026 09:11:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Renault-E-Space-vorgestellt-Der-Van-ist-tot-es-lebe-der-Van-11483815.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/9/8/01-667ced2e116f6dad.jpeg" class="webfeedsFeaturedVisual" alt="Renault E-Space" /></a></p><p>In Paris stellt Renault die Studie eines Vans vor, die mehr sein dürfte als eine vage Aussicht auf die nahende Zukunft. Der E-Space geht optisch eigene Wege.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Warnung vor Angriffen auf alte Sicherheitslücken</title>
+            <link>https://www.heise.de/news/Alte-Luecken-etwa-in-Apache-Struts-BIND-und-ProFTPD-im-Visier-von-Angreifern-11483781.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Die CISA warnt vor beobachteten Angriffen unter anderem auf Apache Struts, BIND und ProFTPD. Die Lücken sind teils sehr alt.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483781</guid>
+        <pubDate>Mon, 12 Oct 2026 08:28:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Alte-Luecken-etwa-in-Apache-Struts-BIND-und-ProFTPD-im-Visier-von-Angreifern-11483781.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/8/1/shutterstock_1124819546_jpg-d3889c815ce30778.jpeg" class="webfeedsFeaturedVisual" alt="Cyber,Hacker,Attack,Background,,Skull,Vector" /></a></p><p>Die CISA warnt vor beobachteten Angriffen unter anderem auf Apache Struts, BIND und ProFTPD. Die Lücken sind teils sehr alt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>US-Verteidigungsministerium vergibt Auftrag zum Laden von Drohnen im Flug</title>
+            <link>https://www.heise.de/news/US-Verteidigungsministerium-vergibt-Auftrag-zum-Laden-von-Drohnen-im-Flug-11483771.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Das US-Verteidigungsministerium hat an PowerLight einen Auftrag für die Weiterentwicklung und Integration eines Laser-Ladesystems für Drohnen im Flug vergeben. ]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483771</guid>
+        <pubDate>Mon, 12 Oct 2026 08:23:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/US-Verteidigungsministerium-vergibt-Auftrag-zum-Laden-von-Drohnen-im-Flug-11483771.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/7/6/PowerLight-acd83fb7fb5c7601.jpeg" class="webfeedsFeaturedVisual" alt="AerialReCharge-System vor blauem Himmel." /></a></p><p>Das US-Verteidigungsministerium hat an PowerLight einen Auftrag für die Weiterentwicklung und Integration eines Laser-Ladesystems für Drohnen im Flug vergeben. </p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: iX-Workshop: Aufgaben eines Informationssicherheitsbeauftragten</title>
+            <link>https://www.heise.de/news/iX-Workshop-Aufgaben-eines-Informationssicherheitsbeauftragten-11472797.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Sich mit der Rolle des Informationssicherheitsbeauftragten vertraut machen: die Anforderungen verstehen und die notwendigen Kompetenzen erwerben.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11472797</guid>
+        <pubDate>Mon, 12 Oct 2026 08:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/iX-Workshop-Aufgaben-eines-Informationssicherheitsbeauftragten-11472797.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/5/0/3/1/Startklar-Ihre-Rolle-als-Informationssicherheitsbeauftragte-Ticker-Header-16-9-4296cbec7a6a3f5d.jpeg" class="webfeedsFeaturedVisual" alt="ix-Workshop IT-Sicherheit nach ISO 27001 umsetzen" /></a></p><p>Sich mit der Rolle des Informationssicherheitsbeauftragten vertraut machen: die Anforderungen verstehen und die notwendigen Kompetenzen erwerben.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>800 Gigabyte: NASA gibt teils unveröffentlichten Daten zu Artemis-2 frei</title>
+            <link>https://www.heise.de/news/NASA-800-Gigabyte-an-teils-unveroeffentlichten-Daten-zur-Mondmission-Artemis-2-11483751.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Im Frühjahr sind zum ersten Mal nach mehr als 50 Jahren wieder Menschen zum Mond geflogen. Jetzt hat die NASA zahlreiche Fotos, Videos und mehr freigegeben.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483751</guid>
+        <pubDate>Mon, 12 Oct 2026 07:57:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/NASA-800-Gigabyte-an-teils-unveroeffentlichten-Daten-zur-Mondmission-Artemis-2-11483751.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/6/6/art002e016252_impactflash_annotation_cropped_large-02fad687a10ac2f7.jpeg" class="webfeedsFeaturedVisual" alt="Schemazeichnung des Mondes mit handschriftlichen Notizen und Markierungen" /></a></p><p>Im Frühjahr sind zum ersten Mal nach mehr als 50 Jahren wieder Menschen zum Mond geflogen. Jetzt hat die NASA zahlreiche Fotos, Videos und mehr freigegeben.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Aus Fehlern lernen: Click Boom Flash # 73 „Bessere Bilder für Einsteiger“</title>
+            <link>https://www.heise.de/news/Aus-Fehlern-lernen-Click-Boom-Flash-73-Bessere-Bilder-fuer-Einsteiger-11482882.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[„Man will schnell machen, man will niemanden zur Last fallen und dann ist der Fuß ab“, sagt Christine Bruns über einen Klassiker unter den Fotofehlern.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11482882</guid>
+        <pubDate>Mon, 12 Oct 2026 07:30:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Aus-Fehlern-lernen-Click-Boom-Flash-73-Bessere-Bilder-fuer-Einsteiger-11482882.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/1/2/7/generated-image-1__1_-77d8c65d5be4c763.png" class="webfeedsFeaturedVisual" alt="schlechte Fotos" /></a></p><p>„Man will schnell machen, man will niemanden zur Last fallen und dann ist der Fuß ab“, sagt Christine Bruns über einen Klassiker unter den Fotofehlern.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Wer „KI“ sagt, ist für Trump „DER FEIND“: Immer mehr folgen Umbenennung in „SI“</title>
+            <link>https://www.heise.de/news/Superintelligenz-statt-KI-Nadella-Huang-Bezos-Co-folgen-Trumps-Vorgabe-11483733.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Donald Trump hält den Begriff KI für falsch und macht seine Umbenennung zum Loyalitätstest. Immer mehr führende Vertreter der Tech-Branche folgen ihm jetzt.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483733</guid>
+        <pubDate>Mon, 12 Oct 2026 07:02:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Superintelligenz-statt-KI-Nadella-Huang-Bezos-Co-folgen-Trumps-Vorgabe-11483733.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/5/7/shutterstock_2540179307-e207ee5b17e89acd.jpeg" class="webfeedsFeaturedVisual" alt="Donald Trump vor dunklem Hintergrund" /></a></p><p>Donald Trump hält den Begriff KI für falsch und macht seine Umbenennung zum Loyalitätstest. Immer mehr führende Vertreter der Tech-Branche folgen ihm jetzt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise+ | Elektroauto Xpeng X9 im Test: Die konsequente Absage an Agilität</title>
+            <link>https://www.heise.de/tests/Elektroauto-Xpeng-X9-im-Test-Die-konsequente-Absage-an-Agilitaet-11480552.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus</link>
+            <description><![CDATA[Der komfortable X9 liefert einige Superlative im Test: Er ist wahrlich riesig und kann schneller laden, als es die hiesige Infrastruktur meistens erlaubt.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11480552</guid>
+        <pubDate>Mon, 12 Oct 2026 07:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/tests/Elektroauto-Xpeng-X9-im-Test-Die-konsequente-Absage-an-Agilitaet-11480552.html?wt_mc=rss.red.ho.ho.rdf.beitrag_plus.beitrag_plus"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/8/9/5/3/001-9434f417fcff4f1f.jpeg" class="webfeedsFeaturedVisual" alt="Xpeng X9" /></a></p><p>Der komfortable X9 liefert einige Superlative im Test: Er ist wahrlich riesig und kann schneller laden, als es die hiesige Infrastruktur meistens erlaubt.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Vor 15 Jahren: Der Tod von Dennis Ritchie und das Rätsel seiner Dissertation</title>
+            <link>https://www.heise.de/news/Vor-15-Jahren-Der-Tod-von-Dennis-Ritchie-und-das-Raetsel-seiner-Dissertation-11483545.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Vor 15 Jahren starb Dennis M. Ritchie, Miterfinder von Unix und C. Ein Rückblick auf sein Leben, Wirken und die nie eingereichte Doktorarbeit.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483545</guid>
+        <pubDate>Mon, 12 Oct 2026 06:25:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Vor-15-Jahren-Der-Tod-von-Dennis-Ritchie-und-das-Raetsel-seiner-Dissertation-11483545.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/4/6/3/Unbenannt-1-d32837f00e9a5e15.png" class="webfeedsFeaturedVisual" alt="Dennis M. Ritchie vor einem Hintergrund mit den Schriftzügen Unix und C" /></a></p><p>Vor 15 Jahren starb Dennis M. Ritchie, Miterfinder von Unix und C. Ein Rückblick auf sein Leben, Wirken und die nie eingereichte Doktorarbeit.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Montag: Ukrainische Drohnen gegen russisches Internet, Intels CPU-Wiederauflage</title>
+            <link>https://www.heise.de/news/Montag-Ukrainische-Drohnen-gegen-russisches-Internet-Intels-CPU-Wiederauflage-11483723.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Internetausfälle nach Drohnenangriffen + Intels neue Alt-CPUs 2027 + CDU-Vorstoß für stärkere Balkonkraftwerke + Cyberangriffe in Japan + Stopp für Pornosperren]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483723</guid>
+        <pubDate>Mon, 12 Oct 2026 06:15:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Montag-Ukrainische-Drohnen-gegen-russisches-Internet-Intels-CPU-Wiederauflage-11483723.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/5/2/monday-f3c65ebc311e04d4.jpeg" class="webfeedsFeaturedVisual" alt="Problemmeldung auf einem Windows-PC; Montag: Yandex-Ausfälle, Intel-CPU-Pläne, Steckersolar-Vorstoß, Cybersicherheit-Notstand &amp; Pornosperren-Absage" /></a></p><p>Internetausfälle nach Drohnenangriffen + Intels neue Alt-CPUs 2027 + CDU-Vorstoß für stärkere Balkonkraftwerke + Cyberangriffe in Japan + Stopp für Pornosperren</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Die besten Gartengeräte im Herbst: Bequemer Schneiden und Sägen mit Akku</title>
+            <link>https://www.heise.de/bestenlisten/ratgeber/die-besten-gartengeraete-im-herbst-bequemer-schneiden-und-saegen-mit-akku/g2qjc64?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Astsäge, Hochentaster oder Akku-Astschere – wofür eignen sie sich? Wir zeigen, warum die kleinen Helfer im Garten so praktisch sind.]]></description>
+        
+            <guid isPermaLink="false">http://heise.de/-11483583</guid>
+        <pubDate>Sun, 11 Oct 2026 20:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p>Astsäge, Hochentaster oder Akku-Astschere – wofür eignen sie sich? Wir zeigen, warum die kleinen Helfer im Garten so praktisch sind.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Massive Ausfälle bei Yandex nach ukrainischen Angriffen</title>
+            <link>https://www.heise.de/news/Massive-Ausfaelle-bei-Yandex-nach-ukrainischen-Angriffen-11483627.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Das russische Internetunternehmen Yandex erleidet massive Ausfälle. Das macht sich für örtliche Internetnutzer bemerkbar.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483627</guid>
+        <pubDate>Sun, 11 Oct 2026 17:20:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Massive-Ausfaelle-bei-Yandex-nach-ukrainischen-Angriffen-11483627.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/0/4/shutterstock_1017657610-0e2d57cb5eea6aa5.jpeg" class="webfeedsFeaturedVisual" alt="Blackout,Concept.,Emergency,Failure,Red,Light,In,Data,Center,With" /></a></p><p>Das russische Internetunternehmen Yandex erleidet massive Ausfälle. Das macht sich für örtliche Internetnutzer bemerkbar.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>FAQ zu Cybergrooming: Ermittler warnen vor Massenphänomen im Netz</title>
+            <link>https://www.heise.de/hintergrund/FAQ-zu-Cybergrooming-Ermittler-warnen-vor-Massenphaenomen-im-Netz-11483635.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Sie haben sexuelle Absichten und knüpfen Kontakte über Chats und Gaming-Plattformen: Wie Täter im Netz vorgehen, welche Hürden bei der Strafverfolgung bestehen.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483635</guid>
+        <pubDate>Sun, 11 Oct 2026 16:53:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/hintergrund/FAQ-zu-Cybergrooming-Ermittler-warnen-vor-Massenphaenomen-im-Netz-11483635.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/5/0/8/Grooming-Chat-06416e8bccd6cfc5.jpeg" class="webfeedsFeaturedVisual" alt="" /></a></p><p>Sie haben sexuelle Absichten und knüpfen Kontakte über Chats und Gaming-Plattformen: Wie Täter im Netz vorgehen, welche Hürden bei der Strafverfolgung bestehen.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Benq Screenbar Max im Test: Perfektes Licht für zwei Monitore – aber hoher Preis</title>
+            <link>https://www.heise.de/bestenlisten/testbericht/benq-screenbar-max-im-test-perfektes-licht-fuer-zwei-monitore-aber-hoher-preis/2mv9rmc?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Die Benq Screenbar Max leuchtet zwei Monitore auf einmal aus und klemmt dafür an der Tischplatte. Wir testen die Monitorlampe.]]></description>
+        
+            <guid isPermaLink="false">http://heise.de/-11483553</guid>
+        <pubDate>Sun, 11 Oct 2026 16:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p>Die Benq Screenbar Max leuchtet zwei Monitore auf einmal aus und klemmt dafür an der Tischplatte. Wir testen die Monitorlampe.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Gigabyte bestätigt neue Intel-CPUs mit DDR4 für Anfang 2027</title>
+            <link>https://www.heise.de/news/Gigabyte-bestaetigt-neue-Intel-CPUs-mit-DDR4-fuer-Anfang-2027-11483573.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Weil DDR5-DRAM weiterhin sehr teuer ist, will Intel alte Prozessordesigns neu auflegen. Dafür gibt es nun erstmals eine offizielle Bestätigung.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483573</guid>
+        <pubDate>Sun, 11 Oct 2026 14:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Gigabyte-bestaetigt-neue-Intel-CPUs-mit-DDR4-fuer-Anfang-2027-11483573.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/4/7/7/Core_i9-13900K-a2883d1fbebe5a06.jpeg" class="webfeedsFeaturedVisual" alt="Intels CPU-Topmodell Core i9-13900K aus der Raptor-Lake-Generation." /></a></p><p>Weil DDR5-DRAM weiterhin sehr teuer ist, will Intel alte Prozessordesigns neu auflegen. Dafür gibt es nun erstmals eine offizielle Bestätigung.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Top 7: Der beste 4K-Beamer bis 2000 Euro</title>
+            <link>https://www.heise.de/bestenlisten/testsieger/top-7-der-beste-4k-beamer-bis-2000-euro-preis-leistungs-sieger-kostet-420-euro/pc1vnzg?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Filme und Serien machen auf der großen Leinwand noch mehr Spaß als am TV. Wir zeigen die besten 4K-Beamer bis 2000 Euro.]]></description>
+        
+            <guid isPermaLink="false">http://heise.de/-11483549</guid>
+        <pubDate>Sun, 11 Oct 2026 13:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p>Filme und Serien machen auf der großen Leinwand noch mehr Spaß als am TV. Wir zeigen die besten 4K-Beamer bis 2000 Euro.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: Vibe-Coding, CarPlay-Navis, Notizen-Apps sowie iPhone, AirPods und Macs im Test</title>
+            <link>https://www.heise.de/news/Vibe-Coding-CarPlay-Navis-Notizen-Apps-sowie-iPhone-AirPods-und-Macs-im-Test-11471392.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Wie erstellt man sich selbst mit KI eine Mac-App? Und welche Navi-App mit CarPlay-Anbindung taugt etwas? Das verrät die Mac & i 5/2026.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11471392</guid>
+        <pubDate>Sun, 11 Oct 2026 13:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Vibe-Coding-CarPlay-Navis-Notizen-Apps-sowie-iPhone-AirPods-und-Macs-im-Test-11471392.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/4/3/2/2/cover-maci-5-2026-2418c1feebb35b40.png" class="webfeedsFeaturedVisual" alt="Titelbild der Mac &amp; i 5/2026" /></a></p><p>Wie erstellt man sich selbst mit KI eine Mac-App? Und welche Navi-App mit CarPlay-Anbindung taugt etwas? Das verrät die Mac & i 5/2026.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>CDU will Balkonkraftwerke stärken: 1000 Voltampere und ihre Tücken</title>
+            <link>https://www.heise.de/news/CDU-will-Balkonkraftwerke-staerken-1000-Voltampere-und-ihre-Tuecken-11483523.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Ein internes Papier der CDU/CSU-Fraktion stellt höhere Wechselrichterleistungen für Steckersolar in Aussicht. Der Verein Balkon.Solar warnt vor Fallstricken.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483523</guid>
+        <pubDate>Sun, 11 Oct 2026 11:17:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/CDU-will-Balkonkraftwerke-staerken-1000-Voltampere-und-ihre-Tuecken-11483523.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/4/5/2/shutterstock_2208359333-669b4f3ce718e389.jpeg" class="webfeedsFeaturedVisual" alt="Solar,Battery,On,Balcony,Wall,Of,Vintage,House,In,Germany." /></a></p><p>Ein internes Papier der CDU/CSU-Fraktion stellt höhere Wechselrichterleistungen für Steckersolar in Aussicht. Der Verein Balkon.Solar warnt vor Fallstricken.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>heise-Angebot: iX-Workshop: Nach dem Einbruch – Digital Forensics &amp; Incident Response</title>
+            <link>https://www.heise.de/news/iX-Workshop-Nach-dem-Einbruch-Digital-Forensics-Incident-Response-11468523.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Lernen Sie, professionelle Incident-Response-Workflows zu implementieren, um im Falle eines Cyberangriffs schnell und effektiv reagieren zu können.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11468523</guid>
+        <pubDate>Sun, 11 Oct 2026 10:00:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/iX-Workshop-Nach-dem-Einbruch-Digital-Forensics-Incident-Response-11468523.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/2/8/6/1/Einbruch-DigitalForensics-Ticker-Header-16-9-a589422d1c10ea31.jpeg" class="webfeedsFeaturedVisual" alt="iX-Workshop Digital Forensics &amp; Incident Response" /></a></p><p>Lernen Sie, professionelle Incident-Response-Workflows zu implementieren, um im Falle eines Cyberangriffs schnell und effektiv reagieren zu können.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Missing Link: Frequenzpolitik – Einig in der Uneinigkeit</title>
+            <link>https://www.heise.de/hintergrund/Missing-Link-Frequenzpolitik-Einig-in-der-Uneinigkeit-11482810.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[2031 werden die Weichen für die Zukunft des terrestrischen Rundfunks gestellt und Europa hat keine einheitliche Position. Was das bedeuten könnte.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11482810</guid>
+        <pubDate>Sun, 11 Oct 2026 08:22:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/hintergrund/Missing-Link-Frequenzpolitik-Einig-in-der-Uneinigkeit-11482810.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/0/9/1/shutterstock_1471058705_overlay_missing-link-f7e4e5e032944ac7.jpeg" class="webfeedsFeaturedVisual" alt="Eine große, mehrteilige Fernsehantenne vor blauem Himmel" /></a></p><p>2031 werden die Weichen für die Zukunft des terrestrischen Rundfunks gestellt und Europa hat keine einheitliche Position. Was das bedeuten könnte.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Open-Source-Office OpenDesk: Zendis bringt agentische KI und Air-Gap-Modus</title>
+            <link>https://www.heise.de/news/Open-Source-Office-OpenDesk-Zendis-bringt-agentische-KI-und-Air-Gap-Modus-11483419.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Das Zentrum für digitale Souveränität zeigt auf der Smart Country Convention neue Funktionen für die Open-Source-Suite OpenDesk mit KI und Offline-Betrieb.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483419</guid>
+        <pubDate>Sat, 10 Oct 2026 18:21:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Open-Source-Office-OpenDesk-Zendis-bringt-agentische-KI-und-Air-Gap-Modus-11483419.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/4/0/0/shutterstock_238107649-2b6b9adbc6206f74.jpeg" class="webfeedsFeaturedVisual" alt="" /></a></p><p>Das Zentrum für digitale Souveränität zeigt auf der Smart Country Convention neue Funktionen für die Open-Source-Suite OpenDesk mit KI und Offline-Betrieb.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>„Silver Pines“ angespielt: Schaurig hier, aber waren Sie mal in Silent Hill?</title>
+            <link>https://www.heise.de/tests/Silver-Pines-angespielt-Liebesbrief-an-den-Horror-aber-ohne-Seele-11483389.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[„Silver Pines“ vereint in sich alle Elemente eines guten Horrorspiels, weil es sie sich von anderen geliehen hat. Doch eine eigene Identität bleibt aus.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483389</guid>
+        <pubDate>Sat, 10 Oct 2026 17:57:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/tests/Silver-Pines-angespielt-Liebesbrief-an-den-Horror-aber-ohne-Seele-11483389.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/3/8/5/2Bild-917f93d6af1141b0.jpeg" class="webfeedsFeaturedVisual" alt="" /></a></p><p>„Silver Pines“ vereint in sich alle Elemente eines guten Horrorspiels, weil es sie sich von anderen geliehen hat. Doch eine eigene Identität bleibt aus.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Oberverwaltungsgericht NRW kippt Websperren für Pornhub und YouPorn</title>
+            <link>https://www.heise.de/news/Oberverwaltungsgericht-NRW-kippt-Websperren-fuer-Pornhub-und-YouPorn-11483348.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Das OVG NRW stoppt Eilverfügungen gegen Netzsperren für Pornoseiten. EU-Recht und Digital Services Act (DSA) blockieren deutsche Alleingänge beim Jugendschutz.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483348</guid>
+        <pubDate>Sat, 10 Oct 2026 17:41:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Oberverwaltungsgericht-NRW-kippt-Websperren-fuer-Pornhub-und-YouPorn-11483348.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/3/6/4/shutterstock_1879881877-8c32689cc350d867.jpeg" class="webfeedsFeaturedVisual" alt="Blick auf Pornhub" /></a></p><p>Das OVG NRW stoppt Eilverfügungen gegen Netzsperren für Pornoseiten. EU-Recht und Digital Services Act (DSA) blockieren deutsche Alleingänge beim Jugendschutz.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>EUDI-Wallet: Gesundheitswesen plant mit, doch zentrale Fragen sind offen</title>
+            <link>https://www.heise.de/news/EUDI-Wallet-Gesundheitswesen-plant-mit-doch-zentrale-Fragen-sind-offen-11482406.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[ Die vom Bund bereitgestellte Wallet soll ab 2027 Aus- und Nachweise bündeln und künftig auch Zugang zu ePA und Co. ermöglichen – doch noch ist viel unsicher.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11482406</guid>
+        <pubDate>Sat, 10 Oct 2026 16:58:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/EUDI-Wallet-Gesundheitswesen-plant-mit-doch-zentrale-Fragen-sind-offen-11482406.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/7/9/8/8/8/partners-a78aa9abb239dd4d.jpeg" class="webfeedsFeaturedVisual" alt="Torsten Lodderstedt" /></a></p><p> Die vom Bund bereitgestellte Wallet soll ab 2027 Aus- und Nachweise bündeln und künftig auch Zugang zu ePA und Co. ermöglichen – doch noch ist viel unsicher.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>KI von Anthropic reichte Fake-Hinweis auf Polizei-Seite ein</title>
+            <link>https://www.heise.de/news/KI-von-Anthropic-reichte-Fake-Hinweis-auf-Polizei-Seite-ein-11483284.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Seit Wochen sorgen vor allem Eskapaden der KI von OpenAI für Schlagzeilen. Doch auch Software von Anthropic reichte echte Formulare auf Behörden-Websites ein.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483284</guid>
+        <pubDate>Sat, 10 Oct 2026 16:04:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/KI-von-Anthropic-reichte-Fake-Hinweis-auf-Polizei-Seite-ein-11483284.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/3/3/2/shutterstock_1430571866-1419144190fb70fa.jpeg" class="webfeedsFeaturedVisual" alt="Abstraktes Bild von einer Künstliche Intelligenz. Zu sehen ist eine helle Maske mit verschiedenen Schichten." /></a></p><p>Seit Wochen sorgen vor allem Eskapaden der KI von OpenAI für Schlagzeilen. Doch auch Software von Anthropic reichte echte Formulare auf Behörden-Websites ein.</p>]]></content:encoded>
+        
+    </item>
+    <item>
+            <title>Japan reagiert auf Welle von Cyberangriffen</title>
+            <link>https://www.heise.de/news/Japan-reagiert-auf-Welle-von-Cyberangriffen-11483276.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag</link>
+            <description><![CDATA[Etliche wichtige Unternehmen in Japan haben Cyberangriffe gemeldet. Japans Digitalminister spricht von einem Notstand.]]></description>
+        
+            <guid isPermaLink="true">http://heise.de/-11483276</guid>
+        <pubDate>Sat, 10 Oct 2026 15:58:00 +0200</pubDate>
+        
+            <content:encoded><![CDATA[<p><a href="https://www.heise.de/news/Japan-reagiert-auf-Welle-von-Cyberangriffen-11483276.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag"><img src="https://www.heise.de/scale/geometry/450/q80//imgs/18/5/1/8/0/3/2/8/shutterstock_1483190894-c580662d337187e9.jpeg" class="webfeedsFeaturedVisual" alt="Warnsymbol vor digitalem Rauschen" /></a></p><p>Etliche wichtige Unternehmen in Japan haben Cyberangriffe gemeldet. Japans Digitalminister spricht von einem Notstand.</p>]]></content:encoded>
+        
+    </item>
+</channel>
+</rss>

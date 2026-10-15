@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziy Talk settings</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="options.css">
+</head>
+<body class="ziy-options">
+<a class="skip-link" href="#options-main">Skip to main content</a>
+
+<main id="options-main" class="page" role="region" aria-labelledby="options-title">
+  <header class="page__header">
+    <h1 class="page__title" id="options-title">Talk settings</h1>
+    <p class="page__intro" id="page-intro">
+      Ziy's Talk is the call surface: the lobby, the room link and the controls.
+      The meeting itself runs on a Jitsi Meet server you point it at, because Ziy
+      does not run a call service and would rather not pretend to.
+    </p>
+  </header>
+
+  <!-- One live region for every save, error and state change. -->
+  <p class="sr-only" id="options-live" role="status" aria-live="polite"></p>
+
+  <form id="options-form" class="page__body" novalidate>
+
+    <!-- ============ 1. The server ============ -->
+    <section class="card" aria-labelledby="server-h">
+      <h2 class="card__title" id="server-h">Your meeting server</h2>
+      <p class="card__intro">
+        Calls run on a Jitsi Meet you control. Add the address with its scheme,
+        for example <code>https://meet.example.org</code>. Ziy only ever navigates
+        you there; it does not read or write anything on that server's behalf.
+      </p>
+
+      <div class="field">
+        <label class="field__label" for="opt-server">Server address</label>
+        <input class="field__input" id="opt-server" type="url" inputmode="url"
+               autocomplete="off" spellcheck="false" placeholder="https://meet.example.org"
+               aria-describedby="opt-server-hint opt-server-error">
+        <p class="field__hint" id="opt-server-hint">
+          An https address only: a call sends audio, video and who-is-here, so an
+          http origin would put all three on the wire.
+        </p>
+        <p class="field__error" id="opt-server-error" role="alert" hidden></p>
+      </div>
+
+      <!-- The public test server, offered as an explicitly-labelled option. It is
+           somebody else's server, and the row says so rather than burying it in
+           a dropdown. -->
+      <div class="field">
+        <button class="btn" id="btn-public-server" type="button" aria-describedby="public-note">
+          Use the public test server instead
+        </button>
+        <p class="field__hint" id="public-note">
+          The public test server is a free community Jitsi Meet run by a third
+          party. It is a quick way to see a real call. It is not private: that
+          operator can see who joined, when, and the room name. Ziy will still
+          warn you before every call on it.
+        </p>
+      </div>
+
+      <!-- The privacy note. Honest, and not buried. -->
+      <div class="notice" id="privacy-note" role="note">
+        <h3 class="notice__title">What Ziy sees, and what it does not</h3>
+        <p class="notice__body" id="privacy-body"></p>
+      </div>
+    </section>
+
+    <!-- ============ 2. You, in the meeting ============ -->
+    <section class="card" aria-labelledby="identity-h">
+      <h2 class="card__title" id="identity-h">You, in the meeting</h2>
+      <div class="field">
+        <label class="field__label" for="opt-name">Your name</label>
+        <input class="field__input" id="opt-name" type="text" autocomplete="off"
+               spellcheck="false" maxlength="200" aria-describedby="opt-name-hint">
+        <p class="field__hint" id="opt-name-hint">
+          How you appear to the other people in the call. Blank is allowed.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ 3. How a call starts and runs ============ -->
+    <section class="card" aria-labelledby="call-h">
+      <h2 class="card__title" id="call-h">How calls run</h2>
+
+      <!-- The two-mode choice, labelled with what each can and cannot do. -->
+      <fieldset class="fieldset" id="mode-group">
+        <legend class="field__label">Where the meeting opens</legend>
+        <label class="radio">
+          <input type="radio" name="call-mode" value="tab" aria-describedby="mode-tab-hint">
+          <span class="radio__label">In a tab</span>
+        </label>
+        <p class="field__hint radio__hint" id="mode-tab-hint">
+          The full controls work: mute, camera, screen share, chat, raise hand,
+          people and layout are all live in this panel.
+        </p>
+        <label class="radio">
+          <input type="radio" name="call-mode" value="sidebar" aria-describedby="mode-sidebar-hint">
+          <span class="radio__label">In this panel, next to the page</span>
+        </label>
+        <p class="field__hint radio__hint" id="mode-sidebar-hint">
+          The meeting runs inside the sidebar. Its own controls work inside the
+          meeting window; the panel's controls say where each one lives instead of
+          pretending to drive them. Pick this when you want to keep reading the
+          page behind the call.
+        </p>
+      </fieldset>
+
+      <div class="switch-row">
+        <input class="switch" type="checkbox" role="switch" id="opt-audio"
+               aria-describedby="opt-audio-hint">
+        <label class="switch-row__label" for="opt-audio">Join with my microphone muted</label>
+        <p class="field__hint" id="opt-audio-hint">
+          Recommended when you join calls you are not speaking in.
+        </p>
+      </div>
+
+      <div class="switch-row">
+        <input class="switch" type="checkbox" role="switch" id="opt-video"
+               aria-describedby="opt-video-hint">
+        <label class="switch-row__label" for="opt-video">Join with my camera off</label>
+        <p class="field__hint" id="opt-video-hint">
+          Off by default: a call should not turn your camera on until you say so.
+        </p>
+      </div>
+
+      <div class="switch-row">
+        <input class="switch" type="checkbox" role="switch" id="opt-preview"
+               aria-describedby="opt-preview-hint">
+        <label class="switch-row__label" for="opt-preview">Show a camera preview before joining</label>
+        <p class="field__hint" id="opt-preview-hint">
+          Asks for camera permission in the lobby so you can check your framing.
+        </p>
+      </div>
+
+      <div class="switch-row">
+        <input class="switch" type="checkbox" role="switch" id="opt-prejoin"
+               aria-describedby="opt-prejoin-hint">
+        <label class="switch-row__label" for="opt-prejoin">Stop at the lobby before joining</label>
+        <p class="field__hint" id="opt-prejoin-hint">
+          Lets you set your name and check your devices before you are in the call.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ 4. The third-party gate ============ -->
+    <section class="card" aria-labelledby="gate-h">
+      <h2 class="card__title" id="gate-h">Warnings</h2>
+      <div class="switch-row">
+        <input class="switch" type="checkbox" role="switch" id="opt-warn"
+               aria-describedby="opt-warn-hint">
+        <label class="switch-row__label" for="opt-warn">
+          Always warn before using a third-party server
+        </label>
+        <p class="field__hint" id="opt-warn-hint">
+          On by default. Ziy will say, before every call, that the meeting runs on
+          hardware it does not control and that the operator can see who joined and
+          the room name. Turning this off is a real decision, not a cosmetic one:
+          re-asking every time would only train you to dismiss the warning.
+        </p>
+      </div>
+      <div class="switch-row">
+        <input class="switch" type="checkbox" role="switch" id="opt-sounds"
+               aria-describedby="opt-sounds-hint">
+        <label class="switch-row__label" for="opt-sounds">Play a short tone when someone joins or leaves</label>
+        <p class="field__hint" id="opt-sounds-hint">
+          The meeting's own sounds are separate and come from your server.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ 5. Recent rooms ============ -->
+    <section class="card" aria-labelledby="recent-h">
+      <h2 class="card__title" id="recent-h">Recent calls</h2>
+      <p class="card__intro">
+        Rooms you have used, newest first, kept on this device only. Removing one
+        here removes it from the sidebar too.
+      </p>
+      <ul class="recent" id="options-recent"></ul>
+      <p class="recent__empty" id="options-recent-empty" hidden>No recent calls yet.</p>
+      <div class="actions">
+        <button class="btn" id="btn-clear-recent" type="button">Clear all recent calls</button>
+      </div>
+    </section>
+
+    <!-- ============ 6. Save ============ -->
+    <div class="actions actions--sticky">
+      <button class="btn btn--primary" id="btn-save" type="submit">Save settings</button>
+      <button class="btn" id="btn-reset" type="button">Restore defaults</button>
+      <p class="save-state" id="save-state" role="status" aria-live="polite"></p>
+    </div>
+  </form>
+</main>
+<script src="../lib/room.js"></script>
+<script src="../lib/settings.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

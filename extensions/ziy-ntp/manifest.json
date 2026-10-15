@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Ziy New Tab",
+  "version": "1.0.0",
+  "description": "Ziy's new tab page: search, top sites, clock and privacy stats, with a backdrop from Ziy's own tokens or a file of your own.",
+  "author": "Ziy",
+  "homepage_url": "https://ziy.app/new-tab",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ziy-ntp@ziy.app",
+      "strict_min_version": "115.0"
+    }
+  },
+  "chrome_url_overrides": {
+    "newtab": "ui/ntp.html"
+  },
+  "background": {
+    "scripts": ["lib/model.js", "lib/storage.js", "background/background.js"]
+  },
+  "options_ui": {
+    "page": "ui/options.html",
+    "open_in_tab": true
+  },
+  "permissions": ["storage", "topSites", "search"],
+  "optional_permissions": ["tabs", "bookmarks"],
+  "host_permissions": [],
+  "icons": {
+    "48": "ui/icons/icon-48.svg",
+    "96": "ui/icons/icon-96.svg"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; connect-src 'self'"
+  }
+}

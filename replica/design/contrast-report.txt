@@ -1,0 +1,115 @@
+  AAA   16.10:1  text                     on bg                   
+  AAA   15.43:1  text                     on surface              
+  AAA   14.13:1  text                     on surface-sunken       
+  AAA   14.07:1  text                     on accent-bg            
+  AAA   14.08:1  text                     on danger-bg            
+  AAA   14.24:1  text                     on success-bg           
+  AAA   14.62:1  text                     on warning-bg           
+  AA     6.40:1  text-muted               on bg                   
+  AA     6.13:1  text-muted               on surface              
+  AA     5.61:1  text-muted               on surface-sunken       
+  AA     5.59:1  text-muted               on accent-bg            
+  AA     5.59:1  text-muted               on danger-bg            
+  AA     5.66:1  text-muted               on success-bg           
+  AA     5.81:1  text-muted               on warning-bg           
+  AA     6.05:1  accent                   on bg                   
+  AA     5.80:1  accent                   on surface              
+  AA     5.31:1  accent                   on surface-sunken       
+  AA     5.29:1  accent                   on accent-bg            
+  AA     5.29:1  accent                   on danger-bg            
+  AA     5.35:1  accent                   on success-bg           
+  AA     5.50:1  accent                   on warning-bg           
+  AA     6.54:1  danger                   on bg                   
+  AA     6.27:1  danger                   on surface              
+  AA     5.74:1  danger                   on surface-sunken       
+  AA     5.71:1  danger                   on accent-bg            
+  AA     5.72:1  danger                   on danger-bg            
+  AA     5.78:1  danger                   on success-bg           
+  AA     5.94:1  danger                   on warning-bg           
+  AA     5.34:1  success                  on bg                   
+  AA     5.12:1  success                  on surface              
+  AA     4.68:1  success                  on surface-sunken       
+  AA     4.66:1  success                  on accent-bg            
+  AA     4.67:1  success                  on danger-bg            
+  AA     4.72:1  success                  on success-bg           
+  AA     4.85:1  success                  on warning-bg           
+  AA     5.93:1  warning                  on bg                   
+  AA     5.68:1  warning                  on surface              
+  AA     5.20:1  warning                  on surface-sunken       
+  AA     5.18:1  warning                  on accent-bg            
+  AA     5.18:1  warning                  on danger-bg            
+  AA     5.24:1  warning                  on success-bg           
+  AA     5.38:1  warning                  on warning-bg           
+  AA     6.05:1  on-accent                on accent               
+  AAA    8.01:1  on-accent                on accent-hover         
+  AAA    9.25:1  on-accent                on accent-active        
+  AA     6.54:1  on-danger                on danger               
+  AAA    7.94:1  on-danger                on danger-hover         
+  AA     6.05:1  text-inverse             on accent               
+  AA     6.54:1  text-inverse             on danger               
+  PASS   4.26:1  border-input             on bg                   ui
+  PASS   4.09:1  border-input             on surface              ui
+  PASS   3.72:1  border-input             on accent-bg            ui
+  PASS   6.05:1  focus                    on bg                   ui
+  PASS   5.80:1  focus                    on surface              ui
+  AAA   16.28:1  dark-text                on dark-bg              
+  AAA   14.78:1  dark-text                on dark-surface         
+  AAA   13.54:1  dark-text                on dark-surface-raised  
+  AAA   17.31:1  dark-text                on dark-surface-sunken  
+  AAA   12.89:1  dark-text                on dark-accent-bg       
+  AAA   14.66:1  dark-text                on dark-danger-bg       
+  AAA   13.83:1  dark-text                on dark-success-bg      
+  AAA   13.52:1  dark-text                on dark-warning-bg      
+  AAA    7.25:1  dark-text-muted          on dark-bg              
+  AA     6.59:1  dark-text-muted          on dark-surface         
+  AA     6.03:1  dark-text-muted          on dark-surface-raised  
+  AAA    7.71:1  dark-text-muted          on dark-surface-sunken  
+  AA     5.75:1  dark-text-muted          on dark-accent-bg       
+  AA     6.53:1  dark-text-muted          on dark-danger-bg       
+  AA     6.16:1  dark-text-muted          on dark-success-bg      
+  AA     6.02:1  dark-text-muted          on dark-warning-bg      
+  AAA    9.54:1  dark-accent              on dark-bg              
+  AAA    8.67:1  dark-accent              on dark-surface         
+  AAA    7.94:1  dark-accent              on dark-surface-raised  
+  AAA   10.15:1  dark-accent              on dark-surface-sunken  
+  AAA    7.56:1  dark-accent              on dark-accent-bg       
+  AAA    8.59:1  dark-accent              on dark-danger-bg       
+  AAA    8.11:1  dark-accent              on dark-success-bg      
+  AAA    7.93:1  dark-accent              on dark-warning-bg      
+  AA     6.42:1  dark-danger              on dark-bg              
+  AA     5.83:1  dark-danger              on dark-surface         
+  AA     5.34:1  dark-danger              on dark-surface-raised  
+  AA     6.83:1  dark-danger              on dark-surface-sunken  
+  AA     5.09:1  dark-danger              on dark-accent-bg       
+  AA     5.78:1  dark-danger              on dark-danger-bg       
+  AA     5.46:1  dark-danger              on dark-success-bg      
+  AA     5.33:1  dark-danger              on dark-warning-bg      
+  AAA   10.20:1  dark-success             on dark-bg              
+  AAA    9.26:1  dark-success             on dark-surface         
+  AAA    8.48:1  dark-success             on dark-surface-raised  
+  AAA   10.84:1  dark-success             on dark-surface-sunken  
+  AAA    8.08:1  dark-success             on dark-accent-bg       
+  AAA    9.18:1  dark-success             on dark-danger-bg       
+  AAA    8.66:1  dark-success             on dark-success-bg      
+  AAA    8.47:1  dark-success             on dark-warning-bg      
+  AAA   10.64:1  dark-warning             on dark-bg              
+  AAA    9.67:1  dark-warning             on dark-surface         
+  AAA    8.85:1  dark-warning             on dark-surface-raised  
+  AAA   11.32:1  dark-warning             on dark-surface-sunken  
+  AAA    8.43:1  dark-warning             on dark-accent-bg       
+  AAA    9.58:1  dark-warning             on dark-danger-bg       
+  AAA    9.04:1  dark-warning             on dark-success-bg      
+  AAA    8.84:1  dark-warning             on dark-warning-bg      
+  AAA    9.10:1  dark-on-accent           on dark-accent          
+  AAA   10.53:1  dark-on-accent           on dark-accent-hover    
+  AA     6.16:1  dark-on-danger           on dark-danger          
+  AAA    8.98:1  dark-on-danger           on dark-danger-hover    
+  AAA    9.54:1  dark-text-inverse        on dark-accent          
+  AA     6.42:1  dark-text-inverse        on dark-danger          
+  PASS   5.36:1  dark-border-input        on dark-bg              ui
+  PASS   4.46:1  dark-border-input        on dark-surface-raised  ui
+  PASS   4.25:1  dark-border-input        on dark-accent-bg       ui
+  PASS   9.54:1  dark-focus               on dark-bg              ui
+  PASS   7.94:1  dark-focus               on dark-surface-raised  ui
+
+  113 pairs, 0 failing AA

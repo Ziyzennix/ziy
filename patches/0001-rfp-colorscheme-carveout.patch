@@ -1,0 +1,80 @@
+From: Ziy engine fork <ziy@ziy.app>
+Date: 2026-10-15
+Subject: [PATCH 1/2] RFP: restore the -CSSPrefersColorScheme carve-out in RFP mode
+
+Ziy locks privacy.resistFingerprinting=true and ships
+privacy.fingerprintingProtection.overrides="+AllTargets,-CSSPrefersColorScheme"
+(shell/mozilla.cfg, ziy.js). The intent is "every protection except the
+colour-scheme spoof, which breaks dark-mode stylesheets".
+
+The carve-out does not take effect, and it cannot: in RFP mode
+nsRFPService::IsRFPEnabledFor() returns true for every target before it ever
+consults the override set. The overrides pref is only read in FPP/Baseline
+mode, so the pref layer's carve-out is dead code the moment
+resistFingerprinting is on. This is exactly the "behaviour the RFP pref layer
+cannot express" that replica/deep-fork.md §6.6 names as the preferred first
+C++ patch target.
+
+Behaviour is restored by reading the engine's own overrides pref in
+HandleExceptionalRFPTargets(), which IsRFPEnabledFor() consults FIRST, and
+returning false for CSSPrefersColorScheme when the pref contains the
+-CSSPrefersColorScheme term. Nothing else changes: every other target keeps
+its RFP-mode spoof, and the carve-out is inert unless the pref carries it.
+
+Gated behind MOZ_ZIY_FINGERPRINTING, set by the
+--enable-ziy-fingerprinting configure option (see the second patch), so a
+build with the gate off is stock Gecko.
+
+Sources for every claim in this commit message:
+  toolkit/components/resistfingerprinting/nsRFPService.cpp:335 IsRFPEnabledFor
+  toolkit/components/resistfingerprinting/nsRFPService.cpp:296
+    HandleExceptionalRFPTargets
+  toolkit/components/resistfingerprinting/nsRFPService.cpp:323
+    IsTargetActiveForMode (the RFP-mode `return true`)
+  dom/base/Document.cpp:21177 Document::PreferredColorScheme (the consumer)
+  RFPTargets.inc:136 the documented "+AllTargets,-CSSPrefersColorScheme" form
+---
+--- a/toolkit/components/resistfingerprinting/nsRFPService.cpp
++++ b/toolkit/components/resistfingerprinting/nsRFPService.cpp
+@@ -299,6 +299,41 @@
+   MOZ_ASSERT(GetFingerprintingProtectionType(aIsPrivateMode) !=
+              FingerprintingProtectionType::None);
+ 
++#ifdef MOZ_ZIY_FINGERPRINTING
++  // Ziy delta 1: the per-target carve-out that prefs cannot reach.
++  //
++  // WHY A C++ CHANGE IS REQUIRED. Ziy locks these prefs (shell/mozilla.cfg
++  // and ziy.js): privacy.resistFingerprinting=true and
++  // privacy.fingerprintingProtection.overrides="+AllTargets,-CSSPrefersColorScheme".
++  // The intent of that string is "run every protection except the colour-scheme
++  // spoof, which breaks dark-mode stylesheets".
++  //
++  // It does not work, and the reason is the RFP-mode short-circuit further down
++  // in this same function: when privacy.resistFingerprinting is on, the mode is
++  // FingerprintingProtectionType::RFP and IsRFPEnabledFor() returns true for
++  // EVERY target BEFORE it ever looks at the override set. The overrides pref is
++  // only consulted in FPP/Baseline mode, so the pref layer's carve-out is dead
++  // code the moment resistFingerprinting is on. There is no pref, no JSON array,
++  // and no granular override that can turn off exactly one target while RFP mode
++  // is on — that is the "behaviour the RFP pref layer cannot express" that
++  // deep-fork.md §6.6 names as the preferred first C++ patch.
++  //
++  // This restores the carve-out's intended effect in RFP mode. It is deliberately
++  // narrow: it only removes the colour-scheme spoof, only when the engine's own
++  // overrides pref carries the -CSSPrefersColorScheme carve-out, and only for
++  // the RFP mode that currently ignores overrides entirely.
++  if (aMode == FingerprintingProtectionType::RFP &&
++      aTarget == RFPTarget::CSSPrefersColorScheme) {
++    nsAutoString overrides;
++    if (NS_SUCCEEDED(Preferences::GetString(
++            RESIST_FINGERPRINTINGPROTECTION_OVERRIDE_PREF, overrides))) {
++      if (overrides.Find(u"-CSSPrefersColorScheme") != kNotFound) {
++        return Some(false);
++      }
++    }
++  }
++#endif  // MOZ_ZIY_FINGERPRINTING
++
+   // IsAlwaysEnabledForPrecompute is used to enable fingerprinting protections.
+   // It isn't included in the RFPTargetSet.
+   if (aTarget == RFPTarget::IsAlwaysEnabledForPrecompute) {

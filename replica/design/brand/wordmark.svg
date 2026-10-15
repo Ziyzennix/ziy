@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 248 64" width="248" height="64" role="img" aria-label="Ziy">
+  <title>Ziy wordmark</title>
+  <!-- Original wordmark: the shield eye from logo.svg used as the bowl of the
+       'y', with a geometric sans wordmark beside it. Open assets only. -->
+  <defs>
+    <linearGradient id="ziy-mark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b6e6e"/>
+      <stop offset="1" stop-color="#08504f"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(2 6) scale(0.8125)">
+    <path d="M32 3 57 11v20c0 14.5-11.2 24.6-25 30C19.2 55.6 8 45.5 8 31V11L32 3Z" fill="url(#ziy-mark)"/>
+    <g fill="none" stroke="#f4f5f6" stroke-width="3.4" stroke-linecap="round">
+      <path d="M18.5 30.5c4.6-4.8 9.2-4.8 13.5 0 4.3-4.8 8.9-4.8 13.5 0"/>
+      <path d="M23.5 38.5c2.8 2.4 5.6 2.4 8.5 0 2.9 2.4 5.7 2.4 8.5 0"/>
+    </g>
+    <circle cx="32" cy="25.5" r="3.1" fill="#f4f5f6"/>
+  </g>
+  <text x="70" y="45" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        font-size="40" font-weight="700" letter-spacing="-1.4" fill="#202124">Ziy</text>
+</svg>

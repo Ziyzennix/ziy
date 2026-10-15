@@ -1,0 +1,88 @@
+Ziy Shields — third-party data licenses
+======================================
+
+Ziy Shields is a blocking engine, and the data it blocks with is public filter
+lists. Those lists are DATA, in the same way a dictionary is data: Ziy reads
+them, compiles them into rules, and ships the compiled result. Ziy's own code —
+the parser, the compiler, the precedence resolver, the UI — is written for Ziy
+and contains nothing copied from any other product.
+
+The lists below are redistributed with their licenses and attributions intact.
+The list BODIES are bundled verbatim (they are the data); the attribution and
+licence notices travel with them.
+
+
+EasyList
+--------
+
+  Homepage:   https://easylist.to/
+  Licence:    GPLv3
+  Licence URL: https://easylist.to/pages/licence.html
+  Bundled as: extensions/ziy-shields/lib/filterlist/snapshots/easylist.txt
+  Sha256:     2e86ae8d092f24cfb6b0845e23c458e4f696d215ca43ff9f3fc83f555443173d
+  Lines:      82,175
+
+  EasyList is the primary subscription for removing adverts from websites,
+  including unwanted frames, images and objects. It is distributed under the
+  GNU General Public License version 3, which is why this extension's list
+  handling is attributed and why the list's own home page is linked from the
+  options page.
+
+
+EasyPrivacy
+-----------
+
+  Homepage:   https://easylist.to/
+  Licence:    GPLv3
+  Licence URL: https://easylist.to/pages/licence.html
+  Bundled as: extensions/ziy-shields/lib/filterlist/snapshots/easyprivacy.txt
+  Sha256:     f2ba5af50caa57a9d66926917ba97031c5a86f77ece6210dc3a7ac8c255e3724
+  Lines:      57,090
+
+  EasyPrivacy is optional, but recommended, and removes tracking components from
+  web pages. Same licence as EasyList.
+
+
+EasyList Cookie List
+--------------------
+
+  Title:      Easylist Cookie List (Fanboy's cookiemonster)
+  Homepage:   https://easylist.to/
+  Licence:    CC-BY-3.0
+  Licence URL: http://creativecommons.org/licenses/by/3.0/
+  Source:     https://secure.fanboy.co.nz/fanboy-cookiemonster.txt
+  Bundled as: extensions/ziy-shields/lib/filterlist/snapshots/fanboy-cookiemonster.txt
+  Sha256:     714dd685e65e97fa0cd9d4036e6f5d80ee8b9de5a16aa42b81e76080dfe88e93
+  Lines:      26,090
+
+  Cookie-consent and notice banners, and the overlays that hide them.
+
+
+What the extension does with these files
+----------------------------------------
+
+At build time, `tools/gen-static-ruleset.js` parses the snapshots, compiles the
+network rules to declarativeNetRequest rules, and writes
+`extensions/ziy-shields/rules/static-ruleset.json`, which is what ships in the
+xpi. The snapshots themselves also ship, because they are the input to the
+update mechanism and to the offline first-run.
+
+At runtime, the list registry (`lib/filterlist/lists.js`) records, per list, the
+URL it came from, the licence it declares, and a SHA-256 of the body it
+accepted. Every list toggle and every custom list the user adds is recorded the
+same way, so a user can always answer "what is this rule from, and who wrote it".
+
+The licence and homepage of each shipped list are shown in the options page's
+Filter lists section, next to its rule count and checksum.
+
+
+Design note — what is NOT here
+------------------------------
+
+There is no allow-list of major sites. The behaviour that provides — sites that
+must not be broken by blocking — comes from the exception rules (`@@`) that
+these lists carry themselves, and from `first_party_protections`, which the
+compiler handles as the `LIST_EXCEPTION` priority tier. Ziy does not maintain,
+ship or invent a separate list of "do not break these" domains, because the
+correct behaviour is already expressible as the lists' own exceptions and
+inventing a second, weaker version of it would be worse than using the real one.

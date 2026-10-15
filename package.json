@@ -1,0 +1,24 @@
+{
+  "name": "ziy",
+  "version": "156.0.1",
+  "private": true,
+  "description": "Ziy — a privacy-first browser on Gecko. This is the workspace root for the WebExtension suite (extensions/*). The product layer (shell/, tools/) is not part of this package.",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "file",
+    "url": "https://ziy.app"
+  },
+  "author": "Ziy",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "extensions/*"
+  ],
+  "scripts": {
+    "build:xpi": "node tools/build-extension.sh --all",
+    "verify": "./tools/verify.sh",
+    "test": "node --test extensions/*/test"
+  }
+}

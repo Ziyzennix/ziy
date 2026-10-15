@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ziy Shields — defaults and filter lists</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="shields.css">
+</head>
+<body class="ziy-options" data-theme="light">
+  <main class="ziy-options__inner">
+    <header class="ziy-options__header">
+      <h1 class="ziy-options__title">Ziy Shields</h1>
+      <p class="ziy-options__intro">
+        These are your defaults for every site. A site you change later keeps its own
+        setting, and changing this page never rewrites what a site already chose.
+      </p>
+      <p class="ziy-options__status" id="ziy-options-status" role="status" aria-live="polite"></p>
+    </header>
+
+    <section class="ziy-options__section" id="ziy-global-section" aria-labelledby="ziy-global-title">
+      <h2 class="ziy-options__heading" id="ziy-global-title">Shields defaults</h2>
+      <div id="ziy-rows"></div>
+    </section>
+
+    <section class="ziy-options__section" id="ziy-lists-section" aria-labelledby="ziy-lists-title">
+      <h2 class="ziy-options__heading" id="ziy-lists-title">Filter lists</h2>
+      <p class="ziy-options__sectionintro" id="ziy-lists-intro">
+        Blocking comes from public filter lists. Turning one off stops the rules it
+        contributes right away; the downloaded copy is kept so you can turn it back on
+        without waiting for a download.
+      </p>
+      <div id="ziy-lists" class="ziy-lists"></div>
+      <form id="ziy-add-list" class="ziy-addlist" novalidate>
+        <label class="ziy-addlist__label" for="ziy-addlist-url">Add a list of your own</label>
+        <div class="ziy-addlist__row">
+          <input class="ziy-addlist__input" id="ziy-addlist-url" type="url" inputmode="url"
+                 placeholder="https://…" aria-describedby="ziy-addlist-error">
+          <button class="ziy-btn" id="ziy-addlist-btn" type="submit">Add list</button>
+        </div>
+        <p class="ziy-addlist__error" id="ziy-addlist-error" role="alert" hidden></p>
+      </form>
+      <div class="ziy-options__actions">
+        <button class="ziy-btn ziy-btn--quiet" id="ziy-update-now" type="button">
+          Check for updates now
+        </button>
+        <span class="ziy-lists__meta" id="ziy-lists-meta"></span>
+      </div>
+    </section>
+  </main>
+  <script src="shields-shared.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

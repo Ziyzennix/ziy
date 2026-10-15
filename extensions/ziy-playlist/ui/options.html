@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziy Playlist settings</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="options.css">
+</head>
+<body class="playlist-options">
+  <main class="options__main">
+    <header class="options__header">
+      <h1 class="options__title">Ziy Playlist</h1>
+      <p class="options__subtitle">
+        Your media queue. Everything below is a choice about how the queue behaves,
+        and nothing here talks to the network.
+      </p>
+    </header>
+
+    <!-- The honest-limitation notes. They are in the page, not in a doc,
+         because a setting that is only partly real has to say so where the
+         user is standing. -->
+    <section class="options__note" aria-labelledby="note-playback-title">
+      <h2 id="note-playback-title" class="options__note-title">What playback can and cannot do here</h2>
+      <p class="options__note-body">
+        Playback lives in the panel, and the panel is the player. When you close the panel,
+        playback pauses and your place is kept. The reference keeps playing with its window
+        closed because its player is a browser-side process; this engine gives an extension
+        no such process, so a switch claiming that behaviour would be lying to you.
+      </p>
+    </section>
+
+    <section class="options__note" aria-labelledby="note-streams-title">
+      <h2 id="note-streams-title" class="options__note-title">Streams</h2>
+      <p class="options__note-body">
+        An HLS manifest is one queue item, and the panel resolves it with the browser's own
+        media stack. Live manifests are not supported: this engine's streams resolve from the
+        start, and a live one has no start. Such an item opens in a tab instead, where the
+        site's own player can take it.
+      </p>
+    </section>
+
+    <section class="options__note" aria-labelledby="note-quality-title">
+      <h2 id="note-quality-title" class="options__note-title">Quality is a note</h2>
+      <p class="options__note-body">
+        Choosing a variant is adaptive bitrate switching, which needs a switcher this engine
+        does not have. Your preference is recorded and the manifest's first variant plays.
+        A selector that promised otherwise would be a control that does nothing.
+      </p>
+    </section>
+
+    <section class="options__section" aria-labelledby="playback-title">
+      <h2 id="playback-title" class="options__section-title">Playback</h2>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-speed">Start every item at</label>
+        <select id="setting-speed" class="pl-select">
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1× (normal)</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="1.75">1.75×</option>
+          <option value="2">2×</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-sleep">Sleep timer length</label>
+        <select id="setting-sleep" class="pl-select">
+          <option value="0" selected>No timer</option>
+          <option value="5">5 minutes</option>
+          <option value="10">10 minutes</option>
+          <option value="15">15 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="45">45 minutes</option>
+          <option value="60">1 hour</option>
+          <option value="90">1 hour 30 minutes</option>
+        </select>
+        <p class="setting-row__hint">
+          Playback pauses when the timer runs out, once. A timer that fired is done; set a new
+          one to sleep again.
+        </p>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-resume">Half-watched items</label>
+        <select id="setting-resume" class="pl-select">
+          <option value="always" selected>Resume where they stopped</option>
+          <option value="ask">Ask me each time</option>
+          <option value="never">Always start from the beginning</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="options__section" aria-labelledby="panel-title">
+      <h2 id="panel-title" class="options__section-title">Panel and prompt</h2>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-side">Panel side</label>
+        <select id="setting-side" class="pl-select">
+          <option value="right" selected>Right side</option>
+          <option value="left">Left side</option>
+        </select>
+        <p class="setting-row__hint">
+          Recorded here. The browser keeps the final word on which side its sidebar sits, so
+          this is a note rather than a promise.
+        </p>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-prompt">Add prompt on pages</label>
+        <select id="setting-prompt" class="pl-select">
+          <option value="on" selected>Show it when a page is playing</option>
+          <option value="off">Never show it</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-quality">Stream quality</label>
+        <select id="setting-quality" class="pl-select">
+          <option value="auto" selected>Let the manifest decide</option>
+          <option value="high">Highest first</option>
+          <option value="low">Lowest first</option>
+        </select>
+        <p class="setting-row__hint">See "Quality is a note" above.</p>
+      </div>
+    </section>
+
+    <section class="options__section" aria-labelledby="sites-title">
+      <h2 id="sites-title" class="options__section-title">Sites you dismissed the prompt on</h2>
+      <ol id="site-list" class="site-list"></ol>
+      <p id="site-empty" class="site-empty" hidden>
+        You have not dismissed the prompt on any site.
+      </p>
+    </section>
+
+    <section class="options__section" aria-labelledby="reset-title">
+      <h2 id="reset-title" class="options__section-title">Reset the playlist</h2>
+      <p class="setting-row__hint">
+        Removes every item and every remembered position. This cannot be undone.
+      </p>
+      <button id="btn-reset-open" class="pl-btn pl-btn--danger" type="button">Reset the queue</button>
+
+      <dialog id="reset-dialog" class="reset-dialog" aria-labelledby="reset-dialog-title">
+        <h2 id="reset-dialog-title" class="reset-dialog__title">Reset your playlist</h2>
+        <p class="reset-dialog__body">
+          This removes every item in the queue and every remembered position. You cannot undo it.
+        </p>
+        <label class="reset-dialog__label" for="reset-confirm-text">
+          Type the word reset to confirm
+        </label>
+        <input id="reset-confirm-text" class="reset-dialog__input" type="text" autocomplete="off"
+               spellcheck="false" aria-describedby="reset-dialog-hint">
+        <p class="reset-dialog__hint" id="reset-dialog-hint">
+          The button stays disabled until the word matches.
+        </p>
+        <div class="reset-dialog__actions">
+          <button id="btn-reset" class="pl-btn pl-btn--danger" type="button" disabled>Reset the queue</button>
+          <button id="btn-reset-cancel" class="pl-btn" type="button">Cancel</button>
+        </div>
+      </dialog>
+    </section>
+
+    <p id="options-status" class="options__status" role="status" aria-live="polite"></p>
+  </main>
+  <script src="../lib/settings.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

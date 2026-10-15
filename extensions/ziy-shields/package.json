@@ -1,0 +1,1 @@
+{"name":"ziy-shields","version":"1.0.0","private":true,"description":"Ziy Shields: the blocking engine and Shields UI. Workspace package for extensions/ziy-shields only; no build step, no dependencies, node:test for tests.","type":"commonjs","main":"lib/engine/precedence.js","scripts":{"test":"node --test test/"}}

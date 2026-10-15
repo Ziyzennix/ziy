@@ -1,0 +1,221 @@
+#!/usr/bin/env bash
+# Ziy launcher — the ONE command that starts the product (architecture.md §7.1).
+#
+#   ./tools/ziy [--profile NAME] [--ziy-version|--version|--help] [args...]
+#
+# Works from any cwd: everything is resolved from this file's own location.
+#
+#   --profile NAME    use ~/.ziy/profiles/NAME (default: the profile named by
+#                     ziylauncher.profile, else "default")
+#   --headless / -H   force --headless=new, for scripts and CI
+#   --no-profile      do not pass --profile at all (uses the engine default)
+#   --ziy-version     Ziy's own version line: the product, then the engine
+#                     version clearly labelled as the engine's
+#   --version         the engine's own --version, prefixed so it is never
+#                     mistaken for Ziy's product identity
+#   --help / -h       this launcher's own help, in Ziy's voice (the engine's
+#                     own help is at ./tools/ziy --engine-help)
+#   --install-native  print the native-helper install command; never run it
+#   url...            every other argument passes through to the browser
+#
+# WHY --version IS INTERCEPTED: the engine's --version prints
+# "Mozilla Firefox 156.0.1" and cannot be remapped from App:Name
+# (proofs-shell.md §2 — libxul owns that string). Handing a user that line
+# as Ziy's version would be a lie about whose product this is, so the launcher
+# answers with Ziy branding plus the engine version labelled as the engine's.
+#
+# Profile handling is deliberately ours: bootstrap-profile.py creates
+# ~/.ziy/profiles/<name>/ and Ziy never touches ~/.mozilla (Firefox's
+# --CreateProfile does not work headless and would pollute the user's
+# profiles.ini; see replica/proofs.md fact 8).
+set -uo pipefail
+
+HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(cd -- "$HERE/.." && pwd)"
+. "$HERE/lib/common.sh"
+
+# ---------------------------------------------------------------------------
+# The informational surface, handled here and never forwarded to the engine.
+#
+# These answer WITHOUT an app dir, because a user asking for the version or the
+# help is a user who may not have built anything yet.
+# ---------------------------------------------------------------------------
+for arg in "$@"; do
+  case "$arg" in
+    --ziy-version)
+      ENGINE_VERSION=""
+      for cand in "${ZIY_APP_DIR:-}" "$ROOT/build/ziy" "$ROOT/shell/app-dir" \
+                   /usr/lib/firefox /opt/firefox; do
+        [ -n "$cand" ] || continue
+        if [ -x "$cand/firefox" ]; then
+          ENGINE_VERSION="$("$cand/firefox" --version 2>/dev/null | head -1)"
+          break
+        fi
+      done
+      printf 'Ziy 156.0.1\n'
+      printf '  engine   %s\n' "${ENGINE_VERSION:-unknown (no engine found)}"
+      printf '  product  a privacy-first browser on the Gecko engine, branded Ziy\n'
+      exit 0
+      ;;
+    --version)
+      ENGINE_VERSION=""
+      for cand in "${ZIY_APP_DIR:-}" "$ROOT/build/ziy" "$ROOT/shell/app-dir" \
+                   /usr/lib/firefox /opt/firefox; do
+        [ -n "$cand" ] || continue
+        if [ -x "$cand/firefox" ]; then
+          ENGINE_VERSION="$("$cand/firefox" --version 2>/dev/null | head -1)"
+          break
+        fi
+      done
+      # Labelled, never bare: the engine's own string names a different product.
+      printf 'Ziy 156.0.1  (built on the Gecko engine: %s)\n' \
+        "${ENGINE_VERSION:-unknown}"
+      exit 0
+      ;;
+    --install-native|--native-help)
+      cat <<'MSG'
+Ziy's native helpers are installed by one command, and only by you:
+
+    node tools/install-ziy-sync-native.js
+
+It writes the sync agent's registration into
+~/.mozilla/native-messaging-hosts/ziy-sync-agent.json and verifies the agent
+answers before finishing. This launcher never runs it for you — an install is
+your decision, not a side effect of starting a browser.
+
+To see exactly what it would do without changing anything:
+
+    node tools/install-ziy-sync-native.js --dry-run
+MSG
+      exit 0
+      ;;
+    -h|--help)
+      # Only when --help is the FIRST argument, so an engine-targeted "--help"
+      # as a later argument still reaches the engine (that is --engine-help).
+      cat <<'MSG'
+Ziy — a privacy-first browser on the Gecko engine.
+
+  ./tools/ziy                     boot the default profile
+  ./tools/ziy --profile NAME      boot ~/.ziy/profiles/NAME
+  ./tools/ziy --headless -H       headless, for scripts and CI
+  ./tools/ziy --ziy-version       Ziy's version, and the engine's, labelled
+  ./tools/ziy --version          the same, labelled the same way
+  ./tools/ziy --help              this text
+  ./tools/ziy --engine-help       the engine's own help text
+  ./tools/ziy --install-native    print the native-helper install command
+  ./tools/ziy URL [URL...]        boot and open these
+
+Every other argument passes straight through to the engine, so --screenshot,
+--window-size and friends behave as they do on Firefox.
+
+First run
+  A missing profile is created with tools/bootstrap-profile.py, so a fresh box
+  works with no manual step. Your profiles live under ~/.ziy/, never under
+  ~/.mozilla.
+
+Desktop integration
+  tools/install-desktop.sh        the .desktop entry and the hicolor icons
+  tools/install-desktop.sh --set-default
+                                  prints the command that makes Ziy the default
+                                  browser. Ziy never changes it for you.
+
+Native helpers
+  node tools/install-ziy-sync-native.js
+                                  the sync agent's registration. Run it yourself;
+                                  this launcher will not run an installer for you.
+
+Nothing about Ziy touches an existing Firefox install.
+MSG
+      exit 0
+      ;;
+  esac
+  break
+done
+
+# --engine-help is Ziy's own spelling of "give me the engine's help text": it is
+# rewritten to the engine's own flag here, so it never reaches the engine as an
+# unknown argument (which would be treated as a URL and open a tab).
+declare -a PASS_ARGS=()
+ENGINE_HELP=0
+for arg in "$@"; do
+  if [ "$arg" = "--engine-help" ]; then
+    ENGINE_HELP=1
+    PASS_ARGS+=(--help)
+  else
+    PASS_ARGS+=("$arg")
+  fi
+done
+
+# The app dir: prefer a real build, fall back to a plain repack of the shell/
+# template so the launcher is useful before anyone has run build-shell.sh.
+APP="${ZIY_APP_DIR:-}"
+if [ -z "$APP" ]; then
+  for candidate in "$ROOT/build/ziy" "$ROOT/shell/app-dir"; do
+    if [ -x "$candidate/firefox" ]; then
+      APP="$candidate"
+      break
+    fi
+  done
+fi
+if [ -z "$APP" ]; then
+  die "no Ziy app dir found. Run ./tools/build-shell.sh first (or set ZIY_APP_DIR)."
+fi
+
+HOME_DIR="$HOME"
+PROFILE_NAME="${ZIY_PROFILE:-default}"
+PROFILE_ROOT="$HOME_DIR/.ziy/profiles"
+HEADLESS=0
+EXTRA=()
+set -- ${PASS_ARGS[@]+"${PASS_ARGS[@]}"}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --profile)
+      [ $# -ge 2 ] || die "--profile needs a name"
+      PROFILE_NAME="$2"; shift 2 ;;
+    --profile=*)
+      PROFILE_NAME="${1#--profile=}"; shift ;;
+    -H|--headless)
+      HEADLESS=1; shift ;;
+    --no-profile)
+      PROFILE_NAME=""; shift ;;
+    --)
+      shift
+      while [ $# -gt 0 ]; do EXTRA+=("$1"); shift; done ;;
+    *)
+      EXTRA+=("$1"); shift ;;
+  esac
+done
+
+# --- profile -----------------------------------------------------------------
+if [ -n "$PROFILE_NAME" ]; then
+  PROFILE_DIR="$PROFILE_ROOT/$PROFILE_NAME"
+  if [ ! -d "$PROFILE_DIR" ]; then
+    # Create it on demand rather than refusing: the bootstrap script is the
+    # canonical path, but a bare `tools/ziy` on a fresh box should still work.
+    log_warn "profile '$PROFILE_NAME' does not exist; creating it with bootstrap-profile.py"
+    python3 "$ROOT/tools/bootstrap-profile.py" --name "$PROFILE_NAME" >&2 || true
+  fi
+  if [ ! -d "$PROFILE_DIR" ]; then
+    die "profile $PROFILE_DIR does not exist and could not be created"
+  fi
+  PROFILE_ARG=(--profile "$PROFILE_DIR")
+else
+  PROFILE_ARG=()
+fi
+
+# --- headless -----------------------------------------------------------------
+if [ "$HEADLESS" = "1" ]; then
+  EXTRA=(--headless=new "${EXTRA[@]}")
+fi
+
+# --- exec ---------------------------------------------------------------------
+export MOZ_APP_LAUNCHER="$ROOT/tools/ziy"
+export ZIY_HOME="$APP"
+[ -f "$APP/ziy.png" ] && export ZIY_ICON="$APP/ziy.png"
+
+if [ "${ZIY_VERBOSE:-0}" = "1" ]; then
+  log_step "launch" "app=$APP profile=${PROFILE_DIR:-<default>} args=${EXTRA[*]:-<none>}"
+fi
+
+exec "$APP/firefox" "${PROFILE_ARG[@]}" "${EXTRA[@]}"

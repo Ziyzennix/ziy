@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ziy Shields</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="shields.css">
+</head>
+<body class="ziy-panel">
+  <main class="ziy-panel__inner" role="dialog" aria-modal="false" aria-labelledby="ziy-panel-title">
+    <h2 id="ziy-panel-title" class="ziy-panel__title">
+      <span id="ziy-domain" class="ziy-panel__domain">this site</span>
+      <span id="ziy-state" class="ziy-panel__state ziy-state ziy-state--up" role="status">Shields are up</span>
+    </h2>
+
+    <div class="ziy-panel__summary">
+      <button id="ziy-count" class="ziy-count" type="button" aria-expanded="false" aria-controls="ziy-items">
+        <span id="ziy-count__n">0</span>
+        <span id="ziy-count__label">trackers and ads stopped this visit</span>
+      </button>
+      <!-- The three figures the observed stats widget carries: one combined
+           count, bandwidth saved in kB, and time saved in seconds. All three are
+           Ziy's own wording and the derived two are labelled as estimates. -->
+      <dl class="ziy-stats" role="group" aria-label="Blocking totals for this visit">
+        <div class="ziy-stats__row">
+          <dt>Stopped</dt>
+          <dd id="ziy-stats__count">0</dd>
+        </div>
+        <div class="ziy-stats__row">
+          <dt>Bandwidth saved</dt>
+          <dd id="ziy-stats__bandwidth">0 kB</dd>
+        </div>
+        <div class="ziy-stats__row">
+          <dt>Time saved</dt>
+          <dd id="ziy-stats__time">0 seconds</dd>
+        </div>
+      </dl>
+      <p class="ziy-stats__note" id="ziy-stats__note">
+        Bandwidth and time are estimates, not measurements.
+      </p>
+      <button id="ziy-shutdown" class="ziy-btn ziy-btn--quiet" type="button" aria-pressed="false">
+        Turn Shields off for this site
+      </button>
+    </div>
+
+    <!-- Simple view: read-only summary except Shields up/down. -->
+    <section id="ziy-simple" class="ziy-simple" aria-labelledby="ziy-simple-title">
+      <h3 id="ziy-simple-title" class="ziy-simple__title">Protection for this site</h3>
+      <p id="ziy-simple-hint" class="ziy-simple__hint">Switch to detailed controls to change these.</p>
+    </section>
+
+    <!-- Advanced view -->
+    <section id="ziy-advanced" class="ziy-advanced" aria-labelledby="ziy-advanced-title" hidden>
+      <h3 id="ziy-advanced-title" class="ziy-advanced__title">Protection details</h3>
+    </section>
+
+    <section id="ziy-items" class="ziy-items" aria-live="polite" hidden>
+      <h3 class="ziy-items__title">Stopped on this page</h3>
+      <ul id="ziy-items__list" class="ziy-items__list"></ul>
+      <p id="ziy-items__empty" class="ziy-items__empty" hidden>
+        Nothing has been stopped on this page yet.
+      </p>
+    </section>
+  </main>
+  <script src="shields-shared.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

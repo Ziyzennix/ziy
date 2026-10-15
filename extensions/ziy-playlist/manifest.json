@@ -1,0 +1,76 @@
+{
+  "manifest_version": 3,
+  "name": "Ziy Playlist",
+  "version": "1.0.0",
+  "description": "Ziy's media queue: pick up the sound and video a page is playing, keep it in a panel, and play it your way.",
+  "author": "Ziy",
+  "homepage_url": "https://ziy.app/playlist",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ziy-playlist@ziy.app",
+      "strict_min_version": "115.0"
+    }
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "webRequest",
+    "webRequestBlocking",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "lib/model.js",
+      "lib/classify.js",
+      "lib/settings.js",
+      "lib/sleep.js",
+      "lib/position.js",
+      "lib/store.js",
+      "background/background.js"
+    ],
+    "type": "classic"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["lib/classify.js", "content/capture.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_title": "Ziy Playlist",
+    "default_icon": {
+      "16": "icons/playlist-16.png",
+      "32": "icons/playlist-32.png",
+      "48": "icons/playlist-48.png"
+    }
+  },
+  "sidebar_action": {
+    "default_title": "Ziy Playlist",
+    "default_panel": "ui/panel.html",
+    "open_at_install": false
+  },
+  "options_ui": {
+    "page": "ui/options.html",
+    "open_in_tab": true
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; media-src 'self'; connect-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["ui/panel.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "icons/playlist-16.png",
+    "32": "icons/playlist-32.png",
+    "48": "icons/playlist-48.png",
+    "96": "icons/playlist-96.png"
+  }
+}

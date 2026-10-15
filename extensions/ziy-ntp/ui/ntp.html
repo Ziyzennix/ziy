@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New tab</title>
+
+<!-- The design tokens. This is the CSS custom-property mirror of
+     replica/design/tokens.css; an extension page has no build step, so the
+     page ships a copy. Every colour used by this page comes from these
+     variables and nothing hard-codes a token role. -->
+<style>
+:root {
+  color-scheme: light;
+
+  --bg: #ffffff;
+  --surface: #fafafb;
+  --surface-raised: #fafafb;
+  --surface-sunken: #f0f0f0;
+  --border: #e4e4e5;
+  --border-strong: #c9c9ca;
+  --border-input: #767b82;
+  --focus: #0b6e6e;
+
+  --text: #202124;
+  --text-muted: #5c5f66;
+  --text-inverse: #ffffff;
+
+  --accent: #0b6e6e;
+  --accent-hover: #095a5a;
+  --accent-active: #08504f;
+  --accent-bg: #e6f2f2;
+  --on-accent: #ffffff;
+
+  --danger: #b3261e;
+  --danger-hover: #9c2119;
+  --danger-bg: #fdecea;
+  --on-danger: #ffffff;
+  --success: #1a7a4d;
+  --success-bg: #e7f4ee;
+  --warning: #8a5a00;
+  --warning-bg: #fdf3e0;
+
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, .06), 0 1px 3px rgba(16, 24, 40, .10);
+  --shadow-pop: 0 12px 32px rgba(16, 24, 40, .16);
+
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, "Cascadia Mono", monospace;
+  --text-xs: 12px; --leading-xs: 16px; --weight-xs: 500;
+  --text-sm: 14px; --leading-sm: 20px; --weight-sm: 400;
+  --text-base: 16px; --leading-base: 24px; --weight-base: 400;
+  --text-lg: 20px; --leading-lg: 28px; --weight-lg: 600;
+  --text-xl: 28px; --leading-xl: 34px; --weight-xl: 700;
+  --text-display: 40px; --leading-display: 44px; --weight-display: 700;
+
+  --space-0: 0; --space-1: 4px; --space-2: 8px; --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-pill: 999px;
+
+  --motion-fast: 120ms; --motion-base: 200ms;
+  --motion-ease: cubic-bezier(.2, .8, .2, 1);
+
+  --content-max: 1128px;
+  --ntp-search-height: 48px;
+  --ntp-widget-frost: rgba(255, 255, 255, .72);
+}
+
+/* The NTP follows the engine's dark preference. The shell's own theme
+   extension can also set data-theme, which is the same selector the shell's
+   userChrome.css uses. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --bg: #17181a;
+    --surface: #1f2124;
+    --surface-raised: #26282b;
+    --surface-sunken: #101113;
+    --border: #3a3d41;
+    --border-strong: #6b6f76;
+    --border-input: #868e98;
+    --focus: #2dd4bf;
+
+    --text: #f4f5f6;
+    --text-muted: #a1a6ad;
+    --text-inverse: #17181a;
+
+    --accent: #2dd4bf;
+    --accent-hover: #5ee0d0;
+    --accent-active: #7ae7da;
+    --accent-bg: #14302e;
+    --on-accent: #04211c;
+
+    --danger: #f87171;
+    --danger-hover: #fca5a5;
+    --danger-bg: #3a1714;
+    --on-danger: #3b0a07;
+    --success: #4ade80;
+    --success-bg: #122b1f;
+    --warning: #fbbf24;
+    --warning-bg: #33260c;
+
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .6);
+    --shadow-pop: 0 12px 32px rgba(0, 0, 0, .7);
+
+    --ntp-widget-frost: rgba(23, 24, 26, .72);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #17181a;
+  --surface: #1f2124;
+  --surface-raised: #26282b;
+  --surface-sunken: #101113;
+  --border: #3a3d41;
+  --border-strong: #6b6f76;
+  --border-input: #868e98;
+  --focus: #2dd4bf;
+
+  --text: #f4f5f6;
+  --text-muted: #a1a6ad;
+  --text-inverse: #17181a;
+
+  --accent: #2dd4bf;
+  --accent-hover: #5ee0d0;
+  --accent-active: #7ae7da;
+  --accent-bg: #14302e;
+  --on-accent: #04211c;
+
+  --danger: #f87171;
+  --danger-hover: #fca5a5;
+  --danger-bg: #3a1714;
+  --on-danger: #3b0a07;
+  --success: #4ade80;
+  --success-bg: #122b1f;
+  --warning: #fbbf24;
+  --warning-bg: #33260c;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .6);
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, .7);
+
+  --ntp-widget-frost: rgba(23, 24, 26, .72);
+}
+
+:where(button, a, input, select, textarea, [tabindex], summary, [role="button"], [role="radio"], [role="option"], [role="tab"]):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+
+<link rel="stylesheet" href="ntp.css">
+</head>
+<body>
+
+<!-- The backdrop. Its inline background comes from the resolved background
+     config and is the only per-user style set from script. -->
+<div class="ntp-backdrop" id="backdrop" aria-hidden="true"></div>
+
+<main class="ntp">
+  <div class="ntp-inner">
+
+    <!-- Top bar: the customize dashboard trigger (recon S03). -->
+    <div class="ntp-top">
+      <button class="ntp-gear" id="gear" type="button" aria-expanded="false"
+              aria-controls="dashboard" aria-label="Customise this page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.08a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Search widget. The icon on the left swaps engines; the form opens the
+         selected engine. -->
+    <section class="ntp-search" id="search" role="region" aria-label="Search">
+      <form id="search-form" role="search" novalidate>
+        <button class="ntp-engine" id="engine-button" type="button"
+                aria-haspopup="listbox" aria-expanded="false"
+                aria-label="Search engine">
+          <span class="glyph" id="engine-glyph" aria-hidden="true">G</span>
+          <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true" focusable="false">
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        </button>
+
+        <label class="vh" for="query">Search or type a web address</label>
+        <input id="query" type="search" name="q" autocomplete="off" spellcheck="false"
+               placeholder="Search or type a web address"
+               aria-describedby="engine-status"
+               enterkeyhint="search">
+
+        <button type="submit" id="search-submit">Search</button>
+      </form>
+
+      <!-- The engine list. role="listbox" with an aria-activedescendant row. -->
+      <ul class="ntp-engine-menu" id="engine-menu" role="listbox"
+          aria-label="Search engines" hidden></ul>
+
+      <!-- Status that says which engine is active, so the switcher is never a
+           mystery icon. -->
+      <p class="vh" id="engine-status" role="status">Searching with the browser default.</p>
+    </section>
+
+    <!-- Clock widget. Not a live region: a ticking clock would announce every
+         minute. The time is published politely only when the user asks, by the
+         Read the time button below. -->
+    <section class="ntp-clock" id="clock" role="region" aria-label="Clock">
+      <div class="time" id="clock-time" aria-hidden="true">--:--</div>
+      <div class="date" id="clock-date"></div>
+      <p class="vh" id="clock-alt"></p>
+      <button class="btn btn-secondary btn-sm" id="clock-read" type="button"
+              style="margin-top: var(--space-3)">Read the time</button>
+      <p class="vh" id="clock-status" role="status"></p>
+    </section>
+
+    <!-- Stats widget: a real <dl>. Zero counts are real, not a blank. -->
+    <section class="ntp-stats" id="stats" role="region" aria-label="Privacy stats">
+      <dl class="stat-primary">
+        <dt id="stat-blocked">0</dt>
+        <dd>Requests stopped</dd>
+      </dl>
+      <dl>
+        <dt id="stat-data">0 KB</dt>
+        <dd>Data never sent</dd>
+      </dl>
+      <dl>
+        <dt id="stat-time">0 min</dt>
+        <dd>Time kept</dd>
+      </dl>
+      <p class="vh" id="stats-status" role="status"></p>
+    </section>
+
+    <!-- News widget. ziy-news renders nothing here; this section only reads
+         its snapshot and paints NTP-owned markup. -->
+    <section class="ntp-news" id="news" role="region" aria-label="News" hidden>
+      <div class="ntp-widget-head">
+        <h2 id="news-heading">News</h2>
+        <p id="news-count" class="ntp-news__count"></p>
+      </div>
+      <ul id="news-list" class="ntp-news__list" role="list"></ul>
+      <p id="news-status" class="vh" role="status"></p>
+      <p id="news-empty" class="ntp-news__empty" hidden>
+        No stories in your window. Add a source in Ziy News.
+      </p>
+    </section>
+
+    <!-- Top sites widget. -->
+    <section class="ntp-topsites" id="topsites" role="region" aria-label="Top sites">
+      <div class="ntp-widget-head">
+        <h2 id="topsites-heading">Top sites</h2>
+        <div class="segmented" role="radiogroup" aria-label="Top sites mode"
+             id="topsites-mode">
+          <button type="button" role="radio" aria-checked="true" data-mode="favorites"
+                  id="mode-favorites">Favorites</button>
+          <button type="button" role="radio" aria-checked="false" data-mode="frequent"
+                  id="mode-frequent">Frequently visited</button>
+        </div>
+      </div>
+
+      <!-- The empty state for favorites carries a real action (the Add Site
+           dialog). It is a sibling of the grid so the grid never renders
+           empty-handed. -->
+      <div class="empty" id="topsites-empty" hidden>
+        <h2>No favorites yet</h2>
+        <p>Pin the sites you open most and they will be one click away every time
+           you start a tab. You keep up to 24, and you set the order.</p>
+        <button class="btn btn-primary" id="empty-add" type="button">Add your first site</button>
+      </div>
+
+      <!-- The empty state for frequently-visited mode: there is no manual add
+           here by design (recon S05), so the action points at the other mode. -->
+      <div class="empty" id="topsites-empty-frequent" hidden>
+        <h2>Nothing visited yet</h2>
+        <p>Ziy fills this list from the pages you visit most, one per site, once
+           you have browsed a little. It updates itself, so there is nothing to
+           add by hand here.</p>
+        <button class="btn btn-secondary" id="empty-favorites-cta" type="button">
+          Switch to Favorites
+        </button>
+      </div>
+
+      <div class="tiles" id="tiles" role="list" aria-labelledby="topsites-heading"></div>
+
+      <div class="tiles-pager" id="tiles-pager" hidden>
+        <button type="button" id="page-prev" aria-label="Previous page">&larr;</button>
+        <span class="count" id="page-count" aria-live="polite">Page 1 of 1</span>
+        <button type="button" id="page-next" aria-label="Next page">&rarr;</button>
+      </div>
+    </section>
+
+    <!-- Cards widget (recon S51). Off by default; rendered when enabled. -->
+    <section class="ntp-cards" id="cards" role="region" aria-label="Cards" hidden>
+      <h2>Cards</h2>
+      <p class="hint" id="cards-hint">Nothing to show here yet.</p>
+    </section>
+
+    <!-- The all-widgets-off state. Real copy, real action. -->
+    <div class="empty" id="all-off" hidden>
+      <h2>Every widget is switched off</h2>
+      <p>This page is showing only its backdrop. Turn the widgets back on and Ziy
+         picks up exactly where you left it.</p>
+      <button class="btn btn-primary" id="all-on-cta" type="button">Turn the widgets back on</button>
+    </div>
+
+  </div>
+</main>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- Add / Edit site dialog (recon F09). <dialog> showModal() gives the   -->
+<!-- native focus trap and Esc handling the spec asks for.                -->
+<!-- ------------------------------------------------------------------ -->
+<dialog class="ntp-dialog" id="site-dialog" aria-labelledby="site-dialog-title">
+  <form id="site-form" method="dialog" novalidate>
+    <h2 id="site-dialog-title">Add a site</h2>
+
+    <div class="field">
+      <label for="site-name">Name</label>
+      <input type="text" id="site-name" name="name" maxlength="200" autocomplete="off"
+             aria-describedby="site-name-hint">
+      <p class="hint" id="site-name-hint">Leave it blank and Ziy uses the site's own name.</p>
+    </div>
+
+    <div class="field">
+      <label for="site-url">Web address</label>
+      <input type="text" id="site-url" name="url" autocomplete="off" spellcheck="false"
+             aria-describedby="site-url-error" aria-invalid="false" required>
+      <p class="error" id="site-url-error" role="alert" hidden></p>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" type="button" id="site-cancel">Cancel</button>
+      <button class="btn btn-primary" type="submit" id="site-save">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ------------------------------------------------------------------ -->
+<!-- The customize dashboard (recon S03).                                -->
+<!-- ------------------------------------------------------------------ -->
+<aside class="ntp-dashboard" id="dashboard" hidden aria-labelledby="dashboard-title"
+       role="dialog" aria-modal="false">
+  <header>
+    <h2 id="dashboard-title">Customise this page</h2>
+    <button class="btn btn-secondary btn-sm" type="button" id="dashboard-close"
+            aria-label="Close the customise panel">Done</button>
+  </header>
+
+  <div class="body">
+
+    <div class="group">
+      <h3>Widgets</h3>
+      <div id="widget-toggles"></div>
+    </div>
+
+    <div class="group">
+      <h3>Backdrop</h3>
+      <div class="swatches" id="gradient-swatches" role="group"
+           aria-label="Gradient backdrops"></div>
+      <div class="segmented" role="radiogroup" aria-label="Backdrop source"
+           id="background-source" style="margin-bottom: var(--space-3)"></div>
+      <div class="file-row" id="custom-file-row" hidden>
+        <label class="btn btn-secondary btn-sm" for="custom-file">
+          Choose a picture
+          <input type="file" id="custom-file" accept="image/*">
+        </label>
+        <span class="file-name" id="custom-file-name"></span>
+        <button class="btn btn-danger btn-sm" type="button" id="custom-remove">Remove</button>
+      </div>
+      <div class="toggle-row" style="margin-top: var(--space-3)">
+        <input type="checkbox" role="switch" id="bg-refresh">
+        <span class="text">
+          <label for="bg-refresh">Use a new backdrop with each new tab</label>
+          <p class="desc">Off by default: Ziy holds one backdrop until you change it.
+             There is no photo library to rotate through.</p>
+        </span>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Top sites</h3>
+      <div class="segmented" role="radiogroup" aria-label="Top sites mode"
+           id="dashboard-mode" style="margin-bottom: var(--space-3)"></div>
+      <p class="hint" id="mode-hint">Favorites is your own list. Frequently visited is
+         filled in for you from the pages you visit most.</p>
+    </div>
+
+    <div class="group">
+      <h3>Clock</h3>
+      <div class="segmented" role="radiogroup" aria-label="Clock format"
+           id="dashboard-clock"></div>
+    </div>
+
+    <div class="group">
+      <h3>Search</h3>
+      <div class="toggle-row" style="margin-bottom: var(--space-2)">
+        <input type="checkbox" role="switch" id="search-widget-toggle">
+        <span class="text">
+          <label for="search-widget-toggle">Show the search box</label>
+        </span>
+      </div>
+      <button class="btn btn-secondary btn-sm" type="button" id="open-options">
+        Choose search engines
+      </button>
+    </div>
+
+  </div>
+</aside>
+
+<!-- The model and the storage adapter load before the page script, so the page
+     never has to discover them. -->
+<script src="../lib/model.js"></script>
+<script src="../lib/storage.js"></script>
+<script src="ntp.js"></script>
+</body>
+</html>

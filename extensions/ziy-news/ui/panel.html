@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>Ziy News</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="panel.css">
+</head>
+<body class="news-panel">
+  <!-- The panel is a labelled region, and the scrolling area is the part that
+       carries the keyboard focus model described in ui/panel.js. -->
+  <main class="news-panel__main">
+    <header class="news-panel__header">
+      <h1 class="news-panel__title">Ziy News</h1>
+      <div class="news-panel__actions">
+        <button id="news-refresh" class="news-btn news-btn--quiet" type="button">
+          Refresh now
+        </button>
+        <button id="news-settings" class="news-btn news-btn--quiet" type="button">
+          Sources
+        </button>
+        <button id="news-help" class="news-btn news-btn--quiet" type="button"
+                aria-expanded="false" aria-controls="news-help-body">
+          Keys
+        </button>
+      </div>
+    </header>
+
+    <!-- Refresh status. role="status" is polite: a screen reader hears the
+         result of the last check without being interrupted mid-sentence. -->
+    <div id="news-status" class="news-status" role="status" aria-live="polite">
+      <span class="news-status__line">Not checked yet.</span>
+    </div>
+
+    <!-- Per-source failures. role="alert", because a source that stopped
+         answering is an error the user has to know about, not decoration. -->
+    <div id="news-errors" class="news-errors" role="alert" hidden></div>
+
+    <section class="news-panel__filters" aria-label="Filter the feed">
+      <label class="news-field">
+        <span class="news-field__label">Channel</span>
+        <select id="news-category" class="news-select">
+          <option value="all">All sources</option>
+        </select>
+      </label>
+      <label class="news-field news-field--grow">
+        <span class="news-field__label">Search your stories</span>
+        <input id="news-search" class="news-input" type="search" placeholder="Title, source or snippet"
+               autocomplete="off">
+      </label>
+    </section>
+
+    <div class="news-panel__summary">
+      <p id="news-unread" class="news-summary__unread">0 new stories</p>
+      <p id="news-count" class="news-summary__count" aria-hidden="true">0</p>
+      <button id="news-markall" class="news-btn news-btn--quiet" type="button" disabled>
+        Mark all read
+      </button>
+    </div>
+
+    <div id="news-help-body" class="news-help" hidden>
+      <ul id="news-help-list" class="news-help__list"></ul>
+    </div>
+
+    <!-- The feed. Every row is a listitem, so a screen reader announces the
+         list and the position of the focused story inside it. -->
+    <div class="news-panel__scroll" tabindex="0" role="group"
+         aria-label="Stories, use j and k to move between them">
+      <ul id="news-list" class="news-list" role="list"></ul>
+
+      <!-- The empty state carries a real action, not just text. -->
+      <div id="news-empty" class="news-empty" hidden>
+        <h2 id="news-empty-title" class="news-empty__title">Nothing new in your window</h2>
+        <p id="news-empty-body" class="news-empty__body">
+          Your sources are following this window closely. Widen the window, or add a source and we will fetch it now.
+        </p>
+        <button id="news-empty-action" class="news-btn" type="button">Choose sources</button>
+      </div>
+    </div>
+  </main>
+  <script src="../lib/ui/shared.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+/* Ziy design tokens — mirror of replica/design/tokens.css.
+   Source of truth: replica/design/tokens.json. Never hard-code a hex in a
+   component; every value below is a role name. Dark values are applied by
+   [data-theme="dark"] on <html>, the same selector the shell's userChrome.css
+   uses. Lines 89-126 of the source (the focus ring, prefers-reduced-motion,
+   prefers-contrast and forced-colors blocks) are reproduced verbatim. */
+
+:root {
+  color-scheme: light;
+
+  /* surfaces */
+  --bg: #ffffff;
+  --surface: #fafafb;
+  --surface-sunken: #f0f0f0;
+  --border: #e4e4e5;
+  --border-strong: #c9c9ca;
+  --border-input: #767b82;
+  --focus: #0b6e6e;
+
+  /* text */
+  --text: #202124;
+  --text-muted: #5c5f66;
+  --text-inverse: #ffffff;
+
+  /* accent: Ziy's own signature colour, gloam teal */
+  --accent: #0b6e6e;
+  --accent-hover: #095a5a;
+  --accent-active: #08504f;
+  --accent-bg: #e6f2f2;
+  --on-accent: #ffffff;
+
+  /* status */
+  --danger: #b3261e;
+  --danger-hover: #9c2119;
+  --danger-bg: #fdecea;
+  --on-danger: #ffffff;
+  --success: #1a7a4d;
+  --success-bg: #e7f4ee;
+  --warning: #8a5a00;
+  --warning-bg: #fdf3e0;
+
+  /* shadow */
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, .06), 0 1px 3px rgba(16, 24, 40, .10);
+  --shadow-pop: 0 12px 32px rgba(16, 24, 40, .16);
+
+  /* type */
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, "Cascadia Mono", monospace;
+  --text-xs: 12px; --leading-xs: 16px; --weight-xs: 500;
+  --text-sm: 14px; --leading-sm: 20px; --weight-sm: 400;
+  --text-base: 16px; --leading-base: 24px; --weight-base: 400;
+  --text-lg: 20px; --leading-lg: 28px; --weight-lg: 600;
+  --text-xl: 28px; --leading-xl: 34px; --weight-xl: 700;
+  --text-display: 40px; --leading-display: 44px; --weight-display: 700;
+
+  /* space: 0 4 8 12 16 24 32 48 64 */
+  --space-0: 0; --space-1: 4px; --space-2: 8px; --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+
+  /* radius */
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-pill: 999px;
+
+  /* motion */
+  --motion-fast: 120ms; --motion-base: 200ms;
+  --motion-ease: cubic-bezier(.2, .8, .2, 1);
+
+  /* layout */
+  --toolbar-height: 48px;
+  --chrome-accent-bar: 2px;
+  --nav-width: 240px;
+  --side-rail-width: 48px;
+  --side-panel-width: 340px;
+  --content-max: 1128px;
+  --find-bar-height: 40px;
+
+  /* chrome (userChrome.css) */
+  --tab-strip-height: 40px;
+  --tab-min-width: 64px;
+  --tab-max-width: 240px;
+  --tab-radius: 8px;
+
+  /* ntp */
+  --ntp-search-height: 48px;
+  --ntp-widget-frost: rgba(255, 255, 255, .72);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #17181a;
+  --surface: #1f2124;
+  --surface-raised: #26282b;
+  --surface-sunken: #101113;
+  --border: #3a3d41;
+  --border-strong: #6b6f76;
+  --border-input: #868e98;
+  --focus: #2dd4bf;
+
+  --text: #f4f5f6;
+  --text-muted: #a1a6ad;
+  --text-inverse: #17181a;
+
+  --accent: #2dd4bf;
+  --accent-hover: #5ee0d0;
+  --accent-active: #7ae7da;
+  --accent-bg: #14302e;
+  --on-accent: #04211c;
+
+  --danger: #f87171;
+  --danger-hover: #fca5a5;
+  --danger-bg: #3a1714;
+  --on-danger: #3b0a07;
+  --success: #4ade80;
+  --success-bg: #122b1f;
+  --warning: #fbbf24;
+  --warning-bg: #33260c;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .6);
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, .7);
+
+  --ntp-widget-frost: rgba(23, 24, 26, .72);
+}
+
+/* Focus ring, one definition, used by every interactive surface.
+   WCAG 2.2: 2px ring + 2px offset, never suppressed. */
+:where(button, a, input, select, textarea, [tabindex], summary, [role="button"], [role="tab"], [role="option"]):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-fast: 0ms; --motion-base: 0ms; }
+  *, *::before, *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --border: #767b82;
+    --border-strong: #202124;
+    --text-muted: #4a4d52;
+  }
+}
+
+/* Windows High Contrast / forced-colors: let the OS palette win on borders. */
+@media (forced-colors: active) {
+  :where(button, input, select, textarea, [role="button"]):focus-visible { outline-color: Highlight; }
+}

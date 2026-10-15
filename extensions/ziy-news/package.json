@@ -1,0 +1,1 @@
+{"type":"commonjs","name":"ziy-news","private":true,"description":"Ziy News: the feed reader. Workspace package for extensions/ziy-news only; no build step, no dependencies, node:test for tests.","main":"lib/feed/parser.js","scripts":{"test":"node --test test/"}}

@@ -1,0 +1,206 @@
+/* Ziy passwords — the panel's styles.
+ * Every value is a role name from tokens.css; no hex is hard-coded here.
+ */
+:root { color-scheme: light; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
+.ziy-pwd {
+  width: 360px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.ziy-pwd__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.ziy-pwd__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+  font-weight: var(--weight-lg);
+}
+
+.ziy-pwd__badge {
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  font-weight: var(--weight-xs);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  color: var(--text-muted);
+}
+
+.ziy-pwd__badge--open { background: var(--success-bg); color: var(--success); }
+.ziy-pwd__badge--locked { background: var(--warning-bg); color: var(--warning); }
+
+.ziy-pwd__hint {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.ziy-pwd__status {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.ziy-pwd__status[hidden] { display: none; }
+
+.ziy-pwd__error {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: var(--danger);
+}
+
+.ziy-pwd__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ziy-pwd__label {
+  font-weight: var(--weight-sm);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  color: var(--text-muted);
+}
+
+.ziy-pwd__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.ziy-pwd__row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.ziy-pwd__btn {
+  flex: 0 0 auto;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: var(--weight-sm);
+  cursor: pointer;
+}
+
+.ziy-pwd__btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.ziy-pwd__btn--danger {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: var(--on-danger);
+}
+
+.ziy-pwd__btn:disabled { opacity: .55; cursor: default; }
+
+.ziy-pwd__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.ziy-pwd__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.ziy-pwd__item--current { border-color: var(--accent); }
+
+.ziy-pwd__item-main { min-width: 0; }
+
+.ziy-pwd__item-origin {
+  display: block;
+  font-weight: var(--weight-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ziy-pwd__item-user {
+  display: block;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ziy-pwd__item-remove {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+  padding: var(--space-1);
+}
+
+.ziy-pwd__item-remove:hover { color: var(--danger); }
+
+.ziy-pwd__save {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.ziy-pwd__foot {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+}
+
+.ziy-pwd__visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

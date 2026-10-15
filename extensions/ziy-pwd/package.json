@@ -1,0 +1,11 @@
+{
+  "name": "ziy-pwd",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ziy's password manager: a credential vault encrypted under a passphrase only the user holds, owned by the ziy-pwd native helper. Workspace package for extensions/ziy-pwd only; no build step, no dependencies, node:test for tests.",
+  "type": "commonjs",
+  "main": "lib/pwd-client.js",
+  "scripts": {
+    "test": "node --test test/"
+  }
+}

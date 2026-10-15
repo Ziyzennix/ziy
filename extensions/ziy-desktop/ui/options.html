@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziy Desktop — keyboard shortcuts</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="options.css">
+</head>
+<body class="ziy-desktop-options">
+  <a class="skip-link" href="#options-main">Skip to main content</a>
+
+  <main id="options-main" class="options" role="region" aria-labelledby="options-title">
+    <header class="options__header">
+      <h1 class="options__title" id="options-title">Ziy Desktop</h1>
+      <p class="options__lede">Keyboard shortcuts, and what this engine reserves. Everything on this page is read from the running engine, not from a claim.</p>
+    </header>
+
+    <p class="sr-only" id="options-live" role="status" aria-live="polite"></p>
+
+    <!-- ================= ENGINE CAPABILITIES ================= -->
+    <section class="options__section" aria-labelledby="cap-title">
+      <h2 class="options__section-title" id="cap-title">What this engine gives Ziy</h2>
+      <p class="options__note">Probed at startup from the running build, not assumed. A surface the engine lacks is hidden, and the control is replaced by the engine's own path.</p>
+      <ul class="capability" id="capability-list" role="list"></ul>
+    </section>
+
+    <!-- ================= SHORTCUTS ================= -->
+    <section class="options__section" aria-labelledby="shortcuts-title">
+      <h2 class="options__section-title" id="shortcuts-title">Shortcuts</h2>
+      <p class="options__note">These are the commands this extension declares. Gecko binds the ones it is free to bind; the rest are reserved by the engine and are shown with their real state. Rebind them at <code>about:addons</code> → the extension → Manage → Keyboard shortcuts.</p>
+      <table class="shortcuts">
+        <thead>
+          <tr><th scope="col">Command</th><th scope="col">Key</th><th scope="col">Bound</th></tr>
+        </thead>
+        <tbody id="shortcuts-body"></tbody>
+      </table>
+    </section>
+
+    <!-- ================= RESERVED KEYS ================= -->
+    <section class="options__section" aria-labelledby="reserved-title">
+      <h2 class="options__section-title" id="reserved-title">Keys the engine reserves</h2>
+      <p class="options__note">An extension cannot rebind these, and Ziy says so rather than shipping an editor that silently drops the change. This is the honest form of recon S24 on an engine that owns its own key map.</p>
+      <ul class="reserved" id="reserved-list" role="list"></ul>
+    </section>
+
+    <!-- ================= IMPORT AND EXPORT ================= -->
+    <section class="options__section" aria-labelledby="data-title">
+      <h2 class="options__section-title" id="data-title">Your data</h2>
+      <p class="options__note">The same import and export the app menu offers, with the format spelled out.</p>
+      <div class="options__actions">
+        <button id="import-start" class="button" type="button">Import bookmarks</button>
+        <button id="export-bookmarks" class="button" type="button">Export bookmarks (HTML)</button>
+        <button id="export-snapshot" class="button" type="button">Save settings snapshot</button>
+        <button id="restore-snapshot" class="button" type="button">Restore settings snapshot</button>
+      </div>
+      <dl class="formats">
+        <dt>Bookmarks (HTML)</dt>
+        <dd>The Netscape bookmark file format every browser reads, written from the live tree through <code>browser.bookmarks.getTree</code>.</dd>
+        <dt>Bookmarks (JSON)</dt>
+        <dd>Chromium's own bookmarks file, read directly from a Chrome/Edge/Brave profile. No conversion step.</dd>
+        <dt>Settings snapshot (JSON)</dt>
+        <dd>Ziy's own format, versioned. Settings only. No history and no password is ever moved.</dd>
+      </dl>
+    </section>
+
+    <!-- ================= DEFAULT BROWSER ================= -->
+    <section class="options__section" aria-labelledby="default-title">
+      <h2 class="options__section-title" id="default-title">Default browser</h2>
+      <div id="default-browser-body"></div>
+    </section>
+
+    <p class="options__status" id="options-status" data-kind="info" role="status" aria-live="polite"></p>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

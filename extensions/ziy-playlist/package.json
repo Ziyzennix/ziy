@@ -1,0 +1,11 @@
+{
+  "name": "ziy-playlist",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ziy Playlist: the media queue and its player. Workspace package for extensions/ziy-playlist only; no build step, no dependencies, node:test for tests.",
+  "type": "commonjs",
+  "main": "lib/model.js",
+  "scripts": {
+    "test": "node --test test/"
+  }
+}

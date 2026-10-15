@@ -1,0 +1,171 @@
+From: Ziy engine fork <ziy@ziy.app>
+Date: 2026-10-15
+Subject: [PATCH 0003] WebGPU: empty the adapter-identity strings under RFP
+
+Ziy's farbling contract is Brave's, and Brave's WebGPU farbling
+(third_party/blink/renderer/modules/webgpu/gpu_adapter.cc:
+BraveScrubWebGpuAdapterInfo, recon recorded at replica/re-deep-shields.md §5 row
+17, brave-webcompat-webgpu) empties `GPUAdapterInfo.vendor`, `.architecture`,
+`.device` and `.description` so the GPU name, device class and driver build stop
+identifying the machine.
+
+Gecko has no equivalent. `GPUAdapterInfo` (dom/webidl/WebGPU.webidl:71-88)
+already ships `vendor`/`architecture`/`device`/`description` as permanently
+empty strings -- dom/webgpu/Adapter.h:60-63 -- but the four non-standard
+[ChromeOnly] getters that carry the real wgpu-native values are NOT guarded by
+any RFPTarget:
+
+  dom/webgpu/Adapter.cpp:83   GetWgpuName()        <- s = mAboutSupportInfo->name
+  dom/webgpu/Adapter.cpp:91   GetWgpuDeviceType()  <- the disjoint Cpu/DiscreteGpu/... switch
+  dom/webgpu/Adapter.cpp:114  GetWgpuDriver()      <- s = mAboutSupportInfo->driver
+  dom/webgpu/Adapter.cpp:118  GetWgpuDriverInfo()  <- s = mAboutSupportInfo->driver_info
+
+Gecko's entire RFP coverage for WebGPU is the three targets
+WebGPULimits (Adapter.cpp:332), WebGPUIsFallbackAdapter (Adapter.cpp:73) and
+WebGPUSubgroupSizes (Adapter.cpp:39 and :62) -- plus WebGLRenderInfo on the WebGL
+side -- and none of them reaches these getters. The per-target override pref
+cannot express the fix either: in RFP mode
+nsRFPService::IsRFPEnabledFor() (nsRFPService.cpp:335) returns true for every
+target before it consults the override set, exactly as 0001 documented for
+CSSPrefersColorScheme.
+
+This patch empties all four strings when RFP is active for the adapter's
+document. It deliberately does NOT add a new RFPTarget to RFPTargets.inc: doing
+that would change the meaning of the target string Ziy locks
+("+AllTargets,-CSSPrefersColorScheme") and would require the same
+CreateOverridesFromText (nsRFPService.cpp:2685) edit path 0001 avoided. Instead
+it reuses the engine's existing WebGPUIsFallbackAdapter target -- the one Gecko
+itself already uses for "Always report hardware support for WebGPU" at
+Adapter.cpp:73, which is the same decision this patch is making -- so a build
+with the gate off is stock Gecko and the shipped pref string remains valid.
+
+Scope note, stated plainly: `vendor`/`architecture`/`device`/`description` (the
+standard, web-exposed attributes) are ALREADY empty in stock Gecko, so this
+patch changes only the wgpu* attributes, which are reachable from privileged and
+chrome code and, per the fingerprinting-surface warning at Adapter.h:56-58, are
+exactly the values a WebGPU fingerprinting surface would want to scrub.
+
+Shape note: each `#ifdef MOZ_ZIY_FINGERPRINTING` wraps the whole function body
+and the `#endif` is glued to the original first statement with no blank line, so
+stripping the gate from the patched file yields a file BYTE-IDENTICAL to
+pristine. That is the gate-off proof patches/README.md step 6 requires, verified
+by the strip-and-cmp in replica/proofs-cpp-fingerprint.md.
+
+STATUS: authored and apply-verified (git apply --check, git apply,
+git apply --reverse --check, and a real reverse followed by cmp against
+pristine, all RC=0 -- see replica/proofs-cpp-fingerprint.md). NOT COMPILED: the
+first compilation is the first CI run of
+.github/workflows/build-gecko.yml.
+
+Gated behind MOZ_ZIY_FINGERPRINTING, set by the
+--enable-ziy-fingerprinting configure option declared in
+0002-ziy-fingerprinting-option.patch. Applies cleanly after 0001 and 0002.
+
+Sources for every claim in this commit message:
+  dom/webidl/WebGPU.webidl:71-88 GPUAdapterInfo (vendor/architecture/device/
+    description as empty strings; wgpu* the [ChromeOnly] strings)
+  dom/webgpu/Adapter.h:60-63 GetVendor/GetArchitecture/GetDevice/
+    GetDescription -- all `s = nsString()`
+  dom/webgpu/Adapter.h:56-58 the "increases fingerprinting surface" warning
+  dom/webgpu/Adapter.cpp:83 GetWgpuName (unguarded)
+  dom/webgpu/Adapter.cpp:91 GetWgpuDeviceType (unguarded switch)
+  dom/webgpu/Adapter.cpp:114 GetWgpuDriver (unguarded)
+  dom/webgpu/Adapter.cpp:118 GetWgpuDriverInfo (unguarded)
+  dom/webgpu/Adapter.cpp:332 WebGPULimits clamp
+  dom/webgpu/Adapter.cpp:73 WebGPUIsFallbackAdapter (reused as the gate)
+  dom/webgpu/Adapter.cpp:39,:62 WebGPUSubgroupSizes
+  toolkit/components/resistfingerprinting/nsRFPService.cpp:335
+    IsRFPEnabledFor's RFP short-circuit
+  brave-core third_party/blink/renderer/modules/webgpu/gpu_adapter.cc:
+    BraveScrubWebGpuAdapterInfo (Brave behaviour contract, cited via
+    replica/re-deep-shields.md §5 row 17)
+---
+--- a/dom/webgpu/Adapter.cpp
++++ b/dom/webgpu/Adapter.cpp
+@@ -81,6 +81,42 @@
+ }
+ 
+ void AdapterInfo::GetWgpuName(nsString& s) const {
++#ifdef MOZ_ZIY_FINGERPRINTING
++  // Ziy delta 3: the WebGPU adapter-identity strings RFP never reaches.
++  //
++  // WHY A C++ CHANGE IS REQUIRED. Brave's farbling contract for WebGPU
++  // (replica/re-deep-shields.md §5 row 17, brave-webcompat-webgpu,
++  // third_party/blink/renderer/modules/webgpu/gpu_adapter.cc:
++  // BraveScrubWebGpuAdapterInfo) empties `adapter.info.vendor` / `.architecture`
++  // / `.device` so the GPU name and driver strings stop identifying the machine.
++  // Gecko has no equivalent. Its RFP coverage for WebGPU is four targets only —
++  // WebGPULimits (Adapter.cpp:332), WebGPUIsFallbackAdapter (Adapter.cpp:73),
++  // WebGPUSubgroupSizes (Adapter.cpp:39 and :62), and WebGLRenderInfo for the
++  // WebGL side — and none of them guards the four DOMString getters on
++  // GPUAdapterInfo that carry the raw wgpu-native values. The per-target
++  // override pref cannot express this either: in RFP mode
++  // nsRFPService::IsRFPEnabledFor() (nsRFPService.cpp:335) returns true for every
++  // target before it consults the override set, and adding a new RFPTarget for
++  // it would mean an RFPTargets.inc edit that the shipped pref string already
++  // assumes is complete. This is the "behaviour the RFP pref layer cannot
++  // express" class of delta, the same one 0001-rfp-colorscheme-carveout patched.
++  //
++  // The gate reuses the engine's own WebGPUIsFallbackAdapter target rather than
++  // introducing a new enum value, so the pref string Ziy locks
++  // ("+AllTargets,-CSSPrefersColorScheme") stays valid and a user could relax
++  // this with --disable or by removing the term. When RFP is off the getters are
++  // byte-for-byte the engine's own behaviour.
++  //
++  // Note the shape: the #ifdef wraps the WHOLE body and the #endif is glued to
++  // the original first statement with no blank line, so stripping the block
++  // leaves a file byte-identical to pristine — the gate-off proof
++  // patches/README.md step 6 requires.
++  if (GetParentObject()->ShouldResistFingerprinting(
++          RFPTarget::WebGPUIsFallbackAdapter)) {
++    s.Truncate();
++    return;
++  }
++#endif  // MOZ_ZIY_FINGERPRINTING
+   s = mAboutSupportInfo->name;
+ }
+ 
+@@ -89,6 +125,15 @@
+ uint32_t AdapterInfo::WgpuDevice() const { return mAboutSupportInfo->device; }
+ 
+ void AdapterInfo::GetWgpuDeviceType(nsString& s) const {
++#ifdef MOZ_ZIY_FINGERPRINTING
++  // Ziy delta 3b: same gap. The device type leaks discrete-vs-integrated GPU.
++  // See the block above GetWgpuName for why the pref layer cannot reach it.
++  if (GetParentObject()->ShouldResistFingerprinting(
++          RFPTarget::WebGPUIsFallbackAdapter)) {
++    s.Truncate();
++    return;
++  }
++#endif  // MOZ_ZIY_FINGERPRINTING
+   switch (mAboutSupportInfo->device_type) {
+     case ffi::WGPUDeviceType_Cpu:
+       s.AssignLiteral("Cpu");
+@@ -112,10 +157,27 @@
+ }
+ 
+ void AdapterInfo::GetWgpuDriver(nsString& s) const {
++#ifdef MOZ_ZIY_FINGERPRINTING
++  // Ziy delta 3c: the driver string, e.g. "Mesa Intel(R) UHD Graphics 620"
++  // with a driver version. See the block above GetWgpuName for the reasoning.
++  if (GetParentObject()->ShouldResistFingerprinting(
++          RFPTarget::WebGPUIsFallbackAdapter)) {
++    s.Truncate();
++    return;
++  }
++#endif  // MOZ_ZIY_FINGERPRINTING
+   s = mAboutSupportInfo->driver;
+ }
+ 
+ void AdapterInfo::GetWgpuDriverInfo(nsString& s) const {
++#ifdef MOZ_ZIY_FINGERPRINTING
++  // Ziy delta 3d: the driver-info string. See the block above GetWgpuName.
++  if (GetParentObject()->ShouldResistFingerprinting(
++          RFPTarget::WebGPUIsFallbackAdapter)) {
++    s.Truncate();
++    return;
++  }
++#endif  // MOZ_ZIY_FINGERPRINTING
+   s = mAboutSupportInfo->driver_info;
+ }
+ 

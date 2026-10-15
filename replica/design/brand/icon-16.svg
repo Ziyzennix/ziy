@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" role="img" aria-label="Ziy">
+  <title>Ziy toolbar icon 16</title>
+  <!-- Solid single-family mark for toolbar sizes: shield + sealed eye, one fill. -->
+  <path d="M8 1 14 2.7v5.1c0 4-3.1 6.8-6 8.2C5.1 14.6 2 11.8 2 7.8V2.7L8 1Z" fill="#0b6e6e"/>
+  <g fill="none" stroke="#ffffff" stroke-width="1.15" stroke-linecap="round">
+    <path d="M4.6 6.3c1.13-1.18 2.27-1.18 3.4 0 1.13-1.18 2.27-1.18 3.4 0"/>
+    <path d="M5.7 8.9c.7.6 1.4.6 2.1 0 .7.6 1.4.6 2.1 0"/>
+  </g>
+  <circle cx="8" cy="5.35" r=".8" fill="#ffffff"/>
+</svg>

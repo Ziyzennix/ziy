@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Ziy">
+  <title>Ziy toolbar icon 24</title>
+  <path d="M12 2 21 4.5v7.2c0 5.6-4.3 9.4-9 11.3-4.7-1.9-9-5.7-9-11.3V4.5L12 2Z" fill="#0b6e6e"/>
+  <path d="M12 4.1 19 6v5.7c0 4.2-3.2 7-7 8.6-3.8-1.6-7-4.4-7-8.6V6l7-1.9Z" fill="none" stroke="#ffffff" stroke-opacity=".32" stroke-width="1.1"/>
+  <g fill="none" stroke="#ffffff" stroke-width="1.7" stroke-linecap="round">
+    <path d="M6.9 9.4c1.7-1.8 3.4-1.8 5.1 0 1.7-1.8 3.4-1.8 5.1 0"/>
+    <path d="M8.5 13.4c1.05.9 2.1.9 3.15 0 1.05.9 2.1.9 3.15 0"/>
+  </g>
+  <circle cx="12" cy="8" r="1.2" fill="#ffffff"/>
+</svg>

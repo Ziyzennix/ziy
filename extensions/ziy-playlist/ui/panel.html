@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ziy Playlist</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="panel.css">
+</head>
+<body class="playlist">
+  <a class="skip-link" href="#playlist-main">Skip to the player</a>
+
+  <!-- The panel is a sidebar_action page: role=region with a heading, per
+       replica/design/components.md §15. -->
+  <main id="playlist-main" class="playlist__main" role="region" aria-labelledby="playlist-title">
+
+    <header class="playlist__header">
+      <h1 class="playlist__title" id="playlist-title">Playlist</h1>
+      <div class="playlist__actions">
+        <button id="btn-settings" class="pl-btn pl-btn--quiet" type="button"
+                aria-expanded="false" aria-controls="settings-body">Settings</button>
+        <button id="btn-help" class="pl-btn pl-btn--quiet" type="button"
+                aria-expanded="false" aria-controls="help-body">Keys</button>
+      </div>
+    </header>
+
+    <!-- One live region for every state change. Screen readers hear the
+         state rather than having to hunt for it. -->
+    <p class="sr-only" id="playlist-live" role="status" aria-live="polite"></p>
+
+    <!-- ================= THE PLAYER =================
+         A native media element in the panel. This IS the player: there is no
+         background copy, so "background playback" in the reference's sense is
+         documented as unavailable (see the panel's own note). -->
+    <section class="player" aria-labelledby="player-title">
+      <h2 class="sr-only" id="player-title">Player</h2>
+
+      <video id="player-video" class="player__video" playsinline preload="metadata"
+             poster=""></video>
+      <audio id="player-audio" class="player__audio" preload="metadata"></audio>
+
+      <div class="player__meta">
+        <p class="player__title" id="player-item-title">Nothing playing yet</p>
+        <p class="player__source" id="player-item-source"></p>
+      </div>
+
+      <!-- The seek row. A real <input type="range"> with a text alternative,
+         because a drag-only seek bar loses the keyboard. -->
+      <div class="player__seek">
+        <span class="player__time" id="player-elapsed">0:00</span>
+        <input id="player-seek" class="player__range" type="range" min="0" max="100" step="0.1"
+               value="0" aria-label="Seek within the playing item">
+        <span class="player__time" id="player-duration">0:00</span>
+      </div>
+
+      <!-- The transport. One tab stop per control, each with a state in its
+           accessible name (never colour alone). -->
+      <div class="player__controls" role="group" aria-label="Playback controls">
+        <button id="btn-back15" class="pl-btn pl-btn--icon" type="button"
+                aria-label="Skip back 15 seconds">
+          <span aria-hidden="true">−15</span>
+        </button>
+        <button id="btn-play" class="pl-btn pl-btn--primary" type="button"
+                aria-pressed="false">Play</button>
+        <button id="btn-forward15" class="pl-btn pl-btn--icon" type="button"
+                aria-label="Skip forward 15 seconds">
+          <span aria-hidden="true">+15</span>
+        </button>
+        <button id="btn-speed" class="pl-btn" type="button"
+                aria-label="Playback speed, 1x">1×</button>
+        <button id="btn-sleep" class="pl-btn" type="button"
+                aria-label="Set a sleep timer">Sleep</button>
+        <button id="btn-pip" class="pl-btn" type="button"
+                aria-label="Play in a floating window">PiP</button>
+        <button id="btn-fullscreen" class="pl-btn" type="button"
+                aria-label="Play full screen">Full screen</button>
+      </div>
+
+      <div class="player__volume">
+        <label class="player__volume-label" for="player-volume">Volume</label>
+        <input id="player-volume" class="player__range" type="range" min="0" max="1" step="0.05"
+               value="1" aria-label="Volume">
+        <span class="player__volume-value" id="player-volume-value">100%</span>
+      </div>
+
+      <div class="player__sleep" id="player-sleep" role="status" aria-live="polite" hidden>
+        <span id="player-sleep-text">No sleep timer.</span>
+        <button id="btn-sleep-cancel" class="pl-btn pl-btn--quiet" type="button">Cancel</button>
+      </div>
+
+      <!-- The honest note. The reference's background playback is an OS-level
+           feature; on this engine the panel is the player, and it says so
+           rather than implying a control exists. -->
+      <p class="player__note" id="player-note" hidden></p>
+    </section>
+
+    <!-- ================= THE QUEUE =================
+         A real list. Reordering is keyboard-first (Ctrl+Arrow) and
+         drag-and-drop second, per design/components.md §11's rule that
+         drag alone is not accessible. -->
+    <section class="queue" aria-labelledby="queue-title">
+      <div class="queue__head">
+        <h2 class="queue__title" id="queue-title">Your queue</h2>
+        <div class="queue__head-actions">
+          <button id="btn-clear" class="pl-btn pl-btn--quiet" type="button">Clear all</button>
+        </div>
+      </div>
+
+      <ol id="queue-list" class="queue__list" role="list"></ol>
+
+      <p id="queue-empty" class="queue__empty" hidden>
+        Nothing is queued yet. Open a page that is playing something and use the prompt
+        beside the player, or the Ziy Playlist button in the toolbar.
+      </p>
+
+      <div id="queue-error" class="queue__error" role="alert" hidden></div>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section id="settings-body" class="settings" aria-labelledby="settings-title" hidden>
+      <h2 class="settings__title" id="settings-title">Playlist settings</h2>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-speed">Start every item at</label>
+        <select id="setting-speed" class="pl-select">
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1× (normal)</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="1.75">1.75×</option>
+          <option value="2">2×</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-sleep">Sleep timer length</label>
+        <select id="setting-sleep" class="pl-select">
+          <option value="0" selected>No timer</option>
+          <option value="5">5 minutes</option>
+          <option value="10">10 minutes</option>
+          <option value="15">15 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="45">45 minutes</option>
+          <option value="60">1 hour</option>
+          <option value="90">1 hour 30 minutes</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-resume">Half-watched items</label>
+        <select id="setting-resume" class="pl-select">
+          <option value="always" selected>Resume where they stopped</option>
+          <option value="ask">Ask me each time</option>
+          <option value="never">Always start from the beginning</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-side">Panel side</label>
+        <select id="setting-side" class="pl-select">
+          <option value="right" selected>Right side</option>
+          <option value="left">Left side</option>
+        </select>
+        <p class="setting-row__hint" id="setting-side-hint">
+          Recorded here. The browser keeps the final word on which side its sidebar sits,
+          so this is a note rather than a promise.
+        </p>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-prompt">Add prompt on pages</label>
+        <select id="setting-prompt" class="pl-select">
+          <option value="on" selected>Show it when a page is playing</option>
+          <option value="off">Never show it</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-quality">Stream quality</label>
+        <select id="setting-quality" class="pl-select">
+          <option value="auto" selected>Let the manifest decide</option>
+          <option value="high">Highest first</option>
+          <option value="low">Lowest first</option>
+        </select>
+        <p class="setting-row__hint" id="setting-quality-hint">
+          Your preference is recorded, but this engine has no adaptive switcher: it plays the
+          first variant the manifest offers, so this does not change what you hear.
+        </p>
+      </div>
+
+      <div class="setting-row">
+        <label class="setting-row__label" for="setting-reset">Reset playlist</label>
+        <button id="btn-reset" class="pl-btn pl-btn--danger" type="button">Reset the queue</button>
+        <p class="setting-row__hint">
+          Removes every item and every remembered position. This cannot be undone.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= KEYBOARD HELP ================= -->
+    <section id="help-body" class="help" aria-labelledby="help-title" hidden>
+      <h2 class="settings__title" id="help-title">Keys</h2>
+      <ul class="help__list">
+        <li>Space or Enter — play the selected item</li>
+        <li>↑ ↓ — move between items</li>
+        <li>Ctrl+↑ Ctrl+↓ — move an item up or down the queue</li>
+        <li>← → — skip 15 seconds back or forward</li>
+        <li>+ − — faster or slower</li>
+        <li>Delete — remove the selected item</li>
+        <li>s — start a sleep timer</li>
+        <li>f — full screen, p — floating window</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="../lib/model.js"></script>
+  <script src="../lib/classify.js"></script>
+  <script src="../lib/settings.js"></script>
+  <script src="../lib/sleep.js"></script>
+  <script src="../lib/position.js"></script>
+  <script src="panel.js"></script>
+</body>
+</html>

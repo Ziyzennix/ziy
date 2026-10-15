@@ -1,0 +1,428 @@
+{
+  "policies": {
+    "DisableTelemetry": true,
+    "DisableFirefoxStudies": true,
+    "DisableFirefoxAccounts": true,
+    "DisableFeedbackCommands": true,
+    "NetworkPrediction": false,
+    "HttpsOnlyMode": "force_enabled",
+    "EnableTrackingProtection": {
+      "Value": true,
+      "Locked": true,
+      "Cryptomining": true,
+      "Fingerprinting": true,
+      "EmailTracking": true
+    },
+    "Cookies": {
+      "Allow": [],
+      "AllowSession": [],
+      "Block": [],
+      "Default": true,
+      "AcceptThirdParty": "never",
+      "RejectTracker": true,
+      "ExpireAtSessionEnd": true,
+      "Locked": true,
+      "Behavior": "reject-tracker",
+      "BehaviorPrivateBrowsing": "reject-tracker"
+    },
+    "UserMessaging": {
+      "WhatsNew": false,
+      "ExtensionRecommendations": false,
+      "FeatureRecommendations": false,
+      "UrlbarInterventions": false,
+      "SkipOnboarding": true,
+      "MoreFromMozilla": false,
+      "FirefoxLabs": false,
+      "Locked": true
+    },
+    "DisableSetDesktopBackground": true,
+    "DisableScreenshots": true,
+    "DisableProfileImport": true,
+    "DisableAppUpdate": true,
+    "ManualAppUpdateOnly": true,
+    "DisableRemoteImprovements": true,
+    "DisableSystemAddonUpdate": true,
+    "CaptivePortal": false,
+    "NoDefaultBookmarks": true,
+    "DontCheckDefaultBrowser": true,
+    "NewTabPage": true,
+    "FirefoxHome": {
+      "Search": true,
+      "TopSites": false,
+      "SponsoredTopSites": false,
+      "Highlights": false,
+      "Pocket": false,
+      "SponsoredPocket": false,
+      "Snippets": false,
+      "Locked": true
+    },
+    "OfferToSaveLoginsDefault": false,
+    "OfferToSaveLogins": {
+      "Allow": false,
+      "Locked": true
+    },
+    "DisableFormHistory": true,
+    "SearchEngines": {
+      "PreventInstalls": false,
+      "Remove": [
+        "Bing",
+        "Amazon.com",
+        "eBay",
+        "DuckDuckGo"
+      ]
+    },
+    "ExtensionSettings": {
+      "*": {
+        "installation_mode": "allowed",
+        "allowed_types": [
+          "extension",
+          "theme",
+          "dictionary",
+          "locale",
+          "sitepermission"
+        ],
+        "blocked_install_message": "Ziy only accepts extensions listed in its ExtensionSettings policy."
+      },
+      "ziy-shell@ziy.app": {
+        "installation_mode": "normal_installed",
+        "default_area": "navbar",
+        "private_browsing": true
+      },
+      "ziy-shields@ziy.app": {
+        "installation_mode": "normal_installed",
+        "default_area": "navbar",
+        "private_browsing": true
+      },
+      "ziy-ntp@ziy.app": {
+        "installation_mode": "normal_installed",
+        "default_area": "navbar",
+        "private_browsing": true
+      },
+      "ziy-news@ziy.app": {
+        "installation_mode": "normal_installed",
+        "default_area": "navbar",
+        "private_browsing": true
+      },
+      "ziy-playlist@ziy.app": {
+        "installation_mode": "normal_installed",
+        "default_area": "navbar",
+        "private_browsing": true
+      },
+      "ziy-talk@ziy.app": {
+        "installation_mode": "normal_installed",
+        "default_area": "navbar",
+        "private_browsing": true
+      },
+      "ziy-sync@ziy.app": {
+        "installation_mode": "normal_installed",
+        "default_area": "navbar",
+        "private_browsing": true
+      },
+      "ziy-desktop@ziy.app": {
+        "installation_mode": "normal_installed",
+        "default_area": "navbar",
+        "private_browsing": true
+      },
+      "ziy-pwd@ziy.app": {
+        "installation_mode": "normal_installed",
+        "default_area": "navbar",
+        "private_browsing": true
+      },
+      "newtab@mozilla.org": {
+        "installation_mode": "blocked",
+        "blocked_install_message": "Ziy ships its own new tab page (ziy-ntp); Firefox's built-in new tab is not part of this product."
+      }
+    },
+    "InstallAddonsPermission": {
+      "Allow": [],
+      "Default": true
+    },
+    "Preferences": {
+      "dom.battery.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "dom.webserial.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "dom.fs.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "dom.netinfo.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "dom.event.contextmenu.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "device.sensors.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "datareporting.healthreport.uploadEnabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "datareporting.policy.dataSubmissionEnabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "datareporting.usage.uploadEnabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "toolkit.telemetry.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "toolkit.telemetry.unified": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "toolkit.telemetry.archive.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "toolkit.telemetry.newProfilePing.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "toolkit.telemetry.shutdownPingSender.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "toolkit.telemetry.firstShutdownPing.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "toolkit.telemetry.bhrPing.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "toolkit.telemetry.server": {
+        "Value": "",
+        "Status": "locked",
+        "Type": "string"
+      },
+      "app.normandy.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "app.normandy.first-run": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "app.shield.optoutstudies.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "browser.ping-centre.telemetry": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "browser.discovery.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "network.dns.disablePrefetch": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "network.dns.disablePrefetchFromHTTPS": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "network.predictor.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "network.captive-portal-service.enabled": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "network.dns.echconfig.enabled": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "network.trr.mode": {
+        "Value": 5,
+        "Status": "locked",
+        "Type": "number"
+      },
+      "network.http.sendRefererHeader": {
+        "Value": 2,
+        "Status": "locked",
+        "Type": "number"
+      },
+      "network.http.referer.XOriginPolicy": {
+        "Value": 1,
+        "Status": "locked",
+        "Type": "number"
+      },
+      "dom.security.https_only_mode": {
+        "Value": 1,
+        "Status": "locked",
+        "Type": "number"
+      },
+      "network.cookie.cookieBehavior": {
+        "Value": 5,
+        "Status": "locked",
+        "Type": "number"
+      },
+      "privacy.trackingprotection.enabled": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "privacy.trackingprotection.pbmode.enabled": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "privacy.trackingprotection.cryptomining.enabled": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "privacy.trackingprotection.fingerprinting.enabled": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "privacy.trackingprotection.emailtracking.enabled": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "privacy.trackingprotection.socialtracking.enabled": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "privacy.fingerprintingProtection.enabled": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "privacy.fingerprintingProtection.pbmode": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "privacy.fingerprintingProtection.overrides": {
+        "Value": "+AllTargets,-CSSPrefersColorScheme",
+        "Status": "locked",
+        "Type": "string"
+      },
+      "privacy.fingerprintingProtection.granularOverrides": {
+        "Value": "[{\"firstPartyDomain\":\"*\",\"overrides\":\"+AllTargets,-CSSPrefersColorScheme\"}]",
+        "Status": "locked",
+        "Type": "string"
+      },
+      "webgl.override-unmasked-renderer": {
+        "Value": "Mozilla",
+        "Status": "locked",
+        "Type": "string"
+      },
+      "webgl.override-unmasked-vendor": {
+        "Value": "Mozilla",
+        "Status": "locked",
+        "Type": "string"
+      },
+      "gfx.canvas.serialization.readback": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "gfx.canvas.hit-region": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "xpinstall.signatures.required": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "xpinstall.whitelist.required": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "extensions.installDistroAddons": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "extensions.autoDisableScopes": {
+        "Value": 0,
+        "Status": "locked",
+        "Type": "number"
+      },
+      "extensions.sideloadScopes": {
+        "Value": 15,
+        "Status": "locked",
+        "Type": "number"
+      },
+      "extensions.enabledScopes": {
+        "Value": 15,
+        "Status": "locked",
+        "Type": "number"
+      },
+      "app.update.auto": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "app.update.disabledForTesting": {
+        "Value": true,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "browser.chrome.errorReporter.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "security.ssl.errorReporting.enabled": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      },
+      "security.ssl.errorReporting.automatic": {
+        "Value": false,
+        "Status": "locked",
+        "Type": "boolean"
+      }
+    }
+  }
+}

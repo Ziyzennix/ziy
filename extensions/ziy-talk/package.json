@@ -1,0 +1,1 @@
+{"name":"ziy-talk","version":"1.0.0","private":true,"description":"Ziy Talk: the call surface (lobby, room link, control chips) and the handoff to a self-hosted Jitsi Meet. Workspace package for extensions/ziy-talk only; no build step, no dependencies, node:test for tests.","type":"commonjs","main":"lib/settings.js","scripts":{"test":"node --test test/"}}
