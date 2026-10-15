@@ -82,7 +82,11 @@ env:
   # The engine revision we build. Bump here and in the patch set together.
   GECKO_VERSION: "156.0.1"
   GECKO_TARBALL: "firefox-156.0.1.source.tar.xz"
-  GECKO_RELEASE_URL: "https://ftp.mozilla.org/pub/firefox/releases/156.0.1/source"
+  # The RELEASE ROOT. Layout, verified 2026-10-16: SHA512SUMS sits here; the
+  # source tarball lives under source/, which carries no SHA512SUMS (the
+  # second real run, 38795215736, died on the resulting 404 when this
+  # pointed at source/).
+  GECKO_RELEASE_URL: "https://ftp.mozilla.org/pub/firefox/releases/156.0.1"
   # Ubuntu 24.04 noble is what the local box runs; the apt package names and
   # versions in this workflow are the ones that actually satisfied
   # `./mach configure` there (proofs-deep-fork.md §3, §6).
@@ -231,7 +235,7 @@ jobs:
           # 1 MB/s local link (proofs-deep-fork.md §5).
           curl -C - --retry 20 --retry-delay 5 --retry-all-errors \
             -o "$GECKO_TARBALL" \
-            "$GECKO_RELEASE_URL/$GECKO_TARBALL"
+            "$GECKO_RELEASE_URL/source/$GECKO_TARBALL"
           ls -la "$GECKO_TARBALL"
 
       - name: "d2. checksum-verify against the published SHA512SUMS"
@@ -240,7 +244,9 @@ jobs:
           cd "$GITHUB_WORKSPACE/_src"
           # The checksum is read from Mozilla's own published file AT WORKFLOW
           # TIME — never hardcoded — so a re-cut release can't silently build
-          # something other than what we think we're building.
+          # something other than what we think we're building. The file sits
+          # at the release ROOT — source/ has none, and run 38795215736 died
+          # on the 404 that taught us so.
           curl -sSfLO "$GECKO_RELEASE_URL/SHA512SUMS"
           expected="$(grep 'source/'"$GECKO_TARBALL"'$' SHA512SUMS | awk '{print $1}')"
           if [ -z "$expected" ]; then
