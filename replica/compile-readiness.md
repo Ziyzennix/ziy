@@ -1871,8 +1871,69 @@ account, `Ziyzennix`. No other commit in the repo's history ever had it (checked
 `git log --grep=Codebuff --all`), and no tracked file mentions it. The displaced `84ce3e1`
 remains as a dangling object referenced only by the run that used it.
 
+---
+
+### 9.11 What run 38956545876 measured — the probe was a no-op, and the runner is three numbers instead of a table row
+
+Run **38956545876** (PUBLIC tier, head `0d6c3c7`, dispatched 2026-10-16 19:39:41Z, **cancelled
+on purpose at 5m26s**). The cancellation was the plan, not an accident: g2a's verdict was the
+deliverable, and — an operational fact worth keeping — **a live run's log is unreadable**
+(`gh run view --log` → 0 lines while in progress) while the *same* run's log became readable the
+moment it was cancelled. Every number below is from that log.
+
+**a. g2a's directory target does nothing — VERIFIED, and the "unverified" warning that said so
+was right.** `./mach build toolkit/library/rust` ran twice and returned **`pass 1: mach
+status=0`** and **`pass 2: mach status=0`** about a second apart (19:42:38.67 → 19:42:40.13),
+and both reports printed `verdict: NO-ARCHIVES-FOUND — nothing named libgkrust*.a (or
+*/release/*.a)`. The directory form is therefore a **silent no-op in this tree**: make in that
+objdir has no work to do unless the archive is wanted as a dependency of something bigger.
+The step's own comment had flagged exactly this form as unverified and been **warn-only** about
+it — which is how a broken probe became a courteous shrug instead of a loud failure. The fix is
+commit **`0aa4658`**: each pass is now a bounded full `timeout 1800 ./mach build` (the Rust half
+is minutes — run 38914407147 measured `Finished release profile … in 12m 32s` — against the C++
+half's four hours), the raw status is printed so a `124` timeout kill reads as expected rather
+than alarming, and the step **deletes the archive it measured** so g2b cannot inherit a target
+truncated by that kill (make cannot distinguish a half-written file from a finished one; the
+cargo artifacts stay cached in the objdir, so the cost is a re-archive, not a Rust rebuild).
+The A/B design is unchanged — only the target.
+
+**b. The tier is measured now, and the two tiers measured against each other.** Same log:
+`Mem: 15Gi`, `Swap: 8.0Gi` (the file step g1 creates), `/dev/root 145G 72G 73G 50% /`. The
+contrast is run 38954973352 (PRIVATE), which died 4m21s in because the runner could not write
+its **own** diagnostic log —
+`System.IO.IOException: No space left on device : '/home/runner/actions-runner/cached/2.337.0/_diag/Worker_20261016-192653-utc.log'`
+— leaving no usable log at all. So the private tier's disk is small **by measurement**, and its
+failure mode is a run that erases its own evidence. The doc tables' `14 GB SSD` row is now
+unverified in both directions: the public tier measures **145 GB**, not 14.
+
+**c. `PARALLELISM=1` on a 4-core runner — a RECOMMENDATION, deliberately NOT implemented.**
+The value is 1 core busy on a 4-core machine (run 38914407147's `/usr/bin/time -v`: "Percent of
+CPU this job got: 101%" across ~4 h). Changing it is the single cheapest speedup available, and
+it is deliberately held back: the dispatch that reads the archive's format must not also change
+the compile's concurrency, or the run's evidence carries two variables. **Recommendation:** set
+`MOZ_PARALLEL_BUILD` from `nproc` (4 on the public tier), after the archive question is closed.
+**Falsifier:** a raised-jobs run whose peak RSS climbs past ~13 GiB and whose `/usr/bin/time -v`
+shows swap thrash, or an OOM-kill in the log — then drop to 2, not back to 1.
+**Evidence that the value is the build's real bottleneck:** 101% CPU over a four-hour compile on
+a 4-core box, i.e. three cores idle for the whole run.
+
+**d. The disk guard prints and passes, and its floor is not binding on this tier.** `73 GB` free
+against the guard's 10 GiB floor, one `df` of cost. It was written for the private tier's disk —
+where it would have fired — and on the public tier it is a no-op. Keep it: the repo can be
+flipped back in one command, and that is exactly the case it protects.
+
+**e. `nproc` had never been printed by any run; it is printed now.** Added to the swap step
+(2026-10-17) alongside the `free -h` and `df -h` that were added for the same reason: the
+"2 CPU / 4 CPU" figures were table rows that no log had ever confirmed on the machine that ran
+the job. RAM and disk are now measured; CPU was the last of the three to stay quoted.
+
 **e. Where the question stands.** Two runs have now produced the same unreadable archive at the
 same link step, deterministically; one dispatch reached `g2a` and lost its output to a runner
 disk crash; the archive's format is **still unmeasured**. What is new is that the next dispatch
 is instrumented for both failure modes: the disk guard fails early with a name, and the probe's
 verdict appears in the run's summary even when the log does not survive.
+
+<!-- CORRECTION 2026-10-17: §9.10(e) above is preserved as written and is now PARTLY FALSE.
+     The "next dispatch" it describes (38956545876) ran, and it measured the probe rather than
+     the archive — see §9.11, which supersedes this item's last sentence. Nothing above is
+     deleted: the instrumented-dispatch reasoning is still the reasoning that produced it. -->

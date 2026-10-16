@@ -182,17 +182,28 @@ patch + prefs + policy) — `replica/deep-fork.md` §3; MV3 has no `storage` man
    while the residual tier kept blocking. `GUARANTEED_MINIMUM_STATIC_RULES` = 30 000;
    `MAX_NUMBER_OF_DYNAMIC_RULES` = 5000 (`extensions.dnr.max_number_of_dynamic_rules`);
    history-object quota per chain = 30 000 (`architecture.md` §4.3.4). `proofs-shields.md` §7.4, §45.
-10. **CI runs on a PRIVATE repo.** `ubuntu-latest` = **2 CPU / 8 GB**, metered at 2,000 min/month
+10. ~~**CI runs on a PRIVATE repo.**~~ **CORRECTED 2026-10-17: the repo is PUBLIC.**
+    `ubuntu-latest` = **4 CPU / 16 GB / 145 GB disk, free and unmetered** — all three MEASURED on a
+    runner (run 38956545876: `Mem: 15Gi`, `/dev/root 145G 72G 73G 50% /`), so a run now costs wall
+    time, not quota; the metered arithmetic below applies only if the repo is flipped back.
+    `ubuntu-latest` on a **PRIVATE** repo = **2 CPU / 8 GB**, metered at 2,000 min/month
     (free for public repos and self-hosted runners — that asymmetry is the whole cost decision).
     A cold Gecko build is ~12–28 h ≈ 720–1 680 min = the whole monthly allowance. Trigger is
     `workflow_dispatch`/tag only. ccache is saved under a stable key with `if: always()`.
     `compile-readiness.md` §5, `proofs-fix-ci.md` §5–§7.
-    **Update 2026-10-16 ~19:00 UTC — this rule is accurate again, and here is the window in
+    **Update 2026-10-16 ~19:00 UTC — `~~this rule is accurate again~~`, and here is the window in
     which it was not:** the repo spent roughly a day PUBLIC (verified PUBLIC on 2026-10-16,
     `replica/compile-readiness.md` §8.5), which is the runner tier the 2026-10-16 wave's runs
     (heads up to `dbe5670`) actually used. The co-owner moved it back to private, so the
     metered arithmetic above governs every future dispatch — including the diagnostic dispatch
-    `compile-readiness.md` §9 exists to justify. **Actions were verified live on the pushed
+    `compile-readiness.md` §9 exists to justify.
+    **STRUCK THROUGH 2026-10-17: the repo is PUBLIC again** (co-owner, 2026-10-16 ~19:35 UTC;
+    `gh repo view --json isPrivate` → `false`, re-read 2026-10-17). The private tier measured itself
+    by dying — run 38954973352, 4m21s in, `No space left on device` while the runner wrote its own
+    diagnostic log, leaving no usable log behind; the public tier measured `Mem: 15Gi` and
+    `/dev/root 145G` in run 38956545876. Full record: `replica/compile-readiness.md` §9.10–§9.11
+    (whose §9.11(c) holds the recorded `MOZ_PARALLELISM` recommendation) and the visibility
+    timeline in `AGENTS.md`. **Actions were verified live on the pushed
     repo (2026-10-15): `actions/permissions` → `enabled: true, allowed_actions: "all"`, and
     `build-gecko.yml` is `state: "active"` — the "private repos block Actions until manually
     enabled" worry was FALSE for this repo. `gh workflow run build-gecko.yml --ref main` works

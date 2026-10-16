@@ -46,7 +46,7 @@
 #     job got: 101%" over a 4-hour compile) wastes wall time, but changing the
 #     compile's concurrency in the same dispatch that reads the archive's format
 #     would put two variables into one run's evidence. Raising it is a RECORDED
-#     RECOMMENDATION with its own falsifier — compile-readiness.md §9.10(c) —
+#     RECOMMENDATION with its own falsifier — compile-readiness.md §9.11(c) —
 #     not an implemented change.
 #   * RAM is the binding constraint and it is now measured: 16 GB (15 GiB) plus
 #     the 8 GB swap file step g1 forces. The libxul link is a single ~5 GB
@@ -510,7 +510,7 @@ jobs:
           # the Rust archive's format, and changing the compile's concurrency in
           # the same run would put two variables into one run's evidence.
           # Raising it to `nproc` (4 here) is a RECORDED RECOMMENDATION with a
-          # falsifier, not an implemented change: compile-readiness.md §9.10(c).
+          # falsifier, not an implemented change: compile-readiness.md §9.11(c).
           # CORRECTION 2026-10-16: this comment used to read "PARALLELISM = 2"
           # above a line that sets 1 — a documented number that was never the
           # value in force; only the prose was fixed then. 3717e47 chose 1 and
@@ -1275,7 +1275,7 @@ jobs:
             echo "  4-core runner this leaves three cores idle (run 38914407147's"
             echo "  /usr/bin/time -v measured 101% CPU across ~4 hours). Raising"
             echo "  it is recorded as a recommendation with its own falsifier,"
-            echo "  not implemented: compile-readiness.md §9.10(c)."
+            echo "  not implemented: compile-readiness.md §9.11(c)."
             echo "- timeout-minutes: 720 = GitHub's MAXIMUM job timeout, kept at"
             echo "  the maximum. The old \"12-28h at 2 cores\" estimate is"
             echo "  superseded by measurement — this job reaches the link at"
