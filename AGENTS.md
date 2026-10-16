@@ -69,7 +69,7 @@ per-extension `store.js` header):
 | `extensions/ziy-sync/` | the E2E-encrypted sync chain; **the only ESM extension**, its libs shared with `native/` and `server/`. |
 | `extensions/ziy-desktop/` | app menu, import/export, default-browser status, 8 keyboard commands. |
 | `extensions/ziy-pwd/` | the native vault's UI; popup only, no options page, no fill path. |
-| `tools/` | build + verify + bootstrap + launcher + e2e harnesses; `tools/lib/` holds the shared helpers (`common.sh`, `omni-ja.py`, `zpxi.py`, `gen-tokens.sh`, `cleanroom-scan.py`). |
+| `tools/` | build + verify + bootstrap + launcher + e2e harnesses; `tools/lib/` holds the shared helpers (`common.sh`, `omni-ja.py`, `zpxi.py`, `gen-tokens.sh`, `cleanroom-scan.py`); `tools/ci/` holds CI-only diagnostics (`rust-archive-report.sh`, the tool that reports the format of a Gecko build's Rust static archives, plus its fixture test — see `replica/compile-readiness.md` §9). |
 | `shell/` | app-dir inputs: `application.ini`, pref defaults, `mozilla.cfg`, `policies-gen.py`, `preflight-prefs.py`, `ziy.desktop`, `brand-fallback/`, `omni.ja.patch/`, `extensions.list`. |
 | `native/` | the three native hosts: `ziy-sync-agent` + `ziy-pwd` (Node ESM, each with its own `lib/`, framing module and tests) and `ziy-blocks` (Rust, adblock-rust; engine built by `tools/build-blocks-engine.sh`). |
 | `server/` | the blind sync server: `src/server.js`, `src/store.js`, `lib/ziy-crypto.js`, `test/`. |
@@ -92,7 +92,7 @@ Run in this order. `build/`, `*.xpi`, `node_modules/`, `.ziy/` are gitignored
 # 0. get the tree. No git remote exists yet — `gh repo create` is the co-owner's action.
 git clone <repo> ziy && cd ziy          # or unzip the tree (replica/compile-readiness.md §1)
 
-# 1. unit tests for the whole extension suite (~1 min, 674 assertions)
+# 1. unit tests for the whole extension suite (12.4 s measured 2026-10-16; 641 tests)
 npm test                                # = node --test extensions/*/test
 
 # 2. build the app dir — this IS the product shell. --force is required once build/ziy exists.
@@ -299,6 +299,30 @@ works at runtime. The `patches/README.md` index lists all five; none is compiled
   `tools/build-shell.sh`. Anything above ~60 s of sustained CPU needs `nohup` +
   `nice`/`ionice` and a declared report line. The box is 4 cores / ~3.4 GiB available, and
   the `libxul` link alone is a ~5 GB process.
+- **GitHub is the active compile path now.** `build-gecko.yml` runs on `runs-on:
+  ubuntu-latest`. **The repo is PRIVATE as of 2026-10-16 ~19:00 UTC** — the co-owner moved
+  it back (it had been **public** since some point between 2026-10-15 and 2026-10-16 to
+  reach the 4 CPU / 16 GB free tier; the exact flip is not recorded). Private means
+  **2 CPU / 8 GB with METERED minutes** — 2,000/month on GitHub Free, usage *blocks* past
+  the quota with no payment method on file. Trigger with
+  `gh workflow run build-gecko.yml --ref main`; watch via `gh run watch`.
+  The one-engineering gotcha: the self-hosted runner (`actions-runner/`) was parked under
+  `/home/zen/Documents/brave but not chrome or firefox/...`, a path with a space. GitHub's
+  self-hosted executor mis-parses it (`/home/zen/Documents/brave: Is a directory`) and
+  `hashFiles()` dies too, so **never run the runner from a space-containing path** — move
+  the whole directory to something like `/home/zen/ziy-runner`. The hosted step b
+  (`sudo apt-get install …`) works there because self-hosted sudo has no password; on the
+  hosted tier apt works out of the box.
+- **Visibility is a decision, not a fact.** Public = 4 CPU / 16 GB, free and unmetered;
+  private = 2 CPU / 8 GB, metered (2,000 min/month free). It was made private for the
+  co-owner's privacy requirement, flipped public to buy the compile's runner tier, and
+  **set back to private by the co-owner on 2026-10-16 ~19:00 UTC** — before the change
+  `gh repo view Ziyzennix/ziy --json visibility,isPrivate` → `PUBLIC` / `false`, after it
+  `PRIVATE` / `true`. Both flips are recorded in `replica/compile-readiness.md` §8.5.
+  Cost consequence, plainly: every future dispatch is metered — the 2026-10-16 wave's
+  4 h 05 m run (38914407147) is ~245 minutes of the 2,000, and a cold 12–28 h build is the
+  whole allowance. `replica/AI-BRIEF.md` §2/§5 and `replica/compile-readiness.md` carry the
+  same state; keep all three in sync when it changes again.
 
 ---
 
@@ -306,19 +330,25 @@ works at runtime. The `patches/README.md` index lists all five; none is compiled
 
 ### The unit suite
 
-`npm test` runs `node --test extensions/*/test` — **674 assertions, 0 fails** (re-measured
-2026-10-16). The trailing `/` makes the glob tolerant of an extension with no `test/` dir.
+`npm test` runs `node --test extensions/*/test` — **641 tests, 0 fails, RC 0** (re-measured
+2026-10-16 19:10 UTC). The **674** this section and `replica/TODAY.md` used to quote does not
+reproduce: the per-area rows below were re-measured in the same pass, they sum to exactly 641,
+and `replica/proofs-compliance.md:80` records a *measured* `ℹ tests 674` from an earlier date —
+so 641 is today's number and the 33-test difference is **unexplained, not endorsed**
+(`replica/gaps-internal.md` row 7 already listed three disagreeing totals for this suite;
+`replica/compile-readiness.md` §9.8 adds this measurement to that row). The trailing `/` makes
+the glob tolerant of an extension with no `test/` dir.
 Per-extension `package.json` adds `"test": "node --test test/"` and `"type":"commonjs"`;
 `ziy-shell`/`ziy-sync` have none but are still swept by the glob. `server/` and `native/*`
 are outside it (ESM suites) — run them by path.
 
 | area | command | tests |
 | --- | --- | --- |
-| `extensions/ziy-shields/test` | `node --test extensions/ziy-shields/test` | 176 |
+| `extensions/ziy-shields/test` | `node --test extensions/ziy-shields/test` | 185 |
 | `extensions/ziy-talk/test` | `node --test extensions/ziy-talk/test` | 98 |
 | `ziy-news` / `ziy-playlist` | `node --test extensions/ziy-<name>/test` | 83 each |
 | `extensions/ziy-ntp/test` | `node --test extensions/ziy-ntp/test` | 81 |
-| `extensions/ziy-sync/test` | `node --test extensions/ziy-sync/test` | 52 |
+| `extensions/ziy-sync/test` | `node --test extensions/ziy-sync/test` | 55 |
 | `extensions/ziy-desktop/test` | `node --test extensions/ziy-desktop/test` | 27 |
 | `extensions/ziy-pwd/test` | `node --test extensions/ziy-pwd/test` | 19 |
 | `extensions/ziy-shell/test` | `node --test extensions/ziy-shell/test` | 10 |
@@ -329,8 +359,11 @@ are outside it (ESM suites) — run them by path.
 
 **These counts must not drop.** A change that narrows a suite must restore the coverage or
 record exactly what is no longer asserted, and why, in the proof doc. Shields is the
-sensitive row: its 176 include the static-matcher pinning that is the only thing between
-D-7 returning and a panel silently reporting `blocks=0`.
+sensitive row: its 185 include the static-matcher pinning that is the only thing between
+D-7 returning and a panel silently reporting `blocks=0`. (The two rows whose numbers moved in
+the 2026-10-16 re-measurement — shields 176 → 185, sync 52 → 55 — moved **up**, so no
+coverage was lost in the gap this section is warning about; the unexplained part is the
+total, not the shields row.)
 
 ### The acceptance gate — `tools/verify.sh`
 

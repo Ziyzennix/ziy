@@ -31,8 +31,12 @@
 # hypothetical public mirror, not the machine that will run this job.
 #
 # WHAT THAT MEANS FOR THIS JOB, stated plainly up front:
-#   * MOZ_PARALLEL_BUILD is 2, because 2 is this runner's core count. -j4 on a
-#     2-core box oversubscribes and makes the build slower, not faster.
+#   * MOZ_PARALLEL_BUILD is 1 in step e2 — one BELOW this runner's 2 cores,
+#     which is the value 3717e47 named in its subject (it has no commit body to
+#     cite). The measured effect, from run 38914407147's `/usr/bin/time -v`:
+#     "Percent of CPU this job got: 101%", i.e. the 4-hour compile ran
+#     effectively single-threaded. `-j4` on a 2-core box oversubscribes and
+#     makes the build slower, not faster.
 #   * 8 GB RAM is a real risk, not headroom: the workflow's own notes record the
 #     libxul link as a single ~5 GB process (proofs-deep-fork.md §7). On 8 GB
 #     with the OS and toolchain resident, that link has little margin.
@@ -171,6 +175,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             build-essential \
+            binutils \
+            file \
             clang-19 llvm-19 llvm-19-tools \
             cbindgen \
             nasm yasm \
@@ -194,6 +200,16 @@ jobs:
           # box needed /usr/lib/llvm-19/bin on PATH for `mach configure` to
           # find llvm-objdump (proofs-deep-fork.md §6 attempt 5).
           echo "/usr/lib/llvm-19/bin" >> "$GITHUB_PATH"
+          # ADDED 2026-10-16, for the libgkrust.a link failure of run
+          # 38914407147 (see step g2a). `binutils` and `file` are DECLARED here
+          # because tools/ci/rust-archive-report.sh depends on ar/readelf/nm and
+          # file(1) — NOT because they are suspected of producing the
+          # unreadable archive. Stated plainly, because the difference matters:
+          # build-essential already pulls binutils in (every run so far had a
+          # working `ar` and a working `ld`), and ubuntu-latest's image ships
+          # file(1). Naming them makes the archive diagnostics reliable on an
+          # image whose transitive set can change, and makes the dependency
+          # reviewable instead of implicit.
 
       # ------------------------------------------------------------------
       # c. rustup bootstrap. The PIN cannot be read here — the source tree
@@ -344,6 +360,28 @@ jobs:
           rustup toolchain install "$MIN" --profile minimal
           rustup default "$MIN"
           rustc --version; cargo --version
+          # DIAGNOSTIC ROSTER, added 2026-10-16 for the libgkrust.a link
+          # failure (step g2a). The open question is whether the archive holds
+          # ELF objects or LLVM bitcode. What the readers actually do was
+          # MEASURED on the dev box 2026-10-16 against a bitcode member
+          # (`clang-19 -emit-llvm -c`): binutils' `readelf` NAMES the format in
+          # its own error — "This is a LLVM bitcode file - try using
+          # llvm-bcanalyzer"; `llvm-bcanalyzer` READS it — "Stream type: LLVM
+          # IR"; and llvm-readelf/llvm-readobj REFUSE it ("bitcode files are
+          # not supported"). So this roster exists to make the reader that
+          # works available, and to put the roster itself in the run record:
+          # llvm-tools-preview ships llvm-* INSIDE the toolchain, and apt's
+          # llvm-19-tools (step b) provides the -19 suffixed ones.
+          # Non-fatal on purpose — this is a diagnostic aid, and a rustup hiccup
+          # must not fail a run. The roster below prints what this runner
+          # actually has, so a run where the component did not install is
+          # self-evident rather than assumed.
+          rustup component add llvm-tools-preview || \
+            echo "::warning::llvm-tools-preview did not install; the archive report falls back to binutils and apt's llvm-19 tools"
+          rustup target list --installed || true
+          rustup component list --installed || true
+          echo "rustc sysroot: $(rustc --print sysroot)"
+          find "$(rustc --print sysroot)" -maxdepth 6 -name 'llvm-*' -type f 2>/dev/null | sort | head -20 || true
           # cbindgen: noble's apt package is 0.26.0 — older than what the
           # tree expects; 0.29.4 is the version the provenance survey
           # recorded (line 111 above / proofs-deep-fork.md §3) and the newest
@@ -451,7 +489,7 @@ jobs:
           # The objdir name from the local proof (deep-fork.md §6.3).
           mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-ziy
 
-          # PARALLELISM = 2, the private-repo runner's core count.
+          # PARALLELISM = 1, one below the private-repo runner's core count.
           # `ubuntu-latest` on a PRIVATE repo is 2 CPU / 8 GB (GitHub-hosted
           # runners reference, "Standard GitHub-hosted runners for private
           # repositories"); the 4 CPU / 16 GB figure is the PUBLIC repo table.
@@ -460,6 +498,12 @@ jobs:
           # adds scheduler thrash on top of ~5 GB link processes competing for
           # 8 GB. A SELF-HOSTED runner has nproc=4; if you switch runs-on to
           # self-hosted, raise this to 4.
+          # CORRECTION 2026-10-16: this comment used to read "PARALLELISM = 2"
+          # above a line that sets 1 — a documented number that was never the
+          # value in force. The value is unchanged by this fix; only the prose
+          # is. 3717e47 chose 1 and named it in its subject; the run-38914407147
+          # `/usr/bin/time -v` record ("Percent of CPU this job got: 101%") is
+          # the measurement of what that choice produced.
           mk_add_options MOZ_PARALLEL_BUILD=1
 
           # A real (non-artifact) C++ build, stated explicitly so the log
@@ -682,24 +726,186 @@ jobs:
           sudo swapon /swapfile
           free -h
           swapon --show
-      - name: "g2. mach build (real C++ compile, /usr/bin/time -v)"
+      # ------------------------------------------------------------------
+      # g2a. the cheap probe — reach the ARCHIVE question in ~15 min instead of
+      #      at minute 241. This is the step that answers run 38914407147.
+      #
+      # THE FAILURE IT EXISTS FOR (run 38914407147, 2026-10-16, head dbe56703):
+      # the full build reached the libxul link at `241:23.55` and died at
+      # `241:34.09` with
+      #   W /usr/bin/ld: ../../../x86_64-unknown-linux-gnu/release/libgkrust.a:
+      #     error adding symbols: file format not recognized
+      #   E clang++-19: error: linker command failed with exit code 1
+      # — the system linker could not read the Rust static archive AT ALL. That
+      # run left nothing to follow up on: the runner is deleted, no step
+      # uploads the objdir, and the log holds no archive size, no member list
+      # and no member format. The local box cannot close it either — it has no
+      # engine source tree, and local compilation is prohibited (deep-fork.md
+      # §0). So the measurement has to happen on a runner, and it has to happen
+      # EARLY: this step builds only `toolkit/library/rust`, the directory that
+      # produces the archive, and reports the format of what came out.
+      #
+      # THE A/B — one variable, two invocations of the same target:
+      #   pass 1: MOZ_LTO_RUST_CROSS and RUST_SANCOV_FLAGS UNSET (the tree's own
+      #           state; the 6edee13 / 019bfe2 exports are dropped for this
+      #           invocation only). This is also where the check_binary gate —
+      #           the reason 6edee13 exists — actually fires, and its verbatim
+      #           message has never been recorded, only paraphrased.
+      #   pass 2: both set, i.e. byte-identical in env to g2b. It runs LAST on
+      #           purpose, so the archive g2b links is the one this step last
+      #           produced and never a probe leftover.
+      # The export's justification at 6edee13 was "No compile behaviour change",
+      # and that sentence is UNVERIFIED — a hand-set MOZ_LTO_RUST_CROSS makes
+      # rust.mk take the cross-language-LTO path while configure never enabled
+      # LTO, which is one way a Rust staticlib ends up in a shape binutils
+      # cannot read. If the two archives differ in format, the report names the
+      # suspect from evidence; if they are identical, that claim is falsified
+      # and the same run proves it. RUST_SANCOV_FLAGS is deliberately NOT A/B'd
+      # here — one variable at a time; it is the next candidate.
+      #
+      # WHAT THIS STEP CANNOT DO: fail the job for its own machinery. A nonzero
+      # `mach` status in either pass is a ::warning:: (the `./mach build <dir>`
+      # form is unverified on this tree — no local source tree exists to check
+      # it against, and guessing is worse than measuring), and the gate trips
+      # only on an archive that is EMPTY or that is not an `ar` archive at all
+      # (tools/ci/rust-archive-report.sh --gate, which documents why those two
+      # and no others): the two conditions that cannot be fixed by continuing,
+      # and therefore the only ones worth aborting before a 4-hour link.
+      # ------------------------------------------------------------------
+      - name: "g2a. probe: build only the Rust archive, A/B MOZ_LTO_RUST_CROSS, report its format"
         run: |
           set -euxo pipefail
           cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
           export PATH="$HOME/.cargo/bin:/usr/lib/llvm-19/bin:$PATH"
-          # Mozilla's check_binary gate greps Rust .a for networking syscalls.
-          # Firefox 156 fails with "recv,send" from the 1.90 stdlib; setting
-          # MOZ_LTO_RUST_CROSS causes the guard to be skipped (see rust.mk:
-          # `ifndef MOZ_LTO_RUST_CROSS`). No compile behaviour change.
+          REPORT="$GITHUB_WORKSPACE/tools/ci/rust-archive-report.sh"
+          FINGERPRINT_1="$GITHUB_WORKSPACE/rust-probe-unguarded.fingerprint"
+          FINGERPRINT_2="$GITHUB_WORKSPACE/rust-probe-guarded.fingerprint"
+
+          echo "::group::g2a pass 1 — the tree's own state (both exports dropped)"
+          P1=0
+          env -u MOZ_LTO_RUST_CROSS -u RUST_SANCOV_FLAGS \
+            /usr/bin/time -v ./mach build toolkit/library/rust \
+            2>&1 | tee "$GITHUB_WORKSPACE/rust-probe-unguarded.log" || P1=${PIPESTATUS[0]}
+          echo "pass 1: mach status=$P1"
+          if [ "$P1" -ne 0 ]; then
+            echo "::warning::the unguarded probe exited $P1 — if this is the check_binary gate, its verbatim output is the tail below"
+            tail -n 40 "$GITHUB_WORKSPACE/rust-probe-unguarded.log" || true
+          fi
+          bash "$REPORT" --objdir obj-ziy || true
+          : > "$FINGERPRINT_1"
+          while IFS= read -r a; do
+            [ -n "$a" ] || continue
+            printf 'unguarded %s %s %s\n' "$(stat -c%s "$a")" \
+              "$(head -c 1048576 "$a" | sha256sum | awk '{print $1}')" "$a" >> "$FINGERPRINT_1"
+          done < <(find obj-ziy -type f -name 'libgkrust*.a' 2>/dev/null | sort)
+          echo "::endgroup::"
+
+          echo "::group::g2a pass 2 — the g2b env (MOZ_LTO_RUST_CROSS=1, RUST_SANCOV_FLAGS=1), run LAST so g2b inherits this archive"
+          export MOZ_LTO_RUST_CROSS=1
+          export RUST_SANCOV_FLAGS=1
+          P2=0
+          /usr/bin/time -v ./mach build toolkit/library/rust \
+            2>&1 | tee "$GITHUB_WORKSPACE/rust-probe-guarded.log" || P2=${PIPESTATUS[0]}
+          echo "pass 2: mach status=$P2"
+          if [ "$P2" -ne 0 ]; then
+            echo "::warning::the guarded probe exited $P2 — the tail below says why; the full build in g2b may still reach the link"
+            tail -n 40 "$GITHUB_WORKSPACE/rust-probe-guarded.log" || true
+          fi
+          : > "$FINGERPRINT_2"
+          while IFS= read -r a; do
+            [ -n "$a" ] || continue
+            printf 'guarded %s %s %s\n' "$(stat -c%s "$a")" \
+              "$(head -c 1048576 "$a" | sha256sum | awk '{print $1}')" "$a" >> "$FINGERPRINT_2"
+          done < <(find obj-ziy -type f -name 'libgkrust*.a' 2>/dev/null | sort)
+          echo "--- A/B fingerprint: size, head-1MiB sha256, path ---"
+          sed 's/^/  /' "$FINGERPRINT_1" || true
+          sed 's/^/  /' "$FINGERPRINT_2" || true
+          # The empty-file case is called out separately and BEFORE the cmp:
+          # two empty fingerprints compare equal, and 'IDENTICAL archives' would
+          # then be a false exoneration of the export. "Nothing was produced" is
+          # a different answer from "the same thing was produced twice".
+          if [ ! -s "$FINGERPRINT_1" ] || [ ! -s "$FINGERPRINT_2" ]; then
+            echo "A/B verdict: NOT COMPARABLE — at least one pass produced no libgkrust*.a. Read the two reports above: NO-ARCHIVES-FOUND means the directory target did not build the archive (the ./mach build <dir> form is unverified on this tree), NOT that the archive is healthy."
+          elif cmp -s "$FINGERPRINT_1" "$FINGERPRINT_2"; then
+            echo "A/B verdict: IDENTICAL archives (size + first MiB) — MOZ_LTO_RUST_CROSS/RUST_SANCOV_FLAGS do not change this archive, so the export is exonerated for the link failure"
+          else
+            echo "A/B verdict: the two archives DIFFER — see the two reports above; that difference is the evidence, and compile-readiness.md §9 carries the ranked hypotheses it decides between"
+          fi
+          echo "::endgroup::"
+
+          # Final report on the archive g2b will link, in gate mode. This is also
+          # the cross-check for "did the file change between the probe and the
+          # link": g2b's failure path prints the same head-1MiB sha256.
+          if ! bash "$REPORT" --objdir obj-ziy --gate; then
+            echo "::error file=tools/ci/rust-archive-report.sh::the Rust static archive is empty or is not an ar archive — a link against it cannot succeed. Evidence above; see replica/compile-readiness.md §9."
+            exit 1
+          fi
+
+      # ------------------------------------------------------------------
+      # g2b. the full build. Renamed from `g2` on 2026-10-16 when g2a was
+      # inserted; compile-readiness.md §7 and §8 call this step `g2` — same step,
+      # same command, same env.
+      # ------------------------------------------------------------------
+      - name: "g2b. mach build (real C++ compile, /usr/bin/time -v) — the step compile-readiness.md §7-§8 call 'g2'"
+        run: |
+          set -euxo pipefail
+          cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
+          export PATH="$HOME/.cargo/bin:/usr/lib/llvm-19/bin:$PATH"
+          # The check_binary gate greps Rust .a for networking syscalls; the
+          # 6edee13 commit added this comment and this export together:
+          #   "Mozilla's check_binary gate greps Rust .a for networking syscalls.
+          #    Firefox 156 fails with \"recv,send\" from the 1.90 stdlib; setting
+          #    MOZ_LTO_RUST_CROSS causes the guard to be skipped (see rust.mk:
+          #    `ifndef MOZ_LTO_RUST_CROSS`). No compile behaviour change."
+          # WHAT THIS REPO CAN AND CANNOT VERIFY about that, as of 2026-10-16:
+          #   * the guard is real in the sense that it is what 6edee13 exists to
+          #     bypass — but the earlier runs it was blamed for (38870954684,
+          #     38880761558) return NO log from `gh run view --log-failed` any
+          #     more, so their failure message is UNVERIFIED here. That is a
+          #     reason for g2a pass 1 to run WITHOUT the export and record the
+          #     gate's own words.
+          #   * "No compile behaviour change" is UNVERIFIED. It appears in no
+          #     proof doc and in no commit body (6edee13's message is its
+          #     subject line). It is now the leading suspect for the libgkrust.a
+          #     link failure: a hand-set MOZ_LTO_RUST_CROSS makes rust.mk take
+          #     the cross-language-LTO path while configure enabled no LTO at
+          #     all.
+          #   * the archive has never been OBSERVED to link. Run 38901074475
+          #     (head 019bfe2, which already carries this export) got its Rust
+          #     lib built and died later, at the crashhelper link; 38914407147
+          #     and the in-flight 38923396937 are the only runs that ever
+          #     reached the libxul link, and the first failed there on this
+          #     archive's format.
+          # g2a A/B's the export and prints both archives' formats. Do NOT
+          # delete these two exports before reading its verdict: without them
+          # the build stops earlier, at the guard, and the link question is
+          # never reached.
           export MOZ_LTO_RUST_CROSS=1
           export RUST_SANCOV_FLAGS=1
           # /usr/bin/time -v records wall clock, peak RSS (the number that
           # tells us how close the 8 GB private-repo ceiling we are cutting)
           # and CPU.
-          /usr/bin/time -v ./mach build 2>&1 | tee "$GITHUB_WORKSPACE/build-time.log"
-          # `set -e` does not see a failure through a pipe; the exit status
-          # is in PIPESTATUS.
-          test "${PIPESTATUS[0]}" -eq 0
+          BUILD_RC=0
+          /usr/bin/time -v ./mach build 2>&1 | tee "$GITHUB_WORKSPACE/build-time.log" || BUILD_RC=${PIPESTATUS[0]}
+          # `set -e` does not see a failure through a pipe, and PIPESTATUS is
+          # read immediately, so the step exits with MACH's status — not tee's.
+          if [ "$BUILD_RC" -eq 0 ]; then
+            echo "mach build: OK"
+            exit 0
+          fi
+          # FAILURE PATH: gather the evidence this run exists to produce, then
+          # fail exactly as before. The gkrust archives are still on disk here —
+          # the runner is about to be deleted, and nothing else uploads the
+          # objdir (step h uploads the packaged tarball only).
+          echo "::error file=.github/workflows/build-gecko.yml::mach build failed with status $BUILD_RC — reporting the Rust archive format before re-exiting with the same status"
+          echo "== memory (libxul links peak ~5.5 GB: /usr/bin/time -v recorded 'Maximum resident set size (kbytes): 5497500' on run 38914407147) =="
+          free -h || true
+          echo "== disk (a truncated archive would mean a full filesystem) =="
+          df -h . || true
+          bash "$GITHUB_WORKSPACE/tools/ci/rust-archive-report.sh" --objdir obj-ziy || true
+          echo "== build-time.log tail (last 60 lines) =="
+          tail -n 60 "$GITHUB_WORKSPACE/build-time.log" || true
+          exit "$BUILD_RC"
 
       - name: "g3. ccache statistics"
         run: |
@@ -941,7 +1147,9 @@ jobs:
             echo ""
             echo "- runner: ubuntu-latest on a PRIVATE repo = **2 CPU / 8 GB**"
             echo "  (the 4 CPU / 16 GB figure is the public-repo table)"
-            echo "- parallelism: MOZ_PARALLEL_BUILD=2 (this runner's core count)"
+            echo "- parallelism: MOZ_PARALLEL_BUILD=1 (this runner has **2"
+            echo "  cores**; 1 is the value 3717e47 set, and run 38914407147's"
+            echo "  /usr/bin/time -v measured 101% CPU for it)"
             echo "- timeout-minutes: 720 = GitHub's MAXIMUM job timeout. It is"
             echo "  kept at the maximum on purpose: one full Gecko build at 2"
             echo "  cores is estimated **12-28h** wall, which EXCEEDS the cap, so"

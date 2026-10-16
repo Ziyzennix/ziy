@@ -61,7 +61,7 @@ re-fetching anything.
 | --- | --- |
 | git repo at the project root | **PRESENT.** Initialised 2026-10-15 (`git init -b main`, git 2.43.0), **two commits** on `main`: `786f85b` *"Ziy browser: Gecko-branded shell, 9-extension MV3 suite, tooling, replica record"* (the initial commit, 463 tracked files) and `99d407f` *"Record repo creation: private repo pushed, Blocker 1 cleared, Actions verified active"* (2026-10-15 22:26, which updated `replica/AI-BRIEF.md` and `replica/compile-readiness.md`). Both are pushed — local `main` tracks `origin/main` at 0 ahead / 0 behind. |
 | GitHub remote | **PRESENT and PUSHED — https://github.com/Ziyzennix/ziy** (PRIVATE). Created by the co-owner (`gh repo create ziy --private --source=. --remote=origin --push`); first push attempt was **rejected** because the OAuth token lacked the `workflow` scope, which GitHub requires to push `.github/workflows/build-gecko.yml`. The co-owner re-authorised (`gh auth refresh -h github.com -s workflow`), after which `git push -u origin main` succeeded. Local and remote `main` both at the same commit (initially `786f85b`; the follow-up `99d407f` was pushed the same day). |
-| repo visibility | **PRIVATE**, verified after the push: `gh repo view --json visibility,isPrivate` → `"visibility": "PRIVATE"`, `"isPrivate": true`, `pushedAt 2026-10-15T15:20:21Z`. |
+| repo visibility | **PRIVATE**, verified after the push: `gh repo view --json visibility,isPrivate` → `"visibility": "PRIVATE"`, `"isPrivate": true`, `pushedAt 2026-10-15T15:20:21Z`. **PRIVATE again as of 2026-10-16 ~19:00 UTC**, after a **PUBLIC window** that this row did not record (verified PUBLIC on 2026-10-16 — `replica/compile-readiness.md` §8.5 — and flipped back at the co-owner's request): re-read immediately before the change `PUBLIC`/`false`, immediately after `PRIVATE`/`true`. The public window was not an accident — it bought the 4 CPU / 16 GB free tier — but it is also why the metered arithmetic in §5 rule 10 now applies to every future dispatch. |
 | Actions state | **ENABLED, no UI step needed.** `gh api repos/Ziyzennix/ziy/actions/permissions` → `{"enabled":true,"allowed_actions":"all","sha_pinning_required":false}`. `gh api repos/Ziyzennix/ziy/actions/workflows` → **1 workflow, `state: "active"`**: `build-gecko` at `.github/workflows/build-gecko.yml` (id 385699008). Both endpoints returned 200 — nothing here is `unverified`. |
 | Actions workflow dispatch | **AVAILABLE** — the workflow file landed and is active, and its `on:` block carries `workflow_dispatch` (input `note`, string) plus tag triggers. Dispatch manually with `gh workflow run build-gecko.yml --ref main` then `gh run watch`, or from `/actions/workflows/build-gecko.yml`. |
 | `gh` CLI | **PRESENT and authenticated** as **`Ziyzennix`** (`gh` 2.45.0, https protocol, keyring). Token scopes are now `delete_repo, gist, read:org, repo, workflow` — **`workflow` is the scope any push touching `.github/workflows/` needs**; without it GitHub rejects the whole ref with `refusing to allow an OAuth App to create or update workflow ... without workflow scope`. Nothing else about the token changed. |
@@ -186,7 +186,13 @@ patch + prefs + policy) — `replica/deep-fork.md` §3; MV3 has no `storage` man
     (free for public repos and self-hosted runners — that asymmetry is the whole cost decision).
     A cold Gecko build is ~12–28 h ≈ 720–1 680 min = the whole monthly allowance. Trigger is
     `workflow_dispatch`/tag only. ccache is saved under a stable key with `if: always()`.
-    `compile-readiness.md` §5, `proofs-fix-ci.md` §5–§7. **Actions were verified live on the pushed
+    `compile-readiness.md` §5, `proofs-fix-ci.md` §5–§7.
+    **Update 2026-10-16 ~19:00 UTC — this rule is accurate again, and here is the window in
+    which it was not:** the repo spent roughly a day PUBLIC (verified PUBLIC on 2026-10-16,
+    `replica/compile-readiness.md` §8.5), which is the runner tier the 2026-10-16 wave's runs
+    (heads up to `dbe5670`) actually used. The co-owner moved it back to private, so the
+    metered arithmetic above governs every future dispatch — including the diagnostic dispatch
+    `compile-readiness.md` §9 exists to justify. **Actions were verified live on the pushed
     repo (2026-10-15): `actions/permissions` → `enabled: true, allowed_actions: "all"`, and
     `build-gecko.yml` is `state: "active"` — the "private repos block Actions until manually
     enabled" worry was FALSE for this repo. `gh workflow run build-gecko.yml --ref main` works

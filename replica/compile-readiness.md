@@ -1356,6 +1356,14 @@ later. So every wave run could only restore by prefix match,
 never the exact-key fast path the step's comment documents. `path: ~/.cache/ccache`
 is now present on g5.
 
+**Verified in a real run, 2026-10-16 (§9.9e).** Run 38914407147's `e1` restored a
+*prefix* hit (`Cache hit for restore-key: ccache-gecko-156.0.1-c4cdaa3c…-38910465453`,
+415,154,840 B = 396 MB — the §8.2 entry, exactly as predicted), and its `g5` then saved
+the **stable key for the first time in the wave** (`Cache saved with key:
+ccache-gecko-156.0.1-c4cdaa3c23fba2388245c4d573c19cb456870422089b3c0f290e7655388cde2b`,
+730,791,001 B = 697 MiB), with `g5b` saving the run-scoped key beside it. So this fix is no
+longer a review claim: the gap it closed is visible in the run's own logs.
+
 ### 8.4 The self-hosted runner, from inside its own logs
 
 `cd589ed` ("Switch build-gecko.yml to self-hosted runner") IS the co-owner-run
@@ -1374,9 +1382,39 @@ directory '/home/zen/Documents/brave but not chrome or firefox/actions-runner/_w
 exclusively since (runs 38880270809 onward). Nothing else occupies step b's 59 s
 failure; the apt step itself was fine in the neighbouring runs.
 
-### 8.5 The PUBLIC/PRIVATE contradiction in the workflow's cost tables (decision pending)
+### 8.5 The PUBLIC/PRIVATE contradiction in the workflow's cost tables — CLOSED 2026-10-16
 
-`gh repo view Ziyzennix/ziy --json visibility` → **`PUBLIC`** (verified 2026-10-16).
+**CLOSED.** The co-owner moved the repo back to **PRIVATE** on **2026-10-16 ~19:00 UTC**,
+and the state was read either side of the change with the same command the finding used:
+before → `{"isPrivate":false,"name":"ziy","visibility":"PUBLIC"}`; after →
+`{"isPrivate":true,"visibility":"PRIVATE"}`. So every PRIVATE-repo number the workflow
+prints is true again, and the metered arithmetic in §5 governs every future dispatch.
+**The finding below is kept verbatim, because the public window is part of the record** —
+it is the runner tier that the 2026-10-16 wave's runs (heads up to `dbe5670`,
+`gh run list --json`) actually ran on, and that is why "4 CPU / 16 GB" appears in no
+measurement in this doc.
+
+Two corrections to the paragraph, from measuring run 38914407147 (2026-10-16, §9):
+
+1. `MOZ_PARALLEL_BUILD=1` is *not* "deliberate per its commit message" — **`3717e47` has no
+   commit body at all** (`git show -s --format=%B 3717e47` → the subject line only, which does
+   name the variable). The value is deliberate; the evidence is the subject line, not a body.
+2. The CPU figure is now measured, not inferred: `MOZ_PARALLEL_BUILD=1` produced
+   **`Percent of CPU this job got: 101%`** over a 4 h 01 m 40 s `mach build`
+   (`/usr/bin/time -v`, run 38914407147). The "200% CPU with the old `-j2` config" claim in
+   the paragraph below is corroborated by the pair, and "the runner's own `nproc` is NOT
+   printed by any run" is still true — no run prints it.
+4. **The 16 GB public tier of that run is now measured, not read off a table.** Its swap
+   step printed `Mem: 15Gi total, 14Gi available / Swap: 8.0Gi` and `mkswap` reported
+   `size = 8 GiB (8589930496 bytes)` (§9.9c). So "2 CPU / 8 GB" was wrong for it — the
+   private-repo row the workflow's comments were quoting was not the machine that ran it.
+   The core count is still unmeasured (`nproc` appears in no log); RAM is not.
+3. The e2 `.mozconfig` comment that read *"PARALLELISM = 2"* above a line setting `1` — the
+   prose half of this contradiction — is fixed in the same commit batch as §9, together with
+   step j's summary echo (`MOZ_PARALLEL_BUILD=2` → `1` + the measured 101%). It was a wrong
+   number in a comment, never a wrong build.
+
+`gh repo view Ziyzennix/ziy --json visibility` → **`PUBLIC`** (verified 2026-10-16 — as of then).
 The workflow's header, the e2 mozconfig comment and step j's summary echo still print
 the PRIVATE-repo columns: *"2 CPU / 8 GB"*, *"MOZ_PARALLEL_BUILD=2 … this runner's
 core count"*, *"METERED minutes, 2 000/month, usage BLOCKS"*, and the 12–28 h
@@ -1450,3 +1488,293 @@ never printed in the failed-step log we hold (clang's summary only, see the tail
 but it is bypassed WHOLESALE (with the subtree gone there is no link to fail), so
 risk no longer applies to the resumable wave. The co-owner may revisit for a
 real root-case in a later session if crash reporting is ever wanted in the engine.
+
+---
+
+## 2026-10-16 — run 38914407147: the libxul link dies on `libgkrust.a`, and from now on the
+## archive's FORMAT is measured on the runner (step g2a + `tools/ci/rust-archive-report.sh`)
+
+**Written:** 2026-10-16, 19:00–20:00 UTC. **Trigger:** the co-owner pasted the failing job's
+log excerpt (`/usr/bin/ld: …/libgkrust.a: error adding symbols: file format not recognized`)
+and asked for the diagnostic change; then asked for the repo to go back to **private**, and
+for the docs to be **checked rather than trusted**. **Method:** read-only `gh` — `run list
+--json databaseId,headSha,status,conclusion,createdAt,updatedAt`, the full `--log` of
+38914407147 (4558 lines), `--job` step status of the in-flight run; local fixture verification
+of the new tool; three edits to `.github/workflows/build-gecko.yml`; two new files underneath
+`tools/ci/`. **No workflow dispatch, no local Gecko compilation** (deep-fork.md §0 intact).
+
+### 9.1 The run, re-verified against the API
+
+| run | head | created (UTC) | updated (UTC) | elapsed | outcome |
+| --- | --- | --- | --- | --- | --- |
+| 38923396937 | `dbe5670` | 15:22:26 | — | ≥3 h 37 m at 19:00 | **IN FLIGHT** at this write: a–f, g1 and the swap step all ✓, `g2` running |
+| **38914407147** | `dbe5670` | 14:16:15 | 18:21:39 | 4 h 05 m 24 s | **failure — `g2`, the libxul link (this section)** |
+| 38910465453 | `3717e47` | 13:46:31 | 13:49:43 | 3 m 12 s | failure — swap ETXTBSY (§8.3) |
+| 38901074475 | `019bfe2` | 12:31:08 | 13:34:22 | 63 m 14 s | failure — crashhelper link (§8.2) |
+| 38880761558 | `1b852cd` | 09:29:05 | 09:52:50 | 23 m 45 s | failure — `g2` (message **unretrievable**, §9.3) |
+| 38870954684 | `1b3c6f9` | 08:01:40 | 08:20:56 | 19 m 16 s | failure — `g2` (message **unretrievable**, §9.3) |
+
+**§8.1's table cross-checks clean:** every head matches, and every elapsed figure lands within
+5 s of §8.1's (the difference is which pair of timestamps is subtracted). Two word-level
+corrections belong to it, recorded here rather than rewritten in place: §8.1's "superseded by
+the `3717e47` dispatch six minutes later" is **2 m 25 s** by the API (13:44:06 → 13:46:31),
+and §8.5's "`MOZ_PARALLEL_BUILD=1` (3717e47, deliberate per its commit message)" overstates
+the evidence — **`3717e47` has no commit body**; its subject line names the variable, and that
+is the whole record. (§8.5 itself is now CLOSED — the visibility flip — see its new head.)
+
+**Two runs overlapped.** 38914407147 ran 14:16 → 18:21 while 38923396937 started at 15:22 on
+the *same head* (`dbe5670`) and was still inside `g2` at 19:00. The workflow has no
+`concurrency:` group, and both runs save the same stable ccache key in step g5. While the repo
+was public that overlap was free; **it is metered minutes now** (§8.5), so it is recorded as a
+cost observation for the co-owner rather than changed here: a
+`concurrency: {group: build-gecko, cancel-in-progress: false}` would serialize dispatches
+without ever cancelling an in-flight build, and nothing in the workflow does that today.
+
+### 9.2 The failure, verbatim
+
+```
+18:19:52.5046471Z 240:14.87 xpcom/string
+18:19:56.1846617Z 240:18.55 xpcom/threads
+18:20:42.5753874Z 241:04.94 xpfe/appshell
+18:21:01.1907963Z 241:23.55 toolkit/library/build/libxul.so
+18:21:11.2920552Z 241:33.65 W /usr/bin/ld: ../../../x86_64-unknown-linux-gnu/release/libgkrust.a: error adding symbols: file format not recognized
+18:21:11.7298640Z 241:34.09 E clang++-19: error: linker command failed with exit code 1 (use -v to see invocation)
+18:21:11.7339818Z 241:34.10 E gmake[4]: *** [/home/runner/work/ziy/ziy/_src/firefox-156.0.1/config/rules.mk:519: ../../../dist/bin/libxul.so] Error 1
+18:21:11.7344801Z 241:34.10 E gmake[3]: *** [/home/runner/work/ziy/ziy/_src/firefox-156.0.1/config/recurse.mk:79: toolkit/library/build/target] Error 2
+18:21:11.7353625Z 241:34.10 E gmake[2]: *** [/home/runner/work/ziy/ziy/_src/firefox-156.0.1/config/recurse.mk:34: compile] Error 2
+18:21:11.7360088Z 241:34.10 E gmake[1]: *** [/home/runner/work/ziy/ziy/_src/firefox-156.0.1/config/rules.mk:345: default] Error 2
+18:21:11.7364790Z 241:34.10 E gmake: *** [client.mk:58: build] Error 2
+18:21:11.8380949Z 241:34.20 W 155 compiler warnings present.
+18:21:18.0572644Z Command exited with non-zero status 2
+```
+
+Read with the clock in view:
+
+- the link **began** at `241:23.55` and died at `241:34.09` — **10 seconds later**. A libxul
+  link on this tree is minutes of work, so ld rejected an input early in its list, which is
+  what an unreadable file does.
+- the archive's own target ran at **`14:04.71`** (`toolkit/library/rust/libgkrust.a` — the mach
+  label for the rule), 12 m 32 s after cargo printed
+  ``Finished `release` profile [unoptimized] target(s) in 12m 32s``. The linker read the file
+  **4 h 16 m later**, and nothing in a build writes that path in between.
+- `/usr/bin/time -v`, whole step: `Elapsed (wall clock) time … 4:01:40`,
+  `User time (seconds): 13688.69`, `System time (seconds): 1021.98`,
+  `Percent of CPU this job got: 101%`, `Maximum resident set size (kbytes): 5497500`
+  (5.24 GiB — this is §8.2's "~5 GB link process" figure, now measured on the link that
+  failed), `Major (requiring I/O) page faults: 1594` (no swap thrash).
+
+### 9.3 What the log does NOT contain — the honest boundary
+
+- **No cargo/rustc command line.** mach prints target labels, not invocations, and `./mach
+  build` ran without `-v`. Which flags rustc received — in particular whether rust.mk adds
+  anything of the cross-language-LTO family once `MOZ_LTO_RUST_CROSS=1` is in the environment
+  — is **unverified**.
+- **No archive size, member list or member format.** Nothing uploads the objdir (step h
+  uploads `dist/*.tar.*` and `build-time.log`), the runner is deleted, and the bytes are gone.
+- **No disk numbers anywhere**, and `grep -i "no space\|ENOSPC"` over all 4558 lines: **0
+  hits**. A full filesystem truncating the archive is therefore neither shown nor excluded.
+  (Refined by §9.9d against the co-owner's downloaded per-step logs: RAM **and** swap numbers
+  DO exist — the swap step prints `free -h` and `swapon --show` — while disk still appears in
+  no step. "No disk" was right; "no resource numbers" would not have been.)
+- **The earlier `g2` failures' messages are unretrievable:** `gh run view --log-failed` returns
+  **0 lines** for 38870954684, 38880761558 and 38901074475 in this environment, while
+  38914407147 returns all 4558. So §8.1's "`g2. mach build` failure" rows stay what they are —
+  a step name, not a message — and **the check_binary gate's own words have never been
+  recorded**. That is precisely why g2a's first pass runs with the export removed.
+- **`hg.mozilla.org` is unreachable from this box:** both `raw-file/<rev>/config/makefiles/
+  rust.mk` fetches timed out (20 s; `releases/mozilla-release` and `mozilla-central`).
+  rust.mk's real handling of `MOZ_LTO_RUST_CROSS` is **unverified here**, and no claim in this
+  section rests on it.
+
+### 9.4 Hypotheses — ranked, ALL unverified, each with its falsifier
+
+1. **H1 (leading): the archive's MEMBERS are LLVM bitcode**, so binutils' ld can add no
+   symbols from it. *For:* that is the failure class (the file is not a usable link input);
+   the one environment difference between the runs that never reached the link and the one
+   that did is `MOZ_LTO_RUST_CROSS=1` (6edee13, hand-set — `--enable-lto` appears nowhere in
+   e2's `.mozconfig`); and that commit's justification, "No compile behaviour change", is
+   unverified prose. *Newly supported (§9.9a, from the co-owner's downloaded per-step logs):*
+   **the linker in this run is BFD** — `checking for target linker... bfd` and
+   `checking for host linker... bfd` — so no bitcode-capable linking path exists in this
+   command at all: if the members are bitcode, this link *cannot* succeed, which makes the
+   format the single question left to measure. *Falsifier:* g2a reports
+   `ARCHIVE-OF-ELF-OBJECTS` **and** the A/B verdict says the guarded and unguarded archives are
+   identical.
+2. **H2: the container itself is malformed** — zero bytes, a partial write, or something that
+   is not an `ar` archive at all. *For:* nothing. *Against:* the file existed 4 h 16 m before
+   the link with nothing writing it, and no ENOSPC appears in the log. *Falsifier:*
+   `tools/ci/rust-archive-report.sh --gate` fails the run on exactly this class, so this is
+   the one hypothesis a single dispatch can settle at minute ~15.
+3. **H3: a toolchain/target mismatch** (objects built for a different triple, or an `ar`/`ld`
+   incompatibility). *For:* nothing measured. *Against:* `g1`'s log shows `checking for rust
+   host triplet... x86_64-unknown-linux-gnu` and the same for the target, and the path ld read
+   is that same triple's own output directory.
+4. **H4: the link command itself mis-read the archive** (a flag that made ld take the file
+   without the plugin it needed). *For:* uncheckable as written — the invocation is not in the
+   log. *Against, and this is now partly closed (§9.9a/§9.9b):* the linker is bfd and **no LTO
+   exists anywhere in the run** — `grep -rn -i lto` over all 20 downloaded step logs returns
+   only the workflow's own comment and export lines, the `.mozconfig` as written has no LTO
+   option, and configure ran no LTO check. So there was no bitcode-capable linker in this run
+   for a flags bug to have invoked. *Falsifier:* still the invocation itself, on the next
+   failure; if a plugin or `-flto`-family flag appears there, H4 climbs again.
+
+### 9.5 What changed in this batch
+
+`.github/workflows/build-gecko.yml`:
+
+- **step b** — `binutils` and `file` added to the apt list, **declared as dependencies of the
+  diagnostics and explicitly not as a fix**: `build-essential` already pulls binutils in (every
+  run so far had a working `ar` and a working `ld`), and the image ships `file(1)`. The step
+  comment says exactly that, so nobody later reads the line as "binutils fixed the link".
+- **step d4** — `rustup component add llvm-tools-preview` (non-fatal) plus the installed
+  target/component roster and the sysroot's `llvm-*` listing: the runner's own tool set goes
+  into the record instead of being assumed.
+- **new step g2a** — two invocations of `./mach build toolkit/library/rust`, the cheap
+  directory target, each followed by the report. **Pass 1 drops both exports**
+  (`env -u MOZ_LTO_RUST_CROSS -u RUST_SANCOV_FLAGS`), which also records the check_binary
+  gate's verbatim words for the first time; **pass 2 sets them and runs last**, so the archive
+  g2b links is the one pass 2 produced and never a probe leftover. Then the A/B fingerprint
+  (size + head-1 MiB sha256) and `--gate` on the final archive. A nonzero `mach` status in
+  either pass is a `::warning::`, never a failure: the `./mach build <dir>` form is
+  **unverified** on this tree, and guessing is worse than measuring.
+- **step g2 → g2b** — same command, same env, plus the failure path: `free -h`, `df -h`, the
+  full report, `build-time.log`'s tail, then **`exit "$BUILD_RC"`**. The step now exits with
+  *mach's* status (read from `PIPESTATUS[0]` immediately after the pipeline) instead of a bare
+  `test "${PIPESTATUS[0]}" -eq 0`, so the status can no longer be lost behind `tee`.
+- **comment corrections** — the "No compile behaviour change" sentence is labelled UNVERIFIED
+  and dated to 6edee13; step e2's `PARALLELISM = 2` comment (whose value was, and is, 1) and
+  step j's summary echo are corrected to the value in force, with the 101 % measurement
+  attached; the header's `MOZ_PARALLEL_BUILD is 2` line likewise.
+
+`tools/ci/rust-archive-report.sh` (new) prints the tool roster, the disk and objdir size, and
+for each `libgkrust*.a`: size, head-1 MiB sha256, the first 8 bytes in octal and hex, the
+container class, `file(1)`, the member count and the first members, and the first object
+member's magic, `file(1)`, `readelf`, LLVM-reader and `llvm-bcanalyzer` output. `--gate` exits
+1 on **only** the two provably-unlinkable container conditions (empty, or not an `ar`
+archive); an archive of bitcode is reported loudly and does **not** trip it, because aborting a
+run on a *suspected* member format would throw away that run's ccache progress while the report
+already carries the answer.
+
+`tools/ci/rust-archive-report.test.sh` (new) is the fixture test below.
+
+### 9.6 Local verification of the tool — this box, no dispatch, no Gecko
+
+```
+$ bash tools/ci/rust-archive-report.test.sh
+PASS  elf.a        gate_rc=0  verdict: ARCHIVE-OF-ELF-OBJECTS — a normal link input
+PASS  bitcode.a    gate_rc=0  verdict: ARCHIVE-OF-LLVM-BITCODE — binutils cannot add these symbols; …
+PASS  thin.a       gate_rc=0  verdict: THIN-ARCHIVE — readable by BFD ld while the member paths resolve
+PASS  empty.a      gate_rc=1  verdict: EMPTY (0 bytes) — UNLINKABLE
+PASS  text.a       gate_rc=1  verdict: NOT-AN-ARCHIVE (NOT-AN-ARCHIVE) — UNLINKABLE by any ar reader
+PASS  usage        rc=2
+PASS  no-objdir
+PASS  bare-file
+PASS  readelf-names
+PASS  bcanalyzer-reads
+
+10 passed, 0 failed, 0 skipped
+```
+
+The fixtures are real bytes, not stand-ins: `clang-19 -c` for the ELF member,
+`clang-19 -emit-llvm -c` for the bitcode member, `ar rcsT` for the thin archive. **Two of the
+ten cases exist because the first run of this file failed them — and both failures were in the
+TEST, not the tool.** `ar rcs` *updates* an archive in place, so the "bitcode" fixture was
+really elf.a plus a member, and the tool correctly called it `ARCHIVE-OF-ELF-OBJECTS`; and the
+reader assertions were aimed at a bare `.bc` file, which the tool reports at container level by
+design. The test now removes each path before archiving it and asserts on an `ar` container —
+the shape of the real failure. Both fixes are commented in the test, because a fixture that
+lies is worse than no fixture.
+
+The readers were measured against a bitcode member rather than assumed:
+
+```
+first_object_member_readelf:
+  readelf: Error: This is a LLVM bitcode file - try using llvm-bcanalyzer
+first_object_member_llvm-readelf-19 --file-header:
+  llvm-readelf-19: warning: '…/member': bitcode files are not supported
+first_object_member_llvm-readobj-19 --file-header:
+  llvm-readobj-19: warning: '…/member': bitcode files are not supported
+first_object_member_llvm-bcanalyzer-19 (summary — 'Stream type' is the format):
+  Summary of …/member:
+           Total size: 17952b/2244.00B/561W
+          Stream type: LLVM IR
+```
+
+So binutils' `readelf` **names** the format, `llvm-bcanalyzer` **reads** it, and the LLVM
+*object* readers refuse it. The d4 comment's first draft claimed the opposite (that the LLVM
+object readers could read bitcode); this fixture falsified that sentence, and it is corrected
+in place rather than quietly dropped.
+
+### 9.7 What the next dispatch answers, and what it costs
+
+In the first ~15–30 minutes of a dispatch (g2a), before anything is spent on the C++ side:
+
+1. the check_binary gate's **verbatim** message, if it fires with the exports removed;
+2. the **format of the archive** in both environments, with sizes, magics, member lists and
+   reader output;
+3. the **A/B verdict** — whether `MOZ_LTO_RUST_CROSS`/`RUST_SANCOV_FLAGS` change the archive at
+   all, which is what H1 stands or falls on;
+4. the objdir size and filesystem free space that this doc has never had.
+
+If the gate trips (empty, or not an `ar` archive), the job stops there — the only condition
+worth aborting on. If it passes, `g2b` continues to the real build and the link, and its
+failure path prints the same report so the probe-time and link-time fingerprints can be
+compared.
+
+**Cost, stated plainly, because this is now metered:** reaching the libxul frontier took
+**245 minutes** of runner time on the public tier (run 38914407147, 4 h 05 m). On the private
+tier that is the same build at 2 cores / 8 GB, and it is billed. The cheap probe is therefore
+not a luxury: it moves the question from minute 241 to minute ~20.
+
+### 9.8 The docs re-check (asked for, and done)
+
+**Verified against the API / git, not taken on trust:**
+
+| claim | where | result |
+| --- | --- | --- |
+| the wave table (heads + elapsed) | §8.1 | **accurate** — all heads match, elapsed within 5 s |
+| §8.2's head, 38901074475 = `019bfe2` | §8.2 | **accurate** |
+| §8.3's head, 38910465453 = `3717e47` | §8.3 | **accurate** |
+| "superseded six minutes later" | §8.1 | **corrected**: 2 m 25 s |
+| "deliberate per its commit message" | §8.5 | **corrected**: no commit body exists |
+| `MOZ_PARALLEL_BUILD = 2` | e2 comment | **corrected**: the value is 1; the run measured 101 % CPU |
+| `MOZ_PARALLEL_BUILD=2` | step j echo | **corrected**: 1 |
+| "No compile behaviour change" | 6edee13's comment | **relabelled UNVERIFIED** — it is in no proof doc and no commit body |
+| repo visibility | §8.5, AI-BRIEF §2/§5, AGENTS.md | **updated** to PRIVATE (2026-10-16 ~19:00 UTC), public window recorded |
+| `npm test` total = **674** | AGENTS.md (×2), TODAY.md, and `gaps-internal.md` row 7 | **re-measured 2026-10-16 19:10 UTC: 641 tests, 0 fail, RC 0, 12.4 s.** The per-area rows were re-measured in the same pass — shields **185** (doc: 176), talk 98, news 83, playlist 83, ntp 81, sync **55** (doc: 52), desktop 27, pwd 19, shell 10 — and they sum to **exactly 641**. Both moved rows moved *up*, so no coverage was lost; the 33-test gap against the earlier *measured* `ℹ tests 674` (`proofs-compliance.md:80`) is **unexplained and recorded, not resolved**. `server/test` 18, `native/ziy-pwd/test` 35, `native/ziy-blocks/test` 13 all reproduce as documented. |
+| LLVM readers can read bitcode | d4 comment (this batch) | **falsified by the fixture and corrected** before it ever ran |
+
+**Could not be verified here, and is labelled as such in place:** the check_binary gate's
+message; rust.mk's handling of `MOZ_LTO_RUST_CROSS` (no source tree on this box, hg.mozilla.org
+unreachable); the archive's on-runner format; the in-flight run's outcome at the time of
+writing; and `--disable-crashreporter`'s §8.7 reasoning, which stays a static read of the tree
+rather than a compile.
+
+### 9.9 The co-owner's downloaded per-step log set — what it verified that `gh` would not
+
+**Added 2026-10-16 ~02:2x (box clock) / 2026-10-16 ~19:2x UTC.** The co-owner downloaded this
+run's logs to `/home/zen/Documents/logs/build-gecko/` — **20 files, 436 KB**, of which
+`14_g2. mach build (real C++ compile, _usr_bin_time -v).txt` (182 KB) is the whole build and
+`12_g1. mach configure.txt` the whole configure. `system.txt` dates the run
+(`Requested labels: ubuntu-latest`, `14:16:17.981Z`; `45_Complete job` closes it at
+`18:21:38.036Z`), and the download's own step name is `14_g2. …` — the **pre-patch** name, which
+independently dates the set and confirms the failing run used the workflow without `g2a`.
+
+That set is a better instrument than the aggregated log: it is the *whole* output, locally
+greppable, for every step. What it settled:
+
+| # | finding | evidence (file:line) | effect on §9 |
+| --- | --- | --- | --- |
+| a | **The linker is BFD** — not gold, not lld | `12_g1:63` `checking for target linker... bfd`; `12_g1:78` `checking for host linker... bfd` | H1's *consequence* becomes a certainty: with a BFD linker and no plugin, an archive of bitcode **cannot** link. Format still unmeasured — g2a's job. |
+| b | **No LTO anywhere in the run** | `grep -rn -i lto` over all 20 files returns only the workflow's comment/export lines (`14_g2:5,7,8,9,31,32`); `10_e2:164-…` is the `.mozconfig` as written, with no LTO option; `12_g1` has no LTO check | H4 loses its plausible variant: there was no bitcode-capable linker to mis-invoke. |
+| c | **RAM and swap measured: `Mem: 15Gi` / `Swap: 8.0Gi`** | `13_prepare swap:50` `Mem: 15Gi … 14Gi` (available) and `:51` `Swap: 8.0Gi`; `:45` `size = 8 GiB (8589930496 bytes)`; `:54` `/swapfile file 8G 0B -2` | The run was on the **16 GB public tier** — §8.5's "8 GB" reading of it was the wrong row of the table, and §8.5's "no run prints the runner's numbers" was wrong for RAM (it never printed `nproc`). |
+| d | **Disk numbers: still none** | `grep -rn "Filesystem\|Avail"` → comment text only (`7_d3`, `11_f`) | §9.3/§9.4 unchanged: H2 stays unfalsified by this evidence, and the new report prints `df -h`. |
+| e | **The ccache lineage closed, and §8.3's `path:` fix has run evidence** | `9_e1:25` `Cache hit for restore-key: …c4cdaa3c…-38910465453`, receipt `:28` `415154840` B (396 MB — the §8.2 entry); `17_g5:23` `Cache saved with key: …c4cdaa3c…` (upload `730791001` B = 697 MiB); `18_g5b:34` saves the run-scoped key | §8.2's "the next dispatch resumes warm" is confirmed, and the **stable key was finally written** — the missing-`path` bug is closed with a log, not a review. |
+| f | **Toolchain as executed:** clang 19.1.1 (`1ubuntu1~24.04.2`), rustc/cargo **1.90.0**, cbindgen 0.29.4 | `3_b:1023`; `8_d4:57,59`; `8_d4:157` | Every pin in the docs is the pin that ran. |
+| g | `check_binary` appears **only** in the workflow's own echoed comment — the guard printed nothing with `MOZ_LTO_RUST_CROSS=1` set | `14_g2:5,6` | **Weak** (a passing guard is also silent, and without the export this run's guard behaviour is unobservable). Recorded, not leaned on. |
+| h | **On failure, nothing is uploaded — not even `build-time.log`** | the set has no `h.`/`i.`/`i2.` step files; `45_Complete job` shows the job ending at the failure | The job log is the *only* copy of a failed run's numbers. **Recommendation, not implemented** (cost is the co-owner's): give step `h` an `if: always()` bundle of `build-time.log` + `rust-probe-*.log`, so a failed run's evidence outlives job-log retention. |
+
+**What the set did NOT add** — the same three gaps §9.3 records, unchanged: the archive's
+format, size and members; any cargo/rustc invocation (no `-v`, and mach prints labels); any
+disk number. Those are exactly what `g2a` and `tools/ci/rust-archive-report.sh` now capture on
+the runner itself.
