@@ -471,6 +471,8 @@ jobs:
           # ac_add_options --disable-tests) AND declared in this tree at
           # moz.configure:92. Fetched 2026-10-15.
           ac_add_options --disable-tests
+          # Avoid the crashhelper link that fails on the hosted build.
+          ac_add_options --disable-crashreporter
 
           # The fast-config pair from the local experiment (deep-fork.md
           # §6.3): no optimization, no debug symbols. --disable-optimize
