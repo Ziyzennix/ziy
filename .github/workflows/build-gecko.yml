@@ -189,7 +189,7 @@ jobs:
             build-essential \
             binutils \
             file \
-            clang-19 llvm-19 llvm-19-tools \
+            clang-19 llvm-19 llvm-19-tools lld-19 \
             cbindgen \
             nasm yasm \
             ccache \
@@ -532,18 +532,19 @@ jobs:
           # Avoid the crashhelper link that fails on the hosted build.
           ac_add_options --disable-crashreporter
 
-          # The fast-config pair from the local experiment (deep-fork.md
-          # §6.3): no optimization, no debug symbols. --disable-optimize
-          # also appears in Mozilla's reference; --disable-debug-symbols
-          # is declared in this tree at
-          # build/moz.configure/toolchain.configure:2258.
-          # NOTE: --disable-debug is deliberate NOT set. Mozilla's reference
-          # explicitly recommends --enable-debug for C++ patch work
-          # ("invaluable when writing patches"), but the local proof's
-          # config disabled it for speed and this job is about producing a
-          # relinkable artifact, not debugging one. Patch debugging happens
-          # on the local box, which is §6.4's recorded path.
-          ac_add_options --disable-optimize
+          # Linker compatibility: cross-language Rust/C++ LTO emits LLVM
+          # bitcode members in libgkrust.a. GNU ld cannot consume those members
+          # unless its LTO plugin is correctly wired; use LLVM lld explicitly
+          # and enable Gecko's supported cross-language LTO mode instead of
+          # setting MOZ_LTO_RUST_CROSS by hand. This is a real optimized build.
+          # Keep debug symbols disabled to limit artifact size.
+          # Use Gecko's supported configuration so Rust and C++ participate
+          # in cross-language ThinLTO. Previously MOZ_LTO_RUST_CROSS was forced
+          # manually while --disable-optimize left C++ outside the LTO path;
+          # GNU ld then rejected LLVM bitcode in libgkrust.a.
+          ac_add_options --enable-optimize
+          ac_add_options --enable-lto=cross
+          ac_add_options --enable-linker=lld
           ac_add_options --disable-debug-symbols
 
           # Telemetry: the tree declares NO --disable-telemetry option.
@@ -1002,8 +1003,6 @@ jobs:
           # delete these two exports before reading its verdict: without them
           # the build stops earlier, at the guard, and the link question is
           # never reached.
-          export MOZ_LTO_RUST_CROSS=1
-          export RUST_SANCOV_FLAGS=1
           # /usr/bin/time -v records wall clock, peak RSS (the number that
           # tells us how close the 8 GB private-repo ceiling we are cutting)
           # and CPU.
