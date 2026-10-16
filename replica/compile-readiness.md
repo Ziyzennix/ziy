@@ -1192,12 +1192,17 @@ and it is the single best piece of engineering in the workflow.
 Dispatched 2026-10-15 **20:08:08Z**, headSha `2b93248` (which contains the `f25a467`
 ceiling fix — verified: `git merge-base --is-ancestor f25a467 2b93248`).
 
-**Observed state as of `2026-10-15T20:25:48Z`:** job `116644506539`, `in_progress`.
-Step timings: steps 1–12 (checkout, toolchain, rustup, d1–d4, e1, e2, **f**, **g1
+**Observed state as of `2026-10-15T20:25:48Z` (struck through 2026-10-16 — see §8 for
+the outcome):** ~~job `116644506539`, `in_progress`.~~ **OUTCOME (§8): `failure` —
+completed 20:31:11Z, failed at `g2. mach build` with exit 143, "The runner has received
+a shutdown signal … or a manually started runner is canceled" (`jobs/116644506539/logs`,
+2026-10-15T20:31:09Z). That is an INFRA kill, not a compile error; g2 had run 18 m 30 s
+(20:12:39Z → 20:31:09Z).** Step timings: steps 1–12 (checkout, toolchain, rustup, d1–d4, e1, e2, **f**, **g1
 mach configure**) all `success`, completed by **20:12:39Z**. Step **13 `g2. mach
-build`** is `in_progress` since 20:12:39Z — i.e. **the cold Gecko compile started at
-20:12:39Z on 2 cores** and had run **~13 min** at time of writing. Everything
-downstream (`g3`–`j`) is `pending`. **This is a still-running note, not an outcome.**
+build`** is ~~`in_progress` since 20:12:39Z — i.e. the cold Gecko compile started at
+20:12:39Z on 2 cores and had run ~13 min at time of writing. Everything
+downstream (`g3`–`j`) is `pending`.~~ **started 20:12:39Z, killed by the runner shutdown
+signal at 20:31:09Z (18.5 min of compilation, then the job died from the outside).**
 
 The ccache is cold: `gh api repos/Ziyzennix/ziy/actions/caches` lists exactly **one**
 entry, `ccache-gecko-156.0.1-c4cdaa3c…-38797207327`, **size 662 bytes** (restored by
@@ -1220,10 +1225,11 @@ the per-step REST endpoint above is the only live view.
 
 ### 7.6 Recommended next action
 
-1. **Nothing to dispatch.** Run 5 is the first run carrying the ceiling fix; it is
+1. ~~**Nothing to dispatch.** Run 5 is the first run carrying the ceiling fix; it is
    already in `g2` compiling. Re-running `build-gecko.yml` would queue a second
    12–28 h job (GitHub queues runs of the same workflow) against the same 2 000-min
-   monthly allowance.
+   monthly allowance.~~ **STRIKED 2026-10-16: run 5 was infra-killed mid-`g2` (see the
+   outcome above §7.5). Twelve further dispatches follow — the full record is §8.**
 2. **Watch for the cap timeout** at `timeout-minutes: 720` (~2026-10-16 08:12Z if the
    job is not cancelled first). A cap timeout is a documented acceptable outcome, not
    a defect — re-dispatch with a raised cap and the existing ccache to continue.
@@ -1240,3 +1246,157 @@ the per-step REST endpoint above is the only live view.
 and whether the patched C++ actually *compiles* — both are unanswerable until run 5
 completes. Everything above is observed from live `gh` output and the repo's own
 history.
+
+---
+
+## 2026-10-16 — the hosted-run wave: `g1 mach configure` PASSES, `g2 mach build`
+## reached 63 min deep, two workflow bugs fixed (swap + cache-save path)
+
+**Written:** 2026-10-16. **Trigger:** the co-owner pasted the check log of
+run `38910465453` (head `3717e47`). **Method:** read-only `gh` (run list, jobs API,
+job logs, `--log-failed`) on every 2026-10-15/16 run + local `git log`; two surgical
+edits to `.github/workflows/build-gecko.yml` (below); **no local Gecko compilation,
+no workflow dispatch, no pushes as of this writing.**
+
+### 8.1 The wave, verified from the jobs API (UTC)
+
+| run id | head | started | elapsed | end |
+| --- | --- | --- | --- | --- |
+| 38794333725 | `062a4a6` | 10-15 19:29 | 59 s | `c2` — cd-order bug (recorded §7.1) |
+| 38799494703 | `2b93248` | 10-15 20:08 | 23 m 00 s | **`g2` — exit 143 INFRA kill**: "The runner has received a shutdown signal … or a manually started runner is canceled" (`jobs/116644506539/logs`, 20:31:09Z). 18 m 30 s of compilation thrown away by the runner, not by code |
+| 38870954684 | `1b3c6f9` | 10-16 08:01 | 19 m 11 s | `g2. mach build` failure (first `g2` reach on this engine; superseded by later fixes) |
+| 38876162898 | `cd589ed` | 10-16 08:48 | 59 s | step b + hashFiles — see 8.4 (self-hosted space path) |
+| 38880270809 | `1b852cd` | 10-16 09:24 | — | cancelled |
+| 38880761558 | `1b852cd` | 10-16 09:29 | 23 m 41 s | `g2. mach build` failure |
+| 38901006659 | `6edee13` | 10-16 12:30 | — | cancelled |
+| **38901074475** | `019bfe2` | 10-16 12:31 | **63 m 09 s** | **`g2` — the `crashhelper` link died** (see 8.2) |
+| 38910145529 | `f0406cf` | 10-16 13:44 | 4 m 03 s | cancelled (superseded by the `3717e47` dispatch six minutes' later) |
+| **38910465453** | `3717e47` | 10-16 13:46 | 3 m 07 s | **`prepare swap` — ETXTBSY on `/swapfile`** (see 8.3, FIXED) |
+
+— plus the four runs 1–4 recorded in §7.1. The steps below configure are all `success`
+in every 10-16 run to reach them: **d1–d4, e1–e2, f (all five patches apply, 5/5, since
+`f25a467`), and `g1. mach configure` — the Ziy patch set loads AND configure accepts
+`--enable-ziy-fingerprinting`** ("Configure complete!", `0:23.76`, run 38910465453
+13:49:35Z). `019bfe2` ("mark Rust lib as non-sanitized", `RUST_SANCOV_FLAGS=1`) and
+`6edee13` ("bypass networking symbol check") each cleared a real `mach build` gate.
+
+**Patch-set note.** Step f's nozzle prints, from patch 0002's
+`ziy_fingerprinting_gate_check` (patches/0002 §138): *"checking that the Ziy gate is
+consistent with the shipped prefs... no"*. On CI that "no" is the EXPECTED branch: the
+check's candidate files are `shell/mozilla.cfg` and
+`shell/browser/defaults/preferences/ziy.js` — paths INSIDE the pristine engine tree,
+which never carries the Ziy shell (the shell is applied to the packaged app dir later
+by `tools/build-shell.sh`). Both `os.path.exists` → false → `continue` → check exits
+clean. The gate itself is ON (the e2 `.mozconfig` line), so the check's alarm path is
+unreachable-and-unneeded by construction rather than by luck.
+
+### 8.2 The deepest failure so far: run 38901074475, the `crashhelper` link (63 m 09 s)
+
+The compile ran **60 min of wall clock** (`/usr/bin/time -v`: `1:00:28`, 200% CPU =
+2-way parallel, peak RSS `3 332 580 kB` = 3.2 GB — far under the 16 GB public-runner
+ceiling), reached `toolkit/crashreporter/crash_helper/crashhelper` and died at
+`0:60:27.10`:
+
+```
+E clang++-19: error: linker command failed with exit code 1 (use -v to see invocation)
+E gmake[4]: *** [.../config/rules.mk:406: ../../../dist/bin/crashhelper] Error 1
+E gmake[3]: *** [.../config/recurse.mk:79: toolkit/crashreporter/crash_helper/target] Error 2
+```
+
+`f0406cf` ("disable crashreporter to bypass helper link") added
+`ac_add_options --disable-crashreporter` to the e2 `.mozconfig`. **Untested as of this
+writing** — run 38910145529 (which carried it) was cancelled at 4 m, and run
+38910465453 died on the swap step before ever reaching g2.
+
+ccache lineage: this run's `g5b` save produced the **396 MB** entry
+(`ccache-gecko-156.0.1-c4cdaa3c…-38901074475` — the first non-trivial cache of the
+wave) carrying the surviving Rust + baseline C++ objects with ccache stats
+"(direct) hit rate 33.8%" snapshot in the log. Run 38910465453 restored exactly that
+("Cache hit for restore-key: …-38901074475", "Cache Size: ~396 MB (415164920 B)",
+"Cache restored successfully") and — via its own g5b — re-saved it under
+`…-38910465453`. The next dispatch resumes warm.
+
+### 8.3 Run 38910465453 — the reported failure, and both fixes (this commit)
+
+**Failure, quoted verbatim** (`jobs/117004711751/logs`):
+
+```
++ sudo fallocate -l 8G /swapfile
+fallocate: fallocate failed: Text file busy
++ sudo dd if=/dev/zero of=/swapfile bs=1M count=8192
+dd: failed to open '/swapfile': Text file busy
+##[error]Process completed with exit code 1.
+```
+
+`Text file busy` = **ETXTBSY — an active swapfile cannot be opened for writing.**
+`ubuntu-latest` resolves to an ubuntu-24.04 image on this run ("Image: ubuntu-24.04",
+image 20261012.334.1, in the job log's Runner Image block) and the image ships with
+`/swapfile` ALREADY ON as swap, so the step's very first write refused. The whole
+run died at minute 3 in a step added by its own head commit.
+
+**Fix 1 — swap step (this commit).** `swapoff` a `/swapfile` that `swapon --show=NAME`
+reports active (exact-match, not substring: `/mnt/swapfile` must not match), then
+`rm -f`, `fallocate -l 8G`, `chmod 600`, `mkswap`, `swapon`, and END the step with
+`free -h` + `swapon --show` so the run record finally carries the image's swap+RAM
+numbers (the numbers run 5 wanted and never got). Review notes recorded in the step
+comment: (a) a review variant that *skipped* creation when `/swapfile` is already
+active was rejected — the shipped swap size is unverified and the step's purpose
+(`3717e47`) is a KNOWN 8G link window; (b) a `truncate -s` fallback was rejected —
+safer-looking, but it sparsifies and `swapon(8)` refuses files with holes;
+`fallocate` allocates real extents, so if it fails we want the loud minute-4 failure.
+
+**Fix 2 — the stable cache key was never written (latent, same wave).** Step `g5`
+(`actions/cache/save@v4`) ran WITHOUT the `path` input — the log shows
+`[warning]Input required and not supplied: path` then `Cache save failed` on the
+stable-key save; the run-scoped `g5b` (which carries `path`) succeeded one step
+later. So every wave run could only restore by prefix match,
+never the exact-key fast path the step's comment documents. `path: ~/.cache/ccache`
+is now present on g5.
+
+### 8.4 The self-hosted runner, from inside its own logs
+
+`cd589ed` ("Switch build-gecko.yml to self-hosted runner") IS the co-owner-run
+runner at `/home/zen/Documents/brave but not chrome or firefox/actions-runner/` —
+which `replica/AI-BRIEF.md` §5 and compile-readiness already name as the
+space-in-path trap. Run 38876162898 died in the workflow TEMPLATE evaluation, quoting
+the trap verbatim:
+
+```
+The template is not valid. .github/workflows/build-gecko.yml (Line: 727, Col: 16):
+hashFiles('patches/*.patch, patches/*.toml') failed. Fail to hash files under
+directory '/home/zen/Documents/brave but not chrome or firefox/actions-runner/_work/ziy/ziy'
+```
+
+`1b852cd` switched back to `runs-on: ubuntu-latest`. The hosted runner has been used
+exclusively since (runs 38880270809 onward). Nothing else occupies step b's 59 s
+failure; the apt step itself was fine in the neighbouring runs.
+
+### 8.5 The PUBLIC/PRIVATE contradiction in the workflow's cost tables (decision pending)
+
+`gh repo view Ziyzennix/ziy --json visibility` → **`PUBLIC`** (verified 2026-10-16).
+The workflow's header, the e2 mozconfig comment and step j's summary echo still print
+the PRIVATE-repo columns: *"2 CPU / 8 GB"*, *"MOZ_PARALLEL_BUILD=2 … this runner's
+core count"*, *"METERED minutes, 2 000/month, usage BLOCKS"*, and the 12–28 h
+estimate derived from those. On the public tier the table is **4 CPU / 16 GB RAM,
+free unlimited minutes** (docs.github.com hosted-runners tables), which makes:
+(a) the swap step insurance rather than survival; (b) `MOZ_PARALLEL_BUILD=1`
+(3717e47, deliberate per its commit message) vs 4 available cores a costed decision;
+(c) the 720-min cap a real risk for a 60-min-past-case compile only if the full build
+is ~12× today's frontier, which the 4-core table makes less likely than the header's
+13–46× arithmetic says. **No change has been made here — cost policy is the
+co-owner's. The recorded facts: 200% CPU was observed with the old -j2 config; the
+runner's own `nproc` is NOT printed by any run so the 4-core count is still the docs'
+table, not a measured fact.**
+
+### 8.6 What this section leaves open
+
+- Image's actual swap budget, RAM, disk and `nproc` — now guaranteed to print on the
+  next run (end of the swap step: `free -h` + `swapon --show`).
+- Whether `--disable-crashreporter` (f0406cf) genuinely bypasses the crash-helper
+  link failure — untested; the next dispatch reaches `g2` past the fixed swap step
+  and answers it within ~63 min of work, warm cache.
+- Whether the five C++ patches compile — unchanged: still APPLIED-ONLY per §7.4;
+  no run has reached the objdir inside libxul's rust/C++ weave yet (63-min frontier,
+  libxul content dominant at the end).
+- TODAY.md §3's run history has NOT been edited from here (its maintainer owns it);
+  this §8 is the evidence base for that update.
