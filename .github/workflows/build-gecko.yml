@@ -645,13 +645,43 @@ jobs:
           ./mach configure
 
       - name: "prepare swap to avoid linker memory (hosted runner)"
+        # FIX (run 38910465453, job 117004711751, 2026-10-16): the first
+        # version of this step died in three seconds. `ubuntu-latest` resolves
+        # to an ubuntu-24.04 image ("Image: ubuntu-24.04", image 20261012.334.1
+        # in the run-5 job log) that ships with /swapfile ALREADY ON as swap,
+        # so `fallocate -l 8G /swapfile` failed with
+        #   "fallocate: fallocate failed: Text file busy"
+        # and the dd fallback with
+        #   "dd: failed to open '/swapfile': Text file busy"
+        # — ETXTBSY: an ACTIVE swapfile cannot be opened for writing. Both
+        # targets of the || failed and `set -e` killed the job before the
+        # build began. The fix is to swap the existing /swapfile OFF first
+        # (no-op when it is not active), then replace it with our own 8G one.
         run: |
           set -euxo pipefail
-          sudo fallocate -l 8G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=8192
+          # The runner image's /swapfile is ALREADY ON. Run 38910465453 proved
+          # it: both write attempts died with ETXTBSY ("Text file busy" — an
+          # active swapfile cannot be opened for writing). A variant of this
+          # fix that skipped recreation when /swapfile is active was rejected
+          # (review 2026-10-16): the shipped swap size is UNVERIFIED (run 5
+          # died before free -h ran) and the point of this step is a KNOWN 8G
+          # window for the libxul/rust links — so swapoff + replace, not skip.
+          # swapoff on a fresh pre-build VM is cheap (swap usage ~0).
+          # `truncate -s` was rejected as a fallocate fallback on purpose: it
+          # makes a SPARSE file and `swapon` refuses files with holes —
+          # fallocate allocates real extents; if it fails here we want a loud
+          # failure at minute 4, not a hidden one at swapon.
+          if sudo swapon --noheadings --show=NAME 2>/dev/null | grep -qx '/swapfile'; then
+            echo "the image ships /swapfile active — swapping off before replacing"
+            sudo swapoff /swapfile 2>/dev/null || true
+          fi
+          sudo rm -f /swapfile
+          sudo fallocate -l 8G /swapfile
           sudo chmod 600 /swapfile
           sudo mkswap /swapfile
           sudo swapon /swapfile
           free -h
+          swapon --show
       - name: "g2. mach build (real C++ compile, /usr/bin/time -v)"
         run: |
           set -euxo pipefail
@@ -723,8 +753,16 @@ jobs:
         # failure, AND the 720-min timeout. Without it the timeout path would
         # throw away up to 12h of compilation.
         if: always()
+        # NOTE (fix, run 38910465453): this save ran WITHOUT the `path` input —
+        # the action refused it with "[warning]Input required and not supplied:
+        # path" + "Cache save failed", so the STABLE key was never written and
+        # every next run could only restore by prefix match (the run-scoped
+        # g5b entry, which did save, proved `path` was the only difference).
+        # path: ~/.cache/ccache            # <- the missing input, now present
         uses: actions/cache/save@v4
         with:
+          path: |
+            ~/.cache/ccache
           # Three keys on purpose:
           #  1. the STABLE key (no run_id) — so the next run gets an EXACT-key
           #     hit instead of a prefix match, which is the fast restore path;
