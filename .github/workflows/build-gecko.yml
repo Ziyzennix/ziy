@@ -460,7 +460,7 @@ jobs:
           # adds scheduler thrash on top of ~5 GB link processes competing for
           # 8 GB. A SELF-HOSTED runner has nproc=4; if you switch runs-on to
           # self-hosted, raise this to 4.
-          mk_add_options MOZ_PARALLEL_BUILD=2
+          mk_add_options MOZ_PARALLEL_BUILD=1
 
           # A real (non-artifact) C++ build, stated explicitly so the log
           # records the decision that makes C++ patches possible at all.
@@ -644,6 +644,14 @@ jobs:
           # need the on-demand re-extraction loop the local box needed.
           ./mach configure
 
+      - name: "prepare swap to avoid linker memory (hosted runner)"
+        run: |
+          set -euxo pipefail
+          sudo fallocate -l 8G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=8192
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
       - name: "g2. mach build (real C++ compile, /usr/bin/time -v)"
         run: |
           set -euxo pipefail
