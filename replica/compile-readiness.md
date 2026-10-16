@@ -1045,3 +1045,198 @@ one: a cold run is ~12–28 h on a 2-core private runner = 720–1 680 minutes,
 essentially the entire monthly allowance, so the recommended first run is the
 **free self-hosted runner** on this box (§5(b)) with the hosted tag-cut path kept
 for cut releases.
+
+---
+
+## 2026-10-16 — run 4 outcome: FAILED at step **f**, the Gecko compile NEVER RAN
+
+**Written:** 2026-10-16 (all timestamps UTC; the run was dispatched the local evening of
+2026-10-15). **Adjudicating:** `replica/TODAY.md` §3.1's claim that run 4 =
+`38797207327` was "IN FLIGHT — the 12–28 h compile has NOT started yet".
+**Method:** read-only `gh run list` / `gh run view` / REST `.../jobs`,
+`.../artifacts`, `.../caches`; `gh run view --log-failed` for run 4. Nothing was
+dispatched, cancelled, or re-run. No local Gecko compilation was performed (the one
+local experiment below is a 5-file `git apply` repro in `/tmp/garepro`, the light work
+`patches/README.md` explicitly permits).
+
+### 7.1 Run history, verified live
+
+`gh run list --workflow build-gecko.yml --limit 10` → **five dispatches, all
+`workflow_dispatch` on `main`, all failures**:
+
+| run id | headSha | status / conclusion | elapsed | failed step |
+| --- | --- | --- | --- | --- |
+| 38794333725 | `062a4a6` | completed / failure | 59 s | `c2. resolve the pinned toolchain and install cbindgen` |
+| 38795215736 | `6217634` | completed / failure | 1 m 47 s | `d2. checksum-verify against the published SHA512SUMS` |
+| 38795875890 | `87dc04a` | completed / failure | 2 m 12 s | `d3. extract IN FULL and assert the known-missing subtrees` |
+| **38797207327 (RUN 4)** | `b7eec82` | completed / failure | **3 m 55 s** | **`f. apply Ziy's C++ patch set`** |
+| 38799494703 (run 5) | `2b93248` | **in_progress** | 17 m+ at time of writing | — |
+
+Elapsed times are from the REST step timestamps (e.g. run 4's job
+`116636642231`: `startedAt 2026-10-15T19:51:07Z` → `completedAt 2026-10-15T19:54:55Z`).
+Run 4's own wall window (`createdAt 19:51:01Z` → `updatedAt 19:54:56Z`) matches.
+
+**Run 4 was never the cold 12–28 h build.** It died at 3 m 55 s, before `g1. mach
+configure`. Steps `g1`–`g4`, `h`, `i`, `i2` are all `skipped` in the run's step list.
+The TODAY.md note was correct only in its narrower sense: *the compile itself never
+started* — because the run failed, not because it was still running.
+
+### 7.2 The failure, quoted verbatim from the log
+
+`gh run view 38797207327 --log-failed` → step `f. apply Ziy's C++ patch set (empty set
+= no-op)`:
+
+```
+...19:54:49.9822467Z ##[group]applying patches/0001-rfp-colorscheme-carveout.patch
+...19:54:49.9843308Z Checking patch _src/firefox-156.0.1/toolkit/components/resistfingerprinting/nsRFPService.cpp...
+...19:54:49.9868389Z  1 file changed, 35 insertions(+)
+...19:54:49.9892738Z ##[endgroup]
+...19:54:49.9893737Z applied: patches/0001-rfp-colorscheme-carveout.patch
+...19:54:49.9895003Z ##[group]applying patches/0002-ziy-fingerprinting-option.patch
+...19:54:49.9913461Z Skipped patch 'toolkit/moz.configure'.
+...19:54:49.9914476Z Skipped patch 'toolkit/ziy-fingerprinting.configure'.
+...19:54:49.9928193Z  0 files changed
+...19:54:49.9945846Z ##[endgroup]
+...19:54:49.9946592Z applied: patches/0002-ziy-fingerprinting-option.patch
+...19:54:49.9964044Z Checking patch _src/firefox-156.0.1/dom/webgpu/Adapter.cpp...
+...19:54:50.0005668Z applied: patches/0003-webgpu-adapter-strings.patch
+...19:54:50.0049227Z Checking patch _src/firefox-156.0.1/dom/canvas/ClientWebGLContext.cpp...
+...19:54:50.0081761Z applied: patches/0004-webgl-fake-extension.patch
+...19:54:50.0097462Z Checking patch _src/firefox-156.0.1/netwerk/dns/nsDNSService2.cpp...
+...19:54:50.0140087Z applied: patches/0005-dns-disable-prefetch-from-https.patch
+...19:54:50.0141509Z patch summary: found=5 applied=5 failed=0
+...19:54:50.0168872Z ##[error]expected patched file missing: /home/runner/work/ziy/ziy/_src/firefox-156.0.1/toolkit/ziy-fingerprinting.configure — the patch set is incomplete
+...19:54:50.0177736Z ##[error]Process completed with exit code 1.
+```
+
+### 7.3 Diagnosis — file:line, with the mechanism reproduced
+
+**The defect:** `git apply --check` on patch 0002 printed `Skipped patch ...`,
+`0 files changed`, and **exited 0**, so the loop counted it as `applied`. Patch 0002 is
+the only one in `diff --git` form (`patches/0002-ziy-fingerprinting-option.patch`
+carries `diff --git a/toolkit/moz.configure b/toolkit/moz.configure` *and*
+`diff --git a/toolkit/ziy-fingerprinting.configure b/...` — verified: the other four
+carry only `---`/`+++` headers).
+
+**Root cause:** the patch is applied with `cd "$SRC"` where
+`$SRC = $GITHUB_WORKSPACE/_src/firefox-156.0.1` — a path *inside* the Ziy
+checkout. `git apply` therefore discovers the Ziy `.git` by walking up and runs in
+**repo-subdirectory mode**: `diff --git` patches are top-level-relative, judged
+outside the current directory, and silently skipped, with status 0.
+
+**At the headSha that run 4 used** (`b7eec82`), the step's `run:` block has no ceiling
+— confirmed by `git show b7eec82:.github/workflows/build-gecko.yml` → no
+`GIT_CEILING_DIRECTORIES` anywhere in the file.
+
+**Local repro** (in `/tmp/garepro`, plain-directory `git apply` only — no Gecko, no
+mach), run with the two patch formats from `patches/`:
+
+```
+=== plain-diff patch, NO ceiling ===
+Checking patch _src/firefox-156.0.1/toolkit/moz.configure...
+rc=0
+=== diff --git patch, NO ceiling ===
+Skipped patch 'toolkit/moz.configure'.
+rc=0
+```
+
+The same two applies **with** `export GIT_CEILING_DIRECTORIES=...`:
+
+```
+=== WITH ceiling (the f25a467 fix) ===
+Checking patch toolkit/moz.configure...
+rc=0
+Checking patch toolkit/moz.configure...
+rc=0
+```
+
+**The concrete fix (already committed, already at the head run 5 is building):**
+`f25a467` *"ci(build-gecko): ceiling git discovery so the patch apply is not silently
+skipped"* adds one line at **`.github/workflows/build-gecko.yml:550`**:
+
+```
+export GIT_CEILING_DIRECTORIES="$GITHUB_WORKSPACE"
+```
+
+That is the whole fix; it stops git's discovery at the checkout root so the apply runs
+in plain-directory mode. No other file needed changing — the patch files themselves
+apply cleanly (`git apply --check` on 0001/0003/0004/0005 succeeded *in the very same
+run 4*, before the ceiling existed).
+
+**Important caveat about how loud this bug was:** it was **not** a silent stock-Gecko
+build. The post-apply gate — present at `b7eec82` (`git show b7eec82:.github/…/build-gecko.yml`
+carries the `POST-APPLY GATE ASSERTION` block), and now at
+`.github/workflows/build-gecko.yml:596-614` — asserted
+`$SRC/toolkit/ziy-fingerprinting.configure` exists and aborted at 3 m 55 s. That gate
+is the reason this was a 4-minute failure instead of a 12-hour stock-Gecko artifact,
+and it is the single best piece of engineering in the workflow.
+
+### 7.4 Verdict on the 5 patches: **APPLIED-ONLY**, never compiled
+
+| patch | file touched | run 4 evidence | verdict |
+| --- | --- | --- | --- |
+| 0001 | `toolkit/components/resistfingerprinting/nsRFPService.cpp` | `Checking patch _src/firefox-156.0.1/toolkit/components/resistfingerprinting/nsRFPService.cpp...` + `1 file changed, 35 insertions(+)` | applied to the tree, **NOT compiled** |
+| 0002 | `toolkit/moz.configure` + new `toolkit/ziy-fingerprinting.configure` | `Skipped patch 'toolkit/moz.configure'.` / `Skipped patch 'toolkit/ziy-fingerprinting.configure'.` / `0 files changed` | **NOT EVEN APPLIED** — skipped, caught by the post-apply gate |
+| 0003 | `dom/webgpu/Adapter.cpp` | `Checking patch .../dom/webgpu/Adapter.cpp...` + `1 file changed, 62 insertions(+)` | applied, **NOT compiled** |
+| 0004 | `dom/canvas/ClientWebGLContext.cpp` | `Checking patch .../dom/canvas/ClientWebGLContext.cpp...` + `1 file changed, 58 insertions(+)` | applied, **NOT compiled** |
+| 0005 | `netwerk/dns/nsDNSService2.cpp` | `Checking patch .../netwerk/dns/nsDNSService2.cpp...` + `1 file changed, 26 insertions(+)` | applied, **NOT compiled** |
+
+**No compile evidence exists for any patch, and none can.** Steps `g1`–`g4` are
+`skipped`, no artifacts were uploaded (`gh api repos/Ziyzennix/ziy/actions/runs/38797207327/artifacts`
+→ empty), and there is no `build-time.log`, no `mach build` output, no link of
+`libxul.so`, no `dist/` package. **`patches/README.md`'s "none of the five has been
+*compiled*" remains true as of 2026-10-16.**
+
+### 7.5 Run 5 (`38799494703`) is where the compile actually happens — in flight now
+
+Dispatched 2026-10-15 **20:08:08Z**, headSha `2b93248` (which contains the `f25a467`
+ceiling fix — verified: `git merge-base --is-ancestor f25a467 2b93248`).
+
+**Observed state as of `2026-10-15T20:25:48Z`:** job `116644506539`, `in_progress`.
+Step timings: steps 1–12 (checkout, toolchain, rustup, d1–d4, e1, e2, **f**, **g1
+mach configure**) all `success`, completed by **20:12:39Z**. Step **13 `g2. mach
+build`** is `in_progress` since 20:12:39Z — i.e. **the cold Gecko compile started at
+20:12:39Z on 2 cores** and had run **~13 min** at time of writing. Everything
+downstream (`g3`–`j`) is `pending`. **This is a still-running note, not an outcome.**
+
+The ccache is cold: `gh api repos/Ziyzennix/ziy/actions/caches` lists exactly **one**
+entry, `ccache-gecko-156.0.1-c4cdaa3c…-38797207327`, **size 662 bytes** (restored by
+run 4's step e1, saved by g5) — nothing usable in it. So this is a genuinely cold
+build: **12–28 h against the 720-minute job cap**, i.e. the outcome is quite likely a
+plain cap timeout, which §5 and the workflow header both document as acceptable. If
+the cap hits, `g5`/`g5b` run with `if: always()` so the compilation is not wasted.
+
+**Monitoring command (read-only):**
+
+```
+gh run view 38799494703
+# or, from a shell inside this repo:
+gh api repos/Ziyzennix/ziy/actions/jobs/116644506539
+```
+
+Note: `gh run view 38799494703 --log` returns
+`run 38799494703 is still in progress; logs will be available when it is complete`, so
+the per-step REST endpoint above is the only live view.
+
+### 7.6 Recommended next action
+
+1. **Nothing to dispatch.** Run 5 is the first run carrying the ceiling fix; it is
+   already in `g2` compiling. Re-running `build-gecko.yml` would queue a second
+   12–28 h job (GitHub queues runs of the same workflow) against the same 2 000-min
+   monthly allowance.
+2. **Watch for the cap timeout** at `timeout-minutes: 720` (~2026-10-16 08:12Z if the
+   job is not cancelled first). A cap timeout is a documented acceptable outcome, not
+   a defect — re-dispatch with a raised cap and the existing ccache to continue.
+3. **When run 5 finishes (any conclusion):** pull `gh run view 38799494703 --log-failed`
+   (or `--log` on success) and record the outcome here. If it reaches `g4. mach
+   package`, the two lines that matter are `Created package: ...` and
+   `RELINKABLE=<obj-ziy/.../libxul.so>`. Only then, and only with a
+   `1 file changed` / `Checking patch ...` line per patch in step `f`'s log, can
+   `patches/README.md` move any of 0001–0005 from *apply-verified* to *compiled*.
+4. **Do not** edit `replica/TODAY.md` §3.1's run history from this doc alone — the
+   director owns that file. This section is the evidence for it.
+
+**What this doc could not determine:** whether run 5's `g2` finishes inside the cap,
+and whether the patched C++ actually *compiles* — both are unanswerable until run 5
+completes. Everything above is observed from live `gh` output and the repo's own
+history.

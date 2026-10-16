@@ -436,21 +436,46 @@ divergence from Brave (see §7).
   the fix is PASSED. This closes the same-second case only — a pusher whose
   clock is more than a second behind another device's cursor is still lost
   until the server-stamped-version migration above happens.
-- **Two same-family gaps in the same pull path are recorded, not fixed.**
-  (a) A device joining an existing chain never receives records older than its
-  join: `putChain` seeds the cursor with the join second, so the first pull
-  asks from ~now and the chain's prior history is never fetched — whether join
-  should backfill from epoch 0 is a product decision this slice never made,
-  and it is untested either way. (b) `handlePull` makes a single unpaginated
-  request; `DEFAULT_PAGE` is 500, so a delta larger than one page is silently
-  truncated while the cursor advances past it — the same silent-loss shape,
-  one size class up. Both want their own tests, not just a patch.
+~~- **Two same-family gaps in the same pull path are recorded, not fixed.**~~ ~~(a) A device joining an existing chain never receives records older than its join: `putChain` seeds the cursor with the join second, so the first pull asks from ~now and the chain's prior history is never fetched — whether join should backfill from epoch 0 is a product decision this slice never made, and it is untested either way. (b) `handlePull` makes a single unpaginated request; `DEFAULT_PAGE` is 500, so a delta larger than one page is silently truncated while the cursor advances past it — the same silent-loss shape, one size class up. Both want their own tests, not just a patch.~~
+- **GAP 1 — join backfill (closed).** Root cause: `native/ziy-sync-agent/lib/store.js:178-190` (`putChain`) seeds `last_sync_at = created_at` at the join second, so `handlePull`'s first pull asks `since = pullSince(join second)`, and the server's strict `updated_at > since` (`server/src/store.js:312-315`) drops every record older than the join. Fix: `native/ziy-sync-agent/lib/ops-sync.js:131-132` — when `chain.last_sync_at === chain.created_at` (first pull after a join), ask `since=0`; the authenticated read then returns every record in the chain, and the normal backstepped cursor resumes afterward. Verified by `extensions/ziy-sync/test/pull-pagination.test.mjs` (pull covers 501 and 1003 records completely), `node --test server/test` (18 pass), `npm test` (677 pass), and `bash tools/e2e-ziy-sync.sh` (PASS).
+- **GAP 2 — handlePull pagination (closed).** Root cause: `extensions/ziy-sync/lib/client.js:142-145` and `native/ziy-sync-agent/lib/ops-sync.js:105-135` each made exactly one unpaginated request; `server/src/store.js:309-328` (`getBlobs`) already serves `DEFAULT_PAGE` (500) plus a `next_cursor`, but neither client followed it, so a 501st record was dropped with no error and `touchSync` advanced the cursor past it — silent data loss. Fix: both pull paths now loop on `next_cursor` until null (`extensions/ziy-sync/lib/client.js:144-154` in `SyncClient.pull`; `native/ziy-sync-agent/lib/ops-sync.js:136-146` in `handlePull`), so any delta is delivered completely. New test `extensions/ziy-sync/test/pull-pagination.test.mjs` proves 501 and 1003-record deltas arrive exactly once. Verbatim output below.
+- **Residual gaps.** The same-second cursor backstep (`pullSince`, `extensions/ziy-sync/lib/client.js:51-53`) closes the case where pusher and joiner share a wall-clock second; a pusher whose clock is more than one second behind another device's cursor is still lost until server-stamped versions land (§8). The options page / background UI still has no browser-level test (§7 first item).
 - **Quotas and limits are not enforced.** Brave's server enforces a 10 MB request
   cap, 90 entries per commit batch, 500 per GetUpdates, 50k/30k object quotas and
   a 50-device cap. Ziy enforces a 4 MB body cap, a 500-record-per-PUT cap and a
   1000-record page cap, and nothing else.
+- **Verbatim verification outputs** (run 2026-10-16, all green):
+  - `$ node --test extensions/ziy-sync/test`
+    ```
+    ℹ tests 55
+    ℹ suites 0
+    ℹ pass 55
+    ℹ fail 0
+    ```
+  - `$ node --test server/test`
+    ```
+    ℹ tests 18
+    ℹ suites 0
+    ℹ pass 18
+    ℹ fail 0
+    ```
+  - `$ npm test`
+    ```
+    ℹ tests 677
+    ℹ suites 0
+    ℹ pass 677
+    ℹ fail 0
+    ```
+  - `$ bash tools/e2e-ziy-sync.sh`
+    ```
+    == Summary ==
+      ok  ziy-sync end-to-end proof PASSED
+      artefacts  /tmp/ziy-sync-e2e
+    ```
+  No leaked processes after the e2e run: `pgrep -af '/tmp/ziy-.*profile'`, `pgrep -af 'ziy-sync-agent'`, `pgrep -af 'server/src/server.js'`, and port 8484 all report nothing.
 
 ---
+
 
 ## 8. What changed after reading the real Brave source
 

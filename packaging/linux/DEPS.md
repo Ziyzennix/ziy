@@ -507,3 +507,151 @@ evidence (fresh extraction, throwaway HOME + profile): non-blank 1280x720
 screenshot, 9/9 `ziy-*@ziy.app` add-ons `active=True`, engine `--version` =
 `Mozilla Firefox 156.0.1` (known behaviour). Full record: `replica/TODAY.md`
 §2 and `replica/deploy.md` row 1.
+## 10. `make-deb.sh` first real local execution — outcome (2026-10-16)
+
+`make-deb.sh` had never executed anywhere (neither script had before the
+2026-10-16 batch). This section records its first full local run, end to end.
+
+### Input state
+`build/ziy/` already existed (330 MB app dir from `tools/build-shell.sh --force`,
+built against Mozilla's prebuilt engine tarball), carrying the patched
+`omni.ja`, `browser/omni.ja`, 9 suite XPIs in `distribution/extensions/`,
+the branded `ziy` launcher and `LICENSES.txt`/`patches/`. No rebuild was
+needed or performed (`build/` is gitignored).
+
+### Execution
+Command (from repo root, detached under `nice -n 19` per AGENTS.md, full output
+captured to `/tmp/opencode/make-deb-run3.log`):
+
+```
+setsid nohup nice -n 19 bash packaging/linux/make-deb.sh \
+    > /tmp/opencode/make-deb-run3.log 2>&1 < /dev/null &
+```
+Note: `setsid` was required — earlier runs launched under plain `nohup ... &`
+were killed by the shell's process-group teardown even though they were
+backgrounded.
+
+The earlier incomplete state: `build/packaging/` already contained a
+`ziy_156.0.1-1_amd64.deb` dated 2026-10-16 03:10 produced by an unlogged run
+of the pre-fix script — it built the package but died before writing its
+`.sha256` sidecar, and it still leaked resolver scratch into the payload
+(§9.9 below). That artifact is superseded by the run below; it was kept as
+`/tmp/opencode/make-deb-pre-existing-pid.deb` for reference only and is not
+part of this record.
+
+### Defects found and fixed (mechanical, in `packaging/linux/make-deb.sh`)
+All confirmed by reproducing the exact primitive against this box's real tools
+(dpkg-dev 1.22.6, dpkg-deb; no root):
+
+- **Defect 9.9 — dead payload-path assertions, lines 369–379 (`^ *\./path$`).**
+  `dpkg-deb --contents` emits `mode owner size date path` with **no leading
+  whitespace**, so every pattern `^ *\./usr/lib/ziy/…` could never match. A
+  correct package always `die`d at its first successful build — exactly what
+  killed the unlogged 03:10 run before it wrote `.sha256`. Verified empirically
+  with a throwaway package: the `^ *` pattern matches 0 lines, the path-only
+  pattern matches 1. Fixed by dropping the bogus `^ *` prefix.
+- **Defect 9.10 — resolver scratch shipped inside the package payload.**
+  Lines 144/150/163/167 built `debian/`, `bin/`, `shlibdeps.err` and
+  `deb-shlibdeps.txt` inside `$STAGE`, then `dpkg-deb --build "$STAGE"`
+  packaged them at the archive root: `./bin/firefox` (second 130 MB engine
+  copy), `./bin/libxul.so`, `./debian/control`, `./deb-shlibdeps.txt`,
+  `./shlibdeps.err`. Verified in the pre-existing 03:10 deb (it shipped all of
+  these under `/`). Fixed by moving the dpkg-shlibdeps scratch into a separate
+  `$RESOLVE` dir removed by `cleanup` before the deb is built.
+- **Defect 9.11 — payload root directory mode.**
+  `mktemp -d` left `$STAGE` at mode 0700, which `dpkg-deb --build` preserved,
+  so the package shipped `drwx------ root/root 0 .` instead of the
+  `drwxr-xr-x` every real deb ships (verified against this box's apt-cached
+  debs on 2026-10-16). Fixed with `chmod 0755 "$STAGE"` right after mktemp.
+- **Defect 9.12 — postinst icon source path did not exist.**
+  The postinst's icon-copy loop read `/usr/lib/ziy/share/icons/hicolor/…`,
+  which the app dir does not contain, so the loop was always a no-op and its
+  source was a wrong path. Fixed by staging the icons inside the app dir
+  too (`/usr/lib/ziy/share/icons/hicolor/<size>x<size>/apps/ziy.png`), in
+  parity with `make-tarball.sh`'s layout, so the postinst source path is real.
+
+- **Defect 9.13 — self-check list incomplete (strengthening).**
+  Added assertions the ticket names: `./usr/lib/ziy/LICENSES.txt` and
+  `./usr/lib/ziy/patches/000[1-5]-` (MPL §3.2(a) items), plus an assertion that
+  every app-dir hicolor icon slot the postinst references is shipped (mirroring
+  `make-tarball.sh`'s self-check list).
+
+NOT fixed — a design decision left to the director (per scope): `BASE_DEPS`
+contains both plain and versioned entries (e.g. `libcairo2` and
+`libcairo2 (>= 1.10.0)`), producing redundant-but-valid duplicate `Depends`
+entries; lintian on the runner will make its own call there. Also unchanged:
+the hicolor icons are all the same 1103x1104 master PNG at every size
+(a `build/ziy`/brand condition `make-deb.sh` inherits; identical in the
+tarball artifact — not a packaging-script defect).
+
+### Artifact produced
+- Path: `build/packaging/ziy_156.0.1-1_amd64.deb`
+- Size: 97,406,368 bytes (~93M compressed; unpacked Installed-Size 349,144 KiB)
+- SHA-256: `a00141f27094612505d6994ab30303886a2c438ebbe26fa919e2c3a8c31a67c7`
+  (`sha256sum -c ziy_156.0.1-1_amd64.deb.sha256` → OK; sidecar writes the
+  basename so a downloader-side check works)
+- Version: `ziy 156.0.1-1`, arch `amd64`, 176 payload paths, 9 suite XPIs.
+- Depends (resolved by dpkg-shlibdeps, merged onto BASE_DEPS):
+  `ffmpeg,libasound2,libasound2t64 (>= 1.0.16),libatk-bridge2.0-0,
+  libatk1.0-0,libatk1.0-0t64 (>= 1.12.4),libc6 (>= 2.34),
+  libcairo-gobject2 (>= 1.10.0),libcairo2 (>= 1.10.0),libdbus-1-3 (>= 1.9.14),
+  libdrm2,libfontconfig1 (>= 2.12.6),libfreetype6 (>= 2.3.9),libgbm1,
+  libgcc-s1 (>= 4.2),libgdk-pixbuf-2.0-0 (>= 2.22.0),libglib2.0-0,
+  libglib2.0-0t64 (>= 2.77.3),libgtk-3-0,libgtk-3-0t64 (>= 3.13.7),
+  libnspr4 (>= 2:4.10.9),libnss3 (>= 2:3.88.0),libpango-1.0-0 (>= 1.14.0),
+  libpangocairo-1.0-0 (>= 1.14.0),libpulse0,libstdc++6 (>= 4.8),
+  libwayland-client0,libx11-6,libx11-xcb1 (>= 2:1.8.7),libxcb-shm0,libxcb1,
+  libxcomposite1 (>= 1:0.4.5),libxcursor1 (>> 1.1.2),libxdamage1 (>= 1:1.1),
+  libxext6,libxfixes3 (>= 1:5.0),libxi6,libxrandr2 (>= 2:1.4.0),libxrender1`
+
+### Round-trip evidence (run3 log: `/tmp/opencode/make-deb-run3.log`)
+`make-deb.sh` asserted, against the bytes being packaged, and every assertion
+printed `ok`:
+  - omni.ja signing patch + browser/omni.ja newtab-strip patch present
+    (`tools/lib/omni-ja.py --verify`, the official reader)
+  - 9 XPIs ship inside `/usr/lib/ziy`
+  - dpkg-shlibdeps resolved 41 package names (used for Depends)
+  - `dpkg -I`: Package ziy / Version 156.0.1-1 / Architecture amd64 /
+    Maintainer / Depends all correct
+  - `dpkg -c`: lists 176 paths; root entry `drwxr-xr-x` (fixed mode);
+    no `./bin/`, `./debian/`, `./shlibdeps.err`, `./deb-shlibdeps.txt` scratch
+  - `/usr/lib/ziy/ziy` (executable launcher), `/usr/bin/ziy` symlink to
+    `../lib/ziy/ziy`
+  - `/usr/lib/ziy/omni.ja`, `/usr/lib/ziy/browser/application.ini`
+    (`grep '^Name=Ziy'` asserted earlier)
+  - 9 `distribution/extensions/*.xpi`
+  - `/usr/share/applications/ziy.desktop`
+  - 9 hicolor icon sizes shipped at `/usr/share/icons/hicolor/…/apps/ziy.png`
+    AND at `/usr/lib/ziy/share/icons/hicolor/…/apps/ziy.png`
+  - `/usr/lib/ziy/LICENSES.txt`, all 5 `patches/` + `README.md`
+  - control archive carries `./postinst`
+  - `./usr/lib/ziy/share/icons/hicolor/<size>x<size>/apps/ziy.png` present for
+    all 9 sizes (postinst source path is real — fixed defect 9.12)
+  - `.sha256` sidecar written with basename-only path (verifies on the
+    downloading machine)
+
+What was NOT verified here (by design, needs root/a runner): `dpkg -i` install,
+`apt-get install` of the Depends closure, the postinst actually running, and
+`lintian`.
+
+### lintian local limit
+**`lintian` is not installed on this box** (it is a 5 MB apt install). Per
+`make-deb.sh` its absence is reported (`warn: lintian NOT PRESENT on this box
+— not run. .github/workflows/build-packages.yml runs it on the runner. NOT
+VERIFIED LOCALLY.`), not hidden. The script degrades gracefully — no install,
+no skip-path needed, nothing fails. lintian runs on the CI runner in
+`.github/workflows/build-packages.yml`.
+
+### Regression-suite verdict
+`bash replica/test/regressions.sh all` → **8 passed, 2 failed, 0 blocked**
+(`failed: shields-runtime shields-runtime-webnav`).
+The two failures are BiDi/headless environment issues (the headless Ziy's
+WebDriver BiDi port never opens / websocket closes early — measured
+`ConnectionRefusedError` on 127.0.0.1:9343 and `ConnectionClosedError`), not
+packaging defects: `f20-sync`, `f01-first-run` (+ event page / suite-active)
+and all three `shields-blocking-*` cases PASS. The full log is in
+`/tmp/opencode/regressions-run.log`.
+
+### Unchanged files
+`replica/TODAY.md`, `replica/AI-BRIEF.md` and `replica/HANDOFF.md` were NOT
+edited (director-owned).

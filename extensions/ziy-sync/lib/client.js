@@ -140,11 +140,19 @@ export class SyncClient {
 
   /** Pull the server's delta for this chain and fold it into `store`. */
   async pull(store, { now = Math.floor(Date.now() / 1000) } = {}) {
-    const delta = await this.request(
-      `/${API_VERSION}/chains/${encodeURIComponent(this.keys.chainId)}/records?since=${pullSince(this.lastSyncAt)}`,
-    );
     const results = { accepted: [], rejected: [] };
-    for (const raw of delta.records || []) {
+    let cursor = null;
+    let serverTime = now;
+    const allRecords = [];
+    do {
+      const delta = await this.request(
+        `/${API_VERSION}/chains/${encodeURIComponent(this.keys.chainId)}/records?since=${pullSince(this.lastSyncAt)}${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`,
+      );
+      allRecords.push(...(delta.records || []));
+      serverTime = delta.server_time || now;
+      cursor = delta.next_cursor;
+    } while (cursor);
+    for (const raw of allRecords) {
       const normalized = normalizeRecord(raw);
       if (normalized.error) {
         results.rejected.push({ raw, reason: normalized.error });
@@ -164,7 +172,7 @@ export class SyncClient {
       const applied = applyToView(store, read.record);
       if (applied) results.accepted.push(read.record);
     }
-    this.lastSyncAt = Math.max(this.lastSyncAt, delta.server_time || now);
+    this.lastSyncAt = Math.max(this.lastSyncAt, serverTime);
     return results;
   }
 

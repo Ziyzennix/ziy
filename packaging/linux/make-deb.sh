@@ -132,8 +132,20 @@ SUITE_COUNT=$(ls "$APP_DIR"/distribution/extensions/*.xpi 2>/dev/null | wc -l | 
 log_step "resolve" "mapping the engine's NEEDED libraries to Debian packages (dpkg-shlibdeps)"
 DEPS_SH="$(command -v dpkg-shlibdeps || true)"
 STAGE="$(mktemp -d /tmp/ziy-pkg-deb-XXXXXX)"
-cleanup() { rm -rf "$STAGE"; }
+# dpkg-deb --build packages the whole staging tree, so anything this script
+# leaves in $STAGE ships inside the .deb at `/` — how the first real run
+# (2026-10-16) came to deliver ./bin/ (a second 130 MB copy of the engine),
+# ./debian/, ./deb-shlibdeps.txt and ./shlibdeps.err inside the PAYLOAD.
+# Resolver artefacts are build-machine facts, not package contents, so they
+# live in their own scratch dir removed before the deb is built.
+RESOLVE="$(mktemp -d /tmp/ziy-pkg-resolve-XXXXXX)"
+cleanup() { rm -rf "$STAGE" "$RESOLVE"; }
 trap cleanup EXIT
+# dpkg-deb preserves the staging dir's own mode, so mktemp's 0700 became
+# `drwx------ root/root 0 .` in the package — every real deb ships
+# `drwxr-xr-x` (verified against this box's apt-cached debs on 2026-10-16).
+# Pin it explicitly rather than inherit the umask.
+chmod 0755 "$STAGE"
 
 GEN_DEPS=""
 if [ -n "$DEPS_SH" ]; then
@@ -141,18 +153,18 @@ if [ -n "$DEPS_SH" ]; then
   # directory tree to scan; a symlink farm would confuse it, so we hand it a
   # copy of exactly what ships. It also refuses to run as root without a
   # debian/control, non-root is fine.
-  mkdir -p "$STAGE/debian"
+  mkdir -p "$RESOLVE/debian"
   printf 'Source: ziy-staging\nSection: web\nPriority: optional\nMaintainer: Ziy\nStandards-Version: 4.6.2\n' \
-    > "$STAGE/debian/control"
+    > "$RESOLVE/debian/control"
   # Copy just the ELF objects: scanning the whole 350 MB tree would take
   # minutes and produce the same answer, because only the binaries carry
   # NEEDED entries.
-  mkdir -p "$STAGE/bin"
+  mkdir -p "$RESOLVE/bin"
   for f in firefox firefox-bin crashhelper crashreporter updater pingsender \
            gfxtest libxul.so libmozgtk.so libmozsandbox.so liblgpllibs.so; do
-    [ -e "$APP_DIR/$f" ] && cp -a "$APP_DIR/$f" "$STAGE/bin/" 2>/dev/null || true
+    [ -e "$APP_DIR/$f" ] && cp -a "$APP_DIR/$f" "$RESOLVE/bin/" 2>/dev/null || true
   done
-  if [ -n "$(ls -A "$STAGE/bin" 2>/dev/null)" ]; then
+  if [ -n "$(ls -A "$RESOLVE/bin" 2>/dev/null)" ]; then
     # -O prints the dependency list to STDOUT and does NOT write
     # debian/substvars (verified against dpkg-dev 1.22.6 on 2026-10-16 with a
     # throwaway package: the debian/ dir held only control afterward). The
@@ -160,11 +172,11 @@ if [ -n "$DEPS_SH" ]; then
     # result was always empty and the fallback below warned "Install
     # dpkg-dev" even with dpkg-dev installed. Capture stdout instead — it is
     # the one place -O puts the list.
-    SHLIBDEPS_OUT="$( cd "$STAGE" && dpkg-shlibdeps -O --ignore-missing-info bin/* 2>"$STAGE/shlibdeps.err" )" \
-      || log_warn "dpkg-shlibdeps could not resolve every library ($(head -2 "$STAGE/shlibdeps.err" 2>/dev/null | tr '\n' ' '))"
+    SHLIBDEPS_OUT="$( cd "$RESOLVE" && dpkg-shlibdeps -O --ignore-missing-info bin/* 2>"$RESOLVE/shlibdeps.err" )" \
+      || log_warn "dpkg-shlibdeps could not resolve every library ($(head -2 "$RESOLVE/shlibdeps.err" 2>/dev/null | tr '\n' ' '))"
     GEN_DEPS="$(printf '%s\n' "$SHLIBDEPS_OUT" | sed -n 's/^shlibs:Depends=//p')"
     if [ -n "$GEN_DEPS" ]; then
-      printf '%s\n' "$GEN_DEPS" > "$STAGE/deb-shlibdeps.txt"
+      printf '%s\n' "$GEN_DEPS" > "$RESOLVE/deb-shlibdeps.txt"
       log_ok "dpkg-shlibdeps resolved: $GEN_DEPS"
     fi
   fi
@@ -231,6 +243,12 @@ for size in 16 22 24 32 48 64 96 128 256; do
   src="$ROOT/build/share/icons/hicolor/${size}x${size}/apps/ziy.png"
   [ -f "$src" ] || src="$APP_DIR/ziy.png"
   [ -f "$src" ] || continue
+  # Stage the icon both where the .deb exposes it directly
+  # (/usr/share/icons/hicolor/…) and where the postinst's documented copy
+  # loop expects it inside the app dir
+  # (/usr/lib/ziy/share/icons/hicolor/… — the same layout make-tarball.sh
+  # produces, keeping the two artifacts in parity).
+  install -Dm 0644 "$src" "$STAGE/usr/lib/ziy/share/icons/hicolor/${size}x${size}/apps/ziy.png"
   install -Dm 0644 "$src" "$STAGE/usr/share/icons/hicolor/${size}x${size}/apps/ziy.png"
   ICON_COUNT=$((ICON_COUNT+1))
 done
@@ -366,17 +384,21 @@ printf '%s\n' "$CONTENTS" | sed 's/^/        /' >&2
 log_ok "listed $(printf '%s\n' "$CONTENTS" | wc -l | tr -d ' ') path(s)"
 
 # The paths the ticket names, asserted one by one.
-printf '%s\n' "$CONTENTS" | grep -q '^ *\./usr/lib/ziy/ziy$' \
+# NOTE: `dpkg-deb --contents` emits `mode owner size date path` with NO
+# leading whitespace, so these patterns match the path directly (no `^ *`
+# prefix — that prefix would never match, a mechanical defect caught on the
+# first real run).
+printf '%s\n' "$CONTENTS" | grep -q '\./usr/lib/ziy/ziy$' \
   || die "the package does not ship /usr/lib/ziy/ziy"
-printf '%s\n' "$CONTENTS" | grep -q '^ *\./usr/bin/ziy' \
+printf '%s\n' "$CONTENTS" | grep -q '\./usr/bin/ziy' \
   || die "the package does not ship /usr/bin/ziy"
-printf '%s\n' "$CONTENTS" | grep -q '^ *\./usr/lib/ziy/omni\.ja$' \
+printf '%s\n' "$CONTENTS" | grep -q '\./usr/lib/ziy/omni\.ja$' \
   || die "the package does not ship /usr/lib/ziy/omni.ja"
-printf '%s\n' "$CONTENTS" | grep -q '^ *\./usr/lib/ziy/browser/application\.ini$' \
+printf '%s\n' "$CONTENTS" | grep -q '\./usr/lib/ziy/browser/application\.ini$' \
   || die "the package does not ship our application.ini"
-printf '%s\n' "$CONTENTS" | grep -q '^ *\./usr/lib/ziy/distribution/extensions/.*\.xpi$' \
+printf '%s\n' "$CONTENTS" | grep -q '\./usr/lib/ziy/distribution/extensions/.*\.xpi$' \
   || log_warn "the package ships no suite xpis (distribution/extensions/ is empty)"
-printf '%s\n' "$CONTENTS" | grep -q '^ *\./usr/share/applications/ziy\.desktop$' \
+printf '%s\n' "$CONTENTS" | grep -q '\./usr/share/applications/ziy\.desktop$' \
   || die "the package does not ship the .desktop entry"
 
 # /usr/bin/ziy must be a SYMLINK in the archive (an 'l' mode) and its target
@@ -417,8 +439,23 @@ log_ok "postinst icon sizes: $POSTINST_PACKAGED_ICON_SIZES"
 if printf '%s\n' "$CONTENTS" | grep -q '\./usr/share/icons/hicolor/256x256/apps/ziy\.png$'; then
   log_ok "the package ships the 256px hicolor icon"
 else
-  log_warn "no 256px hicolor icon in the payload — postinst will still copy from the app dir"
+  log_warn "no 256px hicolor icon in the payload"
 fi
+# The postinst's icon copy loop reads from inside the app dir
+# (/usr/lib/ziy/share/icons/hicolor/…). Assert it actually ships there —
+# matching make-tarball.sh's layout — so the postinst source path is not a
+# dead wrong path.
+for size in 16 22 24 32 48 64 96 128 256; do
+  printf '%s\n' "$CONTENTS" | grep -q \
+    '\./usr/lib/ziy/share/icons/hicolor/'${size}'x'${size}'/apps/ziy\.png$' \
+    || log_warn "no app-dir hicolor icon for ${size}x${size} — postinst icon loop does nothing for this size"
+done
+# LICENSES.txt + patches/ are shipped in the app dir (build-shell stage 8b)
+# and are required by MPL §3.2(a); assert they round-trip into the deb.
+printf '%s\n' "$CONTENTS" | grep -q '\./usr/lib/ziy/LICENSES\.txt$' \
+  || die "the package does not ship /usr/lib/ziy/LICENSES.txt"
+printf '%s\n' "$CONTENTS" | grep -q '\./usr/lib/ziy/patches/000[1-5]-' \
+  || die "the package does not ship all five patches under /usr/lib/ziy/patches/"
 
 # ---------------------------------------------------------------- lintian ---
 # Not installed on the co-owner's box (it is a 5 MB apt install that exists to

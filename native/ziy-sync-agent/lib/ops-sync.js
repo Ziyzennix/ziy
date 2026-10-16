@@ -121,11 +121,31 @@ export async function handlePull(agent, store, payload) {
   // than a second behind another device's cursor — is the recorded clock-skew
   // limitation (replica/proofs-sync.md §7), curable only by server-stamped
   // versions. The boundary bug and two same-family gaps are recorded there.
-  const delta = await client.request(
-    `/v1/chains/${encodeURIComponent(agent.chainKeys.chainId)}/records?since=${pullSince(store.getChain().last_sync_at)}`,
-  );
+  // First pull after a join: the joining cursor (last_sync_at == created_at)
+  // is stamped at the join second, so pullSince() would still skip every
+  // record older than that second. Joining a chain means receiving its whole
+  // history, so the first pull asks from epoch 0 — the server's strict
+  // `updated_at > since` then returns every record (a join is an authenticated
+  // read, and the server holds only opaque blobs). After this pull the normal
+  // backstepped cursor resumes.
+  const chain = store.getChain();
+  const since = chain && chain.last_sync_at === chain.created_at ? 0 : pullSince(chain.last_sync_at);
+  // Paginate: `getBlobs` serves DEFAULT_PAGE (500) per request and returns a
+  // `next_cursor` for the remainder. Follow it until null so a delta larger
+  // than one page is delivered completely — never silently truncated.
+  let cursor = null;
+  let serverTime = nowSeconds();
+  const allRecords = [];
+  do {
+    const delta = await client.request(
+      `/v1/chains/${encodeURIComponent(agent.chainKeys.chainId)}/records?since=${since}${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`,
+    );
+    allRecords.push(...(delta.records || []));
+    serverTime = delta.server_time || serverTime;
+    cursor = delta.next_cursor;
+  } while (cursor);
   const now = payload.now || nowSeconds();
-  for (const raw of delta.records || []) {
+  for (const raw of allRecords) {
     const normalized = normalizeRecord(raw);
     if (normalized.error) {
       results.rejected.push({ raw, reason: normalized.error });
@@ -167,7 +187,7 @@ export async function handlePull(agent, store, payload) {
     applyToView(storeView, record);
     if (local.changed) results.accepted.push({ category: record.category, record_id: record.record_id });
   }
-  store.touchSync(Math.max(store.getChain().last_sync_at || 0, delta.server_time || nowSeconds()));
+  store.touchSync(Math.max(store.getChain().last_sync_at || 0, serverTime));
   return { pulled: results.accepted.length, accepted: results.accepted, rejected: results.rejected };
 }
 
