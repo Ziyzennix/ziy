@@ -89,6 +89,7 @@ on:
   # force-push sprint would queue a dozen multi-hour jobs, and the queue
   # would eat the free tier the repo's other workflows depend on.
   push:
+    branches: ["fix/gecko-cross-language-lto-linker"]
     tags: ["v*", "gecko-*"]
 
 permissions:
