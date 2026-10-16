@@ -300,11 +300,11 @@ works at runtime. The `patches/README.md` index lists all five; none is compiled
   `nice`/`ionice` and a declared report line. The box is 4 cores / ~3.4 GiB available, and
   the `libxul` link alone is a ~5 GB process.
 - **GitHub is the active compile path now.** `build-gecko.yml` runs on `runs-on:
-  ubuntu-latest`. **The repo is PRIVATE as of 2026-10-16 ~19:00 UTC** — the co-owner moved
-  it back (it had been **public** since some point between 2026-10-15 and 2026-10-16 to
-  reach the 4 CPU / 16 GB free tier; the exact flip is not recorded). Private means
-  **2 CPU / 8 GB with METERED minutes** — 2,000/month on GitHub Free, usage *blocks* past
-  the quota with no payment method on file. Trigger with
+  ubuntu-latest`. **The repo is PUBLIC as of 2026-10-16 ~19:35 UTC** (the co-owner asked for
+  it back the moment a private-tier dispatch died of the runner's own `No space left on
+  device`; see `replica/compile-readiness.md` §9.10). Public = 4 CPU / 16 GB, free and
+  unmetered; private = 2 CPU / 8 GB, metered (2,000 min/month, usage *blocks* past the quota
+  with no payment method on file). Trigger with
   `gh workflow run build-gecko.yml --ref main`; watch via `gh run watch`.
   The one-engineering gotcha: the self-hosted runner (`actions-runner/`) was parked under
   `/home/zen/Documents/brave but not chrome or firefox/...`, a path with a space. GitHub's
@@ -313,16 +313,22 @@ works at runtime. The `patches/README.md` index lists all five; none is compiled
   the whole directory to something like `/home/zen/ziy-runner`. The hosted step b
   (`sudo apt-get install …`) works there because self-hosted sudo has no password; on the
   hosted tier apt works out of the box.
-- **Visibility is a decision, not a fact.** Public = 4 CPU / 16 GB, free and unmetered;
-  private = 2 CPU / 8 GB, metered (2,000 min/month free). It was made private for the
-  co-owner's privacy requirement, flipped public to buy the compile's runner tier, and
-  **set back to private by the co-owner on 2026-10-16 ~19:00 UTC** — before the change
-  `gh repo view Ziyzennix/ziy --json visibility,isPrivate` → `PUBLIC` / `false`, after it
-  `PRIVATE` / `true`. Both flips are recorded in `replica/compile-readiness.md` §8.5.
-  Cost consequence, plainly: every future dispatch is metered — the 2026-10-16 wave's
-  4 h 05 m run (38914407147) is ~245 minutes of the 2,000, and a cold 12–28 h build is the
-  whole allowance. `replica/AI-BRIEF.md` §2/§5 and `replica/compile-readiness.md` carry the
-  same state; keep all three in sync when it changes again.
+- **Visibility is a timeline, not a fact — read the last line, do not infer it.**
+  Every change below was read with `gh repo view Ziyzennix/ziy --json visibility,isPrivate`
+  either side of the edit, and the full record lives in `replica/compile-readiness.md` §8.5
+  and §9.10 (which is where a fourth flip gets recorded too):
+  1. **2026-10-15** — created PRIVATE (the co-owner's original requirement).
+  2. **between 2026-10-15 and 2026-10-16** — flipped PUBLIC, unrecorded at the time, to buy
+     the 4 CPU / 16 GB free tier for the compile (dated by §8.5's finding).
+  3. **2026-10-16 ~19:00 UTC** — back to PRIVATE by the co-owner; before → `PUBLIC`/`false`,
+     after → `PRIVATE`/`true`.
+  4. **2026-10-16 ~19:35 UTC — back to PUBLIC**, the current state, after the private tier's
+     dispatch died with the runner's own `No space left on device` 4 minutes in (§9.10).
+  Cost consequence, plainly: while it is private, every dispatch is metered — the 2026-10-16
+  wave's 4 h 05 m run (38914407147) is ~245 minutes of the 2,000/month, and a cold 12–28 h
+  build is the whole allowance. `replica/AI-BRIEF.md` §2/§5 and
+  `replica/compile-readiness.md` carry the same state; keep all three in sync when it moves
+  again — and record the flip in the list above rather than deleting the old line.
 
 ---
 

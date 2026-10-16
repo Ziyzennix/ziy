@@ -1384,6 +1384,13 @@ failure; the apt step itself was fine in the neighbouring runs.
 
 ### 8.5 The PUBLIC/PRIVATE contradiction in the workflow's cost tables — CLOSED 2026-10-16
 
+> **REOPENED AND CLOSED AGAIN, the same day.** The sentence below was true from 19:00 to
+> 19:35 UTC and is **false now**: the co-owner set the repo back to **PUBLIC** at
+> **2026-10-16 ~19:35 UTC**, after a private-tier dispatch died 4 minutes in of the runner's
+> own disk exhaustion (§9.10, which carries the traceback and the current state). This
+> section's finding stands as written for the window it describes; the cost tables in the
+> workflow header are the PUBLIC rows' problem again.
+
 **CLOSED.** The co-owner moved the repo back to **PRIVATE** on **2026-10-16 ~19:00 UTC**,
 and the state was read either side of the change with the same command the finding used:
 before → `{"isPrivate":false,"name":"ziy","visibility":"PUBLIC"}`; after →
@@ -1778,3 +1785,94 @@ greppable, for every step. What it settled:
 format, size and members; any cargo/rustc invocation (no `-v`, and mach prints labels); any
 disk number. Those are exactly what `g2a` and `tools/ci/rust-archive-report.sh` now capture on
 the runner itself.
+
+### 9.10 The second link failure, the dispatch that died of disk, and the flip back to PUBLIC
+
+**Written** 2026-10-16 ~19:40 UTC, immediately after the co-owner asked for the repo to go
+back to public and pasted the runner's own crash. **Method:** read-only `gh` (runs, job steps,
+run 38923396937's full 4548-line log), the co-owner's log downloads, two workflow edits. **No
+compile, no local engine source.**
+
+**a. The libxul failure is DETERMINISTIC — second occurrence, matched to within 64 kB.**
+Run **38923396937** (head `dbe5670`, the same pre-`g2a` workflow, dispatched 15:22:26Z,
+finished 19:19:43Z as a failure) reached the link and died the same way:
+
+```
+15:39:48.5181670Z  14:01.14 toolkit/library/rust/libgkrust.a
+19:19:24.8990747Z 233:37.52 W /usr/bin/ld: ../../../x86_64-unknown-linux-gnu/release/libgkrust.a: error adding symbols: file format not recognized
+19:19:31.3926945Z Command exited with non-zero status 2
+19:19:31.3929467Z \tElapsed (wall clock) time (h:mm:ss or m:ss): 3:53:44
+19:19:31.3931998Z \tMaximum resident set size (kbytes): 5497436
+```
+
+| run | archive built at | link read it at | elapsed | peak RSS |
+| --- | --- | --- | --- | --- |
+| 38914407147 | build-minute 14:04 | minute 241:33 | 4:01:40 | 5,497,500 kB |
+| 38923396937 | build-minute 14:01 | minute 233:37 | 3:53:44 | **5,497,436 kB** |
+
+Two independent runners, the same input set, peak RSS identical to **64 kB (0.001 %)** — so this
+is not a flake, not memory pressure, and not an ordering accident: the same bytes are produced
+and the same linker refuses them. (No `ENOSPC` appears in either log; disk exhaustion is not
+implicated in *these* two failures — see (b) for the run where it is.)
+
+**b. Dispatch 38954973352 — `g2a` ran, then the RUNNER died of its own disk.** The dispatch
+authorized in §9.5 was made at 19:26:49Z on `84ce3e1` (the patch commit; force-replaced by
+`02e6b96` later the same hour when the co-owner asked for the Codebuff trailer to be removed —
+the run's SHA is therefore dangling, see (d)). Its step list shows **`✓ g2a. probe: build only
+the Rust archive, A/B MOZ_LTO_RUST_CROSS, report its format`** — the new step executes on a
+runner — and then, 4 m 21 s in, while `g2b` was running, the job failed with the **runner
+agent's** own error (the co-owner pasted it verbatim):
+
+```
+System.IO.IOException: No space left on device : '/home/runner/actions-runner/cached/2.337.0/_diag/Worker_20261016-192653-utc.log'
+   at System.IO.RandomAccess.WriteAtOffset(...)
+   …
+Unhandled exception. System.IO.IOException: No space left on device : …
+```
+
+That is the AGENT failing to write its own diagnostic log — the job produced **no retrievable
+log at all** (`gh run view 38954973352 --log` → 0 lines; the job-log API → `BlobNotFound`), so
+whatever `g2a` measured is unrecoverable, and the run is a wash rather than a result.
+
+**Reading it honestly:** this run was on the **private** tier (the repo had been private for
+~26 minutes). It is 4 minutes in — long before any objdir exists — so the disk was already
+almost full when the job started, and the one thing this workflow adds to a fresh runner's disk
+*before* the build is the **8 GiB swap file** (`fallocate`, real extents, on the same
+filesystem), on top of the 806 MB tarball, ~3 GB of extracted tree and the ~700 MB restored
+ccache. The workflow's header claims *"the runner's disk holds it"* — **that claim has never
+been measured by anything**, and it is now suspect. The mechanism is a hypothesis
+(no `df` output exists from that run to confirm which filesystem filled); the *observation* is
+not: a private-tier dispatch died of disk exhaustion and left no evidence behind.
+
+**c. What was changed in response (two edits, both in `build-gecko.yml`):**
+
+1. **The swap step now measures disk and fails EARLY with a name.** It prints `df -h /`,
+   prints the free KiB, and **aborts** if less than **10 GiB** is free after the 8 GiB swap
+   file exists — the documented objdir alone is ~10 GB. A named minute-4 failure replaces an
+   agent crash that leaves nothing to read.
+2. **`g2a` writes its evidence into `$GITHUB_STEP_SUMMARY`** — pass 1/pass 2 mach statuses,
+   the A/B fingerprint, and the whole archive report, in plain text. The step summary travels
+   with the run and is visible in the UI without any log download; dispatch 38954973352 is
+   precisely the case where the run's own log was unretrievable
+   (`gh run view --log` → 0 lines) and the measurement was lost. The step also captures the
+   gate's status with `$?` from a redirected command rather than `if ! report | tee …`,
+   because under `pipefail` that pipeline's status can be `tee`'s and the gate would be
+   swallowed.
+
+**d. The visibility flip, and the Codebuff trailer.** Current state: **PUBLIC**, set by the
+co-owner at ~19:35 UTC. The state *before* that flip is the PRIVATE read recorded in §8.5
+(~19:00 UTC, `{"isPrivate":true,"visibility":"PRIVATE"}`); the state **after** it was read
+back in the same command → `{"isPrivate":false,"visibility":"PUBLIC"}`. The full timeline lives in `AGENTS.md`
+and §8.5. Separately: the commit this section dispatched was **amended and force-pushed**
+(`84ce3e1` → `02e6b96`) to remove the `Co-Authored-By: Codebuff` trailer — the co-owner's
+explicit instruction, "NO DO NOT AS CONTRIBUTOR". Verified after the push: no branch, remote
+or tag carries the trailer, and `gh api repos/Ziyzennix/ziy/contributors` lists exactly one
+account, `Ziyzennix`. No other commit in the repo's history ever had it (checked with
+`git log --grep=Codebuff --all`), and no tracked file mentions it. The displaced `84ce3e1`
+remains as a dangling object referenced only by the run that used it.
+
+**e. Where the question stands.** Two runs have now produced the same unreadable archive at the
+same link step, deterministically; one dispatch reached `g2a` and lost its output to a runner
+disk crash; the archive's format is **still unmeasured**. What is new is that the next dispatch
+is instrumented for both failure modes: the disk guard fails early with a name, and the probe's
+verdict appears in the run's summary even when the log does not survive.

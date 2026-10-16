@@ -726,6 +726,28 @@ jobs:
           sudo swapon /swapfile
           free -h
           swapon --show
+          # DISK GUARD + NUMBERS (2026-10-16). A dispatched run (38954973352) died
+          # four minutes into `g2b` with the RUNNER's own failure —
+          #   System.IO.IOException: No space left on device :
+          #   '/home/runner/actions-runner/cached/2.337.0/_diag/Worker_…log'
+          # — i.e. the agent could not write its own diagnostic log, the job
+          # produced no usable log, and nothing was measurable. The 8 GiB swap
+          # file this step creates is REAL on-disk space (fallocate, not sparse)
+          # on the same filesystem that must also hold the tarball (806 MB), the
+          # extracted tree (~3 GB) and the objdir (~10 GB). The workflow's own
+          # header claims "the runner's disk holds it" — that claim is now
+          # SUSPECT, and it has never been measured, because no step printed df.
+          # So: print the space, and fail HERE with a named error instead of
+          # letting the agent die mid-build. 10 GiB free is the floor: the
+          # documented objdir alone is ~10 GB.
+          echo "--- disk after the swap file ---"
+          df -h / || true
+          AVAIL_KB="$(df -Pk / | awk 'NR==2 {print $4}')"
+          echo "root filesystem free after the swap file: ${AVAIL_KB} KiB"
+          if [ "${AVAIL_KB:-0}" -lt 10485760 ]; then
+            echo "::error file=.github/workflows/build-gecko.yml::only ${AVAIL_KB} KiB free on / after creating the 8 GiB swap file — too little for the ~10 GB objdir plus the ~3 GB source. A run started now dies mid-build with the runner's own ENOSPC and leaves no usable log. Shrink the swap file, or run on a runner with a bigger disk."
+            exit 1
+          fi
       # ------------------------------------------------------------------
       # g2a. the cheap probe — reach the ARCHIVE question in ~15 min instead of
       #      at minute 241. This is the step that answers run 38914407147.
@@ -791,7 +813,8 @@ jobs:
             echo "::warning::the unguarded probe exited $P1 — if this is the check_binary gate, its verbatim output is the tail below"
             tail -n 40 "$GITHUB_WORKSPACE/rust-probe-unguarded.log" || true
           fi
-          bash "$REPORT" --objdir obj-ziy || true
+          bash "$REPORT" --objdir obj-ziy > "$GITHUB_WORKSPACE/rust-archive-report-pass1.txt" 2>&1 || true
+          cat "$GITHUB_WORKSPACE/rust-archive-report-pass1.txt" || true
           : > "$FINGERPRINT_1"
           while IFS= read -r a; do
             [ -n "$a" ] || continue
@@ -836,8 +859,47 @@ jobs:
           # Final report on the archive g2b will link, in gate mode. This is also
           # the cross-check for "did the file change between the probe and the
           # link": g2b's failure path prints the same head-1MiB sha256.
-          if ! bash "$REPORT" --objdir obj-ziy --gate; then
-            echo "::error file=tools/ci/rust-archive-report.sh::the Rust static archive is empty or is not an ar archive — a link against it cannot succeed. Evidence above; see replica/compile-readiness.md §9."
+          #
+          # The report is redirected to a file and the status captured with `$?`
+          # rather than piped: under `set -o pipefail`, `report | tee` would make
+          # `if ! …; then` see tee's status for a pipeline whose rightmost FAILING
+          # element is the report, and the gate could be swallowed. One redirect,
+          # one exact status — and the file is what goes into the job summary.
+          GATE_RC=0
+          bash "$REPORT" --objdir obj-ziy --gate > "$GITHUB_WORKSPACE/rust-archive-report.txt" 2>&1 || GATE_RC=$?
+          cat "$GITHUB_WORKSPACE/rust-archive-report.txt" || true
+          # DURABLE EVIDENCE, in the run record instead of a log blob.
+          # WHY: dispatch 38954973352 completed this step and then produced NO
+          # retrievable log at all (`gh run view --log` → 0 lines; the job's API
+          # log 404s), so whatever the probe measured was lost with the runner.
+          # The step summary travels with the run, is visible in the UI without
+          # downloading anything, and is the only part of this step's evidence a
+          # human does not have to go looking for.
+          {
+            echo "### g2a probe — the Rust archive's format"
+            echo ""
+            echo "- pass 1 (exports dropped): mach status \`${P1}\`"
+            echo "- pass 2 (the g2b env): mach status \`${P2}\`"
+            echo "- gate (container check): exit \`${GATE_RC}\`"
+            echo ""
+            echo "A \`status 0\` in a pass means the target ran; it does NOT prove the"
+            echo "archive exists — the report below is the authority on that."
+            echo ""
+            echo "**A/B fingerprint — size, head-1MiB sha256, path**"
+            echo ""
+            echo '```'
+            cat "$FINGERPRINT_1" 2>/dev/null || true
+            cat "$FINGERPRINT_2" 2>/dev/null || true
+            echo '```'
+            echo ""
+            echo "**Archive report (pass 2 / gate)**"
+            echo ""
+            echo '```'
+            cat "$GITHUB_WORKSPACE/rust-archive-report.txt" 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$GATE_RC" -ne 0 ]; then
+            echo "::error file=tools/ci/rust-archive-report.sh::the Rust static archive is empty or is not an ar archive — a link against it cannot succeed. Evidence above and in the job summary; see replica/compile-readiness.md §9."
             exit 1
           fi
 
