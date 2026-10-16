@@ -1306,7 +1306,10 @@ E gmake[3]: *** [.../config/recurse.mk:79: toolkit/crashreporter/crash_helper/ta
 `f0406cf` ("disable crashreporter to bypass helper link") added
 `ac_add_options --disable-crashreporter` to the e2 `.mozconfig`. **Untested as of this
 writing** — run 38910145529 (which carried it) was cancelled at 4 m, and run
-38910465453 died on the swap step before ever reaching g2.
+38910465453 died on the swap step before ever reaching g2. → **§8.7 closes this
+statically (no compile): the whole failing subtree is inside
+`if CONFIG["MOZ_CRASHREPORTER"]:`**, which `--disable-crashreporter` unset — the
+target ceases to exist in the build graph.
 
 ccache lineage: this run's `g5b` save produced the **396 MB** entry
 (`ccache-gecko-156.0.1-c4cdaa3c…-38901074475` — the first non-trivial cache of the
@@ -1392,11 +1395,58 @@ table, not a measured fact.**
 
 - Image's actual swap budget, RAM, disk and `nproc` — now guaranteed to print on the
   next run (end of the swap step: `free -h` + `swapon --show`).
-- Whether `--disable-crashreporter` (f0406cf) genuinely bypasses the crash-helper
+- ~~Whether `--disable-crashreporter` (f0406cf) genuinely bypasses the crash-helper
   link failure — untested; the next dispatch reaches `g2` past the fixed swap step
-  and answers it within ~63 min of work, warm cache.
+  and answers it within ~63 min of work, warm cache.~~ **CLOSED 2026-10-16, no
+  compile needed — resolved statically as §8.7.**
 - Whether the five C++ patches compile — unchanged: still APPLIED-ONLY per §7.4;
   no run has reached the objdir inside libxul's rust/C++ weave yet (63-min frontier,
   libxul content dominant at the end).
 - TODAY.md §3's run history has NOT been edited from here (its maintainer owns it);
   this §8 is the evidence base for that update.
+
+### 8.7 Local static verification of the crash-helper bypass — CLOSED, zero compile
+
+**Written:** 2026-10-16, after the co-owner asked whether some of the wave's open
+risks could be "tested on my pc" before the full GitHub run. **Route decision
+(co-owner, this date): the CI run stays the compile path** (deep-fork.md §0 intact);
+the local box does source-level verification only. **Method:** read-only greps over
+the box's surviving Firefox-156.0.1 extraction at
+`firefox-156.0.1/` (a PARTIAL tree: `dom` + `toolkit` only — the reboot ate
+`/tmp/firefox-src`, this subtree survived) + a fetch of two `moz.build` files from
+`hg.mozilla.org` at the tree's own revision
+`6f2c158dfc7e9693f880fad2510ceb51a158c069` (`tools/verify.sh`'s and
+`proofs-fix-events.md` §1's pinned rev). No `mach` invocation, no compilation.
+
+**Question: does `--disable-crashreporter` suppress the `crashhelper` link target
+whose failure ended run 38901074475?** Answer: **yes, provably — the target ceases
+to exist in the build graph:**
+
+1. `toolkit/moz.configure:3505-3506` (this tree): `MOZ_CRASHREPORTER` is
+   `set_config`+`set_define` `True, when="--enable-crashreporter"`. The
+   f0406cf-added `--disable-crashreporter` leaves the define UNSET.
+2. `toolkit/crashreporter/moz.build` @ rev 6f2c158dfc7e: everything the failing
+   target needs is inside `if CONFIG["MOZ_CRASHREPORTER"]:` — the Linux row's
+   `DIRS += ["breakpad-client", "breakpad-client/linux/", … "breakpad_wrapper",
+   "crash_helper", "crash_helper_client", "crash_helper_server", "crashping", …]`.
+   Not set ⇒ those DIRS are never appended ⇒ the child `moz.build` files are never
+   even executed (moz.build recursion is parent-driven).
+3. `toolkit/crashreporter/crash_helper/moz.build` @ the same rev makes
+   `GeckoProgram("crashhelper", linkage=None)` **unconditional** — a live trap IF the
+   dir were entered unconditionally, but it is only reachable through (2)'s gate.
+4. Run-4's own log shows the order matching the gate's contents: `breakpad-client`
+   (51:04), `google-breakpad/src/common` (51:05), `breakpad_wrapper` (55:32),
+   `libcrash_helper_server.a` (55:56), `crashhelper` link (60:27, fatal). All inside
+   (2).
+5. The disabled option's replacement is in-tree: the `else:` branch swaps in
+   `nsDummyExceptionHandler.cpp` (same parent `moz.build`) — nothing outside the gate
+   consumes `breakpad_*`/`crash_helper_*` libs, so no dangling consumer. (In-tree
+   read, not compiled: if some FLAVOR ever reintroduces a consumer, this paragraph is
+   the tripwire.)
+
+**Residual truth:** the crash-helper link failure's underlying LINKER message was
+never printed in the failed-step log we hold (clang's summary only, see the tail of
+`run-38901074475`'s `--log-failed`); the ROOT CAUSE is therefore still unroot-cased —
+but it is bypassed WHOLESALE (with the subtree gone there is no link to fail), so
+risk no longer applies to the resumable wave. The co-owner may revisit for a
+real root-case in a later session if crash reporting is ever wanted in the engine.
