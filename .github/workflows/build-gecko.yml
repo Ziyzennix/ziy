@@ -16,43 +16,55 @@
 # matter: run the heavy workflows on release tags and manual dispatch, not on
 # every PR of every branch."
 #
-# RUNNER SPEC — CORRECTED FOR THE REPO THIS RUNS ON, WHICH IS PRIVATE BY DESIGN.
+# RUNNER SPEC — PUBLIC REPO, AND NOW MEASURED RATHER THAN QUOTED.
 # `ubuntu-latest` is NOT one machine: its size depends on repo visibility.
-# (Verified 2026-10-15, docs.github.com/en/actions/reference/runners/
+# (Doc table fetched 2026-10-15, docs.github.com/en/actions/reference/runners/
 # github-hosted-runners, the two "Standard ... runners" tables:)
 #
-#   PUBLIC repo:  ubuntu-latest = 4 CPU / 16 GB RAM / 14 GB SSD, free+unlimited.
-#   PRIVATE repo: ubuntu-latest = 2 CPU /  8 GB RAM / 14 GB SSD, and minutes are
-#                 METERED — "These runners use your account's allotment of free
-#                 minutes, and are then charged at the per minute rates."
+#   PUBLIC repo:  ubuntu-latest = 4 CPU / 16 GB RAM, free + unmetered minutes.
+#   PRIVATE repo: ubuntu-latest = 2 CPU /  8 GB RAM, and minutes are METERED —
+#                 "These runners use your account's allotment of free minutes,
+#                 and are then charged at the per minute rates."
 #
-# THIS REPO IS PRIVATE (the co-owner requirement, compile-readiness.md top block),
-# so every number below is the 2 CPU / 8 GB column. The 4/16 numbers describe a
-# hypothetical public mirror, not the machine that will run this job.
+# THIS REPO IS PUBLIC. (`gh repo view --json isPrivate` -> false, re-read
+# 2026-10-17.) It was flipped private and back to public on 2026-10-16, and the
+# flip changed the machine this workflow gets — which is no longer an inference,
+# because both tiers have now measured themselves:
+#   * run 38956545876 (public) printed `Mem: 15Gi` (the 16 GB row) and
+#     `/dev/root 145G 72G 73G 50% /` — 145 GB of disk, not the 14 GB this
+#     header used to quote;
+#   * run 38954973352 (private) died at 4m21s because the runner could not write
+#     its own diagnostic log — `System.IO.IOException: No space left on device :
+#     '/home/runner/actions-runner/cached/2.337.0/_diag/Worker_…log'` — with no
+#     usable log left behind at all.
 #
 # WHAT THAT MEANS FOR THIS JOB, stated plainly up front:
-#   * MOZ_PARALLEL_BUILD is 1 in step e2 — one BELOW this runner's 2 cores,
-#     which is the value 3717e47 named in its subject (it has no commit body to
-#     cite). The measured effect, from run 38914407147's `/usr/bin/time -v`:
-#     "Percent of CPU this job got: 101%", i.e. the 4-hour compile ran
-#     effectively single-threaded. `-j4` on a 2-core box oversubscribes and
-#     makes the build slower, not faster.
-#   * 8 GB RAM is a real risk, not headroom: the workflow's own notes record the
-#     libxul link as a single ~5 GB process (proofs-deep-fork.md §7). On 8 GB
-#     with the OS and toolchain resident, that link has little margin.
-#   * METERED MINUTES: GitHub Free = 2,000 min/month for PRIVATE repos, and
-#     "If your account does not have a valid payment method on file, usage is
-#     blocked once you use up your quota" (docs.github.com/en/billing/concepts/
-#     product-billing/github-actions). One cold run of this job is estimated
-#     12-28h wall = ~720-1,680 min, i.e. the ENTIRE monthly allowance in one run.
-#   * THE JOB CAP IS 720 MIN (12h) = GITHUB'S MAXIMUM job timeout, and the
-#     estimate above exceeds it. So the FIRST hosted run may not be a build
-#     failure at all — it may be a plain cap timeout after 12h. Budget minutes
-#     accordingly; see the job-level comment for the split point and the
-#     mitigations (self-hosted runner on the co-owner's box = free, and the box
-#     already has the toolchain + the checksum-verified source extracted).
-#   * Linux 2-core past the quota = $0.006/min (actions_linux), from the
-#     "Baseline minute costs" table on the same billing page.
+#   * MOZ_PARALLEL_BUILD is 1 in step e2 — the value 3717e47 named in its subject
+#     (that commit has no body to cite), chosen for the 8 GB private tier. On the
+#     measured 16 GB public tier it is deliberately LEFT ALONE: one busy core on
+#     a 4-core runner (run 38914407147's `/usr/bin/time -v`: "Percent of CPU this
+#     job got: 101%" over a 4-hour compile) wastes wall time, but changing the
+#     compile's concurrency in the same dispatch that reads the archive's format
+#     would put two variables into one run's evidence. Raising it is a RECORDED
+#     RECOMMENDATION with its own falsifier — compile-readiness.md §9.10(c) —
+#     not an implemented change.
+#   * RAM is the binding constraint and it is now measured: 16 GB (15 GiB) plus
+#     the 8 GB swap file step g1 forces. The libxul link is a single ~5 GB
+#     process (proofs-deep-fork.md §7), and run 38914407147's `/usr/bin/time -v`
+#     put that link's peak RSS at 5,497,500 kB.
+#   * MINUTES ARE NOT METERED ANY MORE: public repos get free, unmetered
+#     minutes, so the cost of a run is WALL TIME. Per-run figures live in
+#     compile-readiness.md §8/§9: the run that reached the link did so at
+#     **minute 241** (run 38914407147) and then failed in ten seconds.
+#   * THE JOB CAP IS 720 MIN (12h) = GITHUB'S MAXIMUM job timeout, kept at the
+#     maximum. The old "12-28h at 2 cores" estimate is superseded by that
+#     measurement, so the cap is no longer the expected outcome.
+#   * If the repo is ever flipped back to PRIVATE: 2,000 min/month, "If your
+#     account does not have a valid payment method on file, usage is blocked
+#     once you use up your quota" (docs.github.com/en/billing/concepts/
+#     product-billing/github-actions), and past the quota $0.006/min Linux
+#     2-core ("Baseline minute costs", same page). Plus the disk that killed
+#     run 38954973352.
 #
 # WHY THIS IS STILL NOT ON EVERY PUSH (and why `push:` is tag-gated, not
 
@@ -489,21 +501,23 @@ jobs:
           # The objdir name from the local proof (deep-fork.md §6.3).
           mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-ziy
 
-          # PARALLELISM = 1, one below the private-repo runner's core count.
-          # `ubuntu-latest` on a PRIVATE repo is 2 CPU / 8 GB (GitHub-hosted
-          # runners reference, "Standard GitHub-hosted runners for private
-          # repositories"); the 4 CPU / 16 GB figure is the PUBLIC repo table.
-          # The local box's nproc=4 is irrelevant to the runner this job gets.
-          # Oversubscribing (j4 on 2 cores) does not speed the build up — it
-          # adds scheduler thrash on top of ~5 GB link processes competing for
-          # 8 GB. A SELF-HOSTED runner has nproc=4; if you switch runs-on to
-          # self-hosted, raise this to 4.
+          # PARALLELISM = 1 — a deliberate HOLD, not a fit for the machine this
+          # now runs on. The repo is PUBLIC (measured 16 GB / 145 GB disk, run
+          # 38956545876), so this is one busy core on a 4-core runner: run
+          # 38914407147's `/usr/bin/time -v` measured "Percent of CPU this job
+          # got: 101%" across a ~4-hour compile. That is three cores idle, and it
+          # is LEFT THAT WAY ON PURPOSE for now — the next dispatch exists to read
+          # the Rust archive's format, and changing the compile's concurrency in
+          # the same run would put two variables into one run's evidence.
+          # Raising it to `nproc` (4 here) is a RECORDED RECOMMENDATION with a
+          # falsifier, not an implemented change: compile-readiness.md §9.10(c).
           # CORRECTION 2026-10-16: this comment used to read "PARALLELISM = 2"
           # above a line that sets 1 — a documented number that was never the
-          # value in force. The value is unchanged by this fix; only the prose
-          # is. 3717e47 chose 1 and named it in its subject; the run-38914407147
-          # `/usr/bin/time -v` record ("Percent of CPU this job got: 101%") is
-          # the measurement of what that choice produced.
+          # value in force; only the prose was fixed then. 3717e47 chose 1 and
+          # named it in its subject (no body to cite), for the 8 GB PRIVATE tier,
+          # where 2 cores and ~5 GB link processes made -j1 defensible. On the
+          # public tier that argument does not hold, which is why the value is
+          # now FLAGGED here rather than re-justified.
           mk_add_options MOZ_PARALLEL_BUILD=1
 
           # A real (non-artifact) C++ build, stated explicitly so the log
@@ -742,6 +756,14 @@ jobs:
           # documented objdir alone is ~10 GB.
           echo "--- disk after the swap file ---"
           df -h / || true
+          # CPU, printed here because it had NEVER been measured on a runner
+          # (added 2026-10-17): the doc tables claim 4 CPU public / 2 private,
+          # and no step in any run ever printed nproc, so `PARALLELISM=1` could
+          # not be checked against the machine it ran on. RAM and disk are
+          # measured a few lines above; this is the third number of that claim.
+          echo "--- cpu ---"
+          nproc || true
+          grep -m1 'model name' /proc/cpuinfo || true
           AVAIL_KB="$(df -Pk / | awk 'NR==2 {print $4}')"
           echo "root filesystem free after the swap file: ${AVAIL_KB} KiB"
           if [ "${AVAIL_KB:-0}" -lt 10485760 ]; then
@@ -749,7 +771,7 @@ jobs:
             exit 1
           fi
       # ------------------------------------------------------------------
-      # g2a. the cheap probe — reach the ARCHIVE question in ~15 min instead of
+      # g2a. the cheap probe — reach the ARCHIVE question in ~30 min instead of
       #      at minute 241. This is the step that answers run 38914407147.
       #
       # THE FAILURE IT EXISTS FOR (run 38914407147, 2026-10-16, head dbe56703):
@@ -764,8 +786,12 @@ jobs:
       # and no member format. The local box cannot close it either — it has no
       # engine source tree, and local compilation is prohibited (deep-fork.md
       # §0). So the measurement has to happen on a runner, and it has to happen
-      # EARLY: this step builds only `toolkit/library/rust`, the directory that
-      # produces the archive, and reports the format of what came out.
+      # EARLY: this step builds until the archive exists and reports the format
+      # of what came out. It first tried the cheap form — `./mach build
+      # toolkit/library/rust`, the directory that "produces" the archive — and
+      # run 38956545876 measured that form to be a SILENT NO-OP: mach exited 0
+      # in about a second and produced no archive at all (the step's own report:
+      # `verdict: NO-ARCHIVES-FOUND`, both passes). See the pass-1 comment below.
       #
       # THE A/B — one variable, two invocations of the same target:
       #   pass 1: MOZ_LTO_RUST_CROSS and RUST_SANCOV_FLAGS UNSET (the tree's own
@@ -794,7 +820,7 @@ jobs:
       # and no others): the two conditions that cannot be fixed by continuing,
       # and therefore the only ones worth aborting before a 4-hour link.
       # ------------------------------------------------------------------
-      - name: "g2a. probe: build only the Rust archive, A/B MOZ_LTO_RUST_CROSS, report its format"
+      - name: "g2a. probe: bounded build to the Rust archive, A/B MOZ_LTO_RUST_CROSS, report its format"
         run: |
           set -euxo pipefail
           cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
@@ -803,11 +829,29 @@ jobs:
           FINGERPRINT_1="$GITHUB_WORKSPACE/rust-probe-unguarded.fingerprint"
           FINGERPRINT_2="$GITHUB_WORKSPACE/rust-probe-guarded.fingerprint"
 
+          # THE TARGET CHANGED AFTER BEING MEASURED (2026-10-16, run 38956545876):
+          # the first version ran `./mach build toolkit/library/rust`, the tree's
+          # directory target. On the runner it exited **0** and produced **no
+          # libgkrust*.a and no */release/*.a at all** (g2a's own report:
+          # `verdict: NO-ARCHIVES-FOUND`), i.e. the directory form is a silent
+          # NO-OP in this tree — make in that objdir has no work to do unless the
+          # archive is wanted as a dependency of something bigger. The warning
+          # that this form was "unverified" was therefore correct, and warn-only
+          # handling turned a broken probe into a courteous shrug.
+          #
+          # So the probe now does what actually produces the archive, bounded: a
+          # NORMAL `./mach build`, killed by `timeout` once the Rust archive must
+          # exist. The Rust half of the build is minutes (~12.5 min measured,
+          # run 38914407147: "Finished release profile … in 12m 32s"), against the
+          # C++ half's ~4 hours — so the same measurement now costs ~30 min for
+          # two passes instead of a whole dispatch. The work is not wasted: pass 2
+          # is the opening stretch of g2b's own build, and it warms the same objdir.
           echo "::group::g2a pass 1 — the tree's own state (both exports dropped)"
           P1=0
-          env -u MOZ_LTO_RUST_CROSS -u RUST_SANCOV_FLAGS \
-            /usr/bin/time -v ./mach build toolkit/library/rust \
+          timeout 1800 env -u MOZ_LTO_RUST_CROSS -u RUST_SANCOV_FLAGS \
+            /usr/bin/time -v ./mach build \
             2>&1 | tee "$GITHUB_WORKSPACE/rust-probe-unguarded.log" || P1=${PIPESTATUS[0]}
+          echo "pass 1 raw status: $P1 (124 = the 30-min timeout fired, which is expected)"
           echo "pass 1: mach status=$P1"
           if [ "$P1" -ne 0 ]; then
             echo "::warning::the unguarded probe exited $P1 — if this is the check_binary gate, its verbatim output is the tail below"
@@ -827,8 +871,9 @@ jobs:
           export MOZ_LTO_RUST_CROSS=1
           export RUST_SANCOV_FLAGS=1
           P2=0
-          /usr/bin/time -v ./mach build toolkit/library/rust \
+          timeout 1800 /usr/bin/time -v ./mach build \
             2>&1 | tee "$GITHUB_WORKSPACE/rust-probe-guarded.log" || P2=${PIPESTATUS[0]}
+          echo "pass 2 raw status: $P2 (124 = the 30-min timeout fired, which is expected)"
           echo "pass 2: mach status=$P2"
           if [ "$P2" -ne 0 ]; then
             echo "::warning::the guarded probe exited $P2 — the tail below says why; the full build in g2b may still reach the link"
@@ -848,7 +893,7 @@ jobs:
           # then be a false exoneration of the export. "Nothing was produced" is
           # a different answer from "the same thing was produced twice".
           if [ ! -s "$FINGERPRINT_1" ] || [ ! -s "$FINGERPRINT_2" ]; then
-            echo "A/B verdict: NOT COMPARABLE — at least one pass produced no libgkrust*.a. Read the two reports above: NO-ARCHIVES-FOUND means the directory target did not build the archive (the ./mach build <dir> form is unverified on this tree), NOT that the archive is healthy."
+            echo "A/B verdict: NOT COMPARABLE — at least one pass produced no libgkrust*.a. Since 2026-10-17 each pass is a full bounded ./mach build (run 38956545876 killed the old directory target as the cause of exactly this message), so NO-ARCHIVES-FOUND now means the archive genuinely was not produced — NOT that the archive is healthy, and no longer a probe-syntax artefact. The two probe logs are printed on failure for this reason."
           elif cmp -s "$FINGERPRINT_1" "$FINGERPRINT_2"; then
             echo "A/B verdict: IDENTICAL archives (size + first MiB) — MOZ_LTO_RUST_CROSS/RUST_SANCOV_FLAGS do not change this archive, so the export is exonerated for the link failure"
           else
@@ -902,6 +947,21 @@ jobs:
             echo "::error file=tools/ci/rust-archive-report.sh::the Rust static archive is empty or is not an ar archive — a link against it cannot succeed. Evidence above and in the job summary; see replica/compile-readiness.md §9."
             exit 1
           fi
+          # DE-RISK THE HANDOFF. Both passes end in a `timeout` kill, so the last
+          # write to the archive may have been interrupted — and make does not
+          # distinguish a half-written target from a finished one (matching
+          # timestamps mean "up to date"). Inheriting a truncated archive would
+          # REPRODUCE the very failure this workflow is chasing, from a cause of
+          # our own making. So the probe deletes what it measured: cargo's
+          # artifacts stay cached in the objdir, so re-creating the archive costs
+          # a re-archive, not a Rust rebuild. The fingerprints above and g2b's own
+          # report are what get compared, not the file.
+          while IFS= read -r a; do
+            [ -n "$a" ] || continue
+            echo "removing the probe's archive so g2b rebuilds it from cached objects: $a"
+            rm -f "$a"
+          done < <(find obj-ziy -type f -name 'libgkrust*.a' 2>/dev/null | sort)
+          echo "probe complete — g2b now owns the objdir"
 
       # ------------------------------------------------------------------
       # g2b. the full build. Renamed from `g2` on 2026-10-16 when g2a was
@@ -1207,22 +1267,25 @@ jobs:
           {
             echo "### Gecko $GECKO_VERSION build record"
             echo ""
-            echo "- runner: ubuntu-latest on a PRIVATE repo = **2 CPU / 8 GB**"
-            echo "  (the 4 CPU / 16 GB figure is the public-repo table)"
-            echo "- parallelism: MOZ_PARALLEL_BUILD=1 (this runner has **2"
-            echo "  cores**; 1 is the value 3717e47 set, and run 38914407147's"
-            echo "  /usr/bin/time -v measured 101% CPU for it)"
-            echo "- timeout-minutes: 720 = GitHub's MAXIMUM job timeout. It is"
-            echo "  kept at the maximum on purpose: one full Gecko build at 2"
-            echo "  cores is estimated **12-28h** wall, which EXCEEDS the cap, so"
-            echo "  a smaller cap would guarantee failure. The first hosted run"
-            echo "  may therefore end in a plain cap timeout rather than a"
-            echo "  compile error."
-            echo "- metered minutes (GitHub Free, private repo): **2,000/min**;"
-            echo "  this run is estimated 720-1,680 min, i.e. the whole monthly"
-            echo "  allowance. With no payment method on file, usage BLOCKS once"
-            echo "  the quota is used up; past the quota it is \$0.006/min"
-            echo "  (Linux 2-core)."
+            echo "- runner: ubuntu-latest on a **PUBLIC** repo = 4 CPU / 16 GB"
+            echo "  RAM (free + unmetered). All three are MEASURED on a runner"
+            echo "  now, not quoted: run 38956545876 printed \`Mem: 15Gi\` and"
+            echo "  \`/dev/root 145G\`; the swap step prints nproc."
+            echo "- parallelism: MOZ_PARALLEL_BUILD=1, deliberately held — on a"
+            echo "  4-core runner this leaves three cores idle (run 38914407147's"
+            echo "  /usr/bin/time -v measured 101% CPU across ~4 hours). Raising"
+            echo "  it is recorded as a recommendation with its own falsifier,"
+            echo "  not implemented: compile-readiness.md §9.10(c)."
+            echo "- timeout-minutes: 720 = GitHub's MAXIMUM job timeout, kept at"
+            echo "  the maximum. The old \"12-28h at 2 cores\" estimate is"
+            echo "  superseded by measurement — this job reaches the link at"
+            echo "  **minute 241** (run 38914407147) and then fails in ten"
+            echo "  seconds — so the cap is no longer the expected outcome."
+            echo "- minutes: public repos are free and unmetered, so a run costs"
+            echo "  WALL TIME now, not quota. (Flipped back to private it is"
+            echo "  2,000 min/month, blocked past the quota with no payment"
+            echo "  method on file, plus the disk that killed run"
+            echo "  38954973352.)"
             echo "- the free path: the commented-out \`runs-on: self-hosted\`"
             echo "  block in this workflow. Self-hosted runners are free, and"
             echo "  the co-owner's box already has the toolchain and the"
