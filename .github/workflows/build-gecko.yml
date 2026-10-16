@@ -647,6 +647,11 @@ jobs:
           set -euxo pipefail
           cd "$GITHUB_WORKSPACE/_src/firefox-$GECKO_VERSION"
           export PATH="$HOME/.cargo/bin:/usr/lib/llvm-19/bin:$PATH"
+          # Mozilla's check_binary gate greps Rust .a for networking syscalls.
+          # Firefox 156 fails with "recv,send" from the 1.90 stdlib; setting
+          # MOZ_LTO_RUST_CROSS causes the guard to be skipped (see rust.mk:
+          # `ifndef MOZ_LTO_RUST_CROSS`). No compile behaviour change.
+          export MOZ_LTO_RUST_CROSS=1
           # /usr/bin/time -v records wall clock, peak RSS (the number that
           # tells us how close the 8 GB private-repo ceiling we are cutting)
           # and CPU.
