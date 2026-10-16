@@ -652,6 +652,7 @@ jobs:
           # MOZ_LTO_RUST_CROSS causes the guard to be skipped (see rust.mk:
           # `ifndef MOZ_LTO_RUST_CROSS`). No compile behaviour change.
           export MOZ_LTO_RUST_CROSS=1
+          export RUST_SANCOV_FLAGS=1
           # /usr/bin/time -v records wall clock, peak RSS (the number that
           # tells us how close the 8 GB private-repo ceiling we are cutting)
           # and CPU.
