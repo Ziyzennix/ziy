@@ -59,6 +59,7 @@
     exports.abpMatches = api.abpMatches;
     exports.classify = api.classify;
     exports.browserApi = api.browserApi;
+    exports.nativeVerdictFor = api.nativeVerdictFor;
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
@@ -225,6 +226,48 @@ function classify(url, listId, resourceType) {
   if (listId === 'easylist') return resourceType === 'script' ? 'script' : 'ad';
   if (resourceType === 'script') return 'script';
   return 'ad';
+}
+
+/**
+ * Asks the ziy-blocks native host for a verdict on one request, with a bounded
+ * timeout so a hung host never stalls the request path.
+ *
+ * @param {{url: string, type: string, initiator: string|null, method?: string}} request
+ * @returns {Promise<'block'|'allow'|'pass'>}
+ */
+function nativeVerdictFor(request) {
+  return new Promise((resolve) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      resolve('pass');
+    }, 50);
+    try {
+      browser.runtime.sendNativeMessage('ziy-blocks', {
+        op: 'verdict',
+        url: request.url,
+        initiator: request.initiator,
+        type: request.type,
+        method: request.method,
+      }).then((result) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(result && result.verdict ? String(result.verdict) : 'pass');
+      }, () => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve('pass');
+      });
+    } catch (e) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      resolve('pass');
+    }
+  });
 }
 
   return {

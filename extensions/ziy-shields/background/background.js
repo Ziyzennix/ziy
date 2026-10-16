@@ -53,9 +53,6 @@ const spotifyAdSlot = lib;
 const api = blocking.browserApi ? blocking.browserApi()
   : (typeof browser !== 'undefined' ? browser : chrome);
 
-const RULESET_STATIC_ID = 'ziy-shields-lists';
-const STATIC_RULE_PATH = 'rules/static-ruleset.json';
-
 /* Per-site override rule ids start well above the static ruleset's ids (which
  * are dense from 1) so the two sets never collide when the engine compares
  * them, and stay far below the session tier's 1,000,000 priority band. */
@@ -78,36 +75,8 @@ let residualShape = null;
 /** Per-site ABSOLUTE rules: domain -> parsed rule objects ready to compile. */
 const siteOverrideRules = new Map();
 /** How many DNR rules are installed in each tier. */
-const installState = { static: 0, dynamic: 0, session: 0, webRequest: 0, staticRules: 0, staticCounting: false };
+const installState = { static: 0, dynamic: 0, session: 0, webRequest: 0 };
 
-/**
- * The STATIC ruleset as the engine loaded it, for counting.
- * `fetch()`-loaded at startup from the file the manifest's
- * declarative_net_request.rule_resources entry names, then indexed. This is the
- * SAME table the engine evaluates (it is the build artifact, not a recompile),
- * which is what makes the count a measurement of the engine's own decisions
- * rather than a guess about them.
- * @type {{index: object, unanchored: Array, count: number}|null}
- */
-let staticRulesetIndex = null;
-/** Set once the ruleset fetch has failed, so it is not retried per request. */
-let staticRulesetUnavailable = false;
-
-/**
- * The list id a static rule's priority band stands for. The static tier is a
- * build artifact compiled from EasyList/EasyPrivacy/Fanboy, so a rule id names
- * a ROW of that compilation, not a list. The engine's own priority band is the
- * honest signal for classification: 500 is ABP's !important, 100 is an
- * exception (@@), and 10 an ordinary block. classify() takes a list id, so the
- * band is passed through it rather than inventing a list name.
- */
-function staticListIdFor(rule) {
-  if (!rule) return null;
-  const priority = rule.priority || 0;
-  if (priority >= 500) return 'important';
-  if (priority >= 100) return 'exception';
-  return 'static';
-}
 
 let initPromise = null;
 
@@ -158,12 +127,10 @@ async function rebuildAll() {
     bodies.push(record.id);
   }
   await lists.saveRegistry(registry);
-
-  await Promise.all([installIntoDNR(), loadStaticRulesetIndex()]);
+  await installIntoDNR();
   await persistCosmeticTable();
   return { lists: bodies, networkRules: compiledNetwork.length };
 }
-
 /** Compiles and installs the static and dynamic tiers. */
 async function installIntoDNR() {
   // 1. static tier: one ruleset file, enabled from the manifest.
@@ -179,7 +146,7 @@ async function installIntoDNR() {
   residualShape = lib.describe ? lib.describe(residualIndex) : null;
 
   // The STATIC table is not written here at all: it is generated at build time
-  // into extensions/ziy-shields/rules/static-ruleset.json and SHIPPED INSIDE the
+  // and SHIPPED INSIDE the
   // xpi as the manifest's declarative_net_request.rule_resources entry. The
   // engine loads it from the package — that is the only tier that scales to
   // 10^5 rules, and it is why the 5000-rule dynamic budget is left for per-site
@@ -258,56 +225,6 @@ async function clearSiteRule(domain) {
   await refreshSiteOverrides();
   return true;
 }
-
-/**
- * Loads the shipped static ruleset and indexes it.
- *
- * WHY fetch() AND NOT require(): this file runs in the event page, where there
- * is no require(); the ruleset file is the one the manifest's
- * `declarative_net_request.rule_resources` entry names, so the URL is the
- * extension's own. The engine has already parsed the same file to install the
- * tier, so reading it costs one file read at startup and nothing per request.
- *
- * A failure is not fatal: without the index the static tier simply does not
- * contribute to the count (which is exactly the pre-D-7-fix behaviour), so the
- * add-on degrades to the residual count rather than to a crash. `counted` is
- * echoed in installState so the panel can tell the two situations apart.
- */
-async function loadStaticRulesetIndex() {
-  if (staticRulesetIndex || staticRulesetUnavailable) return staticRulesetIndex;
-  try {
-    const response = await fetch(api.runtime.getURL(STATIC_RULE_PATH));
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const rules = await response.json();
-    if (!Array.isArray(rules) || !rules.length) throw new Error('empty ruleset');
-    staticRulesetIndex = lib.buildStaticIndex
-      ? lib.buildStaticIndex(rules)
-      : null;
-    installState.staticRules = rules.length;
-    installState.staticCounting = staticRulesetIndex !== null;
-    return staticRulesetIndex;
-  } catch (e) {
-    staticRulesetUnavailable = true;
-    installState.staticRules = 0;
-    return null;
-  }
-}
-
-/**
- * Would the static ruleset stop this request? Returns the winning block rule,
- * or null. Counting only — it never cancels anything. See the note in the
- * onBeforeRequest listener and the header of lib/engine/static-match.js for
- * why this is the honest measurement available on this engine.
- */
-function staticWinnerForRequest(request) {
-  if (!staticRulesetIndex) return null;
-  const candidates = lib.staticCandidates
-    ? lib.staticCandidates(staticRulesetIndex, request.url)
-    : [];
-  if (!candidates.length) return null;
-  return lib.staticWinnerFor(candidates, request);
-}
-
 /**
  * Rebuild the per-site DNR overrides from storage and install them into the
  * DYNAMIC ruleset — the one tier whose budget (5000) is sized for exactly this:
@@ -374,62 +291,41 @@ async function refreshSiteOverrides() {
  * ------------------------------------------------------------------ */
 
 /**
- * The counting listener. Registered with "blocking" so it runs on the request
- * path, but we never issue a block from here for anything DNR already covers —
- * see the ordering note in lib/engine/blocking.js.
- *
- * The two tiers are counted here, in the order the ENGINE runs them
- * (WebRequest.sys.mjs, runChannelListener: DNR evaluation, then our listeners,
- * then handleRequest which discards our handlerResults when DNR blocked):
- *
- *   1. the STATIC ruleset (the 28 923-rule build artifact shipped in the xpi) —
- *      counted by re-evaluating the request against the same ruleset, in
- *      lib/engine/static-match.js. This is what closes D-7: the engine gives an
- *      extension no per-request "a rule matched" event (onRuleMatchedDebug is
- *      bug 1745773 and is not in this engine; getMatchedRules is bug 1745765 and
- *      is not either), and the one synchronous feedback API there is,
- *      testMatchOutcome, is gated behind extensions.dnr.feedback (default
- *      false) plus an optional permission that needs a user-gesture prompt.
- *      So the count is measured by us against the shipped ruleset. It NEVER
- *      blocks: by the time this listener runs, the engine has already applied
- *      the block and our handlerResults are discarded.
- *   2. the residual webRequest tier — the rules DNR could not express, which we
- *      really do block here.
+ * The blocking listener. Registered with "blocking" so it runs on the request
+ * path. The ziy-blocks native host gets first say; anything it passes falls
+ * through to the residual webRequest tier (rules DNR could not express),
+ * which we really do block here.
  */
 api.webRequest.onBeforeRequest.addListener(
-  (details) => {
+  async (details) => {
     const url = details.url;
     const request = {
       url,
       type: details.type,
       initiator: details.documentUrl || null,
+      method: details.method,
     };
 
-    // 1. The static tier. Its winner is recorded with tier 'dnr' so the panel
-    //    can say which engine stopped the request; the classification is the
-    //    same one the residual path uses, with the ruleset's own priority band
-    //    standing in for the list id (a static rule id names a build artifact
-    //    row, not a list, so the priority band is the honest signal: 500 is an
-    //    !important rule, 100 an exception, 10 an ordinary block).
-    const staticWinner = staticWinnerForRequest(request);
-    if (staticWinner) {
+    // Native blocking host (ziy-blocks) gets first say. A blocked verdict
+    // cancels the request; an allow verdict is honoured; pass/timeout/unavailable
+    // falls through to the residual webRequest tier below.
+    const verdict = await lib.nativeVerdictFor(request);
+    if (verdict === 'block') {
       blocking.recordBlock(details.tabId, {
-        category: blocking.classify(url, staticListIdFor(staticWinner), details.type),
+        category: blocking.classify(url, 'native', details.type),
         url,
-        tier: 'dnr',
+        tier: 'native',
         protocol: details.type,
         initiator: details.documentUrl || null,
-        listId: staticListIdFor(staticWinner),
-        reason: staticWinner.condition.urlFilter || staticWinner.condition.regexFilter || null,
-        ruleId: staticWinner.id,
+        reason: null,
+        ruleId: null,
       });
-      return undefined;
+      return { cancel: true };
     }
+    if (verdict === 'allow') return undefined;
 
-    // 2. The residual webRequest tier: what the static ruleset could not carry.
-    //    Which intensity a match belongs to is only knowable against the
-    //    compiled table; DNR tells us nothing about what it did, so a request
-    //    that is in our residual set is one we block ourselves.
+    // Residual webRequest tier: what the native host did not express — rules
+    // DNR could not carry, which we block ourselves.
     const hit = matchResidual(url, details.type);
     if (hit) {
       blocking.recordBlock(details.tabId, {
@@ -441,8 +337,6 @@ api.webRequest.onBeforeRequest.addListener(
         listId: hit.listId,
         reason: hit.pattern,
       });
-      // A session override can only make the request go through earlier, never
-      // later; DNR already had its turn.
       return { cancel: true };
     }
     return undefined;
@@ -452,13 +346,6 @@ api.webRequest.onBeforeRequest.addListener(
     'websocket', 'csp_report', 'imageset', 'web_manifest', 'other'] },
   ['blocking'],
 );
-
-/** Counts navigation so the per-tab count resets on navigation (recon S09). */
-api.webNavigation.onCommitted.addListener((details) => {
-  blocking.resetTab(details.tabId);
-  const host = safeHost(details.url);
-  if (host) blocking.setTabDomain(details.tabId, host);
-});
 
 api.tabs.onRemoved.addListener((tabId) => blocking.dropTab(tabId));
 api.tabs.onReplaced.addListener((added, removed) => { blocking.dropTab(added); blocking.dropTab(removed); });

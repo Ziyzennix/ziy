@@ -13,6 +13,7 @@
   },
   "permissions": [
     "declarativeNetRequest",
+    "nativeMessaging",
     "webRequest",
     "webRequestBlocking",
     "webNavigation",
@@ -72,15 +73,7 @@
       "all_frames": true
     }
   ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "ziy-shields-lists",
-        "enabled": true,
-        "path": "rules/static-ruleset.json"
-      }
-    ]
-  },
+"declarative_net_request": {},
   "web_accessible_resources": [
     {
       "resources": [

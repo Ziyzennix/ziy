@@ -91,7 +91,7 @@ test('the permissions are exactly the set the engine needs and no more', () => {
   // (defect D-3 in replica/test-report.md). It is an API permission, so the
   // <all_urls> host permission does not substitute for it.
   assert.deepEqual([...manifest.permissions].sort(), [
-    'activeTab', 'alarms', 'declarativeNetRequest', 'scripting',
+    'activeTab', 'alarms', 'declarativeNetRequest', 'nativeMessaging', 'scripting',
     'storage', 'tabs', 'webNavigation', 'webRequest', 'webRequestBlocking',
   ]);
   // 'sidebar' style permissions and a 'theme' key are deliberately absent.
@@ -197,49 +197,6 @@ test('every path the manifest names exists in the source tree', () => {
     'The engine rejects the whole add-on for this, silently.');
 });
 
-test('the static ruleset file is valid DNR rules and matches the manifest entry', () => {
-  const rr = (manifest.declarative_net_request.rule_resources || [])[0];
-  assert.ok(rr, 'the manifest declares a static ruleset');
-  const rules = JSON.parse(fs.readFileSync(path.join(ROOT, rr.path), 'utf8'));
-  assert.ok(Array.isArray(rules), 'a static ruleset is a JSON array');
-  // The shipped table is the BOUNDED static tier, not the whole table: the
-  // engine drops a ruleset over 30000 rules entirely (ExtensionDNRStore's
-  // RuleQuotaCounter), so the generator caps it and the rest is covered
-  // imperatively.
-  const D = require('../lib/engine/dnr-compile.js');
-  assert.ok(rules.length > 20000,
-    `the shipped table should use most of the quota, saw ${rules.length}`);
-  assert.ok(rules.length <= D.STATIC_RULESET_CAP.rules,
-    `and must not exceed the engine's quota, saw ${rules.length}`);
-
-  const ids = new Set();
-  for (const rule of rules) {
-    assert.ok(!ids.has(rule.id), `duplicate rule id ${rule.id}`);
-    ids.add(rule.id);
-    assert.ok(rule.id >= 1, 'rule ids must be >= 1');
-    assert.ok(rule.priority >= 1, 'priority must be >= 1');
-    assert.ok(['block', 'allow', 'upgradeScheme', 'redirect', 'modifyHeaders']
-      .includes(rule.action.type));
-    const c = rule.condition;
-    assert.ok((c.urlFilter === undefined) !== (c.regexFilter === undefined),
-      'exactly one of urlFilter / regexFilter');
-    if (c.urlFilter) {
-      assert.ok(!c.urlFilter.startsWith('||*'), 'urlFilter may not start with ||*');
-      assert.ok(c.urlFilter.length > 0, 'urlFilter may not be empty');
-    }
-    // A main_frame BLOCK is navigation-blocking and is not expressible safely;
-    // a main_frame ALLOW is legitimate (the banner-opt-out and $document
-    // exception rules in the lists are exactly that).
-    assert.ok(!(c.resourceTypes || []).includes('main_frame') || rule.action.type === 'allow',
-      'a main_frame block rule would break navigation');
-
-    const action = rule.action.type;
-    if (action === 'allow') {
-      // Allow rules are the exceptions tier and must out-prioritise ordinary blocks.
-      assert.ok(rule.priority > 1, 'an allow rule must out-prioritise the block baseline');
-    }
-  }
-});
 
 test('the built xpi contains every manifest path', () => {
   const xpi = path.join(__dirname, '..', '..', '..', 'build', 'ziy',
