@@ -869,8 +869,8 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::g2a pass 2 — the g2b env (MOZ_LTO_RUST_CROSS=1, RUST_SANCOV_FLAGS=1), run LAST so g2b inherits this archive"
-          export MOZ_LTO_RUST_CROSS=1
-          export RUST_SANCOV_FLAGS=1
+          # Cross-language LTO is configured in .mozconfig; do not override
+          # the configure-generated flags in this probe.
           P2=0
           timeout 1800 /usr/bin/time -v ./mach build \
             2>&1 | tee "$GITHUB_WORKSPACE/rust-probe-guarded.log" || P2=${PIPESTATUS[0]}
